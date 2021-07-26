@@ -3,7 +3,7 @@ from types import FunctionType
 from abstract_comm_manager import ZeroMQ
 from fedrec.utilities import registry
 from global_comm_stream import CommunicationStream
-import random
+from time import sleep
 import asyncio
 
 MESSAGE_HANDLER_DICT = defaultdict(dict)
@@ -40,16 +40,12 @@ class CommunicationManager:
         else:
             return
                 
-    async def rnd_sleep(t):
-        # sleep for T seconds on average
-        await asyncio.sleep(t * random.random() * 2)
-
     async def recieve(self):
         queue = CommunicationStream.handle_message()  
         while True:
             self.message_token = await queue.get()
             # process the token received from a producer
-            await rnd_sleep(.3)
+            await sleep(3)
             queue.task_done()
             print("Token Consumed . . ./n")
         
