@@ -45,9 +45,11 @@ class ZeroMQ(AbstractComManager):
             self.publisher.send_pyobj(message)
 
         def close(self):
+            if self.publisher:
                 self.publisher.close()
+            elif self.subscriber:
                 self.subscriber.close()
-                self.context.term()
+            self.context.term()
             
 
             

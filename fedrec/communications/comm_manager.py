@@ -1,6 +1,6 @@
 from collections import defaultdict
 from types import FunctionType
-from abstract_comm_manager import ZeroMQ
+from communication_interfaces import ZeroMQ
 from fedrec.utilities import registry
 from global_comm_stream import CommunicationStream
 from time import sleep
@@ -27,7 +27,7 @@ class CommunicationManager:
         self.com_manager = registry.construct('communications', config_dict)
         self.com_manager.add_observer(self)
         self.message_handler_dict = dict()
-        self.message_token = dict()
+        self.queue = asyncio.Queue()        
 
     def run(self):
         self.com_manager.handle_receive_message()
@@ -41,12 +41,12 @@ class CommunicationManager:
             return
                 
     async def recieve(self):
-        queue = CommunicationStream.handle_message()  
+        self.queue = CommunicationStream.handle_message()  
         while True:
-            self.message_token = await queue.get()
+            message = await self.queue.get()
             # process the token received from a producer
             await sleep(3)
-            queue.task_done()
+            self.queue.task_done()
             print("Token Consumed . . ./n")
         
     def finish(self):

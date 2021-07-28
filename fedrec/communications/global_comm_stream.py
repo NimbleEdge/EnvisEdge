@@ -1,7 +1,6 @@
-
 from asyncio import queues
 from typing import Dict
-from abstract_comm_manager import ZeroMQ
+from communication_interfaces import ZeroMQ
 from fedrec.federated_worker import FederatedWorker
 
 
