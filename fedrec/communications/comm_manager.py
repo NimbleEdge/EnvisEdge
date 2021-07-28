@@ -34,7 +34,7 @@ class CommunicationManager:
 
     async def send_message(self, message, block=False):
         # message includes reciever id and sender id
-        ZeroMQ.send(message)
+        self.com_manager.send(message)
         if block:
             return await self.com_manager.recieve()
         else:

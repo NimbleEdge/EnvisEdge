@@ -1,6 +1,7 @@
 import zmq
 from time import sleep
 from abc import ABC, abstractmethod
+from fedrec.utilities import registry
 import asyncio
 
 class AbstractComManager(ABC):
@@ -12,7 +13,7 @@ class AbstractComManager(ABC):
     @abstractmethod
     def handle_message(self):
         pass
-
+@registry.load("communications", "ZeroMQ")
 class ZeroMQ(AbstractComManager):
     def __init__(self, is_subscriber):
         self.context = zmq.Context()
