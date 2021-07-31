@@ -29,6 +29,13 @@ class CommunicationManager:
         self.message_handler_dict = dict()
         self.queue = asyncio.Queue()        
 
+    def register_queue(self, receving_id):
+        dic = CommunicationStream.get_global_hash_map()
+        if receving_id in dic:
+            raise LookupError('{} already present in hash_map'.format(receving_id))
+        else:
+            dic[receving_id] = self.queue
+    
     def run(self):
         self.com_manager.handle_receive_message()
 
@@ -41,7 +48,6 @@ class CommunicationManager:
             return
                 
     async def recieve(self):
-        self.queue = CommunicationStream.handle_message()  
         while True:
             message = await self.queue.get()
             # process the token received from a producer
