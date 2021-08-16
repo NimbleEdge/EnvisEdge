@@ -30,19 +30,9 @@ class ZeroMQ(AbstractComManager):
             self.subscriber.bind('tcp://127.0.0.1:2000')
             self.subscriber.setsockopt(zmq.SUBSCRIBE, b'')
 
-        def subscribe_method(self):
-            if self.subscriber:
-                global_dict = CommunicationStream.get_global_hash_map()
-                while True:
-                    # Here I am assuming the message is a form of dictionary 
-                    # where it has sender_id and receiver_id are there as Key
-                    message = self.subscriber.recv_pyobj() 
-                    if message['receiver_id'] in global_dict:
-                        queue = global_dict[message['receiver_id']]
-                        # replace the token with the key value name
-                        # for the model stored 
-                        queue.put(message['token'])
-
+        def receive_message(self):
+            return self.subscriber.recv_pyobj()        
+        
         def send_message(message):
             print("Sending Message . . . . . /n")
             self.publisher.send_pyobj(message)

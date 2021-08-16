@@ -51,7 +51,6 @@ class CommunicationManager:
         while True:
             message = await self.queue.get()
             # process the token received from a producer
-            await sleep(3)
             self.queue.task_done()
             print("Token Consumed . . ./n")
         
