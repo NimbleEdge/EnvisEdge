@@ -153,8 +153,6 @@ class FederatedWorker(Reproducible, ABC):
     def send_message(self, message):
         self.fl_com_manager.queue.put(message['token'])
 
-
-
     async def train(self, *args, **kwargs):
         # TODO lauch a training job here in worker process here
         await self.trainer.train(*args, **kwargs)
