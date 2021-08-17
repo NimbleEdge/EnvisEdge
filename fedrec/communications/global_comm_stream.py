@@ -8,7 +8,6 @@ class CommunicationStream:
     def __init__(self, config_dict):
         self.message_stream = {} # TODO decide kafka stream or otherwise
         self.subscriber = registry.construct("communications", config_dict["communications"], is_subscriber=True)
-        self.Zmq = ZeroMQ()
         self.message_routing_dict = dict()
         self.worker_list = WorkerDataset()
 
