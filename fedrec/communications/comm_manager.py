@@ -22,7 +22,6 @@ def tag_reciever(message_type):
 
 
 class CommunicationManager:
-
     def __init__(self, config_dict):
         self.com_manager = registry.construct('communications', config_dict)
         self.com_manager.add_observer(self)

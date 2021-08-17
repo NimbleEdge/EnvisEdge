@@ -1,7 +1,6 @@
 from asyncio import queues
 from typing import Dict
 from fedrec.utilities import registry
-from communication_interfaces import ZeroMQ
 from fedrec.federated_worker import WorkerDataset
 
 class CommunicationStream:
@@ -23,10 +22,10 @@ class CommunicationStream:
     def get_global_hash_map(self):
         return self.message_routing_dict
 
-    def handle_message(self):
+    async def handle_message(self):
         if self.subscriber:
             while True:
-                message = self.subscriber.recieve_message()
+                message = await self.subscriber.recieve_message()
                 if message['receiver_id'] in self.worker_list:
                     worker = self.worker_list.get_worker('receiver_id')
                     worker.add_to_message_queue(message)
