@@ -150,7 +150,7 @@ class FederatedWorker(Reproducible, ABC):
             self.trainer.model_preproc.datasets('train'))
         self.trainer.reset_loaders()
 
-    def send_message(self, message):
+    def add_to_message_queue(self, message):
         self.fl_com_manager.queue.put(message['token'])
 
     async def train(self, *args, **kwargs):

@@ -12,7 +12,11 @@ class AbstractComManager(ABC):
         pass
 
     @abstractmethod
-    def subscribe_method(self):
+    def receive_message(self):
+        pass
+
+    @abstractmethod
+    def close(self):
         pass
 @registry.load("communications", "ZeroMQ")
 class ZeroMQ(AbstractComManager):
