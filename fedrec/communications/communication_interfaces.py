@@ -20,7 +20,7 @@ class AbstractComManager(ABC):
         pass
 @registry.load("communications", "ZeroMQ")
 class ZeroMQ(AbstractComManager):
-    def __init__(self, is_subscriber):
+    def __init__(self, is_subscriber=False):
         self.context = zmq.Context()
         if is_subscriber:            
             self.subscriber = self.context.socket(zmq.SUB)
