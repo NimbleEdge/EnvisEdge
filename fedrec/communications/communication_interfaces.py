@@ -34,10 +34,10 @@ class ZeroMQ(AbstractComManager):
         if self.subscriber:
             print('Connecting to port . . . . ./n')
             self.subscriber.bind('tcp://127.0.0.1:2000')
-            self.subscriber.setsockopt(zmq.SUBSCRIBE, b'')
+            self.subscriber.subscribe(b'')
 
         async def receive_message(self):
-            return await self.subscriber.recv_pyobj()        
+            return await self.subscriber.recv_multipart()        
         
         def send_message(message):
             print("Sending Message . . . . . /n")
