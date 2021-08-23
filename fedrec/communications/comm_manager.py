@@ -45,13 +45,16 @@ class CommunicationManager:
             return await self.com_manager.recieve()
         else:
             return
-                
-    async def recieve(self):
+
+    async def futures_message_handler(self):
         while True:
             message = await self.queue.get()
-            # process the token received from a producer
+            if message["recever_id"] not in self.message_handler_dict.keys():
+                self.message_handler_dict[message["recever_id"]] = message
             self.queue.task_done()
-            print("Token Consumed . . ./n")
+
+    async def recieve(self):
+        await self.futures_message_handler()
         
     def finish(self):
         self.com_manager.stop_receive_message()
