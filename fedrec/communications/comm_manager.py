@@ -49,12 +49,13 @@ class CommunicationManager:
     async def futures_message_handler(self):
         while True:
             message = await self.queue.get()
-            if message["recever_id"] not in self.message_handler_dict.keys():
-                self.message_handler_dict[message["recever_id"]] = message
+            self.message_handler_dict[message["request_id"]] = message
             self.queue.task_done()
 
-    async def recieve(self):
-        await self.futures_message_handler()
+    async def recieve(self, request_id):
+        future_task = asyncio.create_task(self.futures_message_handler())
+        await future_task
+
         
     def finish(self):
         self.com_manager.stop_receive_message()
