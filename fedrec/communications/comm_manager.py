@@ -8,6 +8,7 @@ import asyncio
 
 MESSAGE_HANDLER_DICT = defaultdict(dict)
 
+FUTURE_MESSAE_HANDLER_DICT = defaultdict(dict)
 
 def tag_reciever(message_type):
 
@@ -46,16 +47,18 @@ class CommunicationManager:
         else:
             return
 
-    async def futures_message_handler(self):
+    async def futures_message_handler(self, request_id):
         while True:
             message = await self.queue.get()
-            self.message_handler_dict[message["request_id"]] = message
+            if message.request_id == request_id:
+                FUTURE_MESSAE_HANDLER_DICT[request_id] = message
+
             self.queue.task_done()
 
     async def recieve(self, request_id):
-        future_task = asyncio.create_task(self.futures_message_handler())
-        await future_task
+        while True:
+            future_task = asyncio.create_task(self.futures_message_handler(request_id))
+            await future_task
 
-        
     def finish(self):
         self.com_manager.stop_receive_message()
