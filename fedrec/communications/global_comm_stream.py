@@ -26,8 +26,8 @@ class CommunicationStream:
         if self.subscriber:
             while True:
                 message = await self.subscriber.recieve_message()
-                if message['receiver_id'] in self.worker_list:
-                    worker = self.worker_list.get_worker('receiver_id')
+                if message.get_receiver_id() in self.worker_list:
+                    worker = self.worker_list.get_worker(message.get_receiver_id())
                     worker.add_to_message_queue(message)
 
     def stop(self):
