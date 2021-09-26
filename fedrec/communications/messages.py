@@ -1,7 +1,9 @@
-from enum import Enum
+from enum import Enum, auto
 
 class ProcMessage(Enum):
     SYNC_MODEL = 1
+    TRAIN_JOB = auto()
+    TEST_JOB = auto()
 
 class JobCompletions():
     SENDER_ID = 1
@@ -15,33 +17,43 @@ class Message(object):
         self.senderid = senderid
         self.receiverid = receiverid
 
-class JobSubmitMessage(Message):
-    def __init__(self, senderid, receiverid):
-        super().__init__(senderid, receiverid)
-
     def get_sender_id(self):
         return self.senderid
 
     def get_receiver_id(self):
         return self.receiverid
 
+class JobSubmitMessage(Message):
+    def __init__(self, senderid, receiverid, workerState, local_sample_num):
+        super().__init__(senderid, receiverid)
+        self.workerstate = workerState
+        self.local_sample_num = local_sample_num
+
+    def get_local_sample_num(self):
+        return self.local_sample_num
+    
     def get_worker_state(self):
         return self.workerstate
 
-    def add_WorkerState(self, workerState):
-        self.workerstate = workerState
+class JobResponseMessage(Message):
+    def __init__(self, senderid):
+        super().__init__(senderid)
     
-    def add_modelweights(self, modelweights):
+    
+class ModelRequestMessage(Message):
+    def __init__(self, senderid, receiverid):
+        super().__init__(senderid, receiverid)
+    
+
+class ModelResponseMessage(Message):
+    def __init__(self, senderid, receiverid, modelweights):
+        super().__init__(senderid, receiverid)        
         self.modelweights = modelweights
-    
-    def add_local_sample_num(self, local_sample_num):
-        self.local_sample_num = local_sample_num
 
     def get_model_weights(self):
         return self.modelweights
 
-    def get_local_sample_num(self):
-        return self.local_sample_num
+    
 
     
     

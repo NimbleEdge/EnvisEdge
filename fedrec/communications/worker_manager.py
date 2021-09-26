@@ -1,5 +1,3 @@
-
-from fedrec.communications.messages import JobSubmission, ProcMessage, send_model
 import logging
 import json
 import asyncio
@@ -8,7 +6,7 @@ from fedrec.communications.worker_manager import WorkerComManager
 from fedrec.communications.comm_manager import (CommunicationManager,
                                                tag_reciever)
 from fedrec.utilities.serialization import serialize_object
-from fedrec.communications.messages import Message, JobSubmitMessage
+from fedrec.communications.messages import ProcMessage, JobSubmitMessage, ModelRequestMessage
 
 class WorkerComManager(CommunicationManager):
     def __init__(self, trainer, worker_id, config_dict):
@@ -16,7 +14,7 @@ class WorkerComManager(CommunicationManager):
         self.trainer = trainer
         self.round_idx = 0
         self.id = worker_id
-        self.recieverid = ''
+        self.receiverid = ''
         self.queue = asyncio.Queue()
 
 
@@ -26,22 +24,24 @@ class WorkerComManager(CommunicationManager):
     # TODO should come from topology manager
 
     def receive_message(self, message):
-        self.recieverid = message.get_sender_id()
+        self.receiverid = message.get_sender_id()
 
     def send_model(self, weights, local_sample_num):
-        message = JobSubmitMessage(self.id, self.recieverid)
+        message = JobSubmitMessage(self.id, self.receiverid)
         message.add_modelweights(weights)
         message.aadd_local_sample_num(local_sample_num)
         self.send_message(message)
 
     async def send_job(self, receive_id, job_type):
-        if job_type == 'train':
-            message = JobSubmitMessage(self.id, receive_id)
-            message.add_WorkerState(json.dumps(FederatedWorker.serialise()))
+        """
+        job_type : TRAIN_JOB for Training
+        job_type : TEST_JOB for Training
+        """
+        if job_type == ProcMessage.TRAIN_JOB.name:
+            message = JobSubmitMessage(self.id, receive_id, json.dumps(FederatedWorker.serialise()))
             to_block = True
-        elif job_type == 'test':
-            message = JobSubmitMessage(self.id, receive_id)
-            message.add_WorkerState(json.dumps(FederatedWorker.serialise()))
+        elif job_type == ProcMessage.TEST_JOB.name:
+            message = JobSubmitMessage(self.id, receive_id, json.dumps(FederatedWorker.serialise()))
             to_block = False
         else:
             raise ValueError(f"Invalid job type: {job_type}")
@@ -50,9 +50,5 @@ class WorkerComManager(CommunicationManager):
         return await self.send_message(message, block=to_block)
     
     def request_model(self, receive_id):
-        message = Message(self.id, receive_id)
+        message = ModelRequestMessage(self.id, receive_id)
         self.send_message(message)
-
-    # dumps message into the manager queue
-    def add_to_message_queue(self, message):
-        self.queue.put(message)

@@ -55,3 +55,7 @@ class CommunicationManager:
         
     def finish(self):
         self.com_manager.stop_receive_message()
+
+    def add_to_message_queue(self, message):
+        self.queue.put(message)
+

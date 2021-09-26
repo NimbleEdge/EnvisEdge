@@ -1,6 +1,6 @@
 
 from fedrec.utilities import registry
-from fedrec.communications.messages import JobMessage
+from fedrec.communications.messages import JobResponseMessage
 from fedrec.communications.comm_manager import (CommunicationManager,
                                                 tag_reciever)
 
