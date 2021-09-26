@@ -33,10 +33,6 @@ class WorkerComManager(CommunicationManager):
         self.send_message(message)
 
     async def send_job(self, receive_id, job_type):
-        """
-        job_type : TRAIN_JOB for Training
-        job_type : TEST_JOB for Training
-        """
         if job_type == 'train':
             message = JobSubmitMessage(job_type, self.id, receive_id, json.dumps(FederatedWorker.serialise()))
             to_block = True
