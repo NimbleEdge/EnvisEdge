@@ -1,4 +1,3 @@
-from abc import ABC, abstractmethod
 from enum import Enum
 
 class ProcMessage(Enum):
@@ -11,44 +10,31 @@ class JobCompletions():
     ERRORS = ""
 
 
-class Message(ABC):
+class Message(object):
     def __init__(self, senderid, receiverid):
         self.senderid = senderid
         self.receiverid = receiverid
-        self.data = {}
-    
-    @abstractmethod
+
+class JobSubmitMessage(Message):
+    def __init__(self, senderid, receiverid):
+        super().__init__(senderid, receiverid)
+
     def get_sender_id(self):
         return self.senderid
 
-    @abstractmethod
     def get_receiver_id(self):
         return self.receiverid
-
-class JobSubmission(Message):
-    def __init__(self, senderid, receiverid, workerState):
-        super().__init__(senderid, receiverid)
-        self.workerstate = workerState
 
     def get_worker_state(self):
         return self.workerstate
 
-class train_JobSubmission(JobSubmission):
-    def __init__(self, senderid, receiverid, workerState):
-        super().__init__(senderid, receiverid, workerState)
-
-class test_JobSubmmission(JobSubmission):
-    def __init__(self, senderid, receiverid, workerState):
-        super().__init__(senderid, receiverid, workerState)
-
-class get_model(Message):
-    def __init__(self, senderid, receiverid):
-        super().__init__(senderid, receiverid)
-
-class send_model(Message):
-    def __init__(self, senderid, receiverid, modelweights, local_sample_num):
-        super().__init__(senderid, receiverid)
+    def add_WorkerState(self, workerState):
+        self.workerstate = workerState
+    
+    def add_modelweights(self, modelweights):
         self.modelweights = modelweights
+    
+    def add_local_sample_num(self, local_sample_num):
         self.local_sample_num = local_sample_num
 
     def get_model_weights(self):
@@ -56,4 +42,6 @@ class send_model(Message):
 
     def get_local_sample_num(self):
         return self.local_sample_num
+
+    
     
