@@ -24,8 +24,12 @@ class Message(object):
         return self.receiverid
 
 class JobSubmitMessage(Message):
-    def __init__(self, senderid, receiverid, workerState, local_sample_num):
+    def __init__(self, job_type, senderid, receiverid, workerState, local_sample_num):
         super().__init__(senderid, receiverid)
+        if job_type == 'train':
+            self.job_type = ProcMessage.TRAIN_JOB
+        else:
+            self.job_type = ProcMessage.TEST_JOB
         self.workerstate = workerState
         self.local_sample_num = local_sample_num
 
@@ -35,16 +39,18 @@ class JobSubmitMessage(Message):
     def get_worker_state(self):
         return self.workerstate
 
+    def get_job_type(self):
+        return self.job_type
+
 class JobResponseMessage(Message):
-    def __init__(self, senderid):
-        super().__init__(senderid)
+    def __init__(self, senderid, receiverid):
+        super().__init__(senderid,receiverid)
     
     
 class ModelRequestMessage(Message):
     def __init__(self, senderid, receiverid):
         super().__init__(senderid, receiverid)
     
-
 class ModelResponseMessage(Message):
     def __init__(self, senderid, receiverid, modelweights):
         super().__init__(senderid, receiverid)        

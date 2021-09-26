@@ -37,11 +37,11 @@ class WorkerComManager(CommunicationManager):
         job_type : TRAIN_JOB for Training
         job_type : TEST_JOB for Training
         """
-        if job_type == ProcMessage.TRAIN_JOB.name:
-            message = JobSubmitMessage(self.id, receive_id, json.dumps(FederatedWorker.serialise()))
+        if job_type == 'train':
+            message = JobSubmitMessage(job_type, self.id, receive_id, json.dumps(FederatedWorker.serialise()))
             to_block = True
-        elif job_type == ProcMessage.TEST_JOB.name:
-            message = JobSubmitMessage(self.id, receive_id, json.dumps(FederatedWorker.serialise()))
+        elif job_type == 'test':
+            message = JobSubmitMessage(job_type, self.id, receive_id, json.dumps(FederatedWorker.serialise()))
             to_block = False
         else:
             raise ValueError(f"Invalid job type: {job_type}")
