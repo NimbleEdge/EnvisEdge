@@ -6,7 +6,7 @@ from fedrec.communications.worker_manager import WorkerComManager
 from fedrec.communications.comm_manager import (CommunicationManager,
                                                tag_reciever)
 from fedrec.utilities.serialization import serialize_object
-from fedrec.communications.messages import ProcMessage, JobSubmitMessage, ModelRequestMessage
+from fedrec.communications.messages import ProcMessage, JobSubmitMessage, ModelRequestMessage, ModelResponseMessage
 
 class WorkerComManager(CommunicationManager):
     def __init__(self, trainer, worker_id, config_dict):
@@ -14,7 +14,6 @@ class WorkerComManager(CommunicationManager):
         self.trainer = trainer
         self.round_idx = 0
         self.id = worker_id
-        self.receiverid = ''
         self.queue = asyncio.Queue()
 
 
@@ -23,13 +22,8 @@ class WorkerComManager(CommunicationManager):
 
     # TODO should come from topology manager
 
-    def receive_message(self, message):
-        self.receiverid = message.get_sender_id()
-
     def send_model(self, weights, local_sample_num):
-        message = JobSubmitMessage(self.id, self.receiverid)
-        message.add_modelweights(weights)
-        message.aadd_local_sample_num(local_sample_num)
+        message = ModelResponseMessage(self.id, self.receiverid, weights, local_sample_num)
         self.send_message(message)
 
     async def send_job(self, receive_id, job_type):

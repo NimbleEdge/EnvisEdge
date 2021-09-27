@@ -35,7 +35,6 @@ class CommunicationStream:
                     worker.add_to_message_queue(message)
                 elif message.get_receiver_id() in self.process_man_list():
                     processManager = self.process_man_list.get_manager(message.get_receiver_id())
-                    
 
     def stop(self):
         self.subscriber.close()

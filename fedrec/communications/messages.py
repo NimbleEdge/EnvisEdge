@@ -24,18 +24,14 @@ class Message(object):
         return self.receiverid
 
 class JobSubmitMessage(Message):
-    def __init__(self, job_type, senderid, receiverid, workerState, local_sample_num):
+    def __init__(self, job_type, senderid, receiverid, workerState):
         super().__init__(senderid, receiverid)
         if job_type == 'train':
             self.job_type = ProcMessage.TRAIN_JOB
         else:
             self.job_type = ProcMessage.TEST_JOB
         self.workerstate = workerState
-        self.local_sample_num = local_sample_num
-
-    def get_local_sample_num(self):
-        return self.local_sample_num
-    
+        
     def get_worker_state(self):
         return self.workerstate
 
@@ -52,12 +48,16 @@ class ModelRequestMessage(Message):
         super().__init__(senderid, receiverid)
     
 class ModelResponseMessage(Message):
-    def __init__(self, senderid, receiverid, modelweights):
+    def __init__(self, senderid, receiverid, modelweights, local_sample_num):
         super().__init__(senderid, receiverid)        
         self.modelweights = modelweights
+        self.local_sample_num = local_sample_num
 
     def get_model_weights(self):
         return self.modelweights
+    
+    def get_local_sample_num(self):
+        return self.local_sample_num
 
     
 
