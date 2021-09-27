@@ -58,9 +58,12 @@ class CommunicationManager:
 
     async def message_handler(self):
         while True:
-            message = await self.queue.get() 
-            future = self.message_handler_dict[message.get_request_id()]
-            future.set_result(message)
+            message = await self.queue.get()
+            if message.get_request_id() in self.message_handler_dict:
+                future = self.message_handler_dict[message.get_request_id()]
+                future.set_result(message)
+            else:
+              raise LookupError('{} not in the message dictionary'.format(message.get_request_id()))  
             self.loop.stop()
 
     def add_to_message_queue(self, message):
