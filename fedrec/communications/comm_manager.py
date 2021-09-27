@@ -36,7 +36,8 @@ class CommunicationManager:
             dic[receving_id] = self.queue
     
     def run(self):
-        self.com_manager.handle_receive_message()
+        self.loop = asyncio.get_current_loop()
+        self.loop.create_task(message_handler())
 
     async def send_message(self, message, block=False):
         # message includes reciever id and sender id
@@ -47,13 +48,14 @@ class CommunicationManager:
             return
 
     async def recieve(self, request_id):
-            loop = asyncio.get_current_loop() 
-            future = loop.create_future()
-            self.message_handler_dict[request_id] = future
-            return await future
+        loop = asyncio.get_current_loop() 
+        future = loop.create_future()
+        self.message_handler_dict[request_id] = future
+        return await future
         
     def finish(self):
-        self.com_manager.stop_receive_message()
+        self.loop.stop()
+        self.com_manager.close()
 
     async def message_handler(self):
         while True:
@@ -63,7 +65,6 @@ class CommunicationManager:
                 future.set_result(message)
             else:
                 raise LookupError('{} not in the message dictionary'.format(message.get_request_id()))  
-            self.loop.stop()
 
     def add_to_message_queue(self, message):
         self.queue.put(message)

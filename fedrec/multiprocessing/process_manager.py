@@ -17,8 +17,7 @@ class MPIProcessManager:
             self.process_comm_manager = registry.construct("process_comm_manager", config_dict = config["comm_manager_config"])
             self.loop = asyncio.get_event_loop()
 
-
-
+    
     def run(self) -> None:
         if self.rank != 0:
             self.loop.create_task(self.consume())
@@ -41,7 +40,6 @@ class MPIProcessManager:
             job_request = await self.enqueued_jobs.get()
             job = self.loop.create_task(self.jobber.run(job_request))
             job.add_done_callback(self.publish())
-
 
 
     def publish(self, job_result) -> None:
