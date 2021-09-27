@@ -1,4 +1,3 @@
-from asyncio.tasks import _FutureT
 from collections import defaultdict
 from types import FunctionType
 from communication_interfaces import ZeroMQ
@@ -27,8 +26,7 @@ class CommunicationManager:
         self.com_manager = registry.construct('communications', config_dict)
         self.com_manager.add_observer(self)
         self.message_handler_dict = dict()
-        self.queue = asyncio.Queue()  
-        self.loop = asyncio.get_event_loop()      
+        self.queue = asyncio.Queue()       
 
     def register_queue(self, receving_id):
         dic = CommunicationStream.get_global_hash_map()
@@ -49,7 +47,8 @@ class CommunicationManager:
             return
 
     async def recieve(self, request_id):
-            future = self.loop.create_future()
+            loop = asyncio.get_current_loop() 
+            future = loop.create_future()
             self.message_handler_dict[request_id] = future
             return await future
         
