@@ -1,3 +1,4 @@
+from asyncio.tasks import _FutureT
 from collections import defaultdict
 from types import FunctionType
 from communication_interfaces import ZeroMQ
@@ -26,7 +27,8 @@ class CommunicationManager:
         self.com_manager = registry.construct('communications', config_dict)
         self.com_manager.add_observer(self)
         self.message_handler_dict = dict()
-        self.queue = asyncio.Queue()        
+        self.queue = asyncio.Queue()  
+        self.loop = asyncio.get_event_loop()      
 
     def register_queue(self, receving_id):
         dic = CommunicationStream.get_global_hash_map()
@@ -38,23 +40,31 @@ class CommunicationManager:
     def run(self):
         self.com_manager.handle_receive_message()
 
-    async def send_message(self, message, block=False):
+    async def send_message(self, , message, block=False):
         # message includes reciever id and sender id
         self.com_manager.send(message)
         if block:
             return await self.com_manager.recieve()
         else:
             return
+
+    async def coro():
+        pass
                 
-    async def recieve(self):
+    async def recieve(self, request_id):
         while True:
-            message = await self.queue.get()
-            # process the token received from a producer
-            self.queue.task_done()
-            print("Token Consumed . . ./n")
+            future = self.loop.create_future()
+            self.message_handler_dict[request_id] = future
+            return await future
         
     def finish(self):
         self.com_manager.stop_receive_message()
+
+    async def message_handler(self):
+        while True:
+            message = await self.queue.get() 
+            future = self.message_handler_dict[message.get_request_id()]
+            future.set_result(message)
 
     def add_to_message_queue(self, message):
         self.queue.put(message)
