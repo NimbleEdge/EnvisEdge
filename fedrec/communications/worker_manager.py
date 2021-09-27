@@ -22,8 +22,8 @@ class WorkerComManager(CommunicationManager):
 
     # TODO should come from topology manager
 
-    def send_model(self, weights, local_sample_num):
-        message = ModelResponseMessage(self.id, self.receiverid, weights, local_sample_num)
+    def send_model(self, receive_id, weights, local_sample_num):
+        message = ModelResponseMessage(self.id, receive_id, weights, local_sample_num)
         self.send_message(message)
 
     async def send_job(self, receive_id, job_type):
