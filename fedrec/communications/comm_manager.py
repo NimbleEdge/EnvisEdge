@@ -63,7 +63,7 @@ class CommunicationManager:
                 future = self.message_handler_dict[message.get_request_id()]
                 future.set_result(message)
             else:
-              raise LookupError('{} not in the message dictionary'.format(message.get_request_id()))  
+                raise LookupError('{} not in the message dictionary'.format(message.get_request_id()))  
             self.loop.stop()
 
     def add_to_message_queue(self, message):
