@@ -40,7 +40,7 @@ class CommunicationManager:
     def run(self):
         self.com_manager.handle_receive_message()
 
-    async def send_message(self, , message, block=False):
+    async def send_message(self, message, block=False):
         # message includes reciever id and sender id
         self.com_manager.send(message)
         if block:
@@ -48,11 +48,7 @@ class CommunicationManager:
         else:
             return
 
-    async def coro():
-        pass
-                
     async def recieve(self, request_id):
-        while True:
             future = self.loop.create_future()
             self.message_handler_dict[request_id] = future
             return await future
@@ -65,6 +61,7 @@ class CommunicationManager:
             message = await self.queue.get() 
             future = self.message_handler_dict[message.get_request_id()]
             future.set_result(message)
+            self.loop.stop()
 
     def add_to_message_queue(self, message):
         self.queue.put(message)
