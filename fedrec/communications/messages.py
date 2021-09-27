@@ -26,10 +26,7 @@ class Message(object):
 class JobSubmitMessage(Message):
     def __init__(self, job_type, senderid, receiverid, workerState):
         super().__init__(senderid, receiverid)
-        if job_type == 'train':
-            self.job_type = ProcMessage.TRAIN_JOB
-        else:
-            self.job_type = ProcMessage.TEST_JOB
+        self.job_type = job_type
         self.workerstate = workerState
         
     def get_worker_state(self):

@@ -14,8 +14,6 @@ class WorkerComManager(CommunicationManager):
         self.trainer = trainer
         self.round_idx = 0
         self.id = worker_id
-        self.queue = asyncio.Queue()
-
 
     def run(self):
         super().run()
@@ -27,10 +25,10 @@ class WorkerComManager(CommunicationManager):
         self.send_message(message)
 
     async def send_job(self, receive_id, job_type):
-        if job_type == 'train':
+        if job_type == ProcMessage.TRAIN_JOB:
             message = JobSubmitMessage(job_type, self.id, receive_id, json.dumps(FederatedWorker.serialise()))
             to_block = True
-        elif job_type == 'test':
+        elif job_type == ProcMessage.TEST_JOB:
             message = JobSubmitMessage(job_type, self.id, receive_id, json.dumps(FederatedWorker.serialise()))
             to_block = False
         else:
