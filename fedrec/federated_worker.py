@@ -35,6 +35,25 @@ def role(role_type):
 
 @attr.s(kw_only=True)
 class WorkerState:
+    """Construct a workerState object to reinstatiate a worker when needed.
+
+    Attributes
+    ----------
+    id : int
+        Unique worker identifier
+    model_preproc : `Preprocessor`
+        The local dataset of the worker 
+    roles : str
+        The role in FL cycle as defined by the user
+    round_idx : int
+        The number of local training cycles finished
+    state_dict : dict
+        A dictionary of state dicts storing model weights and optimizer dicts
+    storage : str
+        The address for persistent storage 
+    neighbours : {"in_neigh" : List[`Neighbour`], "out_neigh" : List[`Neighbour`]]
+        The states of in_neighbours and out_neighbours of the worker when last synced
+    """
     id = attr.ib()
     model_preproc = attr.ib()
     roles = attr.ib()
@@ -46,7 +65,18 @@ class WorkerState:
 
 @attr.s
 class Neighbour:
-    """ [summary]
+    """A class that represents a new Neighbour instance.
+
+    Attributes
+    ----------
+    id : int
+        Unique identifier for the worker
+    model : Dict
+        Model weights of the worker
+    sample_num : int
+        Number of datapoints in the neighbour's local dataset
+    last_sync : int
+        Last cycle when the models were synced
     """
     id = attr.ib()
     model = attr.ib(None)
