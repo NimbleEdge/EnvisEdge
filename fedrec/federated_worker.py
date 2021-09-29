@@ -46,6 +46,8 @@ class WorkerState:
 
 @attr.s
 class Neighbour:
+    """ [summary]
+    """
     id = attr.ib()
     model = attr.ib(None)
     sample_num = attr.ib(None)
@@ -60,9 +62,33 @@ class Neighbour:
 
 
 class FederatedWorker(Reproducible, ABC):
-    # Class description inspired from FedML
-    # https://github.com/FedML-AI/FedML/blob/master/fedml_api/distributed/fedavg/FedAVGAggregator.py
+    """FederatedWorker implementes the core federated learning logic.
+    It encapsulates the ML trainer to enable distributed training for the models defined in the standard setting.
 
+    
+    Attributes
+    ----------
+    round_idx : int
+        Number of local iterations finished
+    worker_index : int
+        The unique id alloted to the worker by the orchestrator
+    roles : str
+        The role as defined by the developer
+    is_mobile : bool
+        Whether the worker represents a mobile device or not
+    persistent_storage : str
+        The location to serialize and store the `WorkerState`
+    in_neighbours : List[`Neighbour`]
+        Neighbours from which the the worker can take the models
+    out_neighbours : List[`Neighbour`]
+        Neighbours to which the worker can broadcast its model
+    trainer : `BaseTrainer`
+        The Trainer object that has `train` and `test` methods implemented.
+    local_sample_number : int or None
+        The number of datapoints in the local dataset
+    fl_com_manager : `WorkerComManager`
+        The manager responsible for all the communications in and out of the worker.
+    """
     def __init__(self,
                  worker_index: int,
                  roles,
@@ -93,6 +119,13 @@ class FederatedWorker(Reproducible, ABC):
         self.sample_num_dict = dict()
 
     def serialise(self):
+        """Serialise the state of the worker to a WorkerState.
+
+        Returns
+        -------
+        `WorkerState` 
+            The serialised class object to be written to Json or persisted into the file.
+        """
         in_neigh = {k: v.last_sync for k, v in self.in_neighbours}
         out_neigh = {k: v.last_sync for k, v in self.out_neighbours}
         return WorkerState(
@@ -119,7 +152,24 @@ class FederatedWorker(Reproducible, ABC):
             in_neigh: List[Neighbour],
             out_neigh: List[Neighbour],
             state: WorkerState):
+        """Constructs a worker from state.
 
+        Parameters
+        ----------
+        trainer : `BaseTrainer`
+            The trainer object to which the optimizers and model weights are loaded
+        in_neigh : List[Neighbour]
+            List of in_neighbours for the worker
+        out_neigh : List[Neighbour]
+            List of out_neighbours for the worker
+        state : WorkerState
+            WorkerState containing the model weights
+
+        Returns
+        -------
+        `FederatedWorker`
+            A new worker instance
+        """
         trainer.load_state(
             state.state_dict['model'],
             state.state_dict['optimizer'],
@@ -136,22 +186,73 @@ class FederatedWorker(Reproducible, ABC):
         )
 
     def _get_model_params(self):
+        """Get the current model parameters for the trainer .
+
+        Returns
+        -------
+        Dict: 
+            A dict containing the model weights.
+        """
         return self.trainer.model.cpu().state_dict()
 
     def update_model(self, weights):
+        """Update the model weights with weights.
+
+        Parameters
+        ----------
+        weights : Dict
+            The model weights to be loaded into the optimizer
+        """
         self.trainer.model.load_state_dict(weights)
 
-    def update_recieved_model(self, sender_id, kwargs):
+    def update_recieved_model(self, sender_id, **kwargs):
+        """Update the in - neighbour model in the receiver
+
+        Parameters
+        ----------
+        sender_id : str
+            The id of the neighbour which sent its updated state
+        kwargs : Dict[args]
+            Key map of the attribute name and its new value
+        """
         self.in_neighbours[sender_id].update(**kwargs)
 
     def update_dataset(self, worker_index, model_preproc):
+        """Update the dataset, trainer_index and model_index .
+
+        Parameters
+        ----------
+        worker_index : int
+            unique worker id
+        model_preproc : `Preprocessor`
+            The preprocessor contains the dataset of the worker 
+        """
         self.worker_index = worker_index
         self.trainer.model_preproc = model_preproc
         self.local_sample_number = len(
             self.trainer.model_preproc.datasets('train'))
         self.trainer.reset_loaders()
 
+    async def run(self):
+        """ `Run` function updates the local model.
+        Implement this method to determine how the roles interact with each other 
+        to determine the final updated model.
+
+        Raises
+        ------
+        NotImplementedError
+            If the subclass hasn't implemented the run method
+        """
+        raise NotImplementedError
+
     async def train(self, *args, **kwargs):
+        """Train the model on the child FL simulator processes.
+
+        Returns
+        -------
+        Any
+            output of the training stage if any
+        """
         raw_output = await self.fl_com_manager.send_job("train", *args, **kwargs)
         new_state, output = json.loads(raw_output)
         self.trainer.update_state(
@@ -160,13 +261,25 @@ class FederatedWorker(Reproducible, ABC):
         return output
 
     async def test(self, *args, **kwargs):
+        """Run inference on testing dataset and evaluate the model performance.
+        """
         await self.fl_com_manager.send_job("test", *args, **kwargs)
 
     async def get_model(self, round_idx, out_neighbours: Set[int]):
-        '''
-            Send the model to whoever needs it. 
-            Train it if already submitted the current model.
-        '''
+        """Get model parameters from the worker. Train the model if needed
+
+        Parameters
+        ----------
+        round_idx : int
+            last synced number of trained iterations. Do not send older model, retrain it if needed.
+        out_neighbours : Set[int]
+            List of neighbours asking for model updates.
+
+        Returns
+        -------
+        Tuple
+            Model weights, local dataset number and updated local number of iterations 
+        """
         neighbours = set(self.out_neighbours.keys())
         if not out_neighbours.issubset(neighbours):
             raise ValueError("invalid recieve call")
@@ -185,6 +298,18 @@ class FederatedWorker(Reproducible, ABC):
         return weights, s_n, self.round_idx
 
     async def request_models_suspendable(self, neighbours):
+        """Requests models from other workers and remain suspended until response comes.
+
+        Parameters
+        ----------
+        neighbours : `Neighbour`
+            The workers from which the models have to be requested
+
+        Returns
+        -------
+        List[`Neighbour`]
+            The neighbour states with updated model weights 
+        """
         out_req = {
             n for n in neighbours if self.in_neighbours[n].last_sync < self.round_idx}
         if out_req:
@@ -195,10 +320,29 @@ class FederatedWorker(Reproducible, ABC):
         return neighbours
 
     def request_models(self, neighbours):
+        """Non blocking version of `request_models_suspendable`
+
+        Parameters
+        ----------
+        neighbours : `Neighbour`
+            The workers from which the models have to be requested
+
+        Returns
+        -------
+        List[`Neighbour`]
+            The neighbour states with updated model weights 
+        """
         asyncio.run(self.request_models_suspendable(neighbours))
         return neighbours
 
     def broadcast_model(self, out_neighbour_ids):
+        """Broadcasts a model to all neighbors of the given worker.
+
+        Parameters
+        ----------
+        out_neighbour_ids : int
+            Unique identifiers for the workers to whom the broadcast messsage must be sent.
+        """
         for n in out_neighbour_ids:
             self.fl_com_manager.send_model(n, self._get_model_params(),
                                            self.local_sample_number)
