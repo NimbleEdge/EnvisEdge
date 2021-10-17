@@ -4,16 +4,16 @@ from fedrec.utilities import registry
 from fedrec.communications.abstract_comm_manager import AbstractCommManager
 
 
-@registry.load("communications", "kafka")
+@registry.load("communications", "Kafka")
 class Kafka(AbstractCommManager):
     def __init__(self,
                  consumer=True,
                  producer=True,
-                 consumer_port=2000,
+                 consumer_port=9092,
                  consumer_url="127.0.0.1",
                  consumer_topic=None,
                  consumer_group_id=None,
-                 producer_port=2000,
+                 producer_port=9092,
                  producer_url="127.0.0.1",
                  producer_topic=None):
 
