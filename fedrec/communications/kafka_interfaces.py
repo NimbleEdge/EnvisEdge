@@ -4,7 +4,7 @@ from fedrec.utilities import registry
 from fedrec.communications.abstract_comm_manager import AbstractCommManager
 
 
-@registry.load("communications", "Kafka")
+@registry.load("communications", "kafka")
 class Kafka(AbstractCommManager):
     def __init__(self,
                  consumer=True,
