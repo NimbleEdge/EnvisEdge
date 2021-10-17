@@ -36,16 +36,27 @@ model :
       dataset_multiprocessing : True
 
 
-communications:
+multiprocessing:
+  name : "MPI"
+
   gpu_map:
     host1: [0, 2]
     host2: [1, 0, 1]
     host3: [1, 1, 0, 1]
     host4: [0, 1, 0, 0, 0, 1, 0, 2]
   
-process_manager:
-  max_jobs_per_process: 10
-  comm_manager_config : []
+  comm_manager_config : 
+    name : "kafka"
+    consumer : True
+    producer : True
+    consumer_port : 9092
+    consumer_url : "127.0.0.1",
+    consumer_topic : 'My-topic'
+    cosnumer_group_id : 'My-group-id'
+    producer_port : 9092
+    producer_url : "127.0.0.1"
+    producer_topic : 'My-topic'
+
 
 train :
   name : dlrm
