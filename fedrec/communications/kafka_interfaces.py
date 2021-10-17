@@ -33,7 +33,7 @@ class Kafka(AbstractCommManager):
             bootstrap_servers=[self.consumer_url],
             auto_offset_reset='earliest',
             enable_auto_commit=True,
-            group_id=self.consumer_group_id,
+            group_id=consumer_group_id,
             value_deserializer=lambda x: loads(x.decode('utf-8')))
 
     def receive_message(self):
