@@ -44,7 +44,7 @@ multiprocessing:
     host3: [1, 1, 0, 1]
     host4: [0, 1, 0, 0, 0, 1, 0, 2]
   
-  comm_manager_config : 
+  communications : 
     name : "kafka"
     consumer : True
     producer : True
