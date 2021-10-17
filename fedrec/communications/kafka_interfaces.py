@@ -12,7 +12,7 @@ class Kafka(AbstractCommManager):
                  consumer_port=2000,
                  consumer_url="127.0.0.1",
                  consumer_topic=None,
-                 cosnumer_group_id=None,
+                 consumer_group_id=None,
                  producer_port=2000,
                  producer_url="127.0.0.1",
                  producer_topic=None):
@@ -23,7 +23,7 @@ class Kafka(AbstractCommManager):
         self.producer = KafkaProducer(
             bootstrap_servers=[self.producer_url],
             value_serializer=lambda x: dumps(x).encode('utf-8'))
-        self, producer_topic = producer_topic
+        self.producer_topic = producer_topic
 
     if consumer:
         self.consumer_url = "{}:{}".format(
