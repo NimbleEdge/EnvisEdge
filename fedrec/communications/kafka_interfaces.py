@@ -39,7 +39,7 @@ class Kafka(AbstractCommManager):
     def receive_message(self):
         if not self.consumer:
             raise Exception("No consumer defined")
-        return self.consumer.next()
+        return next(self.consumer)
 
     def send_message(self, message):
         if not self.producer:
