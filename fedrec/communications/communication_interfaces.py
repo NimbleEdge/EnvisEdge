@@ -1,61 +1,49 @@
-import asyncio
 import zmq
-from zmq.asyncio import Context
-from time import sleep
-from abc import ABC, abstractmethod
+from zmq import Context
 from fedrec.utilities import registry
-from global_comm_stream import CommunicationStream
+from fedrec.communications.abstract_comm_manager import AbstractCommManager
 
 
-class AbstractComManager(ABC):
-
-    @abstractmethod
-    def send_message(self):
-        pass
-
-    @abstractmethod
-    def receive_message(self):
-        pass
-
-    @abstractmethod
-    def close(self):
-        pass
 @registry.load("communications", "ZeroMQ")
-class ZeroMQ(AbstractComManager):
-    def __init__(self, is_subscriber=False):
-        self.context = Context.instance()
-        if is_subscriber:            
+class ZeroMQ(AbstractCommManager):
+    def __init__(self,
+                 subscriber=True,
+                 publisher=True,
+                 subscriber_port=2000,
+                 subscriber_url="127.0.0.1",
+                 subscriber_topic=None,
+                 publisher_port=2000,
+                 publisher_url="127.0.0.1",
+                 publisher_topic=None,
+                 protocol="tcp"):
+        self.context = Context()
+
+        if subscriber:
+            self.subscriber_url = "{}://{}:{}".format(
+                protocol, subscriber_url, subscriber_port)
             self.subscriber = self.context.socket(zmq.SUB)
-        else:
+            self.subscriber.setsockopt(zmq.SUBSCRIBE, subscriber_topic)
+            self.subscriber.connect(self.subscriber_url)
+
+        if publisher:
+            self.publisher_url = "{}://{}:{}".format(
+                protocol, publisher_url, publisher_port)
             self.publisher = self.context.socket(zmq.PUB)
+            self.publisher.connect(self.publisher_url)
+
+    def receive_message(self):
+        if not self.subscriber:
+            raise Exception("No subscriber defined")
+        return self.subscriber.recv_multipart()
+
+    def send_message(self, message):
+        if not self.publisher:
+            raise Exception("No publisher defined")
+        self.publisher.send_pyobj(message)
+
+    def close(self):
         if self.publisher:
-            print("Connecting to Port . . . . ./n")
-            self.publisher.connect('tcp://127.0.0.1:2000')
-        if self.subscriber:
-            print('Connecting to port . . . . ./n')
-            self.subscriber.bind('tcp://127.0.0.1:2000')
-            self.subscriber.subscribe(b'')
-
-        async def receive_message(self):
-            return await self.subscriber.recv_multipart()        
-        
-        def send_message(message):
-            print("Sending Message . . . . . /n")
-            self.publisher.send_pyobj(message)
-
-        def close(self):
-            if self.publisher:
-                self.publisher.close()
-            elif self.subscriber:
-                self.subscriber.close()
-            else:
-                self.context.term()
-            
-
-            
-
-  
-
-  
-
-
+            self.publisher.close()
+        elif self.subscriber:
+            self.subscriber.close()
+        self.context.term()

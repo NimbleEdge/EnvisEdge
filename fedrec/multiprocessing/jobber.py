@@ -1,7 +1,6 @@
 from fedrec.trainers.base_trainer import BaseTrainer
 from fedrec.utilities.serialization import deserialize_object, serialize_object
 from fedrec.communications.messages import JobCompletions
-from inspect import getmembers, isfunction
 import json
 class Jobber:
     """

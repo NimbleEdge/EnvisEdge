@@ -34,8 +34,7 @@ model :
     dataset_config :
       name : "kaggle"
       dataset_multiprocessing : True
-
-
+  
 multiprocessing:
   name : "MPI"
 
@@ -56,7 +55,6 @@ multiprocessing:
     producer_port : 9092
     producer_url : "127.0.0.1"
     producer_topic : 'My-topic'
-
 
 train :
   name : dlrm
