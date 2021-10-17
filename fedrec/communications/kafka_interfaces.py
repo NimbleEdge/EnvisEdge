@@ -33,15 +33,13 @@ class Kafka(AbstractCommManager):
             bootstrap_servers=[self.consumer_url],
             auto_offset_reset='earliest',
             enable_auto_commit=True,
-            group_id=cosnumer_group_id,
+            group_id=self.consumer_group_id,
             value_deserializer=lambda x: loads(x.decode('utf-8')))
 
     def receive_message(self):
         if not self.consumer:
             raise Exception("No consumer defined")
-        for event in self.consumer:
-            event_data = event.value
-        return event_data
+        return self.consumer.next()
 
     def send_message(self, message):
         if not self.producer:
