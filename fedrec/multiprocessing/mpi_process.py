@@ -1,9 +1,16 @@
 from typing import Dict
+<<<<<<< HEAD
 from fedrec.communications.messages import JobResponseMessage, JobSubmitMessage
+=======
+>>>>>>> 667eb80 (support aggregator and trainer in jobber)
 
 from fedrec.multiprocessing.jobber import Jobber
 from fedrec.python_executors.base_actor import BaseActor
 from fedrec.utilities import registry
+<<<<<<< HEAD
+=======
+from mpi4py import MPI
+>>>>>>> 667eb80 (support aggregator and trainer in jobber)
 
 
 @registry.load("multiprocessing", "MPI")
@@ -24,6 +31,12 @@ class MPIProcess:
                  worker: BaseActor,
                  logger,
                  com_manager_config: Dict) -> None:
+<<<<<<< HEAD
+=======
+        self.pool = MPI.COMM_WORLD
+        self.rank = self.pool.Get_rank()
+        self.num_processes = self.pool.Get_size()
+>>>>>>> 667eb80 (support aggregator and trainer in jobber)
         self.jobber = Jobber(worker=worker, logger=logger)
         self.process_comm_manager = registry.construct(
             "communications", config_dict=com_manager_config)
