@@ -1,7 +1,8 @@
 from typing import Dict
-from fedrec.utilities import registry
-from fedrec.trainers.base_trainer import BaseTrainer
+
 from fedrec.multiprocessing.jobber import Jobber
+from fedrec.python_executors.base_actor import BaseActor
+from fedrec.utilities import registry
 from mpi4py import MPI
 
 
@@ -9,15 +10,15 @@ from mpi4py import MPI
 class MPIProcess:
 
     def __init__(self,
-                 trainer: BaseTrainer,
+                 worker: BaseActor,
                  logger,
                  com_manager_config: Dict) -> None:
         self.pool = MPI.COMM_WORLD
         self.rank = self.pool.Get_rank()
         self.num_processes = self.pool.Get_size()
-        self.jobber = Jobber(trainer=trainer, logger=logger)
+        self.jobber = Jobber(worker=worker, logger=logger)
         self.process_comm_manager = registry.construct(
-            "comm_manager", config_dict=com_manager_config)
+            "communications", config_dict=com_manager_config)
 
     def run(self) -> None:
         while True:

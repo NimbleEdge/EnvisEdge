@@ -1,7 +1,6 @@
-from fedrec.trainers.base_trainer import BaseTrainer
+from fedrec.communications.messages import JobResponseMessage, JobSubmitMessage
+from fedrec.python_executors.base_actor import BaseActor
 from fedrec.utilities.serialization import deserialize_object, serialize_object
-from fedrec.communications.messages import JobCompletions
-import json
 
 
 class Jobber:
@@ -9,33 +8,31 @@ class Jobber:
     Jobber class only handles job requests based on job type
     """
 
-    def __init__(self, trainer, logger) -> None:
+    def __init__(self, worker, logger) -> None:
         self.logger = logger
-        self.trainer: BaseTrainer = trainer
-        self.trainer_funcs = [func for func in dir(
-            self.trainer) if callable(getattr(self.trainer, func))]
+        self.worker: BaseActor = worker
+        self.worker_funcs = {func.__name__: func for func in dir(
+            self.worker) if callable(getattr(self.worker, func))}
 
-    def run(self, message):
-        job_type = message.JOB_TYPE
-        if job_type in self.trainer_funcs:
-            job_args = [deserialize_object(
-                i) for i in json.loads(message.MSG_ARG_JOB_ARGS)]
-            job_kwargs = {key: deserialize_object(
-                val) for key, val in json.loads(message.MSG_ARG_JOB_KWARGS)}
-            result_message = JobCompletions()
-            result_message.SENDER_ID = message.SENDER_ID
+    def run(self, message: JobSubmitMessage):
+        if message.job_type in self.worker_funcs:
+            job_args = [
+                deserialize_object(i) for i in message.job_args.items()]
+            job_kwargs = {
+                key: deserialize_object(val)
+                for key, val in message.job_kwargs.items()}
+            result_message = JobResponseMessage(
+                job_type=message.job_type,
+                senderid=message.receiverid,
+                receiverid=message.senderid)
             try:
-                job_result = getattr(self.trainer, job_type)(
+                job_result = self.worker_funcs[message.job_type](
                     *job_args, **job_kwargs)
-                result_message.STATUS = True
-                serialized_results = {key: serialize_object(
+                result_message.results = {key: serialize_object(
                     val) for key, val in job_result}
-                result_message.add_params(
-                    result_message.RESULTS, json.dumps(serialized_results))
             except Exception as e:
-                result_message.STATUS = False
-                result_message.add_params(result_message.ERRORS, str(e))
+                result_message.errors = e
             return result_message
         else:
             raise ValueError(
-                f"Job type not part of trainer functions: {job_type}")
+                f"Job type <{message.job_type}> not part of worker <{self.worker.__class__.__name__}> functions")
