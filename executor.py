@@ -1,20 +1,12 @@
-from fedrec.federated_worker import FederatedWorker, Neighbour, WorkerDataset
-from fedrec.utilities.cuda_utils import mapping_processes_to_gpus
 import logging
-import os
-import socket
 from argparse import ArgumentParser
 
-import setproctitle
-import torch
-import functools
-
 import yaml
-from fedrec.trainers.base_trainer import BaseTrainer
+
 from fedrec.utilities import registry
+from fedrec.utilities.cuda_utils import mapping_processes_to_gpus
 from fedrec.utilities.logger import NoOpLogger, TBLogger
 from fedrec.utilities.random_state import Reproducible
-
 
 
 class JobExecutor(Reproducible):
