@@ -4,6 +4,7 @@ from typing import Dict
 import attr
 from fedrec.python_executors.base_actor import BaseActor, ActorState
 from fedrec.utilities.logger import BaseLogger
+#from fedrec.utilities import registry 
 
 
 @attr.s(kw_only=True)
@@ -62,6 +63,8 @@ class Trainer(BaseActor, ABC):
         self.local_sample_number = None
         self.local_training_steps = 0
         self._data_loaders = {}
+        #TODO update trainer logic to avoid double model initialization
+        #self.trainer = registry.construct('trainer', model_config['model'], **model_config['train'])
 
     def reset_loaders(self):
         self._data_loaders = {}
@@ -127,9 +130,11 @@ class Trainer(BaseActor, ABC):
         Train the model.
         """
         pass
+        # self.model.train()
 
     def test(self):
         """
         Test the model.
         """
         pass
+        #self.model.test()

@@ -83,8 +83,8 @@ class Aggregator(BaseActor, ABC):
                  worker_index: int,
                  model_config: Dict,
                  logger: BaseLogger,
-                 in_neighbours: Dict[int, Neighbour],
-                 out_neighbours: Dict[int, Neighbour],
+                 in_neighbours: Dict[int, Neighbour] = None,
+                 out_neighbours: Dict[int, Neighbour] = None,
                  persistent_storage: str = None,
                  is_mobile: bool = True,
                  round_idx: int = 0):
@@ -151,7 +151,7 @@ class Aggregator(BaseActor, ABC):
             self.optimizer.load_state_dict(state.state_dict['optimizer'])
 
 
-@registry.load('fl_algo', 'fed_avg')
+@registry.load('aggregator', 'fed_avg')
 class FedAvgWorker(Aggregator):
     def __init__(self,
                  worker_index: int,

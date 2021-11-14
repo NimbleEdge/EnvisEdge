@@ -36,14 +36,14 @@ model :
       dataset_multiprocessing : True
   
 multiprocessing:
-  name : "MPI"
+  num_aggregators : 1
+  num_trainers : 1
 
-  gpu_map:
-    host1: [0, 2]
-    host2: [1, 0, 1]
-    host3: [1, 1, 0, 1]
-    host4: [0, 1, 0, 0, 0, 1, 0, 2]
-  
+  process_manager : 
+    name : "ray"
+    max_restarts : -1
+    
+
   communications : 
     name : "kafka"
     consumer : True
