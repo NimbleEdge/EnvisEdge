@@ -16,6 +16,10 @@ class Jobber:
 
     def run(self, message: JobSubmitMessage):
         if message.job_type in self.worker_funcs:
+            # Note: messages.JobsubmitMessage.job_args is of type List.
+            # TODO: check if the job_args is of type dict, if it is not
+            # change the below to:
+            # deserialize_object(i) for i in message.job_args]
             job_args = [
                 deserialize_object(i) for i in message.job_args.items()]
             job_kwargs = {
