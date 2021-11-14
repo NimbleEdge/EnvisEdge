@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from atexit import register
+from typing import Callable, Dict
 
 import yaml
 from fedrec.multiprocessing.jobber import Jobber
@@ -7,21 +7,18 @@ from fedrec.multiprocessing.process_manager import ProcessManager
 
 from fedrec.python_executors.aggregator import Aggregator
 from fedrec.python_executors.trainer import Trainer
-from fedrec.utilities import registry, roles
-from fedrec.utilities.logger import NoOpLogger, TBLogger
+from fedrec.utilities import registry
+from fedrec.utilities.logger import BaseLogger, NoOpLogger, TBLogger
 from fedrec.utilities.random_state import Reproducible
 
 
 class JobExecutor(Reproducible):
-    def __init__(self, config_dict, worker_idx, logger, role, **kwargs) -> None:
+    def __init__(self, actorCls: Callable, config_dict: Dict, logger: BaseLogger, **kwargs) -> None:
         """ Class responsible for running aggregator/trainer on a single node.
         """
         # Construct trainer and do training
         self.config_dict = config_dict
-        if role == roles.Roles.TRAINER:
-            self.worker = Trainer(worker_idx, config_dict, logger, **kwargs)
-        elif role == roles.Roles.AGGREGATOR:
-            self.worker = Aggregator(worker_idx, config_dict, logger, **kwargs)
+        self.worker = actorCls(0, config_dict, logger, **kwargs)
 
         self.jobber = Jobber(
             self.worker, logger, config_dict["multiprocessing"]["communications"])
@@ -49,7 +46,16 @@ def main():
 
     process_manager: ProcessManager = registry.construct(
         "process_manager", config_dict["multiprocessing"]["distribution"])
-    process_manager.start()
+
+    process_manager.distribute(JobExecutor, Aggregator.__name__,
+                               config_dict["multiprocessing"]["num_aggregators"],
+                               Aggregator, config_dict, logger)
+    process_manager.distribute(JobExecutor, Trainer.__name__,
+                               config_dict["multiprocessing"]["num_trainers"],
+                               Trainer, config_dict, logger)
+
+    process_manager.start(Aggregator.__name__, "run")
+    process_manager.start(Trainer.__name__, "run")
 
 
 if __name__ == "__main__":

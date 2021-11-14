@@ -1,11 +1,11 @@
 import zmq
 from zmq import Context
 from fedrec.utilities import registry
-from fedrec.communications.abstract_comm_manager import AbstractCommManager
+from fedrec.communications.abstract_comm_manager import AbstractCommunicationManager
 
 
 @registry.load("communications", "ZeroMQ")
-class ZeroMQ(AbstractCommManager):
+class ZeroMQ(AbstractCommunicationManager):
     def __init__(self,
                  subscriber=True,
                  publisher=True,

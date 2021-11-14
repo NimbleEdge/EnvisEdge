@@ -11,16 +11,12 @@ class ProcessManager(ABC):
     for multiprocessing.
     """
 
-    def __init__(self, runnable: Any, num_workers: int, **kwargs: Dict):
-        """
-        Initialize a ProcessManager.
+    def __init__(self) -> None:
+        super().__init__()
+        self.workers = {}
 
-        Args:
-            process_config: The configuration of the process.
-        """
-        self.process_config = kwargs
-        self.num_workers = num_workers
-        self.runnable = runnable
+    def distribute(self):
+        pass
 
     def start(self):
         """
@@ -31,12 +27,6 @@ class ProcessManager(ABC):
     def shutdown(self):
         """
         Shutdown the child processes for executing the job.
-        """
-        pass
-
-    def join(self):
-        """
-        Join the process.
         """
         pass
 
@@ -56,19 +46,21 @@ class ProcessManager(ABC):
 @registry.load("process_manager", "ray")
 class RayProcessManager(ProcessManager):
 
-    def __init__(self,
-                 runnable: Any,
-                 num_workers: int,
-                 **kwargs: Any) -> None:
-        super().__init__(runnable, num_workers, **kwargs)
-        self.dist_runnable = ray.remote(runnable)
-        self.workers = [None] ** num_workers
+    def __init__(self) -> None:
+        super().__init__()
+        ray.init()
 
-    def start(self) -> None:
-        self.workers = [
-            self.dist_runnable.run.remote(**self.process_config)
-            for _ in range(self.num_workers)
-        ]
+    def distribute(self, runnable, type: str, num_instances: int, *args, **kwargs) -> None:
+        dist_runnable = ray.remote(runnable)
+        new_runs = [dist_runnable.remote(*args, **kwargs)
+                    for _ in range(num_instances)]
+        self.workers[type] += new_runs
+
+    def start(self, runnable_type, method, *args, **kwargs) -> None:
+        if callable(method):
+            method = method.__name__
+        for runnable in self.workers[runnable_type]:
+            getattr(runnable, method).remote(*args, **kwargs)
 
     def shutdown(self) -> None:
         ray.shutdown()

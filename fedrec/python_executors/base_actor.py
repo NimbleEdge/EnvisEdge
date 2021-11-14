@@ -1,12 +1,20 @@
-from typing import Dict
-import attr
 from abc import ABC, abstractclassmethod, abstractmethod
+from typing import Dict
 
+import attr
 import torch
 from fedrec.preprocessor import PreProcessor
 from fedrec.utilities import registry
 from fedrec.utilities.logger import BaseLogger
 from fedrec.utilities.random_state import RandomizationConfig, Reproducible
+
+
+@attr.s(auto_attribs=True)
+class ActorConfig(RandomizationConfig):
+    """
+    Configuration for the actor.
+    """
+    num_rounds = attr.ib(type=int, default=1)
 
 
 @attr.s(kw_only=True)
@@ -50,13 +58,13 @@ class BaseActor(Reproducible, ABC):
     def __init__(self,
                  worker_index: int,
                  model_config: Dict,
-                 randomization_config: RandomizationConfig,
+                 actor_config: ActorConfig,
                  logger: BaseLogger,
                  persistent_storage: str = None,
                  is_mobile: bool = True,
                  round_idx: int = 0):
 
-        super().__init__(randomization_config)
+        super().__init__(actor_config)
         self.round_idx = round_idx
         self.worker_index = worker_index
         self.is_mobile = is_mobile
@@ -75,7 +83,6 @@ class BaseActor(Reproducible, ABC):
         self._saver = None
 
     @property
-    @abstractmethod
     def optimizer(self):
         return None
 

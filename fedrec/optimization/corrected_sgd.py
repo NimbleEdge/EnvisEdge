@@ -3,7 +3,7 @@ from typing import List, Optional
 import torch
 from fedrec.utilities import registry
 from torch.optim import Optimizer
-from torch.tensor import Tensor
+from torch import Tensor
 
 
 class _RequiredParameter(object):

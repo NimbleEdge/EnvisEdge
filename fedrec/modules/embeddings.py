@@ -15,7 +15,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.tensor import Tensor
+from torch import Tensor
 from fedrec.utilities import registry
 from torch.nn.parameter import Parameter
 

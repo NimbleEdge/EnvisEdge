@@ -26,14 +26,7 @@ def xavier_init(layer: nn.Linear):
 ### define dlrm in PyTorch ###
 
 
-class BaseModel(abc.ABC):
-    @abc.abstractstaticmethod
-    def parse_args(args):
-        pass
-
-
 @registry.load("model", "dlrm")
-@BaseModel.register
 class DLRM_Net(nn.Module):
     Preproc = DLRMPreprocessor
 

@@ -24,7 +24,7 @@ class Jobber:
         self.logger = logger
         self.worker: BaseActor = worker
         self.worker_funcs = {func.__name__: func for func in dir(
-            self.worker) if callable(getattr(self.worker, func))}
+            self.worker) if callable(func)}
         self.comm_manager = registry.construct(
             "communications", config_dict=com_manager_config)
         self.logger = logger
