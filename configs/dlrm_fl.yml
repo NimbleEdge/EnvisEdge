@@ -41,7 +41,6 @@ multiprocessing:
 
   process_manager : 
     name : "ray"
-    max_restarts : -1
     
 
   communications : 

@@ -1,4 +1,5 @@
 from abc import ABC
+import atexit
 from typing import Any, Dict
 
 import ray
@@ -49,6 +50,7 @@ class RayProcessManager(ProcessManager):
     def __init__(self) -> None:
         super().__init__()
         ray.init()
+        atexit.register(self.shutdown)
 
     def distribute(self, runnable, type: str, num_instances: int, *args, **kwargs) -> None:
         dist_runnable = ray.remote(runnable)

@@ -6,22 +6,28 @@ from fedrec.multiprocessing.jobber import Jobber
 from fedrec.multiprocessing.process_manager import ProcessManager
 
 from fedrec.python_executors.aggregator import Aggregator
+from fedrec.python_executors.base_actor import ActorConfig
 from fedrec.python_executors.trainer import Trainer
 from fedrec.utilities import registry
-from fedrec.utilities.logger import BaseLogger, NoOpLogger, TBLogger
+from fedrec.utilities.logger import BaseLogger, NoOpLogger
 from fedrec.utilities.random_state import Reproducible
 
 
 class JobExecutor(Reproducible):
-    def __init__(self, actorCls: Callable, config_dict: Dict, logger: BaseLogger, **kwargs) -> None:
+    def __init__(self,
+                 actorCls: Callable,
+                 model_config: Dict,
+                 actor_config: ActorConfig,
+                 logger: BaseLogger,
+                 **kwargs) -> None:
         """ Class responsible for running aggregator/trainer on a single node.
         """
         # Construct trainer and do training
-        self.config_dict = config_dict
-        self.worker = actorCls(0, config_dict, logger, **kwargs)
+        self.model_config = model_config
+        self.worker = actorCls(0, model_config, actor_config, logger, **kwargs)
 
         self.jobber = Jobber(
-            self.worker, logger, config_dict["multiprocessing"]["communications"])
+            self.worker, logger, model_config["multiprocessing"]["communications"])
 
     def run(self):
         return self.jobber.run()
@@ -40,6 +46,7 @@ def main():
     if args.logger:
         if args.logdir is None:
             raise ValueError("logdir cannot be null if logging is enabled")
+        from fedrec.utilities.logger import TBLogger
         logger = TBLogger(args.logdir)
     else:
         logger = NoOpLogger()

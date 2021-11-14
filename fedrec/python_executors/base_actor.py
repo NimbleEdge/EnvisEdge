@@ -9,12 +9,12 @@ from fedrec.utilities.logger import BaseLogger
 from fedrec.utilities.random_state import RandomizationConfig, Reproducible
 
 
-@attr.s(auto_attribs=True)
+@attr.s(kw_only=True)
 class ActorConfig(RandomizationConfig):
     """
     Configuration for the actor.
     """
-    num_rounds = attr.ib(type=int, default=1)
+    num_rounds = attr.ib(1)
 
 
 @attr.s(kw_only=True)
