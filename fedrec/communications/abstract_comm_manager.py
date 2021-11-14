@@ -10,7 +10,7 @@ class AbstractCommunicationManager(ABC):
         raise NotImplementedError('communication interface not defined')
 
     @abstractmethod
-    def recieve_message(self):
+    def receive_message(self):
         raise NotImplementedError('communication interface not defined') 
 
     @abstractmethod

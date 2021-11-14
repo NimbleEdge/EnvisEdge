@@ -2,7 +2,7 @@ from fedrec.communications.abstract_comm_manager import \
     AbstractCommunicationManager
 from fedrec.utilities import registry
 from kafka import KafkaConsumer, KafkaProducer
-
+from json import loads, dumps
 
 @registry.load("communications", "kafka")
 class Kafka(AbstractCommunicationManager):
@@ -44,3 +44,7 @@ class Kafka(AbstractCommunicationManager):
         if not self.producer:
             raise Exception("No producer defined")
         self.producer.send(self.producer_topic, value=message)
+
+    def finish(self):
+        self.producer.close()
+        self.consumer.close()

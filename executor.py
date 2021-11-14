@@ -16,18 +16,18 @@ from fedrec.utilities.random_state import Reproducible
 class JobExecutor(Reproducible):
     def __init__(self,
                  actorCls: Callable,
-                 model_config: Dict,
+                 config: Dict,
                  actor_config: ActorConfig,
                  logger: BaseLogger,
                  **kwargs) -> None:
         """ Class responsible for running aggregator/trainer on a single node.
         """
         # Construct trainer and do training
-        self.model_config = model_config
-        self.worker = actorCls(0, model_config, actor_config, logger, **kwargs)
+        self.config = config
+        self.worker = actorCls(0, config["model"], actor_config, logger, **kwargs)
 
         self.jobber = Jobber(
-            self.worker, logger, model_config["multiprocessing"]["communications"])
+            self.worker, logger, config["multiprocessing"]["communications"])
 
     def run(self):
         return self.jobber.run()

@@ -26,7 +26,7 @@ class Jobber:
         self.worker_funcs = {func.__name__: func for func in dir(
             self.worker) if callable(func)}
         self.comm_manager = registry.construct(
-            "communications", config_dict=com_manager_config)
+            "communications", config=com_manager_config)
         self.logger = logger
         atexit.register(self.stop)
 
@@ -39,6 +39,7 @@ class Jobber:
         """
         try:
             while True:
+                print("Waiting for job request")
                 job_request: JobSubmitMessage = self.process_comm_manager.receive_message()
                 result = self.execute(job_request)
                 self.publish(result)
