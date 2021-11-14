@@ -1,3 +1,5 @@
+import io
+import os
 import torch
 import numpy as np
 import pathlib
@@ -6,6 +8,7 @@ from collections.abc import Iterable
 import argparse
 import pickle
 from warnings import warn
+from fedrec.utilities import registry
 
 
 def load_tensor(file, device=None):
@@ -13,7 +16,6 @@ def load_tensor(file, device=None):
     if device is not None:
         t = t.to(device)
     return t
-
 
 def to_dict_with_sorted_values(d, key=None):
     return {k: sorted(v, key=key) for k, v in d.items()}
@@ -91,7 +93,14 @@ def dash_separated_floats(value):
 
 
 # TODO: Take care of serialization for specific objects
-def serialize_object(obj):
+def serialize_object(obj, file=None):
+    """
+    param file: This can either be a local file storage system or a file to be stored in the s3 cloud,
+                used to store serialized value of obj.
+    """
+    if isinstance(obj, torch.Tensor):
+        return registry.lookup("serializer", torch.Tensor.__name__).serialize(obj, file)
+
     if isinstance(obj, str) or isinstance(obj, bytes):
         # TODO : Pickle if bytes else pickled v/s bytes can't be differentiated.
         return obj
@@ -100,7 +109,15 @@ def serialize_object(obj):
         return pickle.dumps(obj)
 
 
-def deserialize_object(obj):
+def deserialize_object(obj, obj_type=None):
+    """
+    param obj: It can be a file containing tensor the file maybe stream file or a file path or serialized pkl string.
+    param type: type of the object that needs to be deserialized, assuming we know the type.
+    """
+    if obj_type and obj_type is torch.tensor:
+        return registry.lookup("serializer", torch.Tensor.__name__).deserialize(obj)
+    # TODO: Implement and use custom serializers for different classes
+    # which take into account of the size of the serialized messages.
     if isinstance(obj, str):
         return obj
     else:
