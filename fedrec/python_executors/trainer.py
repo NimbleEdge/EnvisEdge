@@ -4,7 +4,7 @@ from typing import Dict
 import attr
 from fedrec.python_executors.base_actor import BaseActor, ActorState
 from fedrec.utilities.logger import BaseLogger
-#from fedrec.utilities import registry 
+from fedrec.utilities import registry
 
 
 @attr.s(kw_only=True)
@@ -64,7 +64,9 @@ class Trainer(BaseActor, ABC):
         self.local_training_steps = 0
         self._data_loaders = {}
         #TODO update trainer logic to avoid double model initialization
-        #self.trainer = registry.construct('trainer', model_config['model'], **model_config['train'])
+        self.trainer = registry.construct('trainer', model_config['model'], **model_config['train'])
+        self.trainer_funcs = {func.__name__: func for func in dir(
+            self.trainer) if callable(func)}
 
     def reset_loaders(self):
         self._data_loaders = {}
@@ -125,16 +127,25 @@ class Trainer(BaseActor, ABC):
             self.model_preproc.datasets('train'))
         self.reset_loaders()
 
-    def train(self):
+    def run(self, func_name, *args, **kwargs):
         """
-        Train the model.
-        """
-        pass
-        # self.model.train()
+        Run the model.
 
-    def test(self):
+        func_name : Name of the function to run in the trainer
         """
-        Test the model.
+        if func_name in self.trainer_funcs:
+            self.trainer_funcs[func_name](*args, **kwargs)
+        else:
+            raise ValueError(
+                f"Job type <{func_name}> not part of worker <{self.trainer.__class__.__name__}> functions")
+
+    def aggregator_output(self, aggregation_method, *args, **kwargs):
         """
-        pass
-        #self.model.test()
+        This function will be called whenever aggregator asks for output from worker
+        """
+        if aggregation_method in self.trainer_funcs:
+            self.trainer_funcs[aggregation_method](*args, **kwargs)
+        else:
+            raise ValueError(
+                f"Aggregation Job type <{aggregation_method}> not part"
+                f"of worker <{self.trainer.__class__.__name__}> functions")

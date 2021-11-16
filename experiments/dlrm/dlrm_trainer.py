@@ -195,7 +195,7 @@ class DLRMTrainer(Trainer):
 
         return False, results
 
-    def test(self):
+    def test(self, *args, **kwargs):
         results = {}
         if self.train_config.eval_on_train:
             _, results['train_metrics'] = self.eval_model(
@@ -215,7 +215,13 @@ class DLRMTrainer(Trainer):
                 step=-1)
         return results
 
-    def train(self, modeldir=None):
+    def output(self, *args, **kwargs):
+        """ Sample ouptut class for worker. Agreegator gets the output
+        of this method
+        """
+        return self.model
+
+    def train(self, modeldir=None, *args, **kwargs):
         last_step, current_epoch = self.saver.restore(modeldir)
         lr_scheduler = self.get_scheduler(
             self.optimizer, last_epoch=last_step)
