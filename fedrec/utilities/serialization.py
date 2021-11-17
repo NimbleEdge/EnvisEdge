@@ -8,6 +8,8 @@ from collections.abc import Iterable
 import argparse
 import pickle
 from warnings import warn
+from fedrec.serialization.serializers import SerializeDeserializeTensor
+
 
 def load_tensor(file, device=None):
     t = torch.load(file)
@@ -90,45 +92,14 @@ def dash_separated_floats(value):
     return value
 
 
-def copy_s3_file(self, file):
-    # TODO: Add aws CLI support like BOTO3, using os.system to copy until then,
-    # Once CLI is installed use Stream to store the file.
-    # Create a temporary file to copy data and then load it to stream
-    extension = file.split(".")[-1]
-    rand_nums = "".join([str(random.randint(0,9)) for _ in range(8)])
-    tmp_file = "./.tmp.{}.{}".format(rand_nums, extension)
-    os.system("aws s3 cp {} {}".format(file, tmp_file))
-    return tmp_file
-
-
-def is_s3_file(self, file):
-        import httplib
-        from urlparse import urlparse
-
-        def url_exists(url):
-            _, host, path, _, _, _ = urlparse(url)
-            conn = httplib.HTTPConnection(host)
-            conn.request('HEAD', path)
-            return conn.getresponse().status < 400
-
-        if "amazon.aws" in str(file) and url_exists(str(file)):
-            return True
-            # TODO: Make this check more robust.
-        return False
-
 # TODO: Take care of serialization for specific objects
 def serialize_object(obj, file=None):
     """
-    param file: This can either be a local file storage system or a file to be stored in the s3 clod.
+    param file: This can either be a local file storage system or a file to be stored in the s3 cloud,
+                used to store serialized value of obj.
     """
     if isinstance(obj, torch.tensor):
-        if file:
-            # if file is provided, save the tesor to the file and return the file path.
-            save_tensor(obj, file)
-        else:
-            # create a buffer Bytes object, which can be used to write to the file.
-            buffer = io.BytesIO()
-            save_tensor(obj, buffer)
+        return SerializeDeserializeTensor(obj).serialize(file)
 
     if isinstance(obj, str) or isinstance(obj, bytes):
         # TODO : Pickle if bytes else pickled v/s bytes can't be differentiated.
@@ -138,25 +109,14 @@ def serialize_object(obj, file=None):
         return pickle.dumps(obj)
 
 
-def deserialize_object(obj):
+def deserialize_object(obj, obj_type=None):
     """
     param obj: It can be a file containing tensor the file maybe stream file or a file path or serialized pkl string.
+    param type: type of the object that needs to be deserialized, assuming we know the type.
     """
-    # the file can be link of s3 storage system:
-    if is_s3_file(obj):
-        # This is most likely to be a link of s3 storage.
-        # Copy the file locally and then deserialize it.
-        path = copy_s3_file(obj)
-
-    if  pathlib.Path(obj).exists() or isinstance (obj, io.BytesIO):
-        try:
-            # This should be the path to the tensor object.
-            tensor = load_tensor(obj, device=None)
-        except Exception as e:
-            if str(e.type) is FileNotFoundError:
-                warn("the filename specified to load the tensor from could not be accessed, Please make sure the path has correct permissions")
-        else:
-            return tensor
+    if obj_type and obj_type is torch.tensor:
+            return SerializeDeserializeTensor(obj).deserialize()
+    # TODO: Implement custom serializers for different classes which take into account of the size of the serialized messages.
     if isinstance(obj, str):
         return obj
     else:
