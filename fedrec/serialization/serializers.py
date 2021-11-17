@@ -2,6 +2,7 @@
 Defines custom serializers and deserializers for different objects
 """
 
+import pickle
 from abc import ABC, abstractmethod
 from fedrec.utilities.serialization import load_tensor, save_tensor
 from fedrec.utilities.saver_utilities import download_s3_file, is_s3_file
@@ -15,15 +16,29 @@ SERIALIZER_REGISTRY = {}
 
 class AbstractSerializerDeserializer(ABC):
     def __init__(self, obj):
-        pass
+        self.obj = obj
 
     @abstractmethod
     def serialize(self, file=None):
-        raise NotImplementedError('Not Implemented yet.')
+        pkl_str = io.BytesIO()
+        with open(file, "wb"):
+            pickle.dump(pkl_str, file)
+        if file and len(list(pkl_str) > threshold:
+            # The pkl string is too long to pass to the kafka message queue, write the string to the file and upload 
+            # it to the cloud.
+            with open(file, "wb") as fd:
+                fd.write(pkl_str.read())
+            return file
+        return pkl_str
+
 
     @abstractmethod
     def deserializer(self):
-        raise NotImplementedError('Not Implemented yet.')
+        # Override this method for custom implementation for a class.
+        pkl_str = io.BytesIO(obj)
+        with open(file, "wb") as fd:
+            deserialized_obj = pickle.load(pkl_str)
+        return deserialized_obj
 
 
 
