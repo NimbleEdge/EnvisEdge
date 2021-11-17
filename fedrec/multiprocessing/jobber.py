@@ -56,7 +56,7 @@ class Jobber:
             senderid=message.receiverid,
             receiverid=message.senderid)
         try:
-            job_result = self.worker(message.job_type,
+            job_result = self.worker.run(message.job_type,
                 *job_args, **job_kwargs)
             result_message.results = {key: serialize_object(
                 val) for key, val in job_result}
