@@ -138,14 +138,3 @@ class Trainer(BaseActor, ABC):
         else:
             raise ValueError(
                 f"Job type <{func_name}> not part of worker <{self.trainer.__class__.__name__}> functions")
-
-    def aggregator_output(self, aggregation_method, *args, **kwargs):
-        """
-        This function will be called whenever aggregator asks for output from worker
-        """
-        if aggregation_method in self.trainer_funcs:
-            self.trainer_funcs[aggregation_method](*args, **kwargs)
-        else:
-            raise ValueError(
-                f"Aggregation Job type <{aggregation_method}> not part"
-                f"of worker <{self.trainer.__class__.__name__}> functions")

@@ -195,7 +195,7 @@ class DLRMTrainer(Trainer):
 
         return False, results
 
-    def test(self, *args, **kwargs):
+    def test(self):
         results = {}
         if self.train_config.eval_on_train:
             _, results['train_metrics'] = self.eval_model(
@@ -221,7 +221,7 @@ class DLRMTrainer(Trainer):
         """
         return self.model
 
-    def train(self, modeldir=None, *args, **kwargs):
+    def train(self, modeldir=None):
         last_step, current_epoch = self.saver.restore(modeldir)
         lr_scheduler = self.get_scheduler(
             self.optimizer, last_epoch=last_step)
