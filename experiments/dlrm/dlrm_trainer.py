@@ -215,12 +215,6 @@ class DLRMTrainer(Trainer):
                 step=-1)
         return results
 
-    def output(self, *args, **kwargs):
-        """ Sample ouptut class for worker. Agreegator gets the output
-        of this method
-        """
-        return self.model
-
     def train(self, modeldir=None):
         last_step, current_epoch = self.saver.restore(modeldir)
         lr_scheduler = self.get_scheduler(
