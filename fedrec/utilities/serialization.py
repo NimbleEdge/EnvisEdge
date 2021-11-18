@@ -8,7 +8,7 @@ from collections.abc import Iterable
 import argparse
 import pickle
 from warnings import warn
-from fedrec.serialization.serializers import SerializeDeserializeTensor
+from fedrec.utilities import registry
 
 
 def load_tensor(file, device=None):
@@ -99,7 +99,7 @@ def serialize_object(obj, file=None):
                 used to store serialized value of obj.
     """
     if isinstance(obj, torch.tensor):
-        return SerializeDeserializeTensor(obj).serialize(file)
+        return registry.lookup("serializer", "tensor").serialize(obj, file)
 
     if isinstance(obj, str) or isinstance(obj, bytes):
         # TODO : Pickle if bytes else pickled v/s bytes can't be differentiated.
@@ -115,8 +115,9 @@ def deserialize_object(obj, obj_type=None):
     param type: type of the object that needs to be deserialized, assuming we know the type.
     """
     if obj_type and obj_type is torch.tensor:
-            return SerializeDeserializeTensor(obj).deserialize()
-    # TODO: Implement custom serializers for different classes which take into account of the size of the serialized messages.
+        return registry.lookup("serializer", "tensor").deserialize(obj)
+    # TODO: Implement and use custom serializers for different classes
+    # which take into account of the size of the serialized messages.
     if isinstance(obj, str):
         return obj
     else:
