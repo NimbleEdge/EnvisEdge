@@ -12,7 +12,7 @@ from fedrec.utilities.saver_utilities import download_s3_file, is_s3_file
 
 
 
-class AbstractSerializerDeserializer(ABC):
+class AbstractSerializer(ABC):
 
     @abstractmethod
     @staticmethod
@@ -42,8 +42,8 @@ class AbstractSerializerDeserializer(ABC):
         return deserialized_obj
 
 
-@registry.load("serializer", "tensor")
-class TensorSerializer(AbstractSerializerDeserializer):
+@registry.load("serializer", torch.Tensor.__name__)
+class TensorSerializer(AbstractSerializer):
 
     @staticmethod
     def serialize(obj, file=None):

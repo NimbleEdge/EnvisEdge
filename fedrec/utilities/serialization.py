@@ -99,7 +99,7 @@ def serialize_object(obj, file=None):
                 used to store serialized value of obj.
     """
     if isinstance(obj, torch.tensor):
-        return registry.lookup("serializer", "tensor").serialize(obj, file)
+        return registry.lookup("serializer", torch.Tensor.__name__).serialize(obj, file)
 
     if isinstance(obj, str) or isinstance(obj, bytes):
         # TODO : Pickle if bytes else pickled v/s bytes can't be differentiated.
@@ -115,7 +115,7 @@ def deserialize_object(obj, obj_type=None):
     param type: type of the object that needs to be deserialized, assuming we know the type.
     """
     if obj_type and obj_type is torch.tensor:
-        return registry.lookup("serializer", "tensor").deserialize(obj)
+        return registry.lookup("serializer", torch.Tensor.__name__).deserialize(obj)
     # TODO: Implement and use custom serializers for different classes
     # which take into account of the size of the serialized messages.
     if isinstance(obj, str):
