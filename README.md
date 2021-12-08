@@ -28,8 +28,8 @@ model :
 ```
 Install the dependencies with conda or pip
 ```bash
-conda create --name recsys python=3.8 --file conda_requirements.txt
-conda activate recsys
+conda env create --name recoedge --file environment.yml
+conda activate recoedge
 ``` 
 
 Run data preprocessing with [preprocess_data](preprocess_data.py) and supply the config file. You should be able to generate per-day split from the entire dataset as well a processed data file
