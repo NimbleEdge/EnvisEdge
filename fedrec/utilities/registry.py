@@ -28,6 +28,8 @@ def lookup(kind, name):
 
 
 def construct(kind, config, unused_keys=(), **kwargs):
+    if isinstance(config, str):
+        config = {'name': config}
     return instantiate(
         lookup(kind, config),
         config,

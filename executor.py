@@ -7,23 +7,20 @@ from fedrec.multiprocessing.jobber import Jobber
 from fedrec.multiprocessing.process_manager import ProcessManager
 
 from fedrec.python_executors.aggregator import Aggregator
-from fedrec.python_executors.base_actor import ActorConfig
 from fedrec.python_executors.trainer import Trainer
 from fedrec.utilities import registry
 from fedrec.utilities.logger import BaseLogger, NoOpLogger
-from fedrec.utilities.random_state import Reproducible
 
 
-class JobExecutor(Reproducible):
+
+class JobExecutor():
     def __init__(self,
                  actorCls: Callable,
                  config: Dict,
-                 actor_config: ActorConfig,
                  logger: BaseLogger,
                  **kwargs) -> None:
         """ Class responsible for running aggregator/trainer on a single node.
         """
-        super().__init__()
 
         # Construct trainer and do training
         self.config = config
@@ -32,7 +29,7 @@ class JobExecutor(Reproducible):
             import fedrec
             import fl_strategies
         self.worker = actorCls(
-            0, config["model"], actor_config, logger, **kwargs)
+            0, config, logger, **kwargs)
         self.jobber = Jobber(
             self.worker, logger, config["multiprocessing"]["communications"])
 
@@ -70,6 +67,9 @@ def main():
 
     process_manager.start(Aggregator.__name__, "run")
     process_manager.start(Trainer.__name__, "run")
+
+    import time
+    time.sleep(234234)
 
 
 if __name__ == "__main__":

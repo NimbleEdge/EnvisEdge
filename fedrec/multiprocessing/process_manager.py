@@ -1,6 +1,7 @@
 from abc import ABC
 import atexit
-from typing import Any, Dict
+from collections import defaultdict
+from typing import Any, DefaultDict, Dict
 
 import ray
 from fedrec.utilities import registry
@@ -14,7 +15,7 @@ class ProcessManager(ABC):
 
     def __init__(self) -> None:
         super().__init__()
-        self.workers = {}
+        self.workers = defaultdict(list)
 
     def distribute(self):
         pass

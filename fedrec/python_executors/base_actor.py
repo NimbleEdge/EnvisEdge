@@ -8,15 +8,6 @@ from fedrec.utilities import registry
 from fedrec.utilities.logger import BaseLogger
 from fedrec.utilities.random_state import RandomizationConfig, Reproducible
 
-
-@attr.s(kw_only=True)
-class ActorConfig(RandomizationConfig):
-    """
-    Configuration for the actor.
-    """
-    num_rounds = attr.ib(1)
-
-
 @attr.s(kw_only=True)
 class ActorState:
     """Construct a ActorState object to reinstatiate an actor when needed.
@@ -57,30 +48,26 @@ class BaseActor(Reproducible, ABC):
 
     def __init__(self,
                  worker_index: int,
-                 model_config: Dict,
-                 actor_config: ActorConfig,
+                 config: Dict,
                  logger: BaseLogger,
                  persistent_storage: str = None,
                  is_mobile: bool = True,
                  round_idx: int = 0):
 
-        super().__init__(actor_config)
+        super().__init__(config["random"])
         self.round_idx = round_idx
         self.worker_index = worker_index
         self.is_mobile = is_mobile
         self.persistent_storage = persistent_storage
 
         self.logger = logger
-        self.model_config = model_config
 
-        modelCls = registry.lookup('model', model_config)
+        modelCls = registry.lookup('model', config["model"])
         self.model_preproc: PreProcessor = registry.instantiate(
             modelCls.Preproc,
-            model_config['preproc'])
+            config["model"]['preproc'])
 
-        self._model = None
         self._optimizer = None
-        self._saver = None
         self.worker =  None
         self.worker_funcs = {}
 
@@ -105,7 +92,7 @@ class BaseActor(Reproducible, ABC):
             # 1. Construct model
             self.model_preproc.load_data_description()
             self._model = registry.construct(
-                'model', self.model_config,
+                'model', self.config,
                 preprocessor=self.model_preproc,
                 unused_keys=('name', 'preproc')
             )

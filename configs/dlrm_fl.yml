@@ -42,9 +42,9 @@ multiprocessing:
   process_manager : 
     name : "ray"
     
-
   communications : 
     name : "kafka"
+    serializer : "json"
     consumer : True
     producer : True
     consumer_port : 9092
@@ -55,23 +55,14 @@ multiprocessing:
     producer_url : "127.0.0.1"
     producer_topic : 'testing1'
 
-train :
+trainer :
   name : dlrm
   config:
-    name : "dlrm_std"
     batch_size : 128
     eval_batch_size : 512
     eval_every_n : 10000
     save_every_n : 5000
     num_workers : 10
-    # Seed for RNG used in shuffling the training data.
-    data_seed : 100
-    # Seed for RNG used in initializing the model.
-    init_seed : 100
-    # Seed for RNG used in computing the model's training loss.
-    # Only relevant with internal randomness in the model, e.g. with dropout.
-    model_seed : 100
-
 
   optimizer :
     name : "sgd"
@@ -86,6 +77,8 @@ train :
 
 aggregator:
   name : "fed_avg"
+
+random:
   data_seed : 100
   init_seed : 100
   model_seed : 100

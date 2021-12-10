@@ -1,9 +1,10 @@
 from typing import Dict, List
-
 from fedrec.python_executors.base_actor import ActorState
+from fedrec.utilities import registry
 
-
+@registry.load("serializer","Message")
 class Message(object):
+    __type__ = "Message"
     def __init__(self, senderid, receiverid):
         self.senderid = senderid
         self.receiverid = receiverid
@@ -14,20 +15,21 @@ class Message(object):
     def get_receiver_id(self):
         return self.receiverid
 
-
+@registry.load("serializer","JobSubmitMessage")
 class JobSubmitMessage(Message):
+    __type__ = "JobSubmitMessage"
     def __init__(self,
                  job_type,
                  job_args,
                  job_kwargs,
                  senderid,
                  receiverid,
-                 workerState):
+                 workerstate):
         super().__init__(senderid, receiverid)
         self.job_type: str = job_type
         self.job_args: List = job_args
         self.job_kwargs: Dict = job_kwargs
-        self.workerstate: ActorState = workerState
+        self.workerstate: ActorState = workerstate
 
     def get_worker_state(self):
         return self.workerstate
@@ -36,7 +38,9 @@ class JobSubmitMessage(Message):
         return self.job_type
 
 
+@registry.load("serializer","JobResponseMessage")
 class JobResponseMessage(Message):
+    __type__ = "JobResponseMessage"
     def __init__(self, job_type, senderid, receiverid):
         super().__init__(senderid, receiverid)
         self.job_type: str = job_type
