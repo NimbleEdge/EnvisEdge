@@ -1,10 +1,11 @@
 
 from abc import ABC
 from typing import Dict
+
 import attr
-from fedrec.python_executors.base_actor import BaseActor, ActorState
-from fedrec.utilities.logger import BaseLogger
+from fedrec.python_executors.base_actor import ActorState, BaseActor
 from fedrec.utilities import registry
+from fedrec.utilities.logger import BaseLogger
 
 
 @attr.s(kw_only=True)
@@ -63,10 +64,12 @@ class Trainer(BaseActor, ABC):
         self.local_sample_number = None
         self.local_training_steps = 0
         self._data_loaders = {}
-        #TODO update trainer logic to avoid double model initialization
-        self.worker = registry.construct('trainer', config["trainer"], unused_keys=(), config_dict = config, logger = logger)
-        self.worker_funcs = {func_name: getattr(self.worker, func_name) for func_name in dir(
-            self.worker) if callable(getattr(self.worker, func_name))}
+        # TODO update trainer logic to avoid double model initialization
+        self.worker = registry.construct(
+            'trainer', config["trainer"], unused_keys=(), config_dict=config, logger=logger)
+        # self.worker_funcs = {func_name: getattr(self.worker, func_name) for func_name in dir(
+        #     self.worker) if callable(getattr(self.worker, func_name))}
+        self.worker_funcs = {"test_run": getattr(self.worker, "test_run")}
 
     def reset_loaders(self):
         self._data_loaders = {}

@@ -1,16 +1,15 @@
+import sys
 from argparse import ArgumentParser
 from typing import Callable, Dict
 
 import yaml
-import sys
+
 from fedrec.multiprocessing.jobber import Jobber
 from fedrec.multiprocessing.process_manager import ProcessManager
-
 from fedrec.python_executors.aggregator import Aggregator
 from fedrec.python_executors.trainer import Trainer
 from fedrec.utilities import registry
 from fedrec.utilities.logger import BaseLogger, NoOpLogger
-
 
 
 class JobExecutor():

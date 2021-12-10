@@ -39,7 +39,8 @@ class Jobber:
             while True:
                 print("Waiting for job request")
                 job_request: JobSubmitMessage = self.comm_manager.receive_message()
-                print(f"Received job request {job_request}, {type(job_request)}")
+                print(
+                    f"Received job request {job_request}, {type(job_request)}")
 
                 result = self.execute(job_request)
                 self.publish(result)
@@ -48,21 +49,15 @@ class Jobber:
             self.stop()
 
     def execute(self, message: JobSubmitMessage):
-        job_args = [
-            deserialize_object(i) for i in message.job_args.items()]
-        job_kwargs = {
-            key: deserialize_object(val)
-            for key, val in message.job_kwargs.items()}
         result_message = JobResponseMessage(
             job_type=message.job_type,
             senderid=message.receiverid,
             receiverid=message.senderid)
         try:
             job_result = self.worker.run(message.job_type,
-                *job_args, **job_kwargs)
+                                         *message.job_args, **message.job_kwargs)
             print(job_result)
-            # result_message.results = {key: serialize_object(
-                # val) for key, val in job_result}
+            result_message.results = job_result
         except Exception as e:
             print(e)
             result_message.errors = e
@@ -72,7 +67,7 @@ class Jobber:
         """
         Publishes the result after executing the job request
         """
-        self.comm_manager.send_message(job_result())
+        self.comm_manager.send_message(job_result)
 
     def stop(self) -> None:
         self.comm_manager.finish()

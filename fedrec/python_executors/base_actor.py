@@ -8,6 +8,7 @@ from fedrec.utilities import registry
 from fedrec.utilities.logger import BaseLogger
 from fedrec.utilities.random_state import RandomizationConfig, Reproducible
 
+
 @attr.s(kw_only=True)
 class ActorState:
     """Construct a ActorState object to reinstatiate an actor when needed.
@@ -68,7 +69,7 @@ class BaseActor(Reproducible, ABC):
             config["model"]['preproc'])
 
         self._optimizer = None
-        self.worker =  None
+        self.worker = None
         self.worker_funcs = {}
 
     @property

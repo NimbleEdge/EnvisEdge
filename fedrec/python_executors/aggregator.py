@@ -2,8 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Dict
 
 import attr
-from fedrec.python_executors.base_actor import (ActorState,
-                                                BaseActor)
+from fedrec.python_executors.base_actor import ActorState, BaseActor
 from fedrec.utilities import registry
 from fedrec.utilities.logger import BaseLogger
 
@@ -90,11 +89,12 @@ class Aggregator(BaseActor, ABC):
                          persistent_storage, is_mobile, round_idx)
         self.in_neighbours = in_neighbours
         self.out_neighbours = out_neighbours
-        #TODO update trainer logic to avoid double model initialization
+        # TODO update trainer logic to avoid double model initialization
         self.worker = registry.construct('aggregator', config['aggregator'],
-                                        in_neighbours=in_neighbours, out_neighbours=out_neighbours)
-        self.worker_funcs = {func_name: getattr(self.worker, func_name) for func_name in dir(
-            self.worker) if callable(getattr(self.worker, func_name))}
+                                         in_neighbours=in_neighbours, out_neighbours=out_neighbours)
+        # self.worker_funcs = {func_name: getattr(self.worker, func_name) for func_name in dir(
+        #     self.worker) if callable(getattr(self.worker, func_name))}
+        self.worker_funcs = {"test_run": getattr(self.worker, "test_run")}
 
     def serialize(self):
         """Serialise the state of the worker to a AggregatorState.

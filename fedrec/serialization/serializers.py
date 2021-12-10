@@ -3,14 +3,14 @@ Defines custom serializers and deserializers for different objects
 """
 
 import io
-import pickle
-import torch
-from abc import ABC, abstractmethod
 import json
+import pickle
+from abc import ABC, abstractmethod
 from json import dumps, loads
+
+import torch
 from fedrec.utilities import registry
 from fedrec.utilities.serialization import load_tensor, save_tensor
-
 
 
 class AbstractSerializer(ABC):
@@ -78,9 +78,11 @@ class TensorSerializer(AbstractSerializer):
             # This should be the path to the tensor object.
             tensor = load_tensor(obj, device=None)
         except Exception as e:
-            raise ValueError("the filename specified to load the tensor from could not be accessed,Please make sure the path has correct permissions")
+            raise ValueError(
+                "the filename specified to load the tensor from could not be accessed,Please make sure the path has correct permissions")
         else:
             return tensor
+
 
 @registry.load("serializer", "json")
 class JSONSerializer(AbstractSerializer):
@@ -90,10 +92,9 @@ class JSONSerializer(AbstractSerializer):
         obj = cls.generate_message_dict(obj)
         print(obj, type(obj))
         return json.dumps(obj, indent=4).encode('utf-8')
-    
+
     @classmethod
     def deserialize(cls, obj):
         obj = json.loads(obj)
         print(obj, type(obj))
-        return registry.construct("serializer", obj["__type__"], unused_keys=(),**obj["__data__"])
-
+        return registry.construct("serializer", obj["__type__"], unused_keys=(), **obj["__data__"])
