@@ -41,7 +41,7 @@ class AbstractSerializer(ABC):
 
     @classmethod
     @abstractmethod
-    def deserializer(cls, obj):
+    def deserialize(cls, obj):
         # Override this method for custom implementation for a class.
         pkl_str = io.BytesIO(obj)
         with open(file, "wb") as fd:
