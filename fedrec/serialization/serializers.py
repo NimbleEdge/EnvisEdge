@@ -15,7 +15,7 @@ from fedrec.utilities.serialization import load_tensor, save_tensor
 
 class AbstractSerializer(ABC):
     """    
-    Abstract class for serializers
+    Abstract class for serializers and deserializers.
     
     Attributes:
     -----------
@@ -109,7 +109,7 @@ class AbstractSerializer(ABC):
 @registry.load("serializer", torch.Tensor.__name__)
 class TensorSerializer(AbstractSerializer):
     """
-    TensorSerializer
+    TensorSerializer serializes and deserializes torch tensors.
 
     Attributes:
     ----------
@@ -181,7 +181,7 @@ class TensorSerializer(AbstractSerializer):
 @registry.load("serializer", "json")
 class JSONSerializer(AbstractSerializer):
     """
-    JSONSerializer
+    JSONSerializer serializes and deserializes json objects.
     
     Attributes:
     ----------
