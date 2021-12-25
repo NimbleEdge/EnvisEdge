@@ -181,7 +181,7 @@ class TensorSerializer(AbstractSerializer):
 @registry.load("serializer", "json")
 class JSONSerializer(AbstractSerializer):
     """
-    JSONSerializer serializes and deserializes json objects.
+    Uses json serialization strategy for objects.
     
     Attributes:
     ----------
@@ -192,7 +192,7 @@ class JSONSerializer(AbstractSerializer):
     @classmethod
     def serialize(cls, obj):
         """
-        Serializes an JSON object.
+        Serializes a python object to json.
             
         Parameters:
         -----------
