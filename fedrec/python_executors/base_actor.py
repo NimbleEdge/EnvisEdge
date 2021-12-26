@@ -73,6 +73,10 @@ class BaseActor(Reproducible, ABC):
         self.worker_funcs = {}
 
     @property
+    def name(self):
+        return self.__class__.__name__.lower()
+
+    @property
     def optimizer(self):
         return None
 
