@@ -1,6 +1,11 @@
 ![License](https://img.shields.io/github/license/NimbleEdge/RecoEdge?style=plastic)
 ![Activity](https://img.shields.io/github/last-commit/NimbleEdge/RecoEdge?style=plastic)
 [![Chat on Discord](https://img.shields.io/discord/889803721339445288?color=purple&label=Discord&style=plastic)](https://nimbleedge.ai/discord)
+<br /><br />
+
+<div align="center"><a href="#"><img src="https://stars.medv.io/NimbleEdge/RecoEdge.svg"/></div>
+
+<br>
 
 # RecoEdge: Bringing Recommendations to the Edge
 A one stop solution to build your recommendation models, train them and, deploy them in a privacy preserving manner-- right on the users' devices. 
