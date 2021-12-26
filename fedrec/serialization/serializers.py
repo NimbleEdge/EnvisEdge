@@ -33,7 +33,7 @@ class AbstractSerializer(ABC):
     @classmethod
     def generate_message_dict(cls, obj):
         """
-        Generates a dictionary from an object.
+        Generates a dictionary from an object and appends type information for finding the appropriate serialiser.
 
         Parameters:
         -----------
