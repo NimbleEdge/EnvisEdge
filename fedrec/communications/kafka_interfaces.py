@@ -30,15 +30,6 @@ class Kafka(AbstractCommunicationManager):
         The port of the producer.
     producer_topic: str 
         The topic of the producer.
-
-    Methods:
-    --------
-    receive_message():
-        Receives a message from the consumer.
-    send_message(message):
-        Sends a message to the producer.
-    finish():
-        Closes the consumer and producer.
     """
     def __init__(self,
                  serializer="json",
