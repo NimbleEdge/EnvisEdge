@@ -210,7 +210,7 @@ class JSONSerializer(AbstractSerializer):
     @classmethod
     def deserialize(cls, obj):
         """
-        Deserializes a JSON object and adds to registry based on `__type__` key.
+        Deserializes a JSON object and fetches the correct serializer for the object based on the type of registry.
             
         Parameters:
         -----------
