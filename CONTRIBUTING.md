@@ -29,3 +29,4 @@ Always write a clear log message for your commits. One-line messages are fine fo
 * Please use the autopep-8 reformat **on the VCS changes** before the final commit.
 * Ensure indentation consistency
 * Follow Google code style
+* Please follow numpy style guides [here](https://numpydoc.readthedocs.io/en/latest/format.html).
