@@ -49,11 +49,11 @@ multiprocessing:
     producer : True
     consumer_port : 9092
     consumer_url : "127.0.0.1"
-    consumer_topic : 'testing1'
+    consumer_topic : 'job-request'
     consumer_group_id : 'test-consumer-group'
     producer_port : 9092
     producer_url : "127.0.0.1"
-    producer_topic : 'testing1'
+    producer_topic : 'job-response'
 
 trainer :
   name : dlrm
