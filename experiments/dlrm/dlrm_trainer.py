@@ -79,7 +79,6 @@ class DLRMTrainer(Reproducible):
             current_epoch += 1
 
     def test_run(self, arg1, arg2):
-        print("ASfdasdf")
         return arg1 + arg2
 
     @property

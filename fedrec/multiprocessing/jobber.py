@@ -23,6 +23,15 @@ class Jobber:
     def __init__(self, worker, logger, com_manager_config: Dict) -> None:
         self.logger = logger
         self.worker: BaseActor = worker
+
+        # append worker infromation to dictionary
+        if com_manager_config["producer_topic"] is not None:
+            com_manager_config["producer_topic"] = com_manager_config[
+                "producer_topic"] + "-" + self.worker.name
+        if com_manager_config["consumer_topic"] is not None:
+            com_manager_config["consumer_topic"] = com_manager_config[
+                "consumer_topic"] + "-" + self.worker.name
+
         self.comm_manager = registry.construct(
             "communications", config=com_manager_config)
         self.logger = logger
@@ -40,7 +49,7 @@ class Jobber:
                 print("Waiting for job request")
                 job_request: JobSubmitMessage = self.comm_manager.receive_message()
                 print(
-                    f"Received job request {job_request}, {type(job_request)}")
+                    f"Received job request {job_request}, {type(job_request)} on {self.worker.name}")
 
                 result = self.execute(job_request)
                 self.publish(result)
