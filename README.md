@@ -12,7 +12,8 @@
 <img src="https://img.shields.io/github/license/NimbleEdge/RecoEdge?style=plastic" alt="Lisence">
 <img src="https://img.shields.io/github/last-commit/NimbleEdge/RecoEdge?style=plastic" alt="Activity">
 <img src="https://img.shields.io/discord/889803721339445288?color=purple&label=Discord&style=plastic" alt="Discord">
-<img src="https://img.shields.io/github/issues/NimbleEdge/RecoEdge?style=plastic" alt="OpenIssues">  
+<img src="https://img.shields.io/github/issues/NimbleEdge/RecoEdge?style=plastic" alt="OpenIssues">
+<img src="https://github.com/NimbleEdge/RecoEdge/actions/workflows/codeql-analysis.yml/badge.svg">  
 
 <br>
 <br>  
