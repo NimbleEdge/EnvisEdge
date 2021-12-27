@@ -1,13 +1,24 @@
-![License](https://img.shields.io/github/license/NimbleEdge/RecoEdge?style=plastic)
-![Activity](https://img.shields.io/github/last-commit/NimbleEdge/RecoEdge?style=plastic)
-[![Chat on Discord](https://img.shields.io/discord/889803721339445288?color=purple&label=Discord&style=plastic)](https://nimbleedge.ai/discord)
-<br /><br />
+<h1 align="center">
 
-<div align="center"><a href="#"><img src="https://stars.medv.io/NimbleEdge/RecoEdge.svg"/></div>
+  <br>
+  <img src="./media/recoedge-banner-dark.png#gh-light-mode-only" alt="RecoEdge"/ height="250" width="800">
+  <img src="./media/recoedge-banner-light.png#gh-dark-mode-only" alt="RecoEdge"/ height="250" width="800">
+  <br>
+  Bringing Recommendations to the Edge
+  <br>
+
+</h1>
+<p align="center">
+<img src="https://img.shields.io/github/license/NimbleEdge/RecoEdge?style=plastic" alt="Lisence">
+<img src="https://img.shields.io/github/last-commit/NimbleEdge/RecoEdge?style=plastic" alt="Activity">
+<img src="https://img.shields.io/discord/889803721339445288?color=purple&label=Discord&style=plastic" alt="Discord">
 
 <br>
-
-# RecoEdge: Bringing Recommendations to the Edge
+<br>  
+<img src="https://stars.medv.io/NimbleEdge/RecoEdge.svg" alt="Sparkline">
+  
+<br>
+</p>
 A one stop solution to build your recommendation models, train them and, deploy them in a privacy preserving manner-- right on the users' devices. 
 
 RecoEdge integrate the phenomenal works by [OpenMined](https://www.openmined.org/) and [FedML](https://github.com/FedML-AI/FedML) to easily explore new federated learning algorithms and deploy them into production.
@@ -18,7 +29,24 @@ The steps to building an awesome recommendation system:
 3. :factory:	**Industrial Deployment:** After all the testing and simulation, deploy easily using [PySyft](https://github.com/openmined/Pysyft) from OpenMined
 4. :rocket: **Edge Computing:** Integrate with [NimbleEdge](https://www.nimbleedge.ai/) to improve FL training times by over **100x**.
 
-
+# Repo Structure 🏢
+  
+ ```
+NimbleEdge/RecoEdge
+├── CONTRIBUTING.md           <-- Please go through the contributing guidelines before starting 🤓
+├── README.md                 <-- You are here 📌
+├── docs                      <-- Tutorials and walkthroughs 🧐
+├── experiments               <-- Recommendations Models used by our services
+├── fedrec                    <-- The whole magic takes place here 😜 
+      ├── communications        <-- Modules realted to communications eg. Kafka
+      ├── multiprocessing       <-- Modules that muliple job requests
+      ├── python_executors      <-- Contains worker modules eg. trainer and aggregator
+      ├── serialization         <-- Message serializers
+      ├── utilities             <-- Necessary modules to run our services 
+├── fl_strategies           <-- Federated learning algorithms for our services.
+├── notebooks               <-- Jupyter Notebook examples
+```
+  
 # QuickStart
 
 Let's train [Facebook AI's DLRM](https://arxiv.org/abs/1906.00091) on the edge. DLRM has been a standard baseline for all neural network based recommendation models.
