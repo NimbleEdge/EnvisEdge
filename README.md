@@ -9,27 +9,27 @@
 
 </h1>
 <p align="center">
-<img src="https://img.shields.io/github/license/NimbleEdge/RecoEdge?style=plastic" alt="Lisence">
-<img src="https://img.shields.io/github/last-commit/NimbleEdge/RecoEdge?style=plastic" alt="Activity">
-<img src="https://img.shields.io/discord/889803721339445288?color=purple&label=Discord&style=plastic" alt="Discord">
+<a href=""><img src="https://img.shields.io/github/license/NimbleEdge/RecoEdge?style=plastic" alt="Lisence"></a>
+<a href=""><img src="https://img.shields.io/github/last-commit/NimbleEdge/RecoEdge?style=plastic" alt="Activity"></a>
+<a href="https://nimbleedge.ai/discord"><img src="https://img.shields.io/discord/889803721339445288?color=purple&label=Discord&style=plastic" alt="Discord"></a>
 <img src="https://img.shields.io/github/issues/NimbleEdge/RecoEdge?style=plastic&color=blue" alt="OpenIssues">
-<img src="https://github.com/NimbleEdge/RecoEdge/actions/workflows/codeql-analysis.yml/badge.svg">  
+<a href=""><img src="https://github.com/NimbleEdge/RecoEdge/actions/workflows/codeql-analysis.yml/badge.svg"></a>  
 
 <br>
 <br>
-<img src="./assets/sparkline-banner.png" alt="Sparkline"/ height="50" width="250">
+<a href="https://github.com/NimbleEdge/RecoEdge/pulse"><img src="./assets/sparkline-banner.png" alt="Sparkline"/ height="50" width="250"></a>
 <br>  
 </p>
 
-A one stop solution to build your recommendation models, train them and, deploy them in a privacy preserving manner-- right on the users' devices. 
+A one-stop solution to build your recommendation models, train them and, deploy them in a privacy-preserving manner-- right on the users' devices.
 
-RecoEdge integrate the phenomenal works by [OpenMined](https://www.openmined.org/) and [FedML](https://github.com/FedML-AI/FedML) to easily explore new federated learning algorithms and deploy them into production.
+RecoEdge allows you to easily explore new federated learning algorithms and deploy them into production.
 
-The steps to building an awesome recommendation system:
-1. :nut_and_bolt: **Standard ML training:** Pick up any ML model and benchmark it using [BaseTrainer](fedrec/trainers/base_trainer.py)
-2. :video_game: **Federated Learning Simulation:** Once you are satisfied with your model, explore a host of FL algorithms with [FederatedWorker](fedrec/federated_worker.py)
-3. :factory:	**Industrial Deployment:** After all the testing and simulation, deploy easily using [PySyft](https://github.com/openmined/Pysyft) from OpenMined
-4. :rocket: **Edge Computing:** Integrate with [NimbleEdge](https://www.nimbleedge.ai/) to improve FL training times by over **100x**.
+The steps to building an awesome recommendation system are:
+1. 🔩 **Standard ML training**: Pick up any ML model and benchmark it using standard settings.
+2. 🎮 Federated Learning Simulation: Once you are satisfied with your model, explore a host of FL algorithms with the simulator.
+3. 🏭 Industrial Deployment: After all the testing and simulation, deploy easily using NimbleEdge suite
+4. 🚀 Edge Computing: Leverage all the benefits of edge computing
 
 # Repo Structure 🏢
   
@@ -86,7 +86,7 @@ To start the multiprocessing executer run the following command:
 ```bash
 python executor.py --config configs/dlrm_fl.yml
 ```
-Run data preprocessing with [preprocess_data](preprocess_data.py) and supply the config file. You should be able to generate per-day split from the entire dataset as well a processed data file
+Run data preprocessing with [preprocess_data](fedrec/preprocessor.py) and supply the config file. You should be able to generate per-day split from the entire dataset as well a processed data file
 ```bash
 python preprocess_data.py --config configs/dlrm.yml --logdir $HOME/logs/kaggle_criteo/exp_1
 ```
