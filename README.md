@@ -38,22 +38,22 @@ NimbleEdge/RecoEdge
 ├── CONTRIBUTING.md           <-- Please go through the contributing guidelines before starting 🤓
 ├── README.md                 <-- You are here 📌
 ├── docs                      <-- Tutorials and walkthroughs 🧐
-├── experiments               <-- Recommendations models used by our services
-├── fedrec                    <-- Whole magic takes place here 😜 
-      ├── communications        <-- Modules realted to communications eg. Kafka
-      ├── multiprocessing       <-- Modules that handle multiple job requests
+├── experiments               <-- Recommendation models used by our services
+└── fedrec                    <-- Whole magic takes place here 😜 
+      ├── communications        <-- Modules for communication interfaces eg. Kafka
+      ├── multiprocessing       <-- Modules to run parallel worker jobs
       ├── python_executors      <-- Contains worker modules eg. trainer and aggregator
       ├── serialization         <-- Message serializers
-      ├── utilities             <-- Necessary modules to run our services 
-├── fl_strategies           <-- Federated learning algorithms for our services.
-├── notebooks               <-- Jupyter Notebook examples
-```
+      └── utilities             <-- Helper modules
+├── fl_strategies             <-- Federated learning algorithms for our services.
+└── notebooks                 <-- Jupyter Notebook examples
+``` 
   
 # QuickStart
 
 Let's train [Facebook AI's DLRM](https://arxiv.org/abs/1906.00091) on the edge. DLRM has been a standard baseline for all neural network based recommendation models.
 
-Clone this repo and change the argument `datafile` in [configs/dlrm.yml](configs/dlrm.yml) to the above path.
+Clone this repo and change the argument `datafile` in [configs/dlrm_fl.yml](configs/dlrm_fl.yml) to the above path.
 ```bash
 git clone https://github.com/NimbleEdge/RecoEdge
 ```
@@ -71,29 +71,34 @@ conda env create --name recoedge --file environment.yml
 conda activate recoedge
 ``` 
 Download kafka from [Here](https://github.com/apache/kafka) 👈
-and then run the following commands in kafka directory
+and start the kafka server using the following commands
 
-```bash
-bin/kafka-topics.sh --create --topic job-request-aggregator --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
-bin/kafka-topics.sh --create --topic job-request-trainer --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
-```
 ```bash
 bin/zookeeper-server-start.sh config/zookeeper.properties
 bin/kafka-server-start.sh config/server.properties
 ```
-To start the multiprocessing executer run the following command:
+Create kafka topics for the job executor
+
+```bash
+bin/kafka-topics.sh --create --topic job-request-aggregator --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+bin/kafka-topics.sh --create --topic job-request-trainer --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+bin/kafka-topics.sh --create --topic job-response-aggregator --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+bin/kafka-topics.sh --create --topic job-response-trainer --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+```
+
+To start the multiprocessing executor run the following command:
 
 ```bash
 python executor.py --config configs/dlrm_fl.yml
 ```
-Run data preprocessing with [preprocess_data](fedrec/preprocessor.py) and supply the config file. You should be able to generate per-day split from the entire dataset as well a processed data file
+Run data preprocessing with [preprocess_data](preprocess_data.py) and supply the config file. You should be able to generate per-day split from the entire dataset as well a processed data file
 ```bash
-python preprocess_data.py --config configs/dlrm.yml --logdir $HOME/logs/kaggle_criteo/exp_1
+python preprocess_data.py --config configs/dlrm_fl.yml --logdir $HOME/logs/kaggle_criteo/exp_1
 ```
 
 **Begin Training**
 ```bash
-python train.py --config configs/dlrm.yml --logdir $HOME/logs/kaggle_criteo/exp_3 --num_eval_batches 1000 --devices 0
+python train.py --config configs/dlrm_fl.yml --logdir $HOME/logs/kaggle_criteo/exp_3 --num_eval_batches 1000 --devices 0
 ```
 
 Run tensorboard to view training loss and validation metrics at [localhost:8888](http://localhost:8888/)
