@@ -1,8 +1,8 @@
 <h1 align="center">
 
   <br>
-  <img src="./media/recoedge-banner-dark.png#gh-light-mode-only" alt="RecoEdge"/ height="250" width="800">
-  <img src="./media/recoedge-banner-light.png#gh-dark-mode-only" alt="RecoEdge"/ height="250" width="800">
+  <img src="./assets/recoedge-banner-dark.png#gh-light-mode-only" alt="RecoEdge"/ height="200" width="650">
+  <img src="./assets/recoedge-banner-light.png#gh-dark-mode-only" alt="RecoEdge"/ height="200" width="650">
   <br>
   Bringing Recommendations to the Edge
   <br>
@@ -12,6 +12,8 @@
 <img src="https://img.shields.io/github/license/NimbleEdge/RecoEdge?style=plastic" alt="Lisence">
 <img src="https://img.shields.io/github/last-commit/NimbleEdge/RecoEdge?style=plastic" alt="Activity">
 <img src="https://img.shields.io/discord/889803721339445288?color=purple&label=Discord&style=plastic" alt="Discord">
+<img src="https://img.shields.io/github/issues/NimbleEdge/RecoEdge?style=plastic&color=blue" alt="OpenIssues">
+<img src="https://github.com/NimbleEdge/RecoEdge/actions/workflows/codeql-analysis.yml/badge.svg">  
 
 <br>
 <br>  
@@ -19,6 +21,7 @@
   
 <br>
 </p>
+
 A one stop solution to build your recommendation models, train them and, deploy them in a privacy preserving manner-- right on the users' devices. 
 
 RecoEdge integrate the phenomenal works by [OpenMined](https://www.openmined.org/) and [FedML](https://github.com/FedML-AI/FedML) to easily explore new federated learning algorithms and deploy them into production.
@@ -36,10 +39,10 @@ NimbleEdge/RecoEdge
 ├── CONTRIBUTING.md           <-- Please go through the contributing guidelines before starting 🤓
 ├── README.md                 <-- You are here 📌
 ├── docs                      <-- Tutorials and walkthroughs 🧐
-├── experiments               <-- Recommendations Models used by our services
-├── fedrec                    <-- The whole magic takes place here 😜 
+├── experiments               <-- Recommendations models used by our services
+├── fedrec                    <-- Whole magic takes place here 😜 
       ├── communications        <-- Modules realted to communications eg. Kafka
-      ├── multiprocessing       <-- Modules that muliple job requests
+      ├── multiprocessing       <-- Modules that handle multiple job requests
       ├── python_executors      <-- Contains worker modules eg. trainer and aggregator
       ├── serialization         <-- Message serializers
       ├── utilities             <-- Necessary modules to run our services 
@@ -68,7 +71,24 @@ Install the dependencies with conda or pip
 conda env create --name recoedge --file environment.yml
 conda activate recoedge
 ``` 
+Download kafka from [Here](https://github.com/apache/kafka) 👈
+and then run the following commands in kafka directory
 
+```bash
+bin/kafka-topics.sh --create --topic job-request-aggregator --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+bin/kafka-topics.sh --create --topic job-request-trainer --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+bin/kafka-topics.sh --create --topic job-response-aggregator --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+bin/kafka-topics.sh --create --topic job-response-trainer --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+```
+```bash
+bin/zookeeper-server-start.sh config/zookeeper.properties
+bin/kafka-server-start.sh config/server.properties
+```
+To start the multiprocessing executer run the following command:
+
+```bash
+python executor.py --config configs/dlrm_fl.yml
+```
 Run data preprocessing with [preprocess_data](preprocess_data.py) and supply the config file. You should be able to generate per-day split from the entire dataset as well a processed data file
 ```bash
 python preprocess_data.py --config configs/dlrm.yml --logdir $HOME/logs/kaggle_criteo/exp_1
