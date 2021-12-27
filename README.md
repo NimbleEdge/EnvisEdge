@@ -17,7 +17,7 @@
 
 <br>
 <br>  
-<img src="https://stars.medv.io/NimbleEdge/RecoEdge.svg" alt="Sparkline">
+<img src="./assets/sparkline-banner.png" alt="Sparkline"/ height="200" width="300">
   
 <br>
 </p>
