@@ -71,7 +71,24 @@ Install the dependencies with conda or pip
 conda env create --name recoedge --file environment.yml
 conda activate recoedge
 ``` 
+Download kafka from [Here](https://github.com/apache/kafka) 👈
+and then run the following commands in kafka directory
 
+```bash
+bin/kafka-topics.sh --create --topic job-request-aggregator --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+bin/kafka-topics.sh --create --topic job-request-trainer --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+bin/kafka-topics.sh --create --topic job-response-aggregator --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+bin/kafka-topics.sh --create --topic job-response-trainer --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+```
+```bash
+bin/zookeeper-server-start.sh config/zookeeper.properties
+bin/kafka-server-start.sh config/server.properties
+```
+To start the multiprocessing executer run the following command:
+
+```bash
+python executor.py --config configs/dlrm_fl.yml
+```
 Run data preprocessing with [preprocess_data](preprocess_data.py) and supply the config file. You should be able to generate per-day split from the entire dataset as well a processed data file
 ```bash
 python preprocess_data.py --config configs/dlrm.yml --logdir $HOME/logs/kaggle_criteo/exp_1
