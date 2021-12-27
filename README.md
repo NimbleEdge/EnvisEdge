@@ -12,7 +12,7 @@
 <img src="https://img.shields.io/github/license/NimbleEdge/RecoEdge?style=plastic" alt="Lisence">
 <img src="https://img.shields.io/github/last-commit/NimbleEdge/RecoEdge?style=plastic" alt="Activity">
 <img src="https://img.shields.io/discord/889803721339445288?color=purple&label=Discord&style=plastic" alt="Discord">
-<img src="https://img.shields.io/github/issues/NimbleEdge/RecoEdge?style=plastic" alt="OpenIssues">
+<img src="https://img.shields.io/github/issues/NimbleEdge/RecoEdge?style=plastic&color=blue" alt="OpenIssues">
 <img src="https://github.com/NimbleEdge/RecoEdge/actions/workflows/codeql-analysis.yml/badge.svg">  
 
 <br>
@@ -39,10 +39,10 @@ NimbleEdge/RecoEdge
 ├── CONTRIBUTING.md           <-- Please go through the contributing guidelines before starting 🤓
 ├── README.md                 <-- You are here 📌
 ├── docs                      <-- Tutorials and walkthroughs 🧐
-├── experiments               <-- Recommendations Models used by our services
-├── fedrec                    <-- The whole magic takes place here 😜 
+├── experiments               <-- Recommendations models used by our services
+├── fedrec                    <-- Whole magic takes place here 😜 
       ├── communications        <-- Modules realted to communications eg. Kafka
-      ├── multiprocessing       <-- Modules that muliple job requests
+      ├── multiprocessing       <-- Modules that handle multiple job requests
       ├── python_executors      <-- Contains worker modules eg. trainer and aggregator
       ├── serialization         <-- Message serializers
       ├── utilities             <-- Necessary modules to run our services 
