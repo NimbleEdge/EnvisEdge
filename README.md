@@ -16,10 +16,7 @@
 <img src="https://github.com/NimbleEdge/RecoEdge/actions/workflows/codeql-analysis.yml/badge.svg">  
 
 <br>
-<br>  
 <img src="./assets/sparkline-banner.png" alt="Sparkline"/ height="200" width="300">
-  
-<br>
 </p>
 
 A one stop solution to build your recommendation models, train them and, deploy them in a privacy preserving manner-- right on the users' devices. 
