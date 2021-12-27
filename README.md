@@ -1,8 +1,8 @@
 <h1 align="center">
 
   <br>
-  <img src="./media/recoedge-banner-dark.png#gh-light-mode-only" alt="RecoEdge"/ height="250" width="800">
-  <img src="./media/recoedge-banner-light.png#gh-dark-mode-only" alt="RecoEdge"/ height="250" width="800">
+  <img src="./assets/recoedge-banner-dark.png#gh-light-mode-only" alt="RecoEdge"/ height="250" width="800">
+  <img src="./assets/recoedge-banner-light.png#gh-dark-mode-only" alt="RecoEdge"/ height="250" width="800">
   <br>
   Bringing Recommendations to the Edge
   <br>
