@@ -9,6 +9,7 @@ import akka.actor.typed.scaladsl.ActorContext
 import akka.actor.typed.scaladsl.AbstractBehavior
 import akka.actor.typed.Signal
 import akka.actor.typed.PostStop
+import scala.collection.mutable.Map
 
 object Orchestrator {
   def apply(orcId: OrchestratorIdentifier): Behavior[Command] =
@@ -30,7 +31,7 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
 
   // TODO
   // Add state and persistent information
-  var aggIdToRef : MutableMap[AggregatorIdentifier, ActorRef[Aggregator.Command]] = MutableMap.empty
+  var aggIdToRef : Map[AggregatorIdentifier, ActorRef[Aggregator.Command]] = Map.empty
   context.log.info("Orchestrator {} started", orcId.toString())
   
   private def getAggregatorRef(aggId: AggregatorIdentifier): ActorRef[Aggregator.Command] = {
@@ -45,19 +46,6 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
             actorRef
     }
   }
-  
-  private def getTrainerRef(traId: TrainerIdentifier): ActorRef[Trainer.Command] = {
-    traIdToRef.get(traId) match {
-        case Some(actorRef) =>
-            actorRef
-        case None =>
-            context.log.info("Creating new trainer actor for {}", traId.toString())
-            val actorRef = context.spawn(Trainer(traId), s"aggregator-${traId.toString()}")
-            context.watchWith(actorRef, TrainerTerminated(actorRef, traId))
-            traIdToRef += traId -> actorRef
-            actorRef
-    }
-  }
 
   override def onMessage(msg: Command): Behavior[Command] =
     msg match {
@@ -69,8 +57,8 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
       case trackMsg @ RequestTrainer(requestId, traId, replyTo) =>
         val traId = traId.toList()[1]
 
-        actorRef = getTrainerRef(traId)
-        replyTo ! TrainerRegistered(actorRef)
+        aggRef = getAggregatorRef(aggId)
+        aggRef ! trackMsg
         this
       
       case trackMsg @ RequestTopology(requestId, entity, replyTo) =>

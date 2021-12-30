@@ -9,6 +9,7 @@ import akka.actor.typed.scaladsl.ActorContext
 import akka.actor.typed.scaladsl.AbstractBehavior
 import akka.actor.typed.Signal
 import akka.actor.typed.PostStop
+import scala.collection.mutable.Map
 
 object Aggregator {
     def apply(aggId: AggregatorIdentifier): Behavior[Command] =
@@ -33,8 +34,8 @@ class Aggregator(context: ActorContext[Aggregator.Command], aggId: AggregatorIde
 
     // TODO
     // Add state and persistent information
-    var aggregatorIdsToRef : MutableMap[AggregatorIdentifier, ActorRef[Aggregator.Command]] = MutableMap.empty
-    var trainerIdsToRef : MutableMap[TrainerIdentifier, ActorRef[Trainer.Command]] = MutableMap.empty
+    var aggregatorIdsToRef : Map[AggregatorIdentifier, ActorRef[Aggregator.Command]] = Map.empty
+    var trainerIdsToRef : Map[TrainerIdentifier, ActorRef[Trainer.Command]] = Map.empty
 
     context.log.info("Aggregator {} started", aggId.toString())
 
