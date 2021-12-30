@@ -62,7 +62,7 @@ class Trainer(BaseActor, ABC):
         super().__init__(worker_index, config, logger,
                          persistent_storage, is_mobile, round_idx)
         self.local_sample_number = None
-        self.local_training_steps = 0
+        self.local_training_steps = 10
         self._data_loaders = {}
         # TODO update trainer logic to avoid double model initialization
         self.worker = registry.construct(
@@ -94,7 +94,9 @@ class Trainer(BaseActor, ABC):
             round_idx=self.round_idx,
             state_dict=state,
             model_preproc=self.model_preproc,
-            storage=self.persistent_storage
+            storage=self.persistent_storage,
+            local_sample_number = self.local_sample_number,
+            local_training_steps = self.local_training_steps
         )
 
     def load_worker(
