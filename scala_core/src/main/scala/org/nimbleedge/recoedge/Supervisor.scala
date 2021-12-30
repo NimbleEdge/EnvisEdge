@@ -26,6 +26,7 @@ object Supervisor {
     final case class RequestAggregator(requestId: Long, aggId: AggregatorIdentifier, replyTo: ActorRef[AggregatorRegistered])
         extends Supervisor.Command
         with Orchestrator.Command
+        with Aggregator.Command
     
     final case class AggregatorRegistered(requestId: Long, actor: ActorRef[Aggregator.Command])
 
@@ -41,7 +42,7 @@ object Supervisor {
         extends Supervisor.Command
 
     // Requesting Topology
-    final case class RequestTopology(requestId: Long, entity: Identifier, replyTo: ActorRef[Topology])
+    final case class RequestTopology(requestId: Long, entity: Either[OrchestratorIdentifier, AggregatorIdentifier], replyTo: ActorRef[Topology])
         extends Supervisor.Command
         with Orchestrator.Command
         with Aggregator.Command
@@ -85,35 +86,28 @@ class Supervisor(context: ActorContext[Supervisor.Command]) extends AbstractBeha
         msg match {
             case RequestOrchestrator(requestId, orcId, replyTo) =>
                 val actorRef = getOrchestratorRef(orcId)
-                replyTo ! OrchestratorRegistered(actorRef)
+                replyTo ! OrchestratorRegistered(requestId, actorRef)
                 this
             
             case trackMsg @ RequestAggregator(requestId, aggId, replyTo) =>
-                // First of the identifier list is 
-                // TODO add protection (some/none) monad (condition) here
-                // TODO add top-down traversal in identifier class
-                val orcId = aggId.toList()[0]
+                val orcId = aggId.getOrchestrator()
 
                 val orchestratorRef = getOrchestratorRef(orcId)
                 orchestratorRef ! trackMsg
                 this
             
             case trackMsg @ RequestTrainer(requestId, traId, replyTo) =>
-                // First of the identifier list is 
-                // TODO add protection (some/none) monad (condition) here
-                // TODO add top-down traversal in identifier class
-                val orcId = traId.toList()[0]
+                val orcId = traId.getOrchestrator()
 
                 val orchestratorRef = getOrchestratorRef(orcId)
                 orchestratorRef ! trackMsg
                 this
             
             case trackMsg @ RequestTopology(requestId, entity, replyTo) =>
-                // TODO
-                // First of the identifier list is 
-                // TODO add protection (some/none) monad (condition) here
-                // TODO add top-down traversal in identifier class
-                val orcId = entity.toList()[0]
+                val orcId = entity match {
+                    case Left(x) => x
+                    case Right(x) => x.getOrchestrator()
+                }
 
                 orcIdToRef.get(orcId) match {
                     case Some(actorRef) =>

@@ -1,6 +1,7 @@
 package org.nimbleedge.recoedge
 
 import models._
+import scala.collection.mutable.{Map => MutableMap}
 
 import akka.actor.typed.ActorRef
 import akka.actor.typed.Behavior
@@ -9,7 +10,6 @@ import akka.actor.typed.scaladsl.ActorContext
 import akka.actor.typed.scaladsl.AbstractBehavior
 import akka.actor.typed.Signal
 import akka.actor.typed.PostStop
-import scala.collection.mutable.Map
 
 object Orchestrator {
   def apply(orcId: OrchestratorIdentifier): Behavior[Command] =
@@ -27,11 +27,11 @@ object Orchestrator {
 
 class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: OrchestratorIdentifier) extends AbstractBehavior[Orchestrator.Command](context) {
   import Orchestrator._
-  import Supervisor.{ RequestAggregator, RequestTrainer, RequestTopology }
+  import Supervisor.{ RequestAggregator, AggregatorRegistered, RequestTrainer, RequestTopology }
 
   // TODO
   // Add state and persistent information
-  var aggIdToRef : Map[AggregatorIdentifier, ActorRef[Aggregator.Command]] = Map.empty
+  var aggIdToRef : MutableMap[AggregatorIdentifier, ActorRef[Aggregator.Command]] = MutableMap.empty
   context.log.info("Orchestrator {} started", orcId.toString())
   
   private def getAggregatorRef(aggId: AggregatorIdentifier): ActorRef[Aggregator.Command] = {
@@ -50,26 +50,46 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
   override def onMessage(msg: Command): Behavior[Command] =
     msg match {
       case trackMsg @ RequestAggregator(requestId, aggId, replyTo) =>
-        actorRef = getAggregatorRef(aggId)
-        replyTo ! AggregatorRegistered(actorRef)
+        if (aggId.getOrchestrator() != this.orcId) {
+          context.log.info("Expected orchestrator id {}, found {}", this.orcId.toString(), aggId.toString())
+        } else {
+          val actorRef = getAggregatorRef(aggId)
+          replyTo ! AggregatorRegistered(requestId, actorRef)
+        }
         this
 
       case trackMsg @ RequestTrainer(requestId, traId, replyTo) =>
-        val traId = traId.toList()[1]
-
-        aggRef = getAggregatorRef(aggId)
-        aggRef ! trackMsg
+        if (traId.getOrchestrator() != this.orcId) {
+          context.log.info("Expected orchestrator id {}, found {}", this.orcId.toString(), traId.toString())
+        } else {
+          val aggList = traId.getAggregators()
+          val aggId = aggList.head
+          val aggRef = getAggregatorRef(aggId)
+          aggRef ! trackMsg
+        }
         this
       
       case trackMsg @ RequestTopology(requestId, entity, replyTo) =>
         // TODO
-        val aggId = entity.toList()[0]
+        val entityOrcId = entity match {
+          case Left(x) => x
+          case Right(x) => x.getOrchestrator()
+        }
 
-        orcIdToRef.get(aggId) match {
-            case Some(actorRef) =>
-                actorRef ! trackMsg
-            case None =>
-                context.log.info("Orchestrator with id {} does not exist, can't request topology", aggId.toString())
+        if (entityOrcId != this.orcId) {
+          context.log.info("Expected orchestrator id {}, found {}", this.orcId.toString(), entityOrcId.toString())
+        } else {
+          entity match {
+            case Left(x) =>
+              // TODO
+              // Give current node's topology
+            case Right(x) =>
+              // Will always include current aggregator at the end
+              val aggList = x.getAggregators()
+              val aggId = aggList.head
+              val aggRef = getAggregatorRef(aggId)
+              aggRef ! trackMsg
+          }
         }
         this
       
