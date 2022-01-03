@@ -91,6 +91,11 @@ To start the multiprocessing executor run the following command:
 ```bash
 python executor.py --config configs/dlrm_fl.yml
 ```
+Change the path in [Dlrm_fl.yml](https://github.com/NimbleEdge/RecoEdge/blob/740f50e8c367e4824c704d826ea65866cac31664/configs/dlrm_fl.yml#L32) to your data path.
+```
+preproc :
+    datafile : "<Your path to data>/criteo_dataset/train.txt"
+```
 Run data preprocessing with [preprocess_data](preprocess_data.py) and supply the config file. You should be able to generate per-day split from the entire dataset as well a processed data file
 ```bash
 python preprocess_data.py --config configs/dlrm_fl.yml --logdir $HOME/logs/kaggle_criteo/exp_1
