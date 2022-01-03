@@ -29,7 +29,7 @@ model :
 
   
   preproc :
-    datafile : "/home/vkkhare/datablaze/criteo_dataset/train.txt"
+    datafile : "/home/ramesht.shuklae/fed/data/train.txt"
     output_file : "kaggleAdDisplayChallenge_processed"
     dataset_config :
       name : "kaggle"
