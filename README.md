@@ -53,7 +53,7 @@ NimbleEdge/RecoEdge
 
 Let's train [Facebook AI's DLRM](https://arxiv.org/abs/1906.00091) on the edge. DLRM has been a standard baseline for all neural network based recommendation models.
 
-Clone this repo and change the argument `datafile` in [configs/dlrm_fl.yml](configs/dlrm_fl.yml) to the above path.
+Clone this repo and change the argument `datafile` in [configs/dlrm_fl.yml](https://github.com/NimbleEdge/RecoEdge/blob/main/configs/dlrm_fl.yml) to the above path.
 ```bash
 git clone https://github.com/NimbleEdge/RecoEdge
 ```
@@ -91,7 +91,7 @@ To start the multiprocessing executor run the following command:
 ```bash
 python executor.py --config configs/dlrm_fl.yml
 ```
-Change the path in [Dlrm_fl.yml](https://github.com/NimbleEdge/RecoEdge/blob/740f50e8c367e4824c704d826ea65866cac31664/configs/dlrm_fl.yml#L32) to your data path.
+Change the path in [Dlrm_fl.yml](https://github.com/NimbleEdge/RecoEdge/blob/main/configs/dlrm_fl.yml) to your data path.
 ```
 preproc :
     datafile : "<Your path to data>/criteo_dataset/train.txt"
