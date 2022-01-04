@@ -60,14 +60,15 @@ class BaseActor(Reproducible, ABC):
         self.worker_index = worker_index
         self.is_mobile = is_mobile
         self.persistent_storage = persistent_storage
-
+        self.config = config
         self.logger = logger
+    
 
         modelCls = registry.lookup('model', config["model"])
         self.model_preproc: PreProcessor = registry.instantiate(
             modelCls.Preproc,
             config["model"]['preproc'])
-
+        self._model = None
         self._optimizer = None
         self.worker = None
         self.worker_funcs = {}
@@ -97,7 +98,7 @@ class BaseActor(Reproducible, ABC):
             # 1. Construct model
             self.model_preproc.load_data_description()
             self._model = registry.construct(
-                'model', self.config,
+                'model', self.config['model'],
                 preprocessor=self.model_preproc,
                 unused_keys=('name', 'preproc')
             )
