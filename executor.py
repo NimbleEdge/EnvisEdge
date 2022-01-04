@@ -23,7 +23,9 @@ class JobExecutor():
 
         # Construct trainer and do training
         self.config = config
-        if not set(['experiments', 'fedrec', 'fl_strategies']).issubset(set(sys.modules.values())):
+        if not set(['experiments',
+                    'fedrec',
+                    'fl_strategies']).issubset(set(sys.modules.values())):
             import experiments
             import fedrec
             import fl_strategies
@@ -57,12 +59,18 @@ def main():
     process_manager: ProcessManager = registry.construct(
         "process_manager", config_dict["multiprocessing"]["process_manager"])
 
-    process_manager.distribute(JobExecutor, Aggregator.__name__,
-                               config_dict["multiprocessing"]["num_aggregators"],
-                               actorCls=Aggregator, config=config_dict, logger=logger)
-    process_manager.distribute(JobExecutor, Trainer.__name__,
-                               config_dict["multiprocessing"]["num_trainers"],
-                               actorCls=Trainer, config=config_dict, logger=logger)
+    process_manager.distribute(
+        JobExecutor, Aggregator.__name__,
+        config_dict["multiprocessing"]["num_aggregators"],
+        actorCls=Aggregator,
+        config=config_dict, logger=logger
+    )
+    process_manager.distribute(
+        JobExecutor, Trainer.__name__,
+        config_dict["multiprocessing"]["num_trainers"],
+        actorCls=Trainer,
+        config=config_dict, logger=logger
+    )
 
     process_manager.start(Aggregator.__name__, "run")
     process_manager.start(Trainer.__name__, "run")

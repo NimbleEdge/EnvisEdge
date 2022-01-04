@@ -71,7 +71,8 @@ class SGD(Optimizer):
         dampening (float, optional): dampening for momentum (default: 0)
         nesterov (bool, optional): enables Nesterov momentum (default: False)
     Example:
-        >>> optimizer = torch.optim.SGD(model.parameters(), lr=0.1, momentum=0.9)
+        >>> optimizer = torch.optim.SGD(model.parameters(),
+         lr=0.1, momentum=0.9)
         >>> optimizer.zero_grad()
         >>> loss_fn(model(input), target).backward()
         >>> optimizer.step()
@@ -162,7 +163,8 @@ class SGD(Optimizer):
                 nesterov=nesterov)
 
             # update momentum_buffers in state
-            for p, momentum_buffer in zip(params_with_grad, momentum_buffer_list):
+            param_momentum_tuple = zip(params_with_grad, momentum_buffer_list)
+            for p, momentum_buffer in param_momentum_tuple:
                 state = self.state[p]
                 state['momentum_buffer'] = momentum_buffer
 

@@ -17,6 +17,7 @@ def load_tensor(file, device=None):
         t = t.to(device)
     return t
 
+
 def to_dict_with_sorted_values(d, key=None):
     return {k: sorted(v, key=key) for k, v in d.items()}
 
@@ -37,20 +38,6 @@ def to_dict_with_set_values(d):
 def save_tensor(tensor, file):
     pathlib.Path(file).parent.mkdir(parents=True, exist_ok=True)
     torch.save(tensor, file)
-
-
-def toJSON(obj):
-    ''' 
-    Calls this instance in case of serialization failure.
-    Assumes the object is attr 
-    '''
-    if attr.has(obj):
-        return attr.asdict(obj)
-    elif isinstance(obj, np.int64):
-        return int(obj)
-    else:
-        raise NotImplementedError(
-            "serialization obj not attr but {}".format(type(obj)))
 
 
 def tuplify(dictionary):
@@ -94,15 +81,19 @@ def dash_separated_floats(value):
 
 # TODO: Take care of serialization for specific objects
 def serialize_object(obj, file=None):
-    """
-    param file: This can either be a local file storage system or a file to be stored in the s3 cloud,
-                used to store serialized value of obj.
+    """param file:
+        This can either be a local file
+        storage system or a file to be stored in the s3 cloud,
+        used to store serialized value of obj.
     """
     if isinstance(obj, torch.Tensor):
-        return registry.lookup("serializer", torch.Tensor.__name__).serialize(obj, file)
+        return registry.lookup(
+            "serializer",
+            torch.Tensor.__name__).serialize(obj, file)
 
     if isinstance(obj, str) or isinstance(obj, bytes):
-        # TODO : Pickle if bytes else pickled v/s bytes can't be differentiated.
+        # TODO : Pickle if bytes else pickled
+        #  v/s bytes can't be differentiated. ̰
         return obj
     else:
         warn(f"Pickle is being used to serialize object of type: {type(obj)}")
@@ -110,12 +101,16 @@ def serialize_object(obj, file=None):
 
 
 def deserialize_object(obj, obj_type=None):
-    """
-    param obj: It can be a file containing tensor the file maybe stream file or a file path or serialized pkl string.
-    param type: type of the object that needs to be deserialized, assuming we know the type.
+    """param obj: It can be a file containing tensor
+        the file maybe stream file or a file path or
+        serialized pkl string.
+        param type: type of the object that needs
+        to be deserialized, assuming we know the type.
     """
     if obj_type and obj_type is torch.tensor:
-        return registry.lookup("serializer", torch.Tensor.__name__).deserialize(obj)
+        return registry.lookup(
+            "serializer",
+            torch.Tensor.__name__).deserialize(obj)
     # TODO: Implement and use custom serializers for different classes
     # which take into account of the size of the serialized messages.
     if isinstance(obj, str):

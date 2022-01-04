@@ -53,7 +53,10 @@ class RayProcessManager(ProcessManager):
         ray.init()
         atexit.register(self.shutdown)
 
-    def distribute(self, runnable, type: str, num_instances: int, *args, **kwargs) -> None:
+    def distribute(self, runnable,
+                   type: str,
+                   num_instances: int,
+                   *args, **kwargs) -> None:
         dist_runnable = ray.remote(runnable)
         print(args)
         print(kwargs)

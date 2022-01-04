@@ -27,7 +27,11 @@ class CriteoDataset(Dataset):
             ]
 
         if self.max_ind_range > 0:
-            return self.X_int[index], self.X_cat[index] % self.max_ind_range, self.y[index]
+            return (
+                self.X_int[index],
+                self.X_cat[index] % self.max_ind_range,
+                self.y[index]
+            )
         else:
             return self.X_int[index], self.X_cat[index], self.y[index]
 

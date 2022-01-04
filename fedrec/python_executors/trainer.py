@@ -17,13 +17,13 @@ class TrainerState(ActorState):
     id : int
         Unique worker identifier
     model_preproc : `Preprocessor`
-        The local dataset of the worker 
+        The local dataset of the worker
     round_idx : int
         The number of local training cycles finished
     state_dict : dict
         A dictionary of state dicts storing model weights and optimizer dicts
     storage : str
-        The address for persistent storage 
+        The address for persistent storage
     """
     model_preproc = attr.ib()
     local_sample_number = attr.ib()
@@ -66,8 +66,13 @@ class Trainer(BaseActor, ABC):
         self._data_loaders = {}
         # TODO update trainer logic to avoid double model initialization
         self.worker = registry.construct(
-            'trainer', config["trainer"], unused_keys=(), config_dict=config, logger=logger)
-        # self.worker_funcs = {func_name: getattr(self.worker, func_name) for func_name in dir(
+            'trainer',
+            config["trainer"],
+            unused_keys=(),
+            config_dict=config,
+            logger=logger)
+        # self.worker_funcs =
+        # {func_name: getattr(self.worker, func_name) for func_name in dir(
         #     self.worker) if callable(getattr(self.worker, func_name))}
         self.worker_funcs = {"test_run": getattr(self.worker, "test_run")}
 
@@ -79,8 +84,9 @@ class Trainer(BaseActor, ABC):
 
         Returns
         -------
-        `TrainerState` 
-            The serialised class object to be written to Json or persisted into the file.
+        `TrainerState`
+            The serialised class object to be written
+            to Json or persisted into the file.
         """
         state = {
             'model': self._get_model_params(),
@@ -95,8 +101,8 @@ class Trainer(BaseActor, ABC):
             state_dict=state,
             model_preproc=self.model_preproc,
             storage=self.persistent_storage,
-            local_sample_number = self.local_sample_number,
-            local_training_steps = self.local_training_steps
+            local_sample_number=self.local_sample_number,
+            local_training_steps=self.local_training_steps
         )
 
     def load_worker(
@@ -125,7 +131,7 @@ class Trainer(BaseActor, ABC):
         worker_index : int
             unique worker id
         model_preproc : `Preprocessor`
-            The preprocessor contains the dataset of the worker 
+            The preprocessor contains the dataset of the worker
         """
         self.model_preproc = model_preproc
         self.local_sample_number = len(
@@ -143,4 +149,5 @@ class Trainer(BaseActor, ABC):
             return self.worker_funcs[func_name](*args, **kwargs)
         else:
             raise ValueError(
-                f"Job type <{func_name}> not part of worker <{self.worker.__class__.__name__}> functions")
+                f"Job type <{func_name}> not part of worker"
+                + f"<{self.worker.__class__.__name__}> functions")
