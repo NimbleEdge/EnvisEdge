@@ -24,7 +24,7 @@ jobs:
       working-directory: ${{ env.working-directory }}
       run: |
         # check formatting
-        flake8 . --select=E501,W291
+        flake8 . --select=E501,W291 --statistics
     - name: Lint with flake8
       working-directory: ${{ env.working-directory }}
       run: |
