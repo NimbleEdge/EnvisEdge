@@ -15,21 +15,28 @@ class Kafka(AbstractCommunicationManager):
     serializer: AbstractSerializer
         The serializer to use.
     consumer: KafkaConsumer
-        The consumer to use.
+       Consumer will get the message token form kafka broker.
     producer: KafkaProducer
-        The producer to use.
+        Producer will provide the message token to the kafka broker.
     consumer_url: str
-        The url of the consumer.
-    consumer_port: int  
-        The port of the consumer.
+        URL to which consumer will listen to get the message token.
+    consumer_port: int
+        The port to which consumer will connect to get message token
     consumer_topic: str
-        The topic of the consumer.
+        Topic to which consumer will listen to get message token form kafka token.
+    consumer_group_id: str
+        The group id of the consumer which is the ID of the group of consumer topics.
     producer_url: str
-        The url of the producer.
+        URL to which producer will send the message token to kafka broker.
     producer_port: int
-        The port of the producer.
+        The port to which producer will connect to send the message token to kafka broker.
     producer_topic: str 
-        The topic of the producer.
+        Topic to which producer will send the message token to kafka broker.
+    
+    Raises:
+    -------
+    Exception
+        If the consumer or producer is set to `False`.
     """
     def __init__(self,
                  serializer="json",
