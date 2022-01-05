@@ -8,8 +8,8 @@ from json import loads, dumps
 @registry.load("communications", "kafka")
 class Kafka(AbstractCommunicationManager):
     """
-    Kafka specific methods below here.  These are not part of the abstract 
-    class.
+    Kafka specific methods below here. These are not part of the
+    abstract class.
 
     Attributes:
     ----------
@@ -26,8 +26,8 @@ class Kafka(AbstractCommunicationManager):
     consumer_topic: str
         Topic to which consumer will subscribe to get the message token.
     consumer_group_id: str
-        The group id of the consumer which is the ID of the group of consumer 
-        topics.
+        The group id of the consumer which is the ID of the group of 
+        consumer topics.
     producer_url: str
         URL to which consumer will connects to send the message token.
     producer_port: int
