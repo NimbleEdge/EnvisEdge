@@ -8,7 +8,7 @@ body:
       value: |
         Thanks for taking the time to make our documentation better 🙏
   - type: textarea
-    id: Where?
+    id: Where
     validations:
       required: true
     attributes:
