@@ -8,35 +8,32 @@ from json import loads, dumps
 @registry.load("communications", "kafka")
 class Kafka(AbstractCommunicationManager):
     """
-    Kafka specific methods below here. These are not part of the
-    abstract class.
+    Implements the basic send/receive interface so that workers and the job executor can communicate with each other.
 
     Attributes:
     ----------
     serializer: AbstractSerializer
         The serializer to use.
     consumer: KafkaConsumer
-       Consumer will get the message token form kafka broker.
+       Consumer will get the message token from kafka broker.
     producer: KafkaProducer
         Producer will provide the message token to the kafka
         broker.
     consumer_url: str
-        URL to which consumer will connects to get the message token.
+        URL to which consumer will connect to get the message token.
     consumer_port: int
-        Port where the consumer connect to get token.
+        Port where the consumer connects to get token.
     consumer_topic: str
-        Topic to which consumer will subscribe to get the message
-        token.
+        Topic to which consumer will subscribe to fetches its message.
     consumer_group_id: str
         Group is used to identify the consumer group.
     producer_url: str
-        URL to which consumer will connect to send the message token.
+        URL to which producer will connect to send the message token.
     producer_port: int
         Port where the producer connects to send the message
         token.
     producer_topic: str
-        Topic to which producer will subscribe to send message token
-        to consumer subscribed to that topic.
+        Topic to which producer will subscribe to send message token.
 
     Raises:
     -------
@@ -76,7 +73,7 @@ class Kafka(AbstractCommunicationManager):
 
     def receive_message(self):
         """
-        Receives a message from the consumer.
+        Receives a message from the kafka broker.
         
         Returns:
         --------
@@ -89,7 +86,7 @@ class Kafka(AbstractCommunicationManager):
 
     def send_message(self, message):
         """
-        Sends a message to the producer.
+        Sends a message to the kafka broker.
 
         Returns:
         --------
