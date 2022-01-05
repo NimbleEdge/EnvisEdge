@@ -1,0 +1,41 @@
+name: " 🚨 Tests"
+description: "Report an issue related to Tests"
+title: "🚨 Tests: "
+labels: [Tests]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to make our documentation better 🙏
+  - type: textarea
+    id: Where?
+    validations:
+      required: true
+    attributes:
+      label: "🛩 Where?"
+      description: "The path of the file for which the tests are need to be added."
+      placeholder: "Eg. PATH: /fedrec/serialization/serializers.py"
+  - type: textarea
+    id: issue-description
+    validations:
+      required: true
+    attributes:
+      label: "💭 Description"
+      description: "A clear and concise description of what the issue is."
+      placeholder: "The file ...."
+  - type: checkboxes
+    id: no-duplicate-issues
+    attributes:
+      label: "👀 Have you spent some time to check if this issue has been raised before?"
+      description: "Have you Googled for a similar issue or checked our older issues for a similar type?"
+      options:
+        - label: "I checked and didn't find similar issue"
+          required: true
+  - type: checkboxes
+    id: read-code-of-conduct
+    attributes:
+      description: "This is our [Code of Conduct](https://github.com/NimbleEdge/RecoEdge/blob/main/CODE_OF_CONDUCT.md)."
+      label: "🏢 Have you read the Code of Conduct?"
+      options:
+        - label: "I read the Code of Conduct"
+          required: true
