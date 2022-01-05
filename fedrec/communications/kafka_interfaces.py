@@ -21,17 +21,17 @@ class Kafka(AbstractCommunicationManager):
     consumer_url: str
         URL to which consumer will listen to get the message token.
     consumer_port: int
-        The port to which consumer will connect to get message token
+        Port where the consumer connects to get token.
     consumer_topic: str
-        Topic to which consumer will listen to get message token form kafka token.
+        Topic to which consumer will subscribe to get the message token.
     consumer_group_id: str
         The group id of the consumer which is the ID of the group of consumer topics.
     producer_url: str
-        URL to which producer will send the message token to kafka broker.
+        URL to which consumer will listen to send the message token.
     producer_port: int
-        The port to which producer will connect to send the message token to kafka broker.
+        Port where the producer connects to send the message token.
     producer_topic: str 
-        Topic to which producer will send the message token to kafka broker.
+        Topic to which producer will subscribe to send the message token.
     
     Raises:
     -------
