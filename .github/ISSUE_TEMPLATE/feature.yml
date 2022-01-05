@@ -28,7 +28,7 @@ body:
     validations:
       required: False
     attributes:
-      label: "📖 Additional Content"
+      label: "📖 Additional-Content"
       description: "Anhything additonl information you would like to share with us!!"
       placeholder: "Hi there...."
   - type: checkboxes
