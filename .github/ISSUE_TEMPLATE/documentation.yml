@@ -40,14 +40,6 @@ body:
         - label: "I have read the Guildlines"
           required: true
   - type: checkboxes
-    id: For-Beginners-Only
-    attributes:
-      description: "Please take up this issue if you are just starting the journey with us or else leave this issue for fellow contributors."
-      label: "Are you a beginner?"
-      options:
-        - label: "I am beginning my contribution in RecoEdge."
-          required: true
-  - type: checkboxes
     id: read-code-of-conduct
     attributes:
       description: "This is our [Code of Conduct](https://github.com/appwrite/appwrite/blob/master/CODE_OF_CONDUCT.md)."
