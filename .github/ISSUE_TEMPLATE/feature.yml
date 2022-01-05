@@ -23,6 +23,27 @@ body:
       label: "🎤 Pitch"
       description: "Please explain why this feature should be implemented and how it would be used. Add examples, if applicable."
       placeholder: "In my use-case, ..."
+  - type: textarea
+    id: Additional Content 
+    validations:
+      required: False
+    attributes:
+      label: "📖 Additional Content"
+      description: "Anhything additonl information you would like to share with us!!"
+      placeholder: "Hi there...."
   - type: checkboxes
     id: no-duplicate-issues
     attributes:
+      label: "👀 Have you spent some time to check if this issue has been raised before?"
+      description: "Have you Googled for a similar issue or checked our older issues for a similar bug?"
+      options:
+        - label: "I checked and didn't find similar issue"
+          required: true
+  - type: checkboxes
+    id: read-code-of-conduct
+    attributes:
+      label: "🏢 Have you read the Code of Conduct?"
+      options:
+        - label: "I have read the [Code of Conduct](https://github.com/appwrite/appwrite/blob/HEAD/CODE_OF_CONDUCT.md)"
+          required: true
+
