@@ -23,6 +23,18 @@ body:
       label: "💭 Description"
       description: "A clear and concise description of what the issue is."
       placeholder: "The file ...."
+  - type: dropdown
+    id: Type-of-Test
+    attributes:
+      label: Type of Test
+      description: What type of test is it?
+      options:
+        - Unit test
+        - Integration test
+        - Stress Test
+        - Smoke Test
+        - Single User Performance Test
+        - Security Test
   - type: checkboxes
     id: no-duplicate-issues
     attributes:
