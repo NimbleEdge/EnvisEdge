@@ -8,7 +8,8 @@ from json import loads, dumps
 @registry.load("communications", "kafka")
 class Kafka(AbstractCommunicationManager):
     """
-    Implements the basic send/receive interface so that workers and the job executor can communicate with each other.
+    Implements the basic send/receive interface so that workers and
+    the job executor can communicate with each other.
 
     Attributes:
     ----------
