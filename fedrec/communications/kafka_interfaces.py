@@ -28,8 +28,7 @@ class Kafka(AbstractCommunicationManager):
         Topic to which consumer will subscribe to get the message
         token.
     consumer_group_id: str
-        The group id of the consumer which is the ID of the group of
-        consumer topics.
+        The group id of the consumer which is the ID of the group of consumer topics.
     producer_url: str
         URL to which consumer will connects to send the message token.
     producer_port: int
