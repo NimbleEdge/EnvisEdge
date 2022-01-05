@@ -1,0 +1,58 @@
+name: "📚 Documentation"
+description: "Propose a new documentation or doc in the repo"
+title: "📚 Documentation: "
+labels: [documentation]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to make our documentation better 🙏
+  - type: textarea
+    id: Where 
+    validations:
+      required: true
+    attributes:
+      label: " 🙋 Where"
+      description: "Where does the doc needs to be added."
+      placeholder: "Eg. PATH: /fedrec/multiprocessing/jobber.py"
+  - type: textarea
+    id: Description
+    validations:
+      required: true
+    attributes:
+      label: "💭 Description"
+      description: "A clear and concise description of what the issue is."
+      placeholder: "Documentation should be ..."
+  - type: checkboxes
+    id: no-duplicate-issues
+    attributes:
+      label: "👀 Have you spent some time to check if this issue has been raised before?"
+      description: "Have you Googled for a similar issue or checked our older issues for a similar bug?"
+      options:
+        - label: "I checked and didn't find similar issue"
+          required: true
+  - type: checkboxes
+    id: read-PEP8-Guildlines
+    attributes:
+      description: "Please go throught [PEP8](https://numpydoc.readthedocs.io/en/latest/format.html) guildlines before starting."
+      label: "🏢 Have you read the guidlines?"
+      options:
+        - label: "I have read the Guildlines"
+          required: true
+  - type: checkboxes
+    id: For-Beginners-Only
+    attributes:
+      description: "Please take up this issue if you are just starting the journey with us or else leave this issue for fellow contributors."
+      label: "Are you a beginner?"
+      options:
+        - label: "I am beginning my contribution in RecoEdge."
+          required: true
+  - type: checkboxes
+    id: read-code-of-conduct
+    attributes:
+      description: "This is our [Code of Conduct](https://github.com/appwrite/appwrite/blob/master/CODE_OF_CONDUCT.md)."
+      label: "🏢 Have you read the Code of Conduct?"
+      options:
+        - label: "I read the Code of Conduct"
+          required: true
+   
