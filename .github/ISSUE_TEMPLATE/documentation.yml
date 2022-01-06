@@ -34,7 +34,7 @@ body:
   - type: checkboxes
     id: read-PEP8-Guildlines
     attributes:
-      description: "Please go throught [PEP8](https://numpydoc.readthedocs.io/en/latest/format.html) guildlines before starting."
+      description: "Please go through pep8 [guidelines](https://www.python.org/dev/peps/pep-0008/) and you can learn how to write awesome docs [here](https://numpydoc.readthedocs.io/en/latest/format.html)"
       label: "🏢 Have you read the guidlines?"
       options:
         - label: "I have read the Guildlines"
