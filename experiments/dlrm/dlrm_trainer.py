@@ -64,12 +64,9 @@ class DLRMTrainer(Reproducible):
         self._optimizer = None
         self._saver = None
 
-
-
     def reset_loaders(self):
         self._data_loaders = {}
 
-        
     @staticmethod
     def _yield_batches_from_epochs(loader, start_epoch):
         current_epoch = start_epoch
@@ -122,7 +119,8 @@ class DLRMTrainer(Reproducible):
         if self._saver is None:
             # 2. Restore model parameters
             self._saver = saver_mod.Saver(
-                self.model, self.optimizer, keep_every_n=self.train_config.keep_every_n)
+                self.model, self.optimizer,
+                keep_every_n=self.train_config.keep_every_n)
         return self._saver
 
     @property
@@ -223,7 +221,8 @@ class DLRMTrainer(Reproducible):
                 step,
             )
 
-        if (best_auc_test is not None) and (results["roc_auc"] > best_auc_test):
+        if (best_auc_test is not None) and\
+                (results["roc_auc"] > best_auc_test):
             best_auc_test = results["roc_auc"]
             best_acc_test = results["accuracy"]
             return True, results
@@ -274,9 +273,11 @@ class DLRMTrainer(Reproducible):
                 t_loader.set_description(f"Training Epoch {current_epoch}")
 
                 # Quit if too long
-                if self.train_config.num_batches > 0 & last_step >= self.train_config.num_batches:
+                if self.train_config.num_batches > 0 &\
+                        last_step >= self.train_config.num_batches:
                     break
-                if self.train_config.num_epochs > 0 & current_epoch >= self.train_config.num_epochs:
+                if self.train_config.num_epochs > 0 &\
+                        current_epoch >= self.train_config.num_epochs:
                     break
 
                 # Evaluate model
@@ -285,18 +286,20 @@ class DLRMTrainer(Reproducible):
                         self.eval_model(
                             self.model,
                             self.data_loaders['train_eval'],
-                            eval_section='train_eval',
-                            num_eval_batches=self.train_config.num_eval_batches,
-                            logger=self.logger, step=last_step)
+                            'train_eval',
+                            self.logger,
+                            self.train_config.num_eval_batches,
+                            step=last_step)
 
                     if self.train_config.eval_on_val:
                         if self.eval_model(
                                 self.model,
                                 self.data_loaders['val'],
-                                eval_section='val',
-                                logger=self.logger,
-                                num_eval_batches=self.train_config.num_eval_batches,
-                                best_acc_test=best_acc_test, best_auc_test=best_auc_test,
+                                'val',
+                                self.logger,
+                                self.train_config.num_eval_batches,
+                                best_acc_test=best_acc_test,
+                            best_auc_test=best_auc_test,
                                 step=last_step)[1]:
                             self.saver.save(modeldir, last_step,
                                             current_epoch, is_best=True)
@@ -318,7 +321,8 @@ class DLRMTrainer(Reproducible):
                     self.logger.add_scalar(
                         'train/loss', loss.item(), global_step=last_step)
                     self.logger.add_scalar(
-                        'train/lr',  lr_scheduler.last_lr[0], global_step=last_step)
+                        'train/lr',  lr_scheduler.last_lr[0],
+                        global_step=last_step)
                     if self.train_config.log_gradients:
                         self.logger.log_gradients(self.model, last_step)
 

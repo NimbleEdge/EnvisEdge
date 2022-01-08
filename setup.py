@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='recoedge',
-    version='0.0.1',    
+    version='0.0.1',
     description='A simulator for federated learning',
     url='https://github.com/NimbleEdge/RecoEdge',
     author='Varun Kumar Khare',
@@ -14,8 +14,8 @@ setup(
     classifiers=[
         'Development Status :: 1 - Planning',
         'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: Apache License',  
-        'Operating System :: POSIX :: Linux', 
+        'License :: OSI Approved :: Apache License',
+        'Operating System :: POSIX :: Linux',
         'Programming Language :: Python :: 3.8',
     ],
 )

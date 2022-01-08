@@ -27,7 +27,8 @@ class WorkerDataset:
     def get_worker(self, id):
         # TODO We might persist the state in future
         # So this loading will be dynamic.
-        # Then would create a new Federated worker everytime from the persisted storage
+        # Then would create a new Federated
+        # worker everytime from the persisted storage
         return self._workers[id]
 
     def get_workers_by_roles(self, role):

@@ -19,7 +19,12 @@ class RWSAdagrad(Optimizer):
             numerical stability (default: 1e-10)
     """
 
-    def __init__(self, params, lr=1e-2, lr_decay=0.0, weight_decay=0.0, initial_accumulator_value=0.0, eps=1e-10):
+    def __init__(self, params,
+                 lr=1e-2,
+                 lr_decay=0.0,
+                 weight_decay=0.0,
+                 initial_accumulator_value=0.0,
+                 eps=1e-10):
         if not 0.0 <= lr:
             raise ValueError("Invalid learning rate: {}".format(lr))
         if not 0.0 <= lr_decay:
@@ -28,13 +33,19 @@ class RWSAdagrad(Optimizer):
             raise ValueError(
                 "Invalid weight_decay value: {}".format(weight_decay))
         if not 0.0 <= initial_accumulator_value:
-            raise ValueError("Invalid initial_accumulator_value value: {}".format(
-                initial_accumulator_value))
+            raise ValueError(
+                "Invalid initial_accumulator_value value: {}".format(
+                    initial_accumulator_value))
         if not 0.0 <= eps:
             raise ValueError("Invalid epsilon value: {}".format(eps))
 
-        self.defaults = dict(lr=lr, lr_decay=lr_decay, eps=eps, weight_decay=weight_decay,
-                             initial_accumulator_value=initial_accumulator_value)
+        self.defaults = dict(
+            lr=lr,
+            lr_decay=lr_decay,
+            eps=eps,
+            weight_decay=weight_decay,
+            initial_accumulator_value=initial_accumulator_value
+        )
         super(RWSAdagrad, self).__init__(params, self.defaults)
 
         self.momentum_initialized = False
@@ -75,10 +86,11 @@ class RWSAdagrad(Optimizer):
                             dtype=torch.float32,
                         )
                     else:
-                        self.state[p]['sum'] = torch.full_like(p.data,
-                                                               self.defaults["initial_accumulator_value"],
-                                                               dtype=torch.float32,
-                                                               )
+                        self.state[p]['sum'] = torch.full_like(
+                            p.data,
+                            self.defaults["initial_accumulator_value"],
+                            dtype=torch.float32,
+                        )
 
                 grad = p.grad
                 state = self.state[p]
@@ -88,14 +100,17 @@ class RWSAdagrad(Optimizer):
                 if group['weight_decay'] != 0:
                     if p.grad.data.is_sparse:
                         raise RuntimeError(
-                            "weight_decay option is not compatible with sparse gradients")
+                            "weight_decay option is not\
+                             compatible with sparse gradients")
                     grad = grad.add(group['weight_decay'], p.data)
 
                 clr = group['lr'] / \
                     (1.0 + (state['step'] - 1.0) * group['lr_decay'])
 
                 if grad.is_sparse:
-                    grad = grad.coalesce()  # the update is non-linear so indices must be unique
+                    # the update is non-linear so indices
+                    # must be unique
+                    grad = grad.coalesce()
                     grad_indices = grad._indices()
                     grad_values = grad._values()
                     size = grad.size()
@@ -114,7 +129,9 @@ class RWSAdagrad(Optimizer):
                             momentum_update.coalesce())
                         std_values = std._values().sqrt_().add_(group['eps'])
                         p.data.add_(make_sparse(
-                            grad_values / std_values.view(std_values.size()[0], 1), False), alpha=-clr)
+                            grad_values /
+                            std_values.view(std_values.size()[0], 1),
+                            False), alpha=-clr)
 
                 else:
                     state['sum'].addcmul_(grad, grad, value=1.0)
