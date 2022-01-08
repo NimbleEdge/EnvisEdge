@@ -65,7 +65,7 @@ class Jobber:
             senderid=message.receiverid,
             receiverid=message.senderid)
         try:
-            self.worker.load_worker(message.worker_state)
+            self.worker.load_worker(message.workerstate) 
             job_result = self.worker.run(message.job_type,
                                          *message.job_args,
                                          **message.job_kwargs)
