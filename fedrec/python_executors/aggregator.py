@@ -48,9 +48,11 @@ class AggregatorState(ActorState):
     state_dict : dict
         A dictionary of state dicts storing model weights and optimizer dicts
     storage : str
-        The address for persistent storage 
-    neighbours : {"in_neigh" : List[`Neighbour`], "out_neigh" : List[`Neighbour`]]
-        The states of in_neighbours and out_neighbours of the worker when last synced
+        The address for persistent storage
+    neighbours :
+        {"in_neigh" : List[`Neighbour`], "out_neigh" : List[`Neighbour`]]
+        The states of in_neighbours and out_neighbours of the
+        worker when last synced
     """
     in_neighbours = attr.ib(dict)
     out_neighbours = attr.ib(dict)
@@ -90,9 +92,12 @@ class Aggregator(BaseActor, ABC):
         self.in_neighbours = in_neighbours
         self.out_neighbours = out_neighbours
         # TODO update trainer logic to avoid double model initialization
-        self.worker = registry.construct('aggregator', config['aggregator'],
-                                         in_neighbours=in_neighbours, out_neighbours=out_neighbours)
-        # self.worker_funcs = {func_name: getattr(self.worker, func_name) for func_name in dir(
+        self.worker = registry.construct('aggregator',
+                                         config['aggregator'],
+                                         in_neighbours=in_neighbours,
+                                         out_neighbours=out_neighbours)
+        # self.worker_funcs =
+        # {func_name: getattr(self.worker, func_name) for func_name in dir(
         #     self.worker) if callable(getattr(self.worker, func_name))}
         self.worker_funcs = {"test_run": getattr(self.worker, "test_run")}
 
@@ -101,8 +106,9 @@ class Aggregator(BaseActor, ABC):
 
         Returns
         -------
-        `AggregatorState` 
-            The serialised class object to be written to Json or persisted into the file.
+        `AggregatorState`
+            The serialised class object to be written
+            to Json or persisted into the file.
         """
         return AggregatorState(
             id=self.worker_index,
@@ -146,4 +152,5 @@ class Aggregator(BaseActor, ABC):
             return self.worker_funcs[func_name](*args, **kwargs)
         else:
             raise ValueError(
-                f"Job type <{func_name}> not part of worker <{self.worker.__class__.__name__}> functions")
+                f"Job type <{func_name}> not part of worker"
+                + f"<{self.worker.__class__.__name__}> functions")

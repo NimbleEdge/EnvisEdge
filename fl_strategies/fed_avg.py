@@ -18,20 +18,19 @@ class FedAvg:
     def test_run(self, arg1, arg2):
         return arg1 + arg2
 
-    def aggregate(self, neighbour_ids):
-        model_list = [
-            (self.in_neighbours[id].sample_num, self.in_neighbours[id].model)
-            for id in neighbour_ids
-        ]
-        (num0, averaged_params) = model_list[0]
+    def aggregate(self):
+        model_list = [None] * len(self.in_neighbours)
+        training_num = 0
+
+        for idx, neighbour in enumerate(self.in_neighbours.values()):
+            model_list[idx] = neighbour.model
+            training_num += neighbour.sample_num
+
+        (sample_num0, averaged_params) = model_list[0]
         for k in averaged_params.keys():
-            for i in range(0, len(model_list)):
-                local_sample_number, local_model_params = model_list[i]
-                w = local_sample_number / training_num
-                if i == 0:
-                    averaged_params[k] = local_model_params[k] * w
-                else:
-                    averaged_params[k] += local_model_params[k] * w
+            averaged_params[k] *= sample_num0/training_num
+            for sample_num, params in model_list:
+                averaged_params[k] += params[k] * (sample_num/training_num)
 
         return averaged_params
 
@@ -43,6 +42,8 @@ class FedAvg:
         else:
             with RandomContext(round_idx):
                 selected_neighbours = np.random.choice(
-                    self.in_neighbours, min(client_num_per_round, num_neighbours), replace=False)
+                    self.in_neighbours,
+                    min(client_num_per_round, num_neighbours),
+                    replace=False)
         logging.info("worker_indexes = %s" % str(selected_neighbours))
         return selected_neighbours

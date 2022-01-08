@@ -62,7 +62,8 @@ def main():
     parser.add_argument("--load-model", type=str, default=None)
 
     parser.set_defaults(eval_on_train=None, eval_on_val=None, logger=True,
-                        pin_memory=None, round_targets=False, log_gradients=None)
+                        pin_memory=None, round_targets=False,
+                        log_gradients=None)
     args = parser.parse_args()
 
     with open(args.config, 'r') as stream:

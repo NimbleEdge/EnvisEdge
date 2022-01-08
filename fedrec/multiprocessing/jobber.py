@@ -39,17 +39,19 @@ class Jobber:
 
     def run(self) -> None:
         """
-        After calling the function, the Communication 
-        Manager listens to the queue for messages, 
-        executes the job request and publishes the results 
+        After calling the function, the Communication
+        Manager listens to the queue for messages,
+        executes the job request and publishes the results
         in that order.
         """
         try:
             while True:
                 print("Waiting for job request")
-                job_request: JobSubmitMessage = self.comm_manager.receive_message()
+                job_request = self.comm_manager.receive_message()
                 print(
-                    f"Received job request {job_request}, {type(job_request)} on {self.worker.name}")
+                    "Received job request"
+                    + f"{job_request}, {type(job_request)} on"
+                    + self.worker.name)
 
                 result = self.execute(job_request)
                 self.publish(result)
@@ -65,7 +67,8 @@ class Jobber:
         try:
             self.worker.load_worker_state(message.worker_state)
             job_result = self.worker.run(message.job_type,
-                                         *message.job_args, **message.job_kwargs)
+                                         *message.job_args,
+                                         **message.job_kwargs)
             print(job_result)
             result_message.results = job_result
         except Exception as e:

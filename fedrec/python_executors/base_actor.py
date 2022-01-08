@@ -22,7 +22,7 @@ class ActorState:
     state_dict : dict
         A dictionary of state dicts storing model weights and optimizer dicts
     storage : str
-        The address for persistent storage 
+        The address for persistent storage
     """
     id = attr.ib()
     round_idx = attr.ib(0)
@@ -32,7 +32,8 @@ class ActorState:
 
 class BaseActor(Reproducible, ABC):
     """Base Actor implements the core federated learning logic.
-    It encapsulates the ML trainer to enable distributed training for the models defined in the standard setting.
+    It encapsulates the ML trainer to enable distributed training
+    for the models defined in the standard setting.
 
 
     Attributes
@@ -60,14 +61,15 @@ class BaseActor(Reproducible, ABC):
         self.worker_index = worker_index
         self.is_mobile = is_mobile
         self.persistent_storage = persistent_storage
-
+        self.config = config
         self.logger = logger
+    
 
         modelCls = registry.lookup('model', config["model"])
         self.model_preproc: PreProcessor = registry.instantiate(
             modelCls.Preproc,
             config["model"]['preproc'])
-
+        self._model = None
         self._optimizer = None
         self.worker = None
         self.worker_funcs = {}
@@ -97,7 +99,7 @@ class BaseActor(Reproducible, ABC):
             # 1. Construct model
             self.model_preproc.load_data_description()
             self._model = registry.construct(
-                'model', self.config,
+                'model', self.config['model'],
                 preprocessor=self.model_preproc,
                 unused_keys=('name', 'preproc')
             )
@@ -110,7 +112,7 @@ class BaseActor(Reproducible, ABC):
 
         Returns
         -------
-        Dict: 
+        Dict:
             A dict containing the model weights.
         """
         return self.model.cpu().state_dict()
