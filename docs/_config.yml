@@ -6,6 +6,6 @@ description: > # this means to ignore newlines until "baseurl:"
 # social links
 github_username:  NimbleEdge # DO NOT include the @ character, or else the build will fail!
 twitter_username: NimbleedgeINC
-baseurl: https://nimbleedge.ai
+
 
 show_excerpts: false # set to false to remove excerpts on the homepage
