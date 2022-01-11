@@ -3,17 +3,50 @@ package org.nimbleedge.recoedge
 import models._
 
 object Main {
-    def main(args: Array[String]) = {
+    def main(args: Array[String]): Unit = {
+
+        /*
+        The graphical structure of the topology below
+
+            O1
+             ├── A1
+             │   ├── T1
+             │   └── T2
+             |
+             └── A2
+                 ├── T3
+                 ├── T4
+                 └── A3
+                     ├── T5 
+                     └── T6
+
+        */
         val o1 = OrchestratorIdentifier("O1")
         val a1 = AggregatorIdentifier(o1, "A1")
         val a2 = AggregatorIdentifier(o1, "A2")
-        val a3 = AggregatorIdentifier(a1, "A3")
+        val a3 = AggregatorIdentifier(a2, "A3")
         val t1 = TrainerIdentifier(a1, "T1")
-        val t2 = TrainerIdentifier(a2, "T2")
-        val t3 = TrainerIdentifier(a3, "T3")
-        val t4 = TrainerIdentifier(a3, "T4")
-        val t5 = TrainerIdentifier(a2, "T5")
+        val t2 = TrainerIdentifier(a1, "T2")
+        val t3 = TrainerIdentifier(a2, "T3")
+        val t4 = TrainerIdentifier(a2, "T4")
+        val t5 = TrainerIdentifier(a3, "T5")
+        val t6 = TrainerIdentifier(a3, "T6")
 
+        /*
+        The graphical structure of the topology below
+
+            O2
+             ├── A21
+             │   ├── T21
+             │   └── A23
+             |       ├── T23 
+             |       └── T24
+             |
+             └── A22
+                 ├── T22
+                 └── T25
+
+        */
         val o2 = OrchestratorIdentifier("O2")
         val a21 = AggregatorIdentifier(o2, "A21")
         val a22 = AggregatorIdentifier(o2, "A22")
@@ -37,6 +70,6 @@ object Main {
         println(t25.toString())
         println(t22.toList())
 
-        println(a1.children)
+        println(a2.getChildren())
     }
 }
