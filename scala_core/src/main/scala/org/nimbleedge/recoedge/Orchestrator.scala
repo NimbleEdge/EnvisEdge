@@ -27,20 +27,20 @@ object Orchestrator {
 
 class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: OrchestratorIdentifier) extends AbstractBehavior[Orchestrator.Command](context) {
   import Orchestrator._
-  import Supervisor.{ RequestAggregator, AggregatorRegistered, RequestTrainer, RequestTopology }
+  import FLSystemManager.{ RequestAggregator, AggregatorRegistered, RequestTrainer, RequestTopology }
 
   // TODO
   // Add state and persistent information
   var aggIdToRef : MutableMap[AggregatorIdentifier, ActorRef[Aggregator.Command]] = MutableMap.empty
-  context.log.info("Orchestrator {} started", orcId.toString())
+  context.log.info("Orchestrator {} started", orcId.name())
   
   private def getAggregatorRef(aggId: AggregatorIdentifier): ActorRef[Aggregator.Command] = {
     aggIdToRef.get(aggId) match {
         case Some(actorRef) =>
             actorRef
         case None =>
-            context.log.info("Creating new aggregator actor for {}", aggId.toString())
-            val actorRef = context.spawn(Aggregator(aggId), s"aggregator-${aggId.toString()}")
+            context.log.info("Creating new aggregator actor for {}", aggId.name())
+            val actorRef = context.spawn(Aggregator(aggId), s"aggregator-${aggId.name()}")
             context.watchWith(actorRef, AggregatorTerminated(actorRef, aggId))
             aggIdToRef += aggId -> actorRef
             actorRef
@@ -50,8 +50,8 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
   override def onMessage(msg: Command): Behavior[Command] =
     msg match {
       case trackMsg @ RequestAggregator(requestId, aggId, replyTo) =>
-        if (aggId.getOrchestrator() != this.orcId) {
-          context.log.info("Expected orchestrator id {}, found {}", this.orcId.toString(), aggId.toString())
+        if (aggId.getOrchestrator() != orcId) {
+          context.log.info("Expected orchestrator id {}, found {}", orcId.name(), aggId.toString())
         } else {
           val actorRef = getAggregatorRef(aggId)
           replyTo ! AggregatorRegistered(requestId, actorRef)
@@ -59,8 +59,8 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
         this
 
       case trackMsg @ RequestTrainer(requestId, traId, replyTo) =>
-        if (traId.getOrchestrator() != this.orcId) {
-          context.log.info("Expected orchestrator id {}, found {}", this.orcId.toString(), traId.toString())
+        if (traId.getOrchestrator() != orcId) {
+          context.log.info("Expected orchestrator id {}, found {}", orcId.name(), traId.toString())
         } else {
           val aggList = traId.getAggregators()
           val aggId = aggList.head
@@ -70,14 +70,13 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
         this
       
       case trackMsg @ RequestTopology(requestId, entity, replyTo) =>
-        // TODO
         val entityOrcId = entity match {
           case Left(x) => x
           case Right(x) => x.getOrchestrator()
         }
 
-        if (entityOrcId != this.orcId) {
-          context.log.info("Expected orchestrator id {}, found {}", this.orcId.toString(), entityOrcId.toString())
+        if (entityOrcId != orcId) {
+          context.log.info("Expected orchestrator id {}, found {}", orcId.name(), entityOrcId.name())
         } else {
           entity match {
             case Left(x) =>

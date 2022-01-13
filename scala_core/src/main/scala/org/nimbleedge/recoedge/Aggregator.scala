@@ -30,7 +30,7 @@ object Aggregator {
 
 class Aggregator(context: ActorContext[Aggregator.Command], aggId: AggregatorIdentifier) extends AbstractBehavior[Aggregator.Command](context) {
     import Aggregator._
-    import Supervisor.{ RequestTrainer, TrainerRegistered, RequestAggregator, AggregatorRegistered, RequestTopology }
+    import FLSystemManager.{ RequestTrainer, TrainerRegistered, RequestAggregator, AggregatorRegistered, RequestTopology }
 
     // TODO
     // Add state and persistent information
@@ -41,7 +41,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], aggId: AggregatorIde
     // List of trainers which are children of this aggregator
     var trainerIdsToRef : MutableMap[TrainerIdentifier, ActorRef[Trainer.Command]] = MutableMap.empty
 
-    context.log.info("Aggregator {} started", this.aggId.toString())
+    context.log.info("Aggregator {} started", aggId.toString())
 
     def getTrainerRef(trainerId: TrainerIdentifier): ActorRef[Trainer.Command] = {
         trainerIdsToRef.get(trainerId) match {
@@ -50,7 +50,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], aggId: AggregatorIde
                 actorRef
             case None =>
                 context.log.info("Creating new Trainer actor for {}", trainerId.toString())
-                val actorRef = context.spawn(Trainer(trainerId), s"trainer-${trainerId.toString()}")
+                val actorRef = context.spawn(Trainer(trainerId), s"trainer-${trainerId.name()}")
                 context.watchWith(actorRef, TrainerTerminated(actorRef, trainerId))
                 trainerIdsToRef += trainerId -> actorRef
                 actorRef
@@ -63,7 +63,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], aggId: AggregatorIde
                 actorRef
             case None =>
                 context.log.info("Creating new Aggregator actor for {}", aggregatorId.toString())
-                val actorRef = context.spawn(Aggregator(aggregatorId), s"aggregator-${aggregatorId.toString()}")
+                val actorRef = context.spawn(Aggregator(aggregatorId), s"aggregator-${aggregatorId.name()}")
                 context.watchWith(actorRef, AggregatorTerminated(actorRef, aggregatorId))
                 aggregatorIdsToRef += aggregatorId -> actorRef
                 actorRef
@@ -75,16 +75,16 @@ class Aggregator(context: ActorContext[Aggregator.Command], aggId: AggregatorIde
         msg match {
             case trackMsg @ RequestTrainer(requestId, trainerId, replyTo) =>
                 val aggList = trainerId.getAggregators()
-                if (aggList.find(x => {this.aggId == x}) == None) {
-                    context.log.info("Aggregator id {} not found in {}", this.aggId.toString(), trainerId.toString())
+                if (aggList.find(x => {aggId == x}) == None) {
+                    context.log.info("Aggregator id {} not found in {}", aggId.name(), trainerId.toString())
                 } else {
                     // Check if the current aggregator is actually parent of trainer
-                    if (trainerId.parentIdentifier == this.aggId) {
+                    if (trainerId.parentIdentifier == aggId) {
                         val actorRef = getTrainerRef(trainerId)
                         replyTo ! TrainerRegistered(requestId, actorRef)
                     } else {
                         // Getting the next aggregator to send the message to
-                        val childAggIndex = aggList.indexOf(this.aggId)+1
+                        val childAggIndex = aggList.indexOf(aggId)+1
                         val childAgg = aggList(childAggIndex)
                         val aggRef = getAggregatorRef(childAgg)
                         aggRef ! trackMsg
@@ -95,20 +95,20 @@ class Aggregator(context: ActorContext[Aggregator.Command], aggId: AggregatorIde
             case trackMsg @ RequestAggregator(requestId, aggregatorId , replyTo) =>
 
                 // Special case of aggregatorId being equal to currentId
-                if (aggregatorId == this.aggId) {
+                if (aggregatorId == aggId) {
                     context.log.info("Aggregator id {} is same as current one", aggregatorId.toString())
                 } else {
                     val aggList = aggregatorId.getAggregators()
-                    if (aggList.find(x => {this.aggId == x}) == None) {
-                        context.log.info("Aggregator id {} not found in {}", this.aggId.toString(), aggregatorId.toString())
+                    if (aggList.find(x => {aggId == x}) == None) {
+                        context.log.info("Aggregator id {} not found in {}", aggId.name(), aggregatorId.toString())
                     } else {
                         // Check if the current aggregator is actually parent of requested one
-                        if (aggregatorId.parentIdentifier == this.aggId) {
+                        if (aggregatorId.parentIdentifier == aggId) {
                             val actorRef = getAggregatorRef(aggregatorId)
                             replyTo ! AggregatorRegistered(requestId, actorRef)
                         } else {
                             // Getting the next aggregator to send the message to
-                            val childAggIndex = aggList.indexOf(this.aggId)+1
+                            val childAggIndex = aggList.indexOf(aggId)+1
                             val childAgg = aggList(childAggIndex)
                             val aggRef = getAggregatorRef(childAgg)
                             aggRef ! trackMsg
@@ -123,17 +123,17 @@ class Aggregator(context: ActorContext[Aggregator.Command], aggId: AggregatorIde
                         context.log.info("Cannot get topology for an orchestrator entity: got {}", x.toString())
 
                     case Right(x) => 
-                        if (this.aggId == x) {
+                        if (aggId == x) {
                             // TODO
                             // return/build the current node's topology
                         } else {
                             val aggList = x.getAggregators()
-                            if (aggList.find(y => {this.aggId == y}) == None) {
-                                context.log.info("Aggregator with id {} not found in {}", this.aggId.toString(), x.toString())
+                            if (aggList.find(y => {aggId == y}) == None) {
+                                context.log.info("Aggregator with id {} not found in {}", aggId.name(), x.toString())
                                 this
                             }
 
-                            val childAggIndex = aggList.indexOf(this.aggId)+1
+                            val childAggIndex = aggList.indexOf(aggId)+1
                             val childAgg = aggList(childAggIndex)
                             val aggRef = getAggregatorRef(childAgg)
                             aggRef ! trackMsg

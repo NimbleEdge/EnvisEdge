@@ -5,6 +5,7 @@ import java.nio.ByteBuffer
 import scala.collection.mutable.ListBuffer
 
 abstract class Identifier {
+    def name() : String
     def computeDigest() : Array[Byte]
     val digest : Array[Byte] = computeDigest()
     override val hashCode : Int = ByteBuffer.wrap(digest.slice(0,4)).getInt
@@ -57,6 +58,7 @@ abstract class Identifier {
 
 case class OrchestratorIdentifier(id: String) extends Identifier {
     // String Representation
+    override def name(): String = id
     override def toString(): String = id
 
     // Get List
@@ -72,6 +74,7 @@ case class AggregatorIdentifier(parentIdentifier: Identifier, id: String) extend
     parentIdentifier.children += this
 
     // String Representation
+    override def name(): String = id
     override def toString(): String = parentIdentifier.toString() + " -> " + id
 
     // Get List
@@ -111,6 +114,7 @@ case class TrainerIdentifier(parentIdentifier: Identifier, id: String) extends I
     parentIdentifier.children += this
 
     // String Representation
+    override def name(): String = id
     override def toString(): String = parentIdentifier.toString() + " -> " + id
 
     // Get List
