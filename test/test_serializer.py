@@ -9,15 +9,24 @@ submit_message_test = JobSubmitMessage("test", "00", "00", "00", "00", "00")
 submit_message_train = JobSubmitMessage("train", "01", "01", "01", "01", "01")
 
 # test class for generate message dict method
+
+
 class test_dict:
     __type__ = "test"
+
     def __init__(self, name, id, number) -> None:
         self.name = name
         self.id = id
         self.number = number
 
 # test generate_message_dict method
-@pytest.mark.parametrize("obj", [test_dict("test", "00", "00"), test_dict("train", "01", "01")])
+
+
+@pytest.mark.parametrize(
+    "obj",
+    [test_dict("test", "00", "00"),
+     test_dict("train", "01", "01")]
+)
 def test_generate_message_dict(obj):
     dict = AbstractSerializer.generate_message_dict(obj)
     assert dict['__type__'] == obj.__type__
@@ -43,6 +52,8 @@ def test_json_serialize(obj, type, data):
     assert ans['__data__'] == data
 
 # test JSOMdeserialize method
+
+
 @pytest.mark.parametrize(
     "message_dict, type, data",
     [(response_message_test,
