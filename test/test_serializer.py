@@ -12,8 +12,6 @@ submit_message_train = JobSubmitMessage("train", "01", "01", "01", "01", "01")
 @pytest.mark.parametrize(
     "obj",
     [response_message_test,
-     response_message_train,
-     submit_message_test,
      submit_message_train]
 )
 def test_generate_message_dict(obj):
