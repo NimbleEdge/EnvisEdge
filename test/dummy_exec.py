@@ -76,7 +76,7 @@ class TestTrainer(AbstractTester):
         if response.status:
             worker_state = response.results
             self.worker.load_worker(worker_state)
-            print(f"Woker state {response.get_worker_state()}")
+            print(f"Worker state {response.get_worker_state()}")
 
     def TestTesting(self):
         response: JobResponseMessage = self.submit_message(senderid=self.worker.worker_index,

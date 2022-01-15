@@ -1,62 +1,62 @@
 import pytest
 import json
+import yaml
 from fedrec.serialization.serializers import AbstractSerializer, JSONSerializer
 from fedrec.communications.messages import JobSubmitMessage, JobResponseMessage
 
-response_message_test = JobResponseMessage("test", "00", "00")
-response_message_train = JobResponseMessage("train", "01", "01")
-submit_message_test = JobSubmitMessage("test", "00", "00", "00", "00", "00")
-submit_message_train = JobSubmitMessage("train", "01", "01", "01", "01", "01")
+with open("test_config.yml", 'r') as cfg:
+    config = yaml.load(cfg, Loader=yaml.FullLoader)
 
 
-@pytest.mark.parametrize(
-    "obj",
-    [response_message_test,
-     submit_message_train]
-)
-def test_generate_message_dict(obj):
+def pytest_generate_tests(metafunc):
+    fct_name = metafunc.function.__name__
+    if fct_name in config:
+        params = config[fct_name]
+        metafunc.parametrize(params["params"], params["values"])
+
+
+def test_generate_message_dict(job_type, job_args, job_kwargs,
+                               senderid, receiverid, workerstate):
     """test generate_message_dict method
     """
+    obj = JobSubmitMessage(job_type, job_args, job_kwargs,
+                           senderid, receiverid, workerstate)
     dict = AbstractSerializer.generate_message_dict(obj)
     assert dict['__type__'] == obj.__type__
     assert dict['__data__'] == obj.__dict__
 
 
-@pytest.mark.parametrize(
-    "obj, type, data",
-    [(response_message_test,
-     response_message_test.__type__, response_message_test.__dict__),
-     (response_message_train,
-      response_message_train.__type__, response_message_train.__dict__),
-     (submit_message_test,
-      submit_message_test.__type__, submit_message_test.__dict__),
-     (submit_message_train,
-      submit_message_train.__type__, submit_message_train.__dict__)]
-)
-def test_json_serialize(obj, type, data):
+def test_json_serialize(job_type, job_args, job_kwargs,
+                        senderid, receiverid, workerstate):
     """test JSOMSerializer method
     """
-    ans = JSONSerializer.serialize(obj)
-    ans = json.loads(ans)
-    assert ans['__type__'] == type
-    assert ans['__data__'] == data
+    message_dict_submit = JobSubmitMessage(job_type, job_args,
+                                           job_kwargs, senderid,
+                                           receiverid, workerstate)
+    message_dict_response = JobResponseMessage(job_type, senderid, receiverid)
+    serilized_submit_msg = JSONSerializer.serialize(message_dict_submit)
+    serilized_response_msg = JSONSerializer.serialize(message_dict_response)
+    response_submit_msg = json.loads(serilized_submit_msg)
+    response_response_msg = json.loads(serilized_response_msg)
+    assert response_submit_msg['__type__'] == message_dict_submit.__type__
+    assert response_submit_msg['__data__'] == message_dict_submit.__dict__
+    assert response_response_msg['__type__'] == message_dict_response.__type__
+    assert response_response_msg['__data__'] == message_dict_response.__dict__
 
 
-@pytest.mark.parametrize(
-    "message_dict, type, data",
-    [(response_message_test,
-     response_message_test.__type__, response_message_test.__dict__),
-     (response_message_train,
-      response_message_train.__type__, response_message_train.__dict__),
-     (submit_message_test,
-      submit_message_test.__type__, submit_message_test.__dict__),
-     (submit_message_train,
-      submit_message_train.__type__, submit_message_train.__dict__)]
-)
-def test_json_deserialize(message_dict, type, data):
+def test_json_deserialize(job_type, job_args, job_kwargs,
+                          senderid, receiverid, workerstate):
     """test JSOMdeserialize method
     """
-    obj = JSONSerializer.serialize(message_dict)
-    ans = JSONSerializer.deserialize(obj)
-    assert ans.__type__ == type
-    assert ans.__dict__ == data
+    message_dict_submit = JobSubmitMessage(job_type, job_args,
+                                           job_kwargs, senderid,
+                                           receiverid, workerstate)
+    message_dict_response = JobResponseMessage(job_type, senderid, receiverid)
+    submit_msg_serialize = JSONSerializer.serialize(message_dict_submit)
+    reponse_msg_serialize = JSONSerializer.serialize(message_dict_response)
+    response_deserialize_msg = JSONSerializer.deserialize(submit_msg_serialize)
+    submit_deserialize_msg = JSONSerializer.deserialize(reponse_msg_serialize)
+    assert response_deserialize_msg.__type__ == message_dict_submit.__type__
+    assert response_deserialize_msg.__dict__ == message_dict_submit.__dict__
+    assert submit_deserialize_msg.__type__ == message_dict_response.__type__
+    assert submit_deserialize_msg.__dict__ == message_dict_response.__dict__
