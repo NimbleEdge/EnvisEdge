@@ -1,19 +1,18 @@
-import sys
-from fedrec.utilities.logger import NoOpLogger
-from fedrec.utilities import registry
-from fedrec.python_executors.trainer import Trainer
-from fedrec.python_executors.base_actor import BaseActor
-from fedrec.python_executors.aggregator import Aggregator, Neighbour
-from fedrec.communications.messages import JobResponseMessage, JobSubmitMessage
-import fl_strategies
-import fedrec
-import experiments
-import yaml
 import collections
+import sys
 from abc import abstractproperty
 from typing import Callable, Dict
 
-
+import experiments
+import fedrec
+import fl_strategies
+import yaml
+from fedrec.communications.messages import JobResponseMessage, JobSubmitMessage
+from fedrec.python_executors.aggregator import Aggregator, Neighbour
+from fedrec.python_executors.base_actor import BaseActor
+from fedrec.python_executors.trainer import Trainer
+from fedrec.utilities import registry
+from fedrec.utilities.logger import NoOpLogger
 
 
 class AbstractTester():
