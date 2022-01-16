@@ -7,6 +7,7 @@ from fedrec.communications.messages import JobSubmitMessage, JobResponseMessage
 with open("test_config.yml", 'r') as cfg:
     config = yaml.load(cfg, Loader=yaml.FullLoader)
 
+
 def pytest_generate_tests(metafunc):
     fct_name = metafunc.function.__name__
     if fct_name in config:
@@ -26,7 +27,7 @@ def test_generate_message_dict(job_type, job_args, job_kwargs,
 
 
 def test_JSON_JobResponseMessage_serialize(job_type, senderid, receiverid):
-    """test JSOMSerializer method
+    """test JSONSerializer method
     """
     message_dict_response = JobResponseMessage(job_type, senderid, receiverid)
     serilized_response_msg = JSONSerializer.serialize(message_dict_response)
@@ -34,9 +35,10 @@ def test_JSON_JobResponseMessage_serialize(job_type, senderid, receiverid):
     assert response_msg['__type__'] == message_dict_response.__type__
     assert response_msg['__data__'] == message_dict_response.__dict__
 
+
 def test_JSON_jobSubmitMessage_serialize(job_type, job_args,
-                                           job_kwargs, senderid,
-                                           receiverid, workerstate):
+                                         job_kwargs, senderid,
+                                         receiverid, workerstate):
     message_dict_submit = JobSubmitMessage(job_type, job_args,
                                            job_kwargs, senderid,
                                            receiverid, workerstate)
@@ -47,8 +49,8 @@ def test_JSON_jobSubmitMessage_serialize(job_type, job_args,
 
 
 def test_JSON_JobSubmitMessage_deserialize(job_type, job_args, job_kwargs,
-                                      senderid, receiverid, workerstate):
-    """test JSOMdeserialize method
+                                           senderid, receiverid, workerstate):
+    """test JSONdeserialize method
     """
     message = JobSubmitMessage(job_type, job_args,
                                job_kwargs, senderid,
@@ -59,8 +61,8 @@ def test_JSON_JobSubmitMessage_deserialize(job_type, job_args, job_kwargs,
 
 
 def test_JSON_JobResponseMessage_deserialize(job_type,
-                                        senderid, receiverid):
-    """test JSOMdeserialize method
+                                             senderid, receiverid):
+    """test JSONdeserialize method
     """
     message = JobResponseMessage(job_type, senderid, receiverid)
     serilized_msg = JSONSerializer.serialize(message)
