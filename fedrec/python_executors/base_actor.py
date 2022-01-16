@@ -22,7 +22,7 @@ class ActorState:
     state_dict : dict
         A dictionary of state dicts storing model weights and optimizer dicts
     storage : str
-        The address for persistent storage 
+        The address for persistent storage
     """
     id = attr.ib()
     round_idx = attr.ib(0)
@@ -32,7 +32,8 @@ class ActorState:
 
 class BaseActor(Reproducible, ABC):
     """Base Actor implements the core federated learning logic.
-    It encapsulates the ML trainer to enable distributed training for the models defined in the standard setting.
+    It encapsulates the ML trainer to enable distributed training
+    for the models defined in the standard setting.
 
 
     Attributes
@@ -111,7 +112,7 @@ class BaseActor(Reproducible, ABC):
 
         Returns
         -------
-        Dict: 
+        Dict:
             A dict containing the model weights.
         """
         return self.model.cpu().state_dict()

@@ -27,9 +27,9 @@ RecoEdge allows you to easily explore new federated learning algorithms and depl
 
 The steps to building an awesome recommendation system are:
 1. 🔩 **Standard ML training**: Pick up any ML model and benchmark it using standard settings.
-2. 🎮 Federated Learning Simulation: Once you are satisfied with your model, explore a host of FL algorithms with the simulator.
-3. 🏭 Industrial Deployment: After all the testing and simulation, deploy easily using NimbleEdge suite
-4. 🚀 Edge Computing: Leverage all the benefits of edge computing
+2. 🎮 **Federated Learning Simulation**: Once you are satisfied with your model, explore a host of FL algorithms with the simulator.
+3. 🏭 **Industrial Deployment**: After all the testing and simulation, deploy easily using NimbleEdge suite
+4. 🚀 **Edge Computing**: Leverage all the benefits of edge computing
 
 # Repo Structure 🏢
   
@@ -40,11 +40,11 @@ NimbleEdge/RecoEdge
 ├── docs                      <-- Tutorials and walkthroughs 🧐
 ├── experiments               <-- Recommendation models used by our services
 └── fedrec                    <-- Whole magic takes place here 😜 
-      ├── communications        <-- Modules for communication interfaces eg. Kafka
-      ├── multiprocessing       <-- Modules to run parallel worker jobs
-      ├── python_executors      <-- Contains worker modules eg. trainer and aggregator
-      ├── serialization         <-- Message serializers
-      └── utilities             <-- Helper modules
+      ├── communications          <-- Modules for communication interfaces eg. Kafka
+      ├── multiprocessing         <-- Modules to run parallel worker jobs
+      ├── python_executors        <-- Contains worker modules eg. trainer and aggregator
+      ├── serialization           <-- Message serializers
+      └── utilities               <-- Helper modules
 ├── fl_strategies             <-- Federated learning algorithms for our services.
 └── notebooks                 <-- Jupyter Notebook examples
 ``` 

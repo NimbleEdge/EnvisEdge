@@ -34,7 +34,8 @@ class DLRM_Net(nn.Module):
         # build MLP layer by layer
         layers = [xavier_init(nn.Linear(ln[0], ln[1], True))]
         for in_f, out_f in zip(ln[1:], ln[2:]):
-            layers += [registry.construct('sigmoid_layer', {'name': sigmoid_layer}),
+            layers += [registry.construct('sigmoid_layer',
+                                          {'name': sigmoid_layer}),
                        xavier_init(nn.Linear(in_f, out_f, True))]
         return torch.nn.Sequential(*layers)
 
@@ -44,7 +45,8 @@ class DLRM_Net(nn.Module):
         for i in range(0, ln.size):
             # construct embedding operator
 
-            if (emb_dict.get("custom", None) is not None) and (ln[i] > emb_dict["threshold"]):
+            if ((emb_dict.get("custom", None) is not None)
+                    and (ln[i] > emb_dict["threshold"])):
                 EE = registry.construct("embedding", emb_dict["custom"],
                                         num_embeddings=ln[i],
                                         embedding_dim=m)
@@ -114,10 +116,14 @@ class DLRM_Net(nn.Module):
                 else:
                     num_int = (num_fea * (num_fea - 1)) // 2 + self.ln_bot[-1]
                     offset = 0
-                self.index_tensor_i = torch.tensor([i for i in range(num_fea)
-                                                    for j in range(i + offset)])
-                self.index_tensor_j = torch.tensor([j for i in range(num_fea)
-                                                    for j in range(i + offset)])
+                self.index_tensor_i = torch.tensor(
+                    [i for i in range(num_fea)
+                     for j in range(i + offset)]
+                )
+                self.index_tensor_j = torch.tensor(
+                    [j for i in range(num_fea)
+                     for j in range(i + offset)]
+                )
             elif arch_interaction_op == "cat":
                 num_int = num_fea * self.ln_bot[-1]
             else:
@@ -153,7 +159,9 @@ class DLRM_Net(nn.Module):
                     reduction="mean", pos_weight=loss_weights)
             else:
                 sys.exit(
-                    "ERROR: --loss_function=" + self.loss_function + " is not supported"
+                    "ERROR: --loss_function="
+                    + self.loss_function
+                    + " is not supported"
                 )
 
     def toGPU(self):
@@ -172,15 +180,18 @@ class DLRM_Net(nn.Module):
         # sanity check: feature sizes and mlp dimensions must match
         if ((self.emb_dict.get('custom', None) is not None)
                 and (self.emb_dict['custom']['name'] == 'qr_emb')):
-            if self.emb_dict["custom"]['qr_operation'] == "concat" and 2 * self.m_spa != self.ln_bot[-1]:
+            if (self.emb_dict["custom"]['qr_operation'] == "concat"
+                    and 2 * self.m_spa != self.ln_bot[-1]):
                 sys.exit(
                     "ERROR: 2 arch-sparse-feature-size "
                     + str(2 * self.m_spa)
                     + " does not match last dim of bottom mlp "
                     + str(self.ln_bot[-1])
-                    + " (note that the last dim of bottom mlp must be 2x the embedding dim)"
+                    + " (note that the last dim of bottom mlp"
+                    + "must be 2x the embedding dim)"
                 )
-            if self.qr_dict['qr_operation'] != "concat" and self.m_spa != self.ln_bot[-1]:
+            if (self.qr_dict['qr_operation'] != "concat"
+                    and self.m_spa != self.ln_bot[-1]):
                 sys.exit(
                     "ERROR: arch-sparse-feature-size "
                     + str(self.m_spa)
@@ -201,7 +212,8 @@ class DLRM_Net(nn.Module):
 
     def apply_emb(self, lS_o, lS_i, emb_l, v_W_l):
         ly = [None]*len(lS_i)
-        for i, (emb, lsi, lso, vwl) in enumerate(zip(emb_l, lS_i, lS_o, v_W_l)):
+        merged_embeddings = zip(emb_l, lS_i, lS_o, v_W_l)
+        for i, (emb, lsi, lso, vwl) in enumerate(merged_embeddings):
             per_sample_weights = vwl.gather(
                 0, lsi) if vwl is not None else None
             ly[i] = emb(

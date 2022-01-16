@@ -130,9 +130,9 @@ def main():
         action="store_true",
         default=False,
         help="The Kaggle dataset can be multiprocessed in an environment \
-                        with more than 7 CPU cores and more than 20 GB of memory. \n \
-                        The Terabyte dataset can be multiprocessed in an environment \
-                        with more than 24 CPU cores and at least 1 TB of memory.",
+            with more than 7 CPU cores and more than 20 GB of memory. \n \
+            The Terabyte dataset can be multiprocessed in an environment \
+            with more than 24 CPU cores and at least 1 TB of memory.",
     )
     # gpu
     parser.add_argument("--use-gpu", action="store_true", default=False)

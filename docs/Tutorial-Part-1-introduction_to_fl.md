@@ -76,4 +76,4 @@ Metrics are extracted out on the held out data on cloud and the data distributed
 ## Deployment
 Manual quality assurance, live A/B testing and staged rollout. Usually the engineer determines this process. It is exactly similar to how a normally trained model will be deployed.
 
-We will first build a [normal ML pipeline](./starting_with_nimbleedge.md) and then convert it into Federated Setting.
+We will first build a [normal ML pipeline](./Tutorial-Part-2-starting_with_nimbleedge.md) and then convert it into Federated Setting.

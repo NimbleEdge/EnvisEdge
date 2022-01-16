@@ -83,7 +83,8 @@ class CriteoDataProcessor:
                 # process a line (data point)
                 out = CriteoDataProcessor._transform_line(
                     line,
-                    rand_u if sub_sample_rate == 0.0 else rand_u[k], sub_sample_rate)
+                    rand_u if sub_sample_rate == 0.0 else rand_u[k],
+                    sub_sample_rate)
                 if out is None:
                     continue
                 y[i], X_int[i], X_cat[i] = out
@@ -156,8 +157,11 @@ class CriteoDataProcessor:
         _, total_per_file = self.get_counts()
         self.split_dataset(total_per_file)
 
-        convertDicts = self.process_files(self.datafile, self.total_file,
-                                          total_per_file, self.dataset_multiprocessing)
+        convertDicts = self.process_files(
+            self.datafile,
+            self.total_file,
+            total_per_file, self.dataset_multiprocessing
+        )
 
         # dictionary files
         counts = np.zeros(26, dtype=np.int32)
@@ -180,10 +184,13 @@ class CriteoDataProcessor:
 
         # process all splits
         if self.dataset_multiprocessing:
-            processes = [Process(target=CriteoDataProcessor.processCriteoAdData,
-                                 name="processCriteoAdData:%i" % i,
-                                 args=(self.npzfile, i, self.days, convertDicts)
-                                 ) for i in range(0, self.days)]
+            processes = [
+                Process(
+                    target=CriteoDataProcessor.processCriteoAdData,
+                    name="processCriteoAdData:%i" % i,
+                    args=(self.npzfile, i, self.days, convertDicts)
+                ) for i in range(0, self.days)
+            ]
             for process in processes:
                 process.start()
             for process in processes:
@@ -349,14 +356,17 @@ class CriteoDataProcessor:
             self.ln_emb = np.array(counts)
 
         np.savez_compressed(self.d_path + o_filename + "_data_description.npz",
-                            m_den=self.m_den, n_emb=self.n_emb, ln_emb=self.ln_emb)
+                            m_den=self.m_den,
+                            n_emb=self.n_emb,
+                            ln_emb=self.ln_emb)
         return self.d_path + o_filename + ".npz"
 
     def load_data_description(self):
         if not os.path.exists(str(self.d_path + self.output_file + ".npz")):
             assert False, "data not processed"
 
-        with np.load(self.d_path + self.output_file + "_data_description.npz") as data:
+        with np.load(self.d_path + self.output_file
+                     + "_data_description.npz") as data:
             self.m_den = data["m_den"]
             self.n_emb = data["n_emb"]
             self.ln_emb = data["ln_emb"]
@@ -425,7 +435,9 @@ class CriteoDataProcessor:
             train_indices = np.random.permutation(train_indices)
             print("Randomized indices across days ...")
 
-        return {'train': train_indices, 'val': val_indices, 'test': test_indices}
+        return {'train': train_indices,
+                'val': val_indices,
+                'test': test_indices}
 
     def dataset(self, split):
         return CriteoDataset(

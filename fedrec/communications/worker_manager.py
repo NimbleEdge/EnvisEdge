@@ -6,7 +6,9 @@ from fedrec.communications.worker_manager import WorkerComManager
 from fedrec.communications.comm_manager import (CommunicationManager,
                                                 tag_reciever)
 from fedrec.utilities.serialization import serialize_object
-from fedrec.communications.messages import ProcMessage, JobSubmitMessage, ModelRequestMessage, ModelResponseMessage
+from fedrec.communications.messages import (ProcMessage, JobSubmitMessage,
+                                            ModelRequestMessage,
+                                            ModelResponseMessage)
 
 
 class WorkerComManager(CommunicationManager):
@@ -29,11 +31,19 @@ class WorkerComManager(CommunicationManager):
     async def send_job(self, receive_id, job_type):
         if job_type == ProcMessage.TRAIN_JOB:
             message = JobSubmitMessage(
-                job_type, self.id, receive_id, json.dumps(FederatedWorker.serialise()))
+                job_type,
+                self.id,
+                receive_id,
+                json.dumps(FederatedWorker.serialise())
+            )
             to_block = True
         elif job_type == ProcMessage.TEST_JOB:
             message = JobSubmitMessage(
-                job_type, self.id, receive_id, json.dumps(FederatedWorker.serialise()))
+                job_type,
+                self.id,
+                receive_id,
+                json.dumps(FederatedWorker.serialise())
+            )
             to_block = False
         else:
             raise ValueError(f"Invalid job type: {job_type}")

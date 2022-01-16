@@ -41,7 +41,8 @@ def instantiate(callable, config, unused_keys=(), **kwargs):
     merged = {**config, **kwargs}
     signature = inspect.signature(callable)
     for name, param in signature.parameters.items():
-        if param.kind in (inspect.Parameter.POSITIONAL_ONLY, inspect.Parameter.VAR_POSITIONAL):
+        if param.kind in (inspect.Parameter.POSITIONAL_ONLY,
+                          inspect.Parameter.VAR_POSITIONAL):
             raise ValueError('Unsupported kind for param {}: {}'.format(
                 name, param.kind))
 
