@@ -27,7 +27,11 @@ def create_link(original, link_name):
         shutil.copy2(original, link_name)
 
 
-def load_checkpoint(model, optimizer, model_dir, map_location=None, step=None):
+def load_checkpoint(model,
+                    optimizer,
+                    model_dir,
+                    map_location=None,
+                    step=None):
     path = os.path.join(model_dir, 'model_checkpoint')
     if step is not None:
         path += '-{:08d}'.format(step)
@@ -51,7 +55,13 @@ def load_and_map_checkpoint(model, model_dir, remap):
     model.load_state_dict(new_state_dict)
 
 
-def save_checkpoint(model, optimizer, step, epoch, model_dir, is_best, ignore=[],
+def save_checkpoint(model,
+                    optimizer,
+                    step,
+                    epoch,
+                    model_dir,
+                    is_best,
+                    ignore=[],
                     keep_every_n=10000000):
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)

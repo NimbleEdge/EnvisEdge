@@ -14,9 +14,8 @@ from fedrec.utilities.serialization import load_tensor, save_tensor
 
 
 class AbstractSerializer(ABC):
-    """    
-    Abstract class for serializers and deserializers.
-    
+    """Abstract class for serializers and deserializers.
+
     Attributes:
     -----------
     serializer: str
@@ -32,14 +31,14 @@ class AbstractSerializer(ABC):
 
     @classmethod
     def generate_message_dict(cls, obj):
-        """
-        Generates a dictionary from an object and appends type information for finding the appropriate serialiser.
+        """Generates a dictionary from an object and
+         appends type information for finding the appropriate serialiser.
 
         Parameters:
         -----------
         obj: object
             The object to serialize.
-        
+
         Returns:
         --------
         dict:
@@ -55,14 +54,14 @@ class AbstractSerializer(ABC):
     def serialize(cls, obj, file=None):
         """
         Serializes an object.
-        
+
         Parameters:
         -----------
         obj: object
             The object to serialize.
         file: file
             The file to write to.
-        
+
         Returns:
         --------
         pkl_str: str
@@ -73,7 +72,8 @@ class AbstractSerializer(ABC):
         pkl_str = io.BytesIO()
         with open(file, "wb"):
             pickle.dump(obj, pkl_str)
-        # The pkl string is too long to pass to the kafka message queue, write the string
+        # The pkl string is too long to pass
+        # to the kafka message queue, write the string
         # to the file and upload it to the cloud.
         if file and len(list(pkl_str)) > threshold:
             with open(file, "wb") as fd:
@@ -87,7 +87,7 @@ class AbstractSerializer(ABC):
     def deserialize(cls, obj):
         """
         Deserializes an object.
-        
+
         Parameters:
         -----------
         obj: object
@@ -114,21 +114,21 @@ class TensorSerializer(AbstractSerializer):
     Attributes:
     ----------
     serializer: str
-        The serializer to use.  
+        The serializer to use.
     """
 
     @classmethod
     def serialize(cls, obj, file=None):
         """
         Serializes a tensor object.
-        
+
         Parameters:
         -----------
         obj: object
             The object to serialize.
         file: file
             The file to write to.
-    
+
         Returns:
         --------
         pkl_str: io.BytesIO
@@ -136,11 +136,13 @@ class TensorSerializer(AbstractSerializer):
 
         """
         if file:
-            # if file is provided, save the tensor to the file and return the file path.
+            # if file is provided, save the tensor
+            # to the file and return the file path.
             save_tensor(obj, file)
             return file
         else:
-            # create a buffer Bytes object, which can be used to write to the file.
+            # create a buffer Bytes object,
+            # which can be used to write to the file.
             buffer = io.BytesIO()
             save_tensor(obj, buffer)
             return buffer
@@ -154,7 +156,7 @@ class TensorSerializer(AbstractSerializer):
         -----------
         obj: object
             The object to deserialize.
-        
+
         Returns:
         --------
         deserialized_obj: object
@@ -173,16 +175,17 @@ class TensorSerializer(AbstractSerializer):
             tensor = load_tensor(obj, device=None)
         except Exception as e:
             raise ValueError(
-                "the filename specified to load the tensor from could not be accessed,Please make sure the path has correct permissions")
+                "the filename specified to load the tensor from"
+                + "could not be accessed,Please make sure the"
+                + "path has correct permissions")
         else:
             return tensor
 
 
 @registry.load("serializer", "json")
 class JSONSerializer(AbstractSerializer):
-    """
-    Uses json serialization strategy for objects.
-    
+    """Uses json serialization strategy for objects.
+
     Attributes:
     ----------
     serializer: str
@@ -191,9 +194,8 @@ class JSONSerializer(AbstractSerializer):
 
     @classmethod
     def serialize(cls, obj):
-        """
-        Serializes a python object to json.
-            
+        """Serializes a python object to json.
+
         Parameters:
         -----------
         obj: object
@@ -209,14 +211,14 @@ class JSONSerializer(AbstractSerializer):
 
     @classmethod
     def deserialize(cls, obj):
-        """
-        Deserializes the json object to python object as per the `type` mentioned in the json dictionary.
+        """Deserializes the json object to python object
+         as per the `type` mentioned in the json dictionary.
 
         Parameters:
         -----------
         obj: object
             The object to deserialize.
-    
+
         Returns:
         --------
         deserialized_obj: object
@@ -225,4 +227,7 @@ class JSONSerializer(AbstractSerializer):
         """
         obj = json.loads(obj)
         print(obj, type(obj))
-        return registry.construct("serializer", obj["__type__"], unused_keys=(), **obj["__data__"])
+        return registry.construct("serializer",
+                                  obj["__type__"],
+                                  unused_keys=(),
+                                  **obj["__data__"])

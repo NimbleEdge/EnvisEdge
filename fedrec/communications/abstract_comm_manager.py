@@ -3,7 +3,7 @@ import asyncio
 
 class AbstractCommunicationManager(ABC):
     def __init__(self):
-        self.queue = asyncio.Queue()       
+        self.queue = asyncio.Queue()
     
     @abstractmethod
     def send_message(self, message):
@@ -11,7 +11,7 @@ class AbstractCommunicationManager(ABC):
 
     @abstractmethod
     def receive_message(self):
-        raise NotImplementedError('communication interface not defined') 
+        raise NotImplementedError('communication interface not defined')
 
     @abstractmethod
     def finish(self):
