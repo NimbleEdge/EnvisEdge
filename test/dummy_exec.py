@@ -1,18 +1,18 @@
-from typing import Callable, Dict
-from abc import abstractproperty
 import collections
-import yaml
+import sys
+from abc import abstractproperty
+from typing import Callable, Dict
+
 import experiments
 import fedrec
 import fl_strategies
+import yaml
 from fedrec.communications.messages import JobResponseMessage, JobSubmitMessage
 from fedrec.python_executors.aggregator import Aggregator, Neighbour
 from fedrec.python_executors.base_actor import BaseActor
 from fedrec.python_executors.trainer import Trainer
 from fedrec.utilities import registry
 from fedrec.utilities.logger import NoOpLogger
-import sys
-sys.path.append("/home/ramesht.shuklae/fed/RecoEdge")
 
 
 class AbstractTester():

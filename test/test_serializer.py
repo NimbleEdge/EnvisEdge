@@ -1,8 +1,9 @@
-import pytest
 import json
+
+import pytest
 import yaml
+from fedrec.communications.messages import JobResponseMessage, JobSubmitMessage
 from fedrec.serialization.serializers import AbstractSerializer, JSONSerializer
-from fedrec.communications.messages import JobSubmitMessage, JobResponseMessage
 
 with open("test_config.yml", 'r') as cfg:
     config = yaml.load(cfg, Loader=yaml.FullLoader)
