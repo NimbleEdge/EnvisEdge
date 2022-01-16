@@ -1,20 +1,18 @@
-import sys
-sys.path.append("/home/ramesht.shuklae/fed/RecoEdge")
-from fedrec.utilities.logger import NoOpLogger
-from fedrec.utilities import registry
-from fedrec.python_executors.trainer import Trainer
-from fedrec.python_executors.base_actor import BaseActor
-from fedrec.python_executors.aggregator import Aggregator, Neighbour
-from fedrec.communications.messages import JobResponseMessage, JobSubmitMessage
-import fl_strategies
-import fedrec
-import experiments
-import yaml
 import collections
+import sys
 from abc import abstractproperty
 from typing import Callable, Dict
 
-
+import experiments
+import fedrec
+import fl_strategies
+import yaml
+from fedrec.communications.messages import JobResponseMessage, JobSubmitMessage
+from fedrec.python_executors.aggregator import Aggregator, Neighbour
+from fedrec.python_executors.base_actor import BaseActor
+from fedrec.python_executors.trainer import Trainer
+from fedrec.utilities import registry
+from fedrec.utilities.logger import NoOpLogger
 
 
 class AbstractTester():
@@ -77,7 +75,7 @@ class TestTrainer(AbstractTester):
         if response.status:
             worker_state = response.results
             self.worker.load_worker(worker_state)
-            print(f"Woker state {response.get_worker_state()}")
+            print(f"Worker state {response.get_worker_state()}")
 
     def TestTesting(self):
         response: JobResponseMessage = self.submit_message(senderid=self.worker.worker_index,
