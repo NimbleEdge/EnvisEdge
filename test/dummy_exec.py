@@ -21,7 +21,8 @@ class AbstractTester():
         self.config = config
 
         self.comm_manager = registry.construct(
-            "communications", config=config["multiprocessing"]["communications"])
+            "communications",
+            config=config["multiprocessing"]["communications"])
         self.logger = NoOpLogger()
 
     def send_message(self, message):
@@ -66,11 +67,13 @@ class TestTrainer(AbstractTester):
 
     def TestTraining(self):
         # create JobSubmitMessage with Job_type="train"
-        response: JobResponseMessage = self.submit_message(senderid=self.worker.worker_index,
-                                                           receiverid=self.worker.worker_index,
-                                                           job_type="train",
-                                                           job_args=None,
-                                                           job_kwargs=None)
+        response: JobResponseMessage = self.submit_message(
+            senderid=self.worker.worker_index,
+            receiverid=self.worker.worker_index,
+            job_type="train",
+            job_args=None,
+            job_kwargs=None
+        )
         # check response message
         if response.status:
             worker_state = response.results
@@ -78,11 +81,13 @@ class TestTrainer(AbstractTester):
             print(f"Worker state {response.get_worker_state()}")
 
     def TestTesting(self):
-        response: JobResponseMessage = self.submit_message(senderid=self.worker.worker_index,
-                                                           receiverid=self.worker.worker_index,
-                                                           job_type="test",
-                                                           job_args=None,
-                                                           job_kwargs=None)
+        response: JobResponseMessage = self.submit_message(
+            senderid=self.worker.worker_index,
+            receiverid=self.worker.worker_index,
+            job_type="test",
+            job_args=None,
+            job_kwargs=None
+        )
         if response.status:
             worker_state = response.results
             self.worker.load_worker(worker_state)
@@ -109,11 +114,13 @@ class TestFedAvg(AbstractTester):
                           out_neighbours=self.out_neighbours)
 
     def testagg(self):
-        response: JobResponseMessage = self.submit_message(senderid=self.worker.worker_index,
-                                                           receiverid=self.worker.worker_index,
-                                                           job_type="aggregate",
-                                                           job_args=None,
-                                                           job_kwargs=None)
+        response: JobResponseMessage = self.submit_message(
+            senderid=self.worker.worker_index,
+            receiverid=self.worker.worker_index,
+            job_type="aggregate",
+            job_args=None,
+            job_kwargs=None
+        )
         # check response message
         if response.status:
             worker_state = response.results
@@ -123,11 +130,13 @@ class TestFedAvg(AbstractTester):
     def testsampclient(self,
                        round_idx,
                        client_num_per_round):
-        response: JobResponseMessage = self.submit_message(senderid=self.worker.worker_index,
-                                                           receiverid=self.worker.worker_index,
-                                                           job_type="sample_clients",
-                                                           job_args=None,
-                                                           job_kwargs=None)
+        response: JobResponseMessage = self.submit_message(
+            senderid=self.worker.worker_index,
+            receiverid=self.worker.worker_index,
+            job_type="sample_clients",
+            job_args=None,
+            job_kwargs=None
+        )
         if response.status:
             assert len(response.results) == client_num_per_round
             assert len(response.results) <= len(self.in_neighbours)

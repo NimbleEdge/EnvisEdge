@@ -189,5 +189,5 @@ Begin FL simulation by
 mpirun -np 20 python -m mpi4py.futures train_fl.py --num_workers 1000.
 ```
 
-In the [next section](./simulating_fl_cycle.md) we will see how easy it is to convert the normal ML pipeline into an FL pipeline.
+In the [next section](./Tutorial-Part-3-simulating_fl_cycle.md) we will see how easy it is to convert the normal ML pipeline into an FL pipeline.
 
