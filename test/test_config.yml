@@ -2,10 +2,18 @@ test_generate_message_dict:
   params: [job_type, job_args, job_kwargs, senderid, receiverid, workerstate]
   values: [["train", "01", "01", "01", "01", "01"],["test", "00", "00", "00", "00", "00"]]
 
-test_json_serialize:
+test_JSON_JobResponseMessage_serialize:
+  params: [job_type, senderid, receiverid]
+  values: [["train", "01", "01"],["test", "00", "00"]]
+
+test_JSON_jobSubmitMessage_serialize:
   params: [job_type, job_args, job_kwargs, senderid, receiverid, workerstate]
   values: [["train", "01", "01", "01", "01", "01"],["test", "00", "00", "00", "00", "00"]]
 
-test_json_deserialize:
+test_JSON_JobSubmitMessage_deserialize:
   params: [job_type, job_args, job_kwargs, senderid, receiverid, workerstate]
   values: [["train", "01", "01", "01", "01", "01"],["test", "00", "00", "00", "00", "00"]]
+
+test_JSON_JobResponseMessage_deserialize:
+  params: [job_type, senderid, receiverid]
+  values: [["train", "01", "01"],["test", "00", "00"]]

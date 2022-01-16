@@ -1,4 +1,5 @@
 import sys
+sys.path.append("/home/ramesht.shuklae/fed/RecoEdge")
 from fedrec.utilities.logger import NoOpLogger
 from fedrec.utilities import registry
 from fedrec.python_executors.trainer import Trainer
@@ -12,8 +13,7 @@ import yaml
 import collections
 from abc import abstractproperty
 from typing import Callable, Dict
-
-
+from unittest.mock import patch
 
 
 class AbstractTester():
