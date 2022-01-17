@@ -65,7 +65,7 @@ class TestTrainer(AbstractTester):
                        config=self.config,
                        logger=self.logger)
 
-    def TestTraining(self):
+    def test_training_method(self):
         # create JobSubmitMessage with Job_type="train"
         response: JobResponseMessage = self.submit_message(
             senderid=self.worker.worker_index,
@@ -80,7 +80,7 @@ class TestTrainer(AbstractTester):
             self.worker.load_worker(worker_state)
             print(f"Worker state {response.get_worker_state()}")
 
-    def TestTesting(self):
+    def test_testing_method(self):
         response: JobResponseMessage = self.submit_message(
             senderid=self.worker.worker_index,
             receiverid=self.worker.worker_index,
@@ -94,7 +94,7 @@ class TestTrainer(AbstractTester):
             print(f"Worker State {response.get_worker_state()}")
 
 
-class TestFedAvg(AbstractTester):
+class TestAggregator(AbstractTester):
     """Test fl_startegies module methods
     """
 
@@ -113,7 +113,7 @@ class TestFedAvg(AbstractTester):
                           in_neighbours=self.in_neighbours,
                           out_neighbours=self.out_neighbours)
 
-    def testagg(self):
+    def test_aggregation(self):
         response: JobResponseMessage = self.submit_message(
             senderid=self.worker.worker_index,
             receiverid=self.worker.worker_index,
@@ -127,7 +127,7 @@ class TestFedAvg(AbstractTester):
             self.worker.load_worker(worker_state)
             print(f"Worker State {response.get_worker_state()}")
 
-    def testsampclient(self,
+    def test_sample_client(self,
                        round_idx,
                        client_num_per_round):
         response: JobResponseMessage = self.submit_message(
@@ -148,5 +148,13 @@ if __name__ == "__main__":
         config = yaml.load(cfg, Loader=yaml.FullLoader)
 
     print(config['model'])
+    # start trainer
     test_trainer = TestTrainer(config=config)
-    test_trainer.TestTesting()
+    test_trainer.test_training_method()
+    test_trainer.test_testing_method()
+    # start aggregator
+    test_aggregator = TestAggregator(config=config)
+    test_aggregator.test_aggregation()
+    test_aggregator.test_sample_client()
+
+

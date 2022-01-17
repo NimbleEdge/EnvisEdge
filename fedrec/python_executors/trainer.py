@@ -101,8 +101,8 @@ class Trainer(BaseActor, ABC):
             state_dict=state,
             model_preproc=self.model_preproc,
             storage=self.persistent_storage,
-            local_sample_number = self.local_sample_number,
-            local_training_steps = self.local_training_steps
+            local_sample_number=self.local_sample_number,
+            local_training_steps=self.local_training_steps
         )
 
     def load_worker(
