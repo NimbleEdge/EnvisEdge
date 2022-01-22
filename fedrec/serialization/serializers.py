@@ -112,7 +112,7 @@ class TensorSerializer(AbstractSerializer):
     TensorSerializer serializes and deserializes torch tensors.
 
     Attributes:
-    ----------
+    -----------
     serializer: str
         The serializer to use.
     """
