@@ -27,7 +27,7 @@ def test_generate_message_dict(job_type, job_args, job_kwargs,
     assert dict['__data__'] == obj.__dict__
 
 
-def test_json_jobresponsemessage_serialize(job_type, senderid, receiverid):
+def test_JSON_JobResponseMessage_serialize(job_type, senderid, receiverid):
     """test JSONSerializer method
     """
     message_dict_response = JobResponseMessage(job_type, senderid, receiverid)
@@ -37,7 +37,7 @@ def test_json_jobresponsemessage_serialize(job_type, senderid, receiverid):
     assert response_msg['__data__'] == message_dict_response.__dict__
 
 
-def test_json_jobsubmitmessage_serialize(job_type, job_args,
+def test_JSON_JobSubmitMessage_serialize(job_type, job_args,
                                          job_kwargs, senderid,
                                          receiverid, workerstate):
     message_dict_submit = JobSubmitMessage(job_type, job_args,
@@ -49,7 +49,7 @@ def test_json_jobsubmitmessage_serialize(job_type, job_args,
     assert response_submit_msg['__data__'] == message_dict_submit.__dict__
 
 
-def test_json_jobsubmitmessage_deserialize(job_type, job_args, job_kwargs,
+def test_JSON_JobSubmitMessage_deserialize(job_type, job_args, job_kwargs,
                                            senderid, receiverid, workerstate):
     """test JSONdeserialize method
     """
@@ -61,7 +61,7 @@ def test_json_jobsubmitmessage_deserialize(job_type, job_args, job_kwargs,
     assert response__msg == message
 
 
-def test_json_Jobresponsemessage_deserialize(job_type,
+def test_JSON_JobResponseMessage_deserialize(job_type,
                                              senderid, receiverid):
     """test JSONdeserialize method
     """
