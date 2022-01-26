@@ -1,7 +1,8 @@
 from argparse import ArgumentParser
-from fedrec.trainers.base_trainer import BaseTrainer
+
 import torch
 import yaml
+from fedrec.trainers.base_trainer import BaseTrainer
 from fedrec.utilities import registry
 from fedrec.utilities.logger import NoOpLogger, TBLogger
 
@@ -10,27 +11,29 @@ def merge_config_and_args(config, args):
     """
     Creates a configuration dictionary based upon command line arguments
     :param config: configurations loaded from the config file
-    :param args:arguments and there values 
-    which could be passed in the command line
+    :param args:arguments and there values \
+        which could be passed in the command line.
     :type config: dict
     :type args: object
-    :return:updated configuration dictionary 
-    with arguments passed in command line
+    :return: updated configuration dictionary \
+        with arguments passed in command line.
+
     """
     arg_dict = vars(args)
     stripped_dict = {
         k: v for k, v in arg_dict.items() if (v is not None)
-        }
+    }
     return {**config, **stripped_dict}
 
 
 def main():
     """
-    Parses the arguments passed in the command line and
-    creates a trainer and starts it's training.
-    :raises:ValueError if no valid path to directory
-    is given for logging when logging is enabled
+    Parses the arguments passed in the command line and \
+        creates a trainer and starts it's training.
+    :raises ValueError: if no valid path to directory \
+        is given for logging when logging is enabled.
     :return: None
+
     """
     parser = ArgumentParser()
     parser.add_argument("--config", type=str)
