@@ -1,3 +1,18 @@
+'''
+The registry class makes it easy and quick to experiment with
+different algorithms, model architectures and hyperparameters.
+
+We only need to decorate the class definitions with registry.load
+and create a yaml configuration file of all the arguments to pass.
+
+Later, if we want to change any parameter (eg. number of hidden layers,
+learning rate, or number of clients per round), we need not change the
+code but only change the parameters in yaml configuration file.
+
+for detailed explaination on the use of registry, see:
+github.com/NimbleEdge/RecoEdge/blob/main/docs/Tutorial-Part-2-starting_with_nimbleedge.md
+'''
+
 import collections
 import collections.abc
 import inspect
@@ -9,8 +24,21 @@ LOOKUP_DICT = collections.defaultdict(dict)
 
 def load(kind, name):
     '''
-    A decorator function to record callable object definitions
+    A decorator to record callable object definitions
     for models,trainers,workers etc.
+
+    Arguments
+    ----------
+    kind: str
+          Key to store in dictionary, used to specify the
+          kind of object (eg. model, trainer).
+    name: str
+          Sub-key under kind key, used to specify name of
+          of the object definition.
+    Returns
+    ----------
+    callable:
+          Decorator function to store object definition.
     '''
 
     registry = LOOKUP_DICT[kind]
@@ -27,6 +55,19 @@ def load(kind, name):
 def lookup(kind, name):
     '''
     Returns the callable object definition stored in registry.
+
+    Arguments
+    ----------
+    kind: str
+          Key to search in dictionary of registry.
+    name: str
+          Sub-key to search under kind key in dictionary
+          of registry.
+    Returns
+    ----------
+    callable:
+          Object definition stored in registry under key kind
+          and sub-key name.
     '''
 
     # check if 'name' argument is a dictionary.
@@ -40,11 +81,28 @@ def lookup(kind, name):
 
 def construct(kind, config, unused_keys=(), **kwargs):
     '''
-    Returns an object instance by loading defintion from registry,
+    Returns an object instance by loading definition from registry,
     and arguments from configuration file.
+
+    Arguments
+    ----------
+    kind:        str
+                 Key to search in dictionary of registry.
+    config:      dict
+                 Configuration dictionary loaded from yaml file
+    unused_keys: tuple
+                 Keys for values that are not passed as arguments to
+                 insantiate the object but are still present in config.
+    **kwargs:    dict, optional
+                 Extra arguments to pass.
+    Returns
+    ----------
+    object:
+        Constructed object using the parameters passed in config and **kwargs.
     '''
 
-    # check if 'config' argument is a string.
+    # check if 'config' argument is a string,
+    # if yes, make it a dictionary.
     if isinstance(config, str):
         config = {'name': config}
     return instantiate(
@@ -65,7 +123,8 @@ def instantiate(callable, config, unused_keys=(), **kwargs):
     config:      dict
                  Arguments to construct the object.
     unused_keys: tuple
-                 Unneccassary keys in config that callable does not require.
+                 Keys for values that are not passed as arguments to
+                 insantiate the object but are still present in config.
     **kwargs:    dict, optional
                  Extra arguments to pass.
 
