@@ -10,12 +10,12 @@ def merge_config_and_args(config, args):
     """
     Creates a configuration dictionary based upon command line arguments
     :param config: configurations loaded from the config file
-    :param args:
-    arguments and there values which could be passed in the command line
+    :param args:arguments and there values 
+    which could be passed in the command line
     :type config: dict
     :type args: object
-    :return:
-    updated configuration dictionary with arguments passed in command line
+    :return:updated configuration dictionary 
+    with arguments passed in command line
     """
     arg_dict = vars(args)
     stripped_dict = {
@@ -28,8 +28,7 @@ def main():
     """
     Parses the arguments passed in the command line and
     creates a trainer and starts it's training.
-    :raises:
-    ValueError if no valid path to directory
+    :raises:ValueError if no valid path to directory
     is given for logging when logging is enabled
     :return: None
     """
