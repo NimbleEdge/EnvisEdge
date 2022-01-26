@@ -35,10 +35,18 @@ def load(kind, name):
     name: str
           Sub-key under kind key, used to specify name of
           of the object definition.
+
     Returns
     ----------
     callable:
           Decorator function to store object definition.
+
+    Examples
+    ----------
+    >>> @registry.load('model', 'dlrm')
+    ... class DLRM_Net(nn.Module): # This class definition gets recorded
+    ... def __init__(self, arg):
+    ...     self.arg = arg
     '''
 
     registry = LOOKUP_DICT[kind]
@@ -63,14 +71,26 @@ def lookup(kind, name):
     name: str
           Sub-key to search under kind key in dictionary
           of registry.
+
     Returns
     ----------
     callable:
           Object definition stored in registry under key kind
           and sub-key name.
+
+    Examples
+    ----------
+    >>> @registry.load('model', 'dlrm')
+    ... class DLRM_Net(nn.Module): # This class definition gets recorded
+    ... def __init__(self, arg):
+    ...     self.arg = arg
+    >>> model = lookup('model', 'dlrm') # loads model class from registry
+    >>> model  # model is a DLRM_Net object
+    __main__.DLRM_Net
     '''
 
     # check if 'name' argument is a dictionary.
+    # if yes, load the value under key 'name'.
     if isinstance(name, collections.abc.Mapping):
         name = name['name']
 
@@ -95,10 +115,21 @@ def construct(kind, config, unused_keys=(), **kwargs):
                  insantiate the object but are still present in config.
     **kwargs:    dict, optional
                  Extra arguments to pass.
+
     Returns
     ----------
     object:
         Constructed object using the parameters passed in config and **kwargs.
+
+    Examples
+    ----------
+    >>> @registry.load('model', 'dlrm')
+    ... class DLRM_Net(nn.Module): # This class definition gets recorded
+    ... def __init__(self, arg):
+    ...     self.arg = arg
+    >>> model = construct('model', 'drlm', (), arg = 5)
+    >>> model.arg  # model is a DLRM_Net object with arg = 5
+    5
     '''
 
     # check if 'config' argument is a string,
@@ -132,6 +163,18 @@ def instantiate(callable, config, unused_keys=(), **kwargs):
     ----------
     object:
         Instantiated object by the parameters passed in config and **kwargs.
+
+    Examples
+    ----------
+    >>> @registry.load('model', 'dlrm')
+    ... class DLRM_Net(nn.Module): # This class definition gets recorded
+    ... def __init__(self, arg):
+    ...     self.arg = arg
+    >>> config = {'name': 'dlrm', 'arg': 5} # loaded from a yaml config file
+    >>> call = lookup('model', 'dlrm') # Loads the class definition
+    >>> model = instantiate(call, config, ('name'))
+    >>> model.arg  # model is a DRLM_Net object with arg = 5
+    5
     '''
 
     # merge config arguments and kwargs in a single dictionary.
