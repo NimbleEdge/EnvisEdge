@@ -3,15 +3,18 @@ import collections.abc
 import inspect
 import sys
 
-LOOKUP_DICT = collections.defaultdict(dict)
+LOOKUP_DICT = collections.defaultdict(dict)  # a defaultdict provides default values for non-existent keys.
 
 
 def load(kind, name):
+    '''
+    A decorator function to record callable object definitions for models,trainers,workers etc.     
+    '''
     registry = LOOKUP_DICT[kind]
 
     def decorator(obj):
         if name in registry:
-            raise LookupError('{} already present'.format(name, kind))
+            raise LookupError('{} already present'.format(name, kind)) 
         registry[name] = obj
         return obj
 
@@ -19,7 +22,10 @@ def load(kind, name):
 
 
 def lookup(kind, name):
-    if isinstance(name, collections.abc.Mapping):
+    '''
+    Returns the callable object definition stored in registry.
+    '''
+    if isinstance(name, collections.abc.Mapping):  # check if 'name' argument is a dictionary.
         name = name['name']
 
     if kind not in LOOKUP_DICT:
@@ -28,7 +34,11 @@ def lookup(kind, name):
 
 
 def construct(kind, config, unused_keys=(), **kwargs):
-    if isinstance(config, str):
+    '''
+    Returns an object instance by loading defintion from registry, 
+    and arguments from configuration file.   
+    '''
+    if isinstance(config, str):  # check if 'config' argument is a string.
         config = {'name': config}
     return instantiate(
         lookup(kind, config),
@@ -38,8 +48,29 @@ def construct(kind, config, unused_keys=(), **kwargs):
 
 
 def instantiate(callable, config, unused_keys=(), **kwargs):
-    merged = {**config, **kwargs}
-    signature = inspect.signature(callable)
+    '''
+    Instantiates an object after verifying the parameters.
+
+    Arguments
+    ----------
+    callable:    callable
+                 Definition of object to be instantiated.
+    config:      dict
+                 Arguments to construct the object.
+    unused_keys: tuple
+                 Unneccassary keys in config that callable does not require. 
+    **kwargs:    dict, optional
+                 Extra arguments to pass.
+                 
+    Returns
+    ----------
+    object
+                 Instantiated object by the parameters passed in config and **kwargs.
+    '''
+    merged = {**config, **kwargs} # merge config arguments and kwargs in a single dictionary.
+
+    # check if callable has valid parameters.
+    signature = inspect.signature(callable) 
     for name, param in signature.parameters.items():
         if param.kind in (inspect.Parameter.POSITIONAL_ONLY,
                           inspect.Parameter.VAR_POSITIONAL):
@@ -50,6 +81,8 @@ def instantiate(callable, config, unused_keys=(), **kwargs):
            for param in signature.parameters.values()):
         return callable(**merged)
 
+    # check and warn if config has unneccassary arguments that 
+    # callable does not require and are not mentioned in unused_keys.
     missing = {}
     for key in list(merged.keys()):
         if key not in signature.parameters:
