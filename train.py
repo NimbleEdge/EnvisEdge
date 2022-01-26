@@ -1,9 +1,7 @@
 from argparse import ArgumentParser
 from fedrec.trainers.base_trainer import BaseTrainer
-
 import torch
 import yaml
-
 from fedrec.utilities import registry
 from fedrec.utilities.logger import NoOpLogger, TBLogger
 
@@ -12,27 +10,34 @@ def merge_config_and_args(config, args):
     """
     Creates a configuration dictionary based upon command line arguments
     :param config: configurations loaded from the config file
-    :param args: arguments and there values which could be passed in the command line
+    :param args:
+    arguments and there values which could be passed in the command line
     :type config: dict
     :type args: object
-    :return: updated configuration dictionary with the arguments passed in command line
+    :return:
+    updated configuration dictionary with arguments passed in command line
     """
     arg_dict = vars(args)
-    stripped_dict = {k: v for k, v in arg_dict.items() if
-                     (v is not None)}  # remove None values from the arguments passed to the script
+    stripped_dict = {
+        k: v for k, v in arg_dict.items() if (v is not None)
+        }
     return {**config, **stripped_dict}
 
 
 def main():
     """
-    Parses the arguments passed in the command line and creates a trainer and starts it's training.
-    :raises: ValueError if no valid path to directory is given for logging when logging is enabled
+    Parses the arguments passed in the command line and
+    creates a trainer and starts it's training.
+    :raises:
+    ValueError if no valid path to directory
+    is given for logging when logging is enabled
     :return: None
     """
     parser = ArgumentParser()
     parser.add_argument("--config", type=str)
 
-    parser.add_argument("--disable_logger", dest='logger', action='store_false')
+    parser.add_argument("--disable_logger", dest='logger',
+                        action='store_false')
     parser.add_argument("--logdir", type=str, default=None)
 
     parser.add_argument("--weighted-pooling", type=str, default=None)
@@ -41,7 +46,8 @@ def main():
     parser.add_argument("--loss_function", type=str, default=None)
     parser.add_argument("--loss_weights", type=float, default=None)
     parser.add_argument("--loss_threshold", type=float, default=0.0)
-    parser.add_argument("--round_targets", dest='round_targets', action='store_true')
+    parser.add_argument("--round_targets",
+                        dest='round_targets', action='store_true')
 
     # Configuration of the training process
     parser.add_argument("--data_size", type=int, default=None)
@@ -51,8 +57,10 @@ def main():
     parser.add_argument("--keep_every_n", type=int, default=None)
     parser.add_argument("--batch_size", type=int, default=None)
     parser.add_argument("--eval_batch_size", type=int, default=None)
-    parser.add_argument('--eval_on_train', dest='eval_on_train', action='store_true')
-    parser.add_argument('--no_eval_on_val', dest='eval_on_val', action='store_false')
+    parser.add_argument('--eval_on_train',
+                        dest='eval_on_train', action='store_true')
+    parser.add_argument('--no_eval_on_val',
+                        dest='eval_on_val', action='store_false')
     parser.add_argument("--data_seed", type=int, default=None)
     parser.add_argument("--init_seed", type=int, default=None)
     parser.add_argument("--model_seed", type=int, default=None)
@@ -60,10 +68,12 @@ def main():
     parser.add_argument("--num_epochs", type=int, default=None)
     parser.add_argument("--num_workers", type=int, default=None)
     parser.add_argument("--num_eval_batches", type=int, default=None)
-    parser.add_argument('--log_gradients', dest='log_gradients', action='store_true')
+    parser.add_argument('--log_gradients',
+                        dest='log_gradients', action='store_true')
 
     # Configurations regarding the GPU
-    parser.add_argument('--pin_memory', dest='pin_memory', action='store_true')
+    parser.add_argument('--pin_memory',
+                        dest='pin_memory', action='store_true')
     parser.add_argument("--devices", nargs="+", default=None, type=int)
 
     # store/load model
@@ -82,15 +92,20 @@ def main():
 
     if torch.cuda.is_available() and (args.devices[0] != -1):
         # torch.backends.cudnn.deterministic = True
-        # If GPUs are available and there use has been allowed then use the first GPU
+        # If GPUs are available and
+        # there use has been allowed then use the first GPU
         torch.cuda.set_device(args.devices[0])
 
-    modelCls = registry.lookup('model', config_dict['model'])  # get the model class from the config file
+    # get the model class from the config file
+    modelCls = registry.lookup('model', config_dict['model'])
 
+    # get the preprocessing class from the config file
     model_preproc = registry.instantiate(
-        modelCls.Preproc, config_dict['model']['preproc'])  # get the preprocessing class from the config file
+        modelCls.Preproc, config_dict['model']['preproc'])
 
-    model_preproc.load()  # load the preprocessing class so that it can be used at time of loading the model
+    # load the preprocessing class so that,
+    # it can be used at time of loading the model
+    model_preproc.load()
 
     # Based upon whether logger is enabled or not, instantiate the logger
     if args.logger:
@@ -101,7 +116,10 @@ def main():
         logger = NoOpLogger()
 
     # Based upon passed arguments, instantiate the trainer configurations
-    train_config = registry.construct('train_config', merge_config_and_args(config_dict['train']['config'], args))
+    train_config = registry.construct(
+        'train_config',
+        merge_config_and_args(config_dict['train']['config'], args)
+    )
 
     # Construct trainer and do training based on the trainer configurations
     trainer: BaseTrainer = registry.construct(
@@ -117,4 +135,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
