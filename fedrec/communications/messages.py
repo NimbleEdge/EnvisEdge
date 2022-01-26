@@ -8,6 +8,16 @@ from dataclasses import dataclass
 @registry.load("serializer", "Message")
 @dataclass
 class Message(object):
+    '''
+    Stores information into Message object
+
+    Args:
+    -----
+        senderid : str
+            id of sender
+        receiverid : str
+            id of receiver
+    '''
     __type__ = "Message"
 
     def __init__(self, senderid, receiverid):
@@ -24,6 +34,24 @@ class Message(object):
 @registry.load("serializer", "JobSubmitMessage")
 @dataclass
 class JobSubmitMessage(Message):
+    '''
+    Stores message of job submit request
+
+    Args:
+    -----
+        job_type : str
+            type of job
+        job_args : list
+            list of job arguments
+        job_kwargs: dict
+            Extra key-pair arguments related to job
+        senderid : str
+            id of sender
+        receiverid : str
+            id of reciever
+        workerstate : ActorState
+            ActorState object containing worker's state
+    '''
     __type__ = "JobSubmitMessage"
 
     def __init__(self,
@@ -49,6 +77,20 @@ class JobSubmitMessage(Message):
 @registry.load("serializer", "JobResponseMessage")
 @dataclass
 class JobResponseMessage(Message):
+    '''
+    Stores job response message
+
+    Args:
+    -----
+        job_type : str
+            type of job (train/test)
+        senderid : str
+            id of sender
+        receiverid : str
+            id of receiver
+        results : dict
+            dict of results obtained from job completion
+    '''
     __type__ = "JobResponseMessage"
 
     def __init__(self, job_type, senderid, receiverid):
