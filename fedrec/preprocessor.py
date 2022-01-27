@@ -73,3 +73,50 @@ class DLRMPreprocessor(PreProcessor):
         return torch.utils.data.DataLoader(
             data, collate_fn=self.dataset_processor.collate_fn, **kwargs
         )
+
+
+@registry.load('preproc', 'regression')
+class RegressionPreprocessor(PreProcessor):
+    def __init__(
+            self,
+            datafile,
+            output_file,
+            dataset_config):
+        self.dataset_config = dataset_config
+        self.datafile = datafile
+        self.output_file = output_file
+        self.dataset_processor = registry.construct(
+            'dset_proc', self.dataset_config,
+            unused_keys=(),
+            datafile=self.datafile,
+            output_file=self.output_file)
+
+
+    def preprocess_data(self):
+        self.dataset_processor.process_data()
+        if not self.input_dim:
+            self.load_data_description()
+
+    def load_data_description(self):
+        self.dataset_processor.load_data_description()
+        self.input_dim = self.dataset_processor.input_dim
+
+    def load(self):
+        self.dataset_processor.load()
+
+    def datasets(self, *splits):
+        assert all([isinstance(split, str) for split in splits])
+        return {
+            split: self.dataset_processor.dataset(split)
+            for split in splits
+        }
+
+    def dataset(self, split):
+        assert isinstance(split, str)
+        return self.dataset_processor.dataset(split)
+
+    def data_loader(self, data, **kwargs):
+        return torch.utils.data.DataLoader(
+            data, collate_fn=self.dataset_processor.collate_fn, **kwargs
+        )
+#TODO: use of collate function

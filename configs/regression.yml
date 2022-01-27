@@ -1,0 +1,43 @@
+model : 
+  name : "regression"
+  
+  input_dim: 784
+  output_dim : 10
+  loss_function: "mse"
+
+  preproc :
+    datafile : "/home/anubhav/Downloads/mnist_train_small.csv"
+    output_file : "Anubhav's_First_Issue"
+    dataset_config :
+      name : "kaggle"
+      dataset_multiprocessing : True
+
+
+
+
+train :
+  name : regression
+  config:
+    name : "one_layer"
+    batch_size : 32
+    eval_batch_size : 128
+    eval_every_n : 100
+    save_every_n : 500
+    num_workers : 10
+    # Seed for RNG used in shuffling the training data.
+    data_seed : 100
+    # Seed for RNG used in initializing the model.
+    init_seed : 100
+    # Seed for RNG used in computing the model's training loss.
+
+
+  optimizer :
+    name : "sgd"
+    momentum : 0.9
+    lr : 0.001
+    
+  lr_scheduler :
+    name : "regression"
+    num_warmup_steps : 300
+    decay_start_step : 1500
+    num_decay_steps : 1500
