@@ -53,7 +53,7 @@ class Regression(nn.Module):
             )
             
 
-    def forward(self, x, lS_o, lS_i): #TODO: where are we calling this function?
+    def forward(self, x): #TODO: where are we calling this function?
         out = self.linear(x)
 
         if 0.0 < self.loss_threshold and self.loss_threshold < 1.0:
