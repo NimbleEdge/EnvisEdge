@@ -61,7 +61,7 @@ class Jobber:
 
     def execute(self, message: JobSubmitMessage):
         """
-        Listen to the message and executes the job request
+        executes the BaseActor model ,implemented in the worker funcs and run them according to job_type
         Attributes
         ----------
         message: JobSubmitMessage
