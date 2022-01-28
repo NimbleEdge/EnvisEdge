@@ -90,7 +90,7 @@ scikit-learn==1.0.1
 scipy==1.7.1
 Send2Trash==1.8.0
 setuptools==58.0.4
-sip==4.19.13
+sip==6.5.0
 six==1.16.0
 soupsieve==2.3.1
 terminado==0.9.4
