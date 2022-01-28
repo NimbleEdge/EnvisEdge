@@ -17,7 +17,8 @@ def pytest_generate_tests(metafunc):
         metafunc.parametrize(params["params"], params["values"])
 
 
-def test_job_type(job_type, job_args , job_kwargs,senderid, receiverid, workerstate):
+def test_job_type(job_type, job_args , job_kwargs,
+                  senderid, receiverid, workerstate):
 
     obj = JobSubmitMessage(job_type, job_args, job_kwargs,
                            senderid, receiverid, workerstate)
@@ -31,7 +32,8 @@ def test_jobresponse_status(job_type, senderid, receiverid):
 
     assert(type(obj.status) == bool)
 
-def test_jobsubmitmessage(job_type, job_args , job_kwargs,senderid, receiverid, workerstate):
+def test_jobsubmitmessage(job_type, job_args , job_kwargs,
+                          senderid, receiverid, workerstate):
 
     obj = JobSubmitMessage(job_type, job_args, job_kwargs,
                            senderid, receiverid, workerstate)
