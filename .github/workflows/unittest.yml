@@ -18,15 +18,12 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install
+    - name: Install dependencies
       run: |
         sudo apt-get update
         python -m pip install --upgrade pip
         cd ${{ env.working-directory }}
         pip3 install -r requirements.txt
-    - name: Install dependencies
-      run: |
-        conda env update --file environment.yml --name base
     - name: Test with pytest
       working-directory: ${{ env.working-directory }}
       run: |
