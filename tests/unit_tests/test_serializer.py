@@ -5,7 +5,7 @@ import yaml
 from fedrec.communications.messages import JobResponseMessage, JobSubmitMessage
 from fedrec.serialization.serializers import AbstractSerializer, JSONSerializer
 
-with open("test_config.yml", 'r') as cfg:
+with open("./tests/test_configs/test_config.yml", 'r') as cfg:
     config = yaml.load(cfg, Loader=yaml.FullLoader)
 
 
