@@ -30,7 +30,7 @@ def test_worker_state(job_type, job_args , job_kwargs,
     obj = JobSubmitMessage(job_type, job_args, job_kwargs,
                            senderid, receiverid, workerstate)
     
-    assert obj.worker_state() == workerstate
+    assert obj.get_worker_state() == workerstate
 
 def test_job_type(job_type, job_args , job_kwargs,
                   senderid, receiverid, workerstate):
@@ -38,7 +38,6 @@ def test_job_type(job_type, job_args , job_kwargs,
     obj = JobSubmitMessage(job_type, job_args, job_kwargs,
                            senderid, receiverid, workerstate)
 
-    assert type(obj.get_job_type()) == str
     assert obj.get_job_type() == job_type
     
 def test_jobresponse_status(job_type, senderid, receiverid):
