@@ -11,8 +11,8 @@ class Message(object):
     '''
     Stores information into Message object
 
-    Args:
-    -----
+    Arguments:
+    ----------
         senderid : str
             id of sender
         receiverid : str
@@ -37,8 +37,8 @@ class JobSubmitMessage(Message):
     '''
     Stores message of job submit request
 
-    Args:
-    -----
+    Arguments:
+    ----------
         job_type : str
             type of job
         job_args : list
@@ -80,8 +80,8 @@ class JobResponseMessage(Message):
     '''
     Stores job response message
 
-    Args:
-    -----
+    Arguments:
+    ----------
         job_type : str
             type of job (train/test)
         senderid : str
