@@ -2,8 +2,8 @@ import json
 
 import pytest
 import yaml
-from fedrec.communications.messages import Message, JobSubmitMessage, JobResponseMessage
-
+from fedrec.communications.messages import Message, JobSubmitMessage,\
+     JobResponseMessage
 from fedrec.python_executors.base_actor import ActorState
 
 with open("test_config.yml", 'r') as cfg:
