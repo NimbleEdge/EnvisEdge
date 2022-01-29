@@ -69,3 +69,4 @@ def test_json_jobresponsemessage_deserialize(job_type,
     serilized_msg = JSONSerializer.serialize(message)
     response__msg = JSONSerializer.deserialize(serilized_msg)
     assert response__msg == message
+    
