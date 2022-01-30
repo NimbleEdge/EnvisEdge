@@ -9,7 +9,7 @@ from dataclasses import dataclass
 @dataclass
 class Message(object):
     '''
-    Stores information into Message object
+    Base class that is inherited by other Message classes
 
     Arguments:
     ----------
@@ -25,9 +25,11 @@ class Message(object):
         self.receiverid = receiverid
 
     def get_sender_id(self):
+        '''Returns senderid from Message Object'''
         return self.senderid
 
     def get_receiver_id(self):
+        '''Returns senderid from Message Object'''
         return self.receiverid
 
 
@@ -35,7 +37,7 @@ class Message(object):
 @dataclass
 class JobSubmitMessage(Message):
     '''
-    Stores message of job submit request
+    Creates a message object for job submit request
 
     Arguments:
     ----------
@@ -68,9 +70,11 @@ class JobSubmitMessage(Message):
         self.workerstate: ActorState = workerstate
 
     def get_worker_state(self):
+        '''Returns workerstate from JobSubmitMessage Object'''
         return self.workerstate
 
     def get_job_type(self):
+        '''Returns job_type from JobSubmitMessage Object'''
         return self.job_type
 
 
@@ -78,7 +82,7 @@ class JobSubmitMessage(Message):
 @dataclass
 class JobResponseMessage(Message):
     '''
-    Stores job response message
+    Creates message objects for job response message
 
     Arguments:
     ----------
@@ -90,6 +94,7 @@ class JobResponseMessage(Message):
             id of receiver
         results : dict
             dict of results obtained from job completion
+        errors : null
     '''
     __type__ = "JobResponseMessage"
 
@@ -101,6 +106,10 @@ class JobResponseMessage(Message):
 
     @property
     def status(self):
+        '''
+        Check if errors is None and returns response
+        message status accordingly
+        '''
         if self.errors is None:
             return True
         else:
