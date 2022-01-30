@@ -5,7 +5,7 @@ import yaml
 from fedrec.communications.messages import JobResponseMessage, JobSubmitMessage
 from fedrec.serialization.serializers import AbstractSerializer, JSONSerializer
 
-with open("test_config.yml", 'r') as cfg:
+with open("./tests/test_configs/test_config.yml", 'r') as cfg:
     config = yaml.load(cfg, Loader=yaml.FullLoader)
 
 
@@ -69,3 +69,4 @@ def test_json_jobresponsemessage_deserialize(job_type,
     serilized_msg = JSONSerializer.serialize(message)
     response__msg = JSONSerializer.deserialize(serilized_msg)
     assert response__msg == message
+    
