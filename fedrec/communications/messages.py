@@ -11,8 +11,8 @@ class Message(object):
     '''
     Base class that is inherited by other Message classes
 
-    Arguments:
-    ----------
+    Attributes:
+    -----------
         senderid : str
             id of sender
         receiverid : str
@@ -39,8 +39,8 @@ class JobSubmitMessage(Message):
     '''
     Creates a message object for job submit request
 
-    Arguments:
-    ----------
+    Attributes:
+    -----------
         job_type : str
             type of job
         job_args : list
@@ -84,8 +84,8 @@ class JobResponseMessage(Message):
     '''
     Creates message objects for job response message
 
-    Arguments:
-    ----------
+    Attributes:
+    -----------
         job_type : str
             type of job (train/test)
         senderid : str
