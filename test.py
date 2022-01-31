@@ -12,15 +12,18 @@ from fedrec.utilities.serialization import dash_separated_floats
 class InferenceMaker:
     """
     Tests our model on the testing dataset (test-loader)
-    
-    Args:
-    ---
-        config (yml file): file with the parameter values for training.
-        devices (list): list of available devices
-        log_dir (string): directory of the logs from the experiment
     """
+
     def __init__(self, config, devices, log_dir) -> None:
-        
+        """The __init__ method lets the class
+        initialize the objects attributes
+
+        Arguments:
+        ---
+            config (yml file): file with the parameter values for training.
+            devices (list): list of available devices
+            log_dir (string): directory of the logs from the experiment
+        """
         self.devices = devices
         if torch.cuda.is_available():
             torch.backends.cudnn.deterministic = True
@@ -70,22 +73,20 @@ class InferenceMaker:
         model,
         test_loader
     ):
-
-        """ 
+        """
             Makes an inference from the model by testing it against
             the testing dataset and calculates the metrics on it.
-        Args:
+        Arguments:
         ---
             model (pytorch.model): the model variable
             test_loader (Dataloader): Testing dataset
-            
+
         Returns:
         ---
-            list of dict: dictionary contains the metrics used for 
-            test, namely (recall, precision, f1-score,
-            average-precision-score,
-            roc_auc-score and accuracy) 
-        """        
+            list of dict: dictionary contains the metrics used for test,
+            namely (recall, precision, f1-score, average-precision-score,
+            roc_auc-score and accuracy)
+        """
         test_accu = 0
         test_samp = 0
         scores = []
@@ -136,7 +137,7 @@ def main():
         Parses the arguments passed in the command
         line and creates a tester and tests the model.
 
-    """   
+    """
     parser = ArgumentParser()
     parser.add_argument("--weighted-pooling", type=str, default=None)
     # activations and loss
