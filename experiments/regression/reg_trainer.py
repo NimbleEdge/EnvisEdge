@@ -64,25 +64,27 @@ class RegressionTrainer(Reproducible):
         self._optimizer = None
         self._saver = None
 
-        Basic.reset_loaders(self)
+    Basic.reset_loaders(self)
 
-    @staticmethod
+#     @staticmethod
     Basic._yield_batches_from_epochs(loader,start_epoch)
 
-    @property
+#     @property
+
     Basic.model(self)
 
-    @property
+#     @property
+    
     Basic.optimizer(self)
     Basic.get_scheduler(self,optimi, **kwargs)
 
-    @property
+#     @property
     Basic.saver(self)
 
-    @property
+#     @property
     Basic.data_loaders(self)
 
-    @staticmethod
+#     @staticmethod
     Basic.eval_model( model,
             loader,
             eval_section,
