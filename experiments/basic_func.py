@@ -15,7 +15,7 @@ from fedrec.utilities.random_state import Reproducible
 class Basic:
     def reset_loaders(self):
         self._data_loaders = {}
-    # @staticmethod
+    @staticmethod
     def _yield_batches_from_epochs(loader, start_epoch):
         current_epoch = start_epoch
         while True:
@@ -23,7 +23,7 @@ class Basic:
                 yield batch, current_epoch
             current_epoch += 1
 
-    # @property
+    @property
     def model(self):
         if self._model is not None:
             return self._model
@@ -40,7 +40,7 @@ class Basic:
                 self._model.cuda()
         return self._model
 
-    # @property
+    @property
     def optimizer(self):
         if self._optimizer is None:
             with self.init_random:
@@ -59,7 +59,7 @@ class Basic:
                     optimizer=optimizer, **kwargs)
         return self._scheduler
 
-    # @property
+    @property
     def saver(self):
         if self._saver is None:
             # 2. Restore model parameters
@@ -68,7 +68,7 @@ class Basic:
                 keep_every_n=self.train_config.keep_every_n)
         return self._saver
 
-    # @property
+    @property
     def data_loaders(self):
         if self._data_loaders:
             return self._data_loaders
@@ -104,7 +104,7 @@ class Basic:
             'val': val_data_loader
         }
 
-    # @staticmethod
+    @staticmethod
     def eval_model(
             model,
             loader,
