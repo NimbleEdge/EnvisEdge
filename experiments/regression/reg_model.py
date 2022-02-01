@@ -8,9 +8,7 @@ from fedrec.utilities import registry
 from torch import nn, sigmoid
 from torch.nn.parameter import Parameter
 
-
 ### define LogisticRegression in PyTorch ###
-
 
 @registry.load("model", "regression")
 class Regression(nn.Module):
