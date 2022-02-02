@@ -13,17 +13,16 @@ from torch.nn.parameter import Parameter
 @registry.load("model", "regression")
 class Regression(nn.Module):
     Preproc = RegressionPreprocessor
-
     def __init__(
         self,
         preprocessor: RegressionPreprocessor,
-        input_dim = 784, 
+        input_dim = 784,
         output_dim = 10,
         loss_weights=None,
         loss_threshold=0.0,
         ndevices=-1,
         loss_function="mse"
-    ):
+        ):
         super(Regression, self).__init__()
         self.preproc = preprocessor
         self.ndevices = ndevices
