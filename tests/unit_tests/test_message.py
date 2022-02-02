@@ -6,7 +6,7 @@ from fedrec.communications.messages import Message, JobSubmitMessage,\
      JobResponseMessage
 from fedrec.python_executors.base_actor import ActorState
 
-with open("test_config.yml", 'r') as cfg:
+with open("./tests/test_configs/test_config.yml", 'r') as cfg:
     config = yaml.load(cfg, Loader=yaml.FullLoader)
 
 
