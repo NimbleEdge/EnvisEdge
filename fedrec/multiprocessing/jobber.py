@@ -61,8 +61,8 @@ class Jobber:
 
     def execute(self, message: JobSubmitMessage):
         """
-        Executes the BaseActor model ,implemented in the worker funcs and 
-        Run them according to job_type 
+        Executes the BaseActor model ,implemented in the worker funcs
+        And run them according to job_type 
         See : https://github.com/NimbleEdge/RecoEdge/blob/main/fedrec/communications/messages.py
         Attributes
         ----------
