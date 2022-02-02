@@ -10,19 +10,21 @@ from torch.nn.parameter import Parameter
 
 ### define LogisticRegression in PyTorch ###
 
+
 @registry.load("model", "regression")
 class Regression(nn.Module):
     Preproc = RegressionPreprocessor
+
     def __init__(
         self,
         preprocessor: RegressionPreprocessor,
-        input_dim = 784,
-        output_dim = 10,
+        input_dim=784,
+        output_dim=10,
         loss_weights=None,
         loss_threshold=0.0,
         ndevices=-1,
         loss_function="mse"
-        ):
+    ):
         super(Regression, self).__init__()
         self.preproc = preprocessor
         self.ndevices = ndevices
@@ -33,8 +35,7 @@ class Regression(nn.Module):
         self.loss_threshold = loss_threshold
         self.loss_function = loss_function
 
-        self.linear = torch.nn.Linear(self.input_dim,self.output_dim,True)
-        
+        self.linear = torch.nn.Linear(self.input_dim, self.output_dim, True)
 
         # specify the loss function
         if self.loss_function == "mse":
@@ -48,9 +49,8 @@ class Regression(nn.Module):
                 + self.loss_function
                 + " is not supported"
             )
-            
 
-    def forward(self, x): #TODO: where are we calling this function?
+    def forward(self, x):  # TODO: where are we calling this function?
         out = self.linear(x)
 
         if 0.0 < self.loss_threshold and self.loss_threshold < 1.0:

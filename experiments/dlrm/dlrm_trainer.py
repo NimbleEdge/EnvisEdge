@@ -17,6 +17,7 @@ from fedrec.utilities.random_state import Reproducible
 
 from experiments.basic_func import Basic
 
+
 @attr.s
 class DLRMTrainConfig:
     eval_every_n = attr.ib(default=10000)
@@ -69,14 +70,14 @@ class DLRMTrainer(Reproducible):
 
     Basic.reset_loaders(self)
 
-    Basic._yield_batches_from_epochs(loader,start_epoch)
+    Basic._yield_batches_from_epochs(loader, start_epoch)
 
     # @property
     Basic.model(self)
 
     # @property
     Basic.optimizer(self)
-    Basic.get_scheduler(self,optimi, **kwargs)
+    Basic.get_scheduler(self, optimi, **kwargs)
 
     # @property
     Basic.saver(self)
@@ -85,16 +86,13 @@ class DLRMTrainer(Reproducible):
     Basic.data_loaders(self)
 
     # @staticmethod
-    Basic.eval_model( model,
-            loader,
-            eval_section,
-            logger,
-            num_eval_batches=-1,
-            best_acc_test=None,
-            best_auc_test=None,
-            step=-1)
+    Basic.eval_model(model,
+                     loader,
+                     eval_section,
+                     logger,
+                     num_eval_batches=-1,
+                     best_acc_test=None,
+                     best_auc_test=None,
+                     step=-1)
     Basic.test(self)
-    Basic.train(self, modeldir= None)
-
-
-    
+    Basic.train(self, modeldir=None)

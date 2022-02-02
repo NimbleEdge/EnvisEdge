@@ -51,7 +51,9 @@ class RegressionTrainer(Reproducible):
 
         super().__init__(config_dict["random"])
         self.config_dict = config_dict
-        self.train_config = RegressionConfig(**config_dict["trainer"]["config"])
+        self.train_config = RegressionConfig(
+            **config_dict["trainer"]["config"]
+        )
         self.logger = logger
         modelCls = registry.lookup('model', config_dict["model"])
         self.model_preproc: PreProcessor = registry.instantiate(
@@ -67,14 +69,14 @@ class RegressionTrainer(Reproducible):
     Basic.reset_loaders(self)
 
     # @staticmethod
-    Basic._yield_batches_from_epochs(loader,start_epoch)
+    Basic._yield_batches_from_epochs(loader, start_epoch)
 
     # @property
     Basic.model(self)
 
     # @property
     Basic.optimizer(self)
-    Basic.get_scheduler(self,optimi, **kwargs)
+    Basic.get_scheduler(self, optimi, **kwargs)
 
     # @property
     Basic.saver(self)
@@ -83,13 +85,13 @@ class RegressionTrainer(Reproducible):
     Basic.data_loaders(self)
 
     # @staticmethod
-    Basic.eval_model( model,
-            loader,
-            eval_section,
-            logger,
-            num_eval_batches=-1,
-            best_acc_test=None,
-            best_auc_test=None,
-            step=-1)
+    Basic.eval_model(model,
+                     loader,
+                     eval_section,
+                     logger,
+                     num_eval_batches=-1,
+                     best_acc_test=None,
+                     best_auc_test=None,
+                     step=-1)
     Basic.test(self)
-    Basic.train(self, modeldir= None)
+    Basic.train(self, modeldir=None)
