@@ -1,0 +1,151 @@
+Metadata-Version: 2.1
+Name: sphinx-panels
+Version: 0.6.0
+Summary: A sphinx extension for creating panels in a grid layout.
+Home-page: https://github.com/executablebooks/sphinx-panels
+Author: Chris Sewell
+Author-email: chrisj_sewell@hotmail.com
+License: MIT
+Project-URL: Documentation, https://sphinx-panels.readthedocs.io
+Keywords: sphinx html bootstrap grid card dropdown button badge
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Framework :: Sphinx :: Extension
+Description-Content-Type: text/markdown
+Requires-Dist: docutils
+Requires-Dist: sphinx (<5,>=2)
+Requires-Dist: importlib-resources (~=3.0.0) ; python_version < "3.7"
+Provides-Extra: code_style
+Requires-Dist: pre-commit (~=2.7.0) ; extra == 'code_style'
+Provides-Extra: live-dev
+Requires-Dist: sphinx-autobuild ; extra == 'live-dev'
+Requires-Dist: web-compile (~=0.2.0) ; extra == 'live-dev'
+Provides-Extra: testing
+Requires-Dist: pytest (~=6.0.1) ; extra == 'testing'
+Requires-Dist: pytest-regressions (~=2.0.1) ; extra == 'testing'
+Provides-Extra: themes
+Requires-Dist: sphinx-rtd-theme ; extra == 'themes'
+Requires-Dist: pydata-sphinx-theme (~=0.4.0) ; extra == 'themes'
+Requires-Dist: sphinx-book-theme (~=0.0.36) ; extra == 'themes'
+Requires-Dist: myst-parser (~=0.12.9) ; extra == 'themes'
+
+# sphinx-panels
+
+[![Doc Status][rtd-badge]][rtd-link]
+[![Code style: black][black-badge]][black-link]
+[![PyPI][pypi-badge]][pypi-link]
+
+A sphinx extension for creating document components optimised for HTML+CSS.
+
+- The `panels` directive creates panels of content in a grid layout, utilising both the Bootstrap 4 [grid system](https://getbootstrap.com/docs/4.0/layout/grid/), and [cards layout](https://getbootstrap.com/docs/4.0/components/card/).
+
+- The `link-button` directive creates a click-able button, linking to a URL or reference, and can also be used to make an entire panel click-able.
+
+- The `dropdown` directive creates toggle-able content.
+
+- The `tabbed` directive creates tabbed content.
+
+- `opticon` and `fa` (fontawesome) roles allow for inline icons to be added.
+
+
+```rst
+.. panels::
+
+    Content of the top-left panel
+
+    ---
+
+    Content of the top-right panel
+
+    ---
+
+    Content of the bottom-left panel
+
+    ---
+
+    Content of the bottom-right panel
+```
+
+The `link-button` directive can be used to create buttons, which link to a URL (default) or reference.
+They can be styled by [Bootstrap button classes](https://getbootstrap.com/docs/4.0/components/buttons/):
+
+```rst
+.. panels::
+
+    .. link-button:: https://example.com
+        :type: url
+        :tooltip: hallo
+        :classes: btn-success
+
+    ---
+
+    This entire panel is clickable.
+
+    +++
+
+    .. link-button:: panels/usage
+        :type: ref
+        :text: Go To Reference
+        :classes: btn-outline-primary btn-block stretched-link
+```
+
+The `dropdown` directive combines a [Bootstrap card](https://getbootstrap.com/docs/4.0/components/card/)
+with the [HTML details tag](https://www.w3schools.com/tags/tag_details.asp) to create a collapsible
+drop-down panel.
+
+```rst
+.. dropdown:: Click on me to see my content!
+
+    I'm the content which can be anything:
+
+    .. link-button:: https://example.com
+        :text: Like a Button
+        :classes: btn-primary
+```
+
+## Development
+
+To run the tests:
+
+```console
+pip install tox
+tox -e py37-sphinx3
+```
+
+To test building the docs:
+
+```console
+tox -e docs-clean html
+tox -e docs-rebuild html
+```
+
+For live builds of the docs:
+
+```console
+tox -e docs-live html
+```
+
+You can also build the docs in different themes, by setting `HTML_THEME` to one of `alabaster`, `sphinx_rtd_theme`, `pydata_sphinx_theme`, `sphinx_book_theme`:
+
+```console
+export HTML_THEME=sphinx_book_theme
+tox -e docs-live
+```
+
+For code style and SCSS -> CSS updating:
+
+```console
+pip install pre-commit
+pre-commit run --all
+```
+
+[rtd-badge]: https://readthedocs.org/projects/sphinx-panels/badge/?version=latest
+[rtd-link]: https://sphinx-panels.readthedocs.io/en/latest/?badge=latest
+[black-badge]: https://img.shields.io/badge/code%20style-black-000000.svg
+[black-link]: https://github.com/ambv/black
+[pypi-badge]: https://img.shields.io/pypi/v/sphinx-panels.svg
+[pypi-link]: https://pypi.org/project/sphinx-panels
+
+

@@ -1,0 +1,303 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Getting started &#8212; RecoEdge 0 documentation</title>
+    
+    <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  
+    
+    <link rel="stylesheet"
+      href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
+    
+      
+  
+    
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/pydata-sphinx-theme.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+    <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorials" href="tutorials/index.html" />
+    <link rel="prev" title="RecoEdge documentation" href="index.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="index.html">
+<p class="title">RecoEdge</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 current active nav-item">
+ <a class="current reference internal nav-link" href="#">
+  Getting started
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="tutorials/index.html">
+  Tutorials
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="fedrec/index.html">
+  Developer Docs
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="contributing.html">
+  Contributing Guide
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+
+<nav id="bd-toc-nav">
+    
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <section id="getting-started">
+<span id="getting-started-ref"></span><h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<figure class="align-default" id="id1">
+<img alt="RecoEdge" src="_images/recoedge-banner-dark.png" />
+<figcaption>
+<p><span class="caption-text">RecoEdge</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/NimbleEdge/RecoEdge
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> RecoEdge
+</pre></div>
+</div>
+<div class="highlight-RST notranslate"><div class="highlight"><pre><span></span>NimbleEdge/RecoEdge
+├── CONTRIBUTING.md           &lt;-- Please go through the contributing guidelines before starting 🤓
+├── README.md                 &lt;-- You are here 📌
+├── docs                      &lt;-- Tutorials and walkthroughs 🧐
+├── experiments               &lt;-- Recommendation models used by our services
+└── fedrec                    &lt;-- Whole magic takes place here 😜
+      ├── communications          &lt;-- Modules for communication interfaces eg. Kafka
+      ├── multiprocessing         &lt;-- Modules to run parallel worker jobs
+      ├── python_executors        &lt;-- Contains worker modules eg. trainer and aggregator
+      ├── serialization           &lt;-- Message serializers
+      └── utilities               &lt;-- Helper modules
+├── fl_strategies             &lt;-- Federated learning algorithms for our services.
+└── notebooks                 &lt;-- Jupyter Notebook examples
+</pre></div>
+</div>
+<div class="highlight-yml notranslate"><div class="highlight"><pre><span></span>model :
+  name : &#39;dlrm&#39;
+  ...
+  preproc :
+    datafile : &quot;&lt;Path to Criteo&gt;/criteo/train.txt&quot;
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">`{caution}</span> <span class="pre">You</span> <span class="pre">need</span> <span class="pre">to</span> <span class="pre">have</span> <span class="pre">conda</span> <span class="pre">or</span> <span class="pre">pip</span> <span class="pre">installed</span> <span class="pre">in</span> <span class="pre">your</span> <span class="pre">local.`</span></code></p>
+<p>Install the dependencies with conda or pip</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda env create --name recoedge --file environment.yml
+conda activate recoedge
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">`{caution}</span> <span class="pre">You</span> <span class="pre">need</span> <span class="pre">to</span> <span class="pre">have</span> <span class="pre">Java</span> <span class="pre">installed`</span> <span class="pre">in</span> <span class="pre">your</span> <span class="pre">local</span></code></p>
+<p><cite>Download &lt;https://www.apache.org/dyn/closer.cgi?path=/kafka/3.0.0/kafka_2.13-3.0.0.tgz&gt;</cite>
+the latest kafka release.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tar -xzf kafka_<span class="sb">`</span>tab<span class="sb">`</span>
+<span class="nb">cd</span> kafka_<span class="sb">`</span>tab<span class="sb">`</span>
+</pre></div>
+</div>
+<p>Start the kafka server using the following commands</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bin/zookeeper-server-start.sh config/zookeeper.properties
+bin/kafka-server-start.sh config/server.properties
+</pre></div>
+</div>
+<p>Create kafka topics for the job executor</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bin/kafka-topics.sh --create --topic job-request-aggregator --bootstrap-server localhost:9092 --partitions <span class="m">1</span> --replication-factor <span class="m">1</span>
+bin/kafka-topics.sh --create --topic job-request-trainer --bootstrap-server localhost:9092 --partitions <span class="m">1</span> --replication-factor <span class="m">1</span>
+bin/kafka-topics.sh --create --topic job-response-aggregator --bootstrap-server localhost:9092 --partitions <span class="m">1</span> --replication-factor <span class="m">1</span>
+bin/kafka-topics.sh --create --topic job-response-trainer --bootstrap-server localhost:9092 --partitions <span class="m">1</span> --replication-factor <span class="m">1</span>
+</pre></div>
+</div>
+<p>To start the multiprocessing executor run the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python executor.py --config configs/dlrm_fl.yml
+</pre></div>
+</div>
+<p>Change the path in <a class="reference external" href="configs/dlrm_fl.yml">Dlrm_fl.yml</a> to your data
+path.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">preproc</span> <span class="p">:</span>
+    <span class="n">datafile</span> <span class="p">:</span> <span class="s2">&quot;&lt;Your path to data&gt;/criteo_dataset/train.txt&quot;</span>
+</pre></div>
+</div>
+<p>Run data preprocessing with <a class="reference external" href="preprocess_data.py">preprocess_data</a> and
+supply the config file. You should be able to generate per-day split
+from the entire dataset as well a processed data file</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python preprocess_data.py --config configs/dlrm_fl.yml --logdir <span class="nv">$HOME</span>/logs/kaggle_criteo/exp_1
+</pre></div>
+</div>
+<p><strong>Begin Training</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python train.py --config configs/dlrm_fl.yml --logdir <span class="nv">$HOME</span>/logs/kaggle_criteo/exp_3 --num_eval_batches <span class="m">1000</span> --devices <span class="m">0</span>
+</pre></div>
+</div>
+<p>Run tensorboard to view training loss and validation metrics at
+<a class="reference external" href="http://localhost:8888/">localhost:8888</a></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tensorboard --logdir <span class="nv">$HOME</span>/logs/kaggle_criteo --port <span class="m">8888</span>
+</pre></div>
+</div>
+</section>
+
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">RecoEdge documentation</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="tutorials/index.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Tutorials</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+    <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+  <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2022, NimbleEdge Community.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.4.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
