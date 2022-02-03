@@ -1,0 +1,43 @@
+test_generate_message_dict:
+  params: [job_type, job_args, job_kwargs, senderid, receiverid, workerstate]
+  values: [["train", "01", "01", "01", "01", "01"],["test", "00", "00", "00", "00", "00"]]
+
+test_json_jobresponsemessage_serialize:
+  params: [job_type, senderid, receiverid]
+  values: [["train", "01", "01"],["test", "00", "00"]]
+
+test_json_jobsubmitmessage_serialize:
+  params: [job_type, job_args, job_kwargs, senderid, receiverid, workerstate]
+  values: [["train", "01", "01", "01", "01", "01"],["test", "00", "00", "00", "00", "00"]]
+
+test_json_jobsubmitmessage_deserialize:
+  params: [job_type, job_args, job_kwargs, senderid, receiverid, workerstate]
+  values: [["train", "01", "01", "01", "01", "01"],["test", "00", "00", "00", "00", "00"]]
+
+test_json_jobresponsemessage_deserialize:
+  params: [job_type, senderid, receiverid]
+  values: [["train", "01", "01"],["test", "00", "00"]]
+  
+test_message:
+  params: [senderid, receiverid]
+  values: [["01", "01"],["00", "00"]]
+
+test_worker_state:
+  params: [job_type, job_args, job_kwargs, senderid, receiverid, workerstate]
+  values: [["train", "01", "01", "01", "01", "01"],["test", "00", "00", "00", "00", "00"]]
+
+test_job_type:
+  params: [job_type, job_args, job_kwargs, senderid, receiverid, workerstate]
+  values: [["train", "01", "01", "01", "01", "01"],["test", "00", "00", "00", "00", "00"]]
+
+test_jobresponse_status:
+  params: [job_type, senderid, receiverid]
+  values: [["train", "01", "01"],["test", "00", "00"]]
+
+test_jobsubmitmessage :
+  params: [job_type, job_args, job_kwargs, senderid, receiverid, workerstate]
+  values: [["train", "01", "01", "01", "01", "01"],["test", "00", "00", "00", "00", "00"]]  
+
+test_jobresponsemessage :
+  params: [job_type, senderid, receiverid]
+  values: [["train", "01", "01"],["test", "00", "00"]]
