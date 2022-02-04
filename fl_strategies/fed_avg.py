@@ -21,17 +21,17 @@ class FedAvg:
     def aggregate(self):
         model_list = [None] * len(self.in_neighbours)
         training_num = 0
-
+ 
         for idx, neighbour in enumerate(self.in_neighbours.values()):
             model_list[idx] = neighbour.model
             training_num += neighbour.sample_num
-
+ 
         (sample_num0, averaged_params) = model_list[0]
         for k in averaged_params.keys():
             averaged_params[k] *= sample_num0/training_num
             for sample_num, params in model_list:
                 averaged_params[k] += params[k] * (sample_num/training_num)
-
+                
         return averaged_params
 
     def sample_clients(self, round_idx, client_num_per_round):

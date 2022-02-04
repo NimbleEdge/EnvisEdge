@@ -351,3 +351,34 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# macos
+.DS_Store
+
+# sbt build
+target
+project/project
+project/target
+
+# intellij
+.idea
+*.iml
+
+# vs code
+.vscode
+
+# metals
+.metals
+project/metals.sbt
+
+# bloop
+.bsp
+.bloop
+project/.bloop
+
+# gen
+logs
+tmp
+
+# scala worksheet
+*.sc

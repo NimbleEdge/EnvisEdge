@@ -2,9 +2,11 @@ from typing import Dict, List
 
 from fedrec.python_executors.base_actor import ActorState
 from fedrec.utilities import registry
+from dataclasses import dataclass
 
 
 @registry.load("serializer", "Message")
+@dataclass
 class Message(object):
     __type__ = "Message"
 
@@ -20,6 +22,7 @@ class Message(object):
 
 
 @registry.load("serializer", "JobSubmitMessage")
+@dataclass
 class JobSubmitMessage(Message):
     __type__ = "JobSubmitMessage"
 
@@ -44,6 +47,7 @@ class JobSubmitMessage(Message):
 
 
 @registry.load("serializer", "JobResponseMessage")
+@dataclass
 class JobResponseMessage(Message):
     __type__ = "JobResponseMessage"
 

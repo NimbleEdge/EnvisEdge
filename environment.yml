@@ -122,6 +122,7 @@ dependencies:
   - python_abi=3.8=2_cp38
   - pytorch=1.10.0=py3.8_cpu_0
   - pytorch-mutex=1.0=cpu
+  - pytest=6.1.1=py38_0
   - pyyaml=6.0=py38h7f8727e_1
   - pyzmq=22.2.1=py38h295c915_1
   - qt=5.9.7=h5867ecd_1
