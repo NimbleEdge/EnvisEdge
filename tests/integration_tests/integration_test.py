@@ -1,3 +1,6 @@
+import sys
+sys.path.append("/home/ramesht/nimbleedge/yashvardhan/RecoEdge/")
+print(sys.path)
 import collections
 import sys
 from abc import abstractproperty
@@ -144,7 +147,7 @@ class TestAggregator(AbstractTester):
 
 if __name__ == "__main__":
 
-    with open("../configs/dlrm_fl.yml", 'r') as cfg:
+    with open("/home/ramesht/nimbleedge/yashvardhan/RecoEdge/configs/dlrm_fl.yml", 'r') as cfg:
         config = yaml.load(cfg, Loader=yaml.FullLoader)
 
     print(config['model'])
