@@ -103,5 +103,5 @@ The steps to building an awesome recommendation system are:
 
    Getting started <getting_started>
    Tutorials <tutorials/index>
-   Developer Docs <fedrec/index>
+   Developer Docs <fedrec/modules>
    Contributing Guide <contributing>
