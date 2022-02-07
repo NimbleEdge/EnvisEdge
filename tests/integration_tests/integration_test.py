@@ -147,7 +147,7 @@ class TestAggregator(AbstractTester):
 
 if __name__ == "__main__":
 
-    with open("/home/ramesht/nimbleedge/yashvardhan/RecoEdge/configs/dlrm_fl.yml", 'r') as cfg:
+    with open("../configs/dlrm_fl.yml", 'r') as cfg:
         config = yaml.load(cfg, Loader=yaml.FullLoader)
 
     print(config['model'])
