@@ -28,7 +28,7 @@ class JSONSerialization(SerializationStrategy):
             The object to serialize.
         Returns:
         --------
-        str  
+        str
         """
         return dumps(obj, indent=4).encode('utf-8')
 
@@ -45,4 +45,4 @@ class JSONSerialization(SerializationStrategy):
         object
         """
         
-        return loads(obj) 
+        return loads(obj)
