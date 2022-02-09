@@ -2,11 +2,11 @@
 
 To download the FEMNIST dataset follow the following steps:
 
-'''bash
+```bash
 chmod +x download.sh
-'''
+```
 
-'''bash
+```bash
 bash download.sh -f
-'''
+```
 The above command will save the data inside data folder (which is meant to be a dictionary of all datasets).
