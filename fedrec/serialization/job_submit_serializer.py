@@ -1,4 +1,3 @@
-
 from typing import Dict
 
 from fedrec.data_models.messages import Message
@@ -25,10 +24,10 @@ class JobSubmitSerializer(AbstractSerializer):
 
     def deserialize(self, obj: Dict):
         job_args = [self.deserialize_attribute(arg)
-                    for arg in obj.job_args]
+                    for arg in obj['job_args']]
         job_kwargs = [self.deserialize_attribute(kwarg)
-                      for kwarg in obj.job_kwargs]
-        worker_state = self.deserialize_attribute(obj.workerstate)
+                      for kwarg in obj['job_kwargs']]
+        worker_state = self.deserialize_attribute(obj['workerstate'])
 
         return JobSubmitMessage(obj["job_type"],
                                 job_args,
