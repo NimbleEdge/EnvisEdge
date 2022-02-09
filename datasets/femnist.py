@@ -1,6 +1,7 @@
 """
-Fan Lai and Yinwei Dai and Xiangfeng Zhu and Harsha V. Madhyastha and Mosharaf Chowdhury (2021) 
-FedScale: Benchmarking Model and System Performance of Federated Learning at Scale [code]. "www.fedscale.ai".
+Fan Lai and Yinwei Dai and Xiangfeng Zhu and Harsha V. Madhyastha and Mosharaf
+Chowdhury (2021) FedScale: Benchmarking Model and System Performance of
+Federated Learning at Scale [code]. "www.fedscale.ai".
 """
 
 from __future__ import print_function
@@ -12,20 +13,6 @@ import csv
 
 
 class FEMNIST():
-    """
-    Args:
-        root (string): Root directory of dataset where ``MNIST/processed/training.pt``
-            and  ``MNIST/processed/test.pt`` exist.
-        train (bool, optional): If True, creates dataset from ``training.pt``,
-            otherwise from ``test.pt``.
-        download (bool, optional): If true, downloads the dataset from the internet and
-            puts it in root directory. If dataset is already downloaded, it is not
-            downloaded again.
-        transform (callable, optional): A function/transform that  takes in an PIL image
-            and returns a transformed version. E.g, ``transforms.RandomCrop``
-        target_transform (callable, optional): A function/transform that takes in the
-            target and transforms it.
-    """
 
     classes = []
 
@@ -49,7 +36,13 @@ class FEMNIST():
         warnings.warn("test_data has been renamed data")
         return self.data
 
-    def __init__(self, root, dataset='train', transform=None, target_transform=None, imgview=False):
+    def __init__(
+            self,
+            root,
+            dataset='train',
+            transform=None,
+            target_transform=None,
+            imgview=False):
 
         self.data_file = dataset  # 'train', 'test', 'validation'
         self.root = root
@@ -59,7 +52,7 @@ class FEMNIST():
 
         # load data and targets
         self.data, self.targets = self.load_file(self.path)
-        #self.mapping = {idx:file for idx, file in enumerate(raw_data)}
+        # self.mapping = {idx:file for idx, file in enumerate(raw_data)}
 
         self.imgview = imgview
 
@@ -122,6 +115,7 @@ class FEMNIST():
 
         # load meta file to get labels
         datas, labels = self.load_meta_data(os.path.join(
-            self.processed_folder, 'client_data_mapping', self.data_file+'.csv'))
+            self.processed_folder, 'client_data_mapping',
+            self.data_file+'.csv'))
 
         return datas, labels
