@@ -1,6 +1,5 @@
 from typing import Dict
-from xml.parsers.expat import model
-
+from experiments.basic_func import Basic
 import attr
 import numpy as np
 import torch
@@ -15,18 +14,15 @@ from tqdm import tqdm
 from fedrec.utilities.random_state import Reproducible
 
 
-from experiments.basic_func import Basic
-
-
 @attr.s
-class DLRMTrainConfig:
+class RegressionConfig:
     eval_every_n = attr.ib(default=10000)
     report_every_n = attr.ib(default=10)
     save_every_n = attr.ib(default=2000)
     keep_every_n = attr.ib(default=10000)
 
-    batch_size = attr.ib(default=128)
-    eval_batch_size = attr.ib(default=256)
+    batch_size = attr.ib(default=32)
+    eval_batch_size = attr.ib(default=128)
     num_epochs = attr.ib(default=-1)
 
     num_batches = attr.ib(default=-1)
@@ -45,8 +41,8 @@ class DLRMTrainConfig:
     pin_memory = attr.ib(default=True)
 
 
-@registry.load('trainer', 'dlrm')
-class DLRMTrainer(Reproducible):
+@registry.load('trainer', 'regression')
+class RegressionTrainer(Reproducible):
 
     def __init__(
             self,
@@ -55,7 +51,9 @@ class DLRMTrainer(Reproducible):
 
         super().__init__(config_dict["random"])
         self.config_dict = config_dict
-        self.train_config = DLRMTrainConfig(**config_dict["trainer"]["config"])
+        self.train_config = RegressionConfig(
+            **config_dict["trainer"]["config"]
+        )
         self.logger = logger
         modelCls = registry.lookup('model', config_dict["model"])
         self.model_preproc: PreProcessor = registry.instantiate(
@@ -70,6 +68,7 @@ class DLRMTrainer(Reproducible):
 
     Basic.reset_loaders(self)
 
+    # @staticmethod
     Basic._yield_batches_from_epochs(loader, start_epoch)
 
     # @property
