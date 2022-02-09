@@ -3,7 +3,14 @@
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
-DIR="./data"
+
+read -p "Enter global data path : " DIR 
+read -p "Enter model : " Model
+
+#editing path in config file
+PATH_FORMAT=${DIR////\\/}
+sed -i "s/datafile.*$/datafile : \"${PATH_FORMAT}\"/" ../configs/${Model}.yml
+
 
 Help()
 {
