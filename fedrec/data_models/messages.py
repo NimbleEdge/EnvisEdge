@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from fedrec.python_executors.base_actor import ActorState
+from fedrec.data_models.base_actor_state_model import ActorState
 from fedrec.utilities import registry
 from dataclasses import dataclass
 from fedrec.serialization.abstract_serializer import Serializable
