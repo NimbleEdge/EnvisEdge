@@ -1,4 +1,3 @@
-
 from abc import ABC, abstractmethod
 from xml.dom import NotSupportedErr
 

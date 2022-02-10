@@ -2,7 +2,8 @@ from abc import ABC, abstractmethod
 from typing import Dict
 
 import attr
-from fedrec.python_executors.base_actor import ActorState, BaseActor
+from fedrec.python_executors.base_actor import BaseActor
+from fedrec.data_models.base_actor_state_model import ActorState
 from fedrec.utilities import registry
 from fedrec.utilities.logger import BaseLogger
 from fedrec.data_models.aggregator_state_model import AggregatorState

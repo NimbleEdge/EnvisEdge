@@ -3,10 +3,11 @@ from abc import ABC
 from typing import Dict
 
 import attr
-from fedrec.python_executors.base_actor import ActorState, BaseActor
+from fedrec.python_executors.base_actor import BaseActor
+from fedrec.data_models.base_actor_state_model import ActorState
 from fedrec.utilities import registry
 from fedrec.utilities.logger import BaseLogger
-from data_models.trainer_state_model import TrainerState
+from fedrec.data_models.trainer_state_model import TrainerState
 
 
 class Trainer(BaseActor, ABC):
