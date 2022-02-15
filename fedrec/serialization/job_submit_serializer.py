@@ -18,8 +18,10 @@ class JobSubmitSerializer(AbstractSerializer):
         response_dict["job_type"] = obj.job_type
         response_dict["job_args"] = [self.serialize_attribute(arg)
                                      for arg in obj.job_args]
-        response_dict["job_kwargs"] = {kwarg_name: self.serialize_attribute(kwarg)
-                                       for kwarg_name, kwarg in obj.job_kwargs.items()}
+        response_dict["job_kwargs"] = {kwarg_name: 
+                                       self.serialize_attribute(kwarg)
+                                       for kwarg_name, kwarg
+                                       in obj.job_kwargs.items()}
         response_dict["worker_state"] = self.serialize_attribute(
             obj.workerstate)
 
