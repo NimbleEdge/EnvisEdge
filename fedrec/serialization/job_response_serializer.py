@@ -14,19 +14,15 @@ class JobResponseSerializer(AbstractSerializer):
     def serialize(self, obj):
         response_dict = {}
         response_dict["job_type"] = obj.job_type
-        response_dict["senderid"] = self.serialize_attribute(
-            obj.senderid)
-        response_dict["receiverid"] = self.serialize_attribute(
-            obj.receiverid)
+        response_dict["senderid"] = obj.senderid
+        response_dict["receiverid"] = obj.receiverid
         response_dict["results"] = self.serialize_attribute(
             obj.results)
 
         return self.serialization_strategy.unparse(response_dict)
 
     def deserialize(self, obj: Dict):
-        senderid = self.deserialize_attribute(obj['senderid'])
-        receiverid = self.deserialize_attribute(obj['senderid'])
-        
+        obj = self.serialization_strategy.parse(obj)
 
         return JobResponseMessage(obj["job_type"],
                                   senderid,
