@@ -41,7 +41,7 @@ class AbstractCommunicationManager(ABC):
         return get_serializer(
             obj,
             self.srl_strategy
-        ).deserialize(obj)
+        ).serialize(obj)
 
     def deserialize(self, message):
         """

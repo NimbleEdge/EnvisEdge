@@ -3,7 +3,7 @@ import io
 import torch
 from fedrec.utilities import registry
 from fedrec.serialization.abstract_serializer import AbstractSerializer
-from fedrec.utilities.serialization import load_tensor, save_tensor
+from fedrec.utilities.io_uitls import load_tensor, save_tensor
 from fedrec.data_models import job_response_model, job_submit_model
 
 

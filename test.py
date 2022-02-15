@@ -6,7 +6,7 @@ import yaml
 from sklearn import metrics
 
 from fedrec.utilities import random_state, registry
-from fedrec.utilities.serialization import dash_separated_floats
+from fedrec.utilities.io_uitls import dash_separated_floats
 
 
 class InferenceMaker:

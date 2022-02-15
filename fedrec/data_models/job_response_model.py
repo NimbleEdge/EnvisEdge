@@ -2,11 +2,8 @@ from typing import Dict
 
 from fedrec.data_models.messages import Message
 from dataclasses import dataclass
-from fedrec.serialization.abstract_serializer import serializable_with
-from fedrec.serialization.job_response_serializer import JobResponseSerializer
 
 
-@serializable_with(JobResponseSerializer)
 @dataclass
 class JobResponseMessage(Message):
     '''

@@ -3,11 +3,8 @@ from typing import Dict, List
 from dataclasses import dataclass
 from fedrec.data_models.base_actor_state_model import ActorState
 from fedrec.data_models.messages import Message
-from fedrec.serialization.abstract_serializer import serializable_with
-from fedrec.serialization.job_submit_serializer import JobSubmitSerializer
 
 
-@serializable_with(JobSubmitSerializer)
 @dataclass
 class JobSubmitMessage(Message):
     '''

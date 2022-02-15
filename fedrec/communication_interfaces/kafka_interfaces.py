@@ -1,10 +1,10 @@
-from fedrec.communications_interfaces.abstract_comm_manager import \
+from fedrec.communication_interfaces.abstract_comm_manager import \
     AbstractCommunicationManager
 from fedrec.utilities import registry
 from kafka import KafkaConsumer, KafkaProducer
 
 
-@registry.load("communications", "kafka")
+@registry.load("communication_interface", "kafka")
 class Kafka(AbstractCommunicationManager):
     """
     Implements the basic send/receive interface so that workers and

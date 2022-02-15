@@ -24,7 +24,3 @@ class AggregatorState(ActorState):
     """
     in_neighbours = attr.ib(dict)
     out_neighbours = attr.ib(dict)
-
-
-
-# TODO: add aggregator state serializer

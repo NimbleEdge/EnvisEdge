@@ -1,42 +1,5 @@
 from abc import ABC, abstractmethod
-from xml.dom import NotSupportedErr
-from collections import defaultdict
-
-class Serializable(object):
-
-    @classmethod
-    def type_name(cls):
-        return cls.__name__
-
-
-SERIALIZER_MAP = defaultdict(dict)
-ACTIVE_SERIALIZERS = defaultdict(dict)
-
-
-def serializable_with(serializer_name):
-
-    def decorator(serialized_class):
-        assert issubclass(serialized_class, Serializable), NotSupportedErr()
-
-        SERIALIZER_MAP[serialized_class.type_name()] = serializer_name
-        return serialized_class
-    return decorator
-
-
-def get_serializer(serialized_obj, srl_strategy):
-    cls = None
-    if isinstance(serialized_obj, str):
-        cls = SERIALIZER_MAP[serialized_obj]
-    elif isinstance(serialized_obj, Serializable):
-        cls = SERIALIZER_MAP[serialized_obj.type_name()]
-    else:
-        raise NotSupportedErr()
-
-    if cls not in ACTIVE_SERIALIZERS:
-        ACTIVE_SERIALIZERS[cls] = cls(srl_strategy)
-
-    ACTIVE_SERIALIZERS[cls].serialization_strategy = srl_strategy
-    return ACTIVE_SERIALIZERS[cls]
+from fedrec.utilities.serialization_utils import get_serializer
 
 
 class SerializationStrategy(ABC):

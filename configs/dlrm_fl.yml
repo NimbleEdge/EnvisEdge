@@ -42,7 +42,7 @@ multiprocessing:
   process_manager : 
     name : "ray"
     
-  communications_interfaces : 
+  communication_interface : 
     name : "kafka"
     serialization : "json"
     consumer : True

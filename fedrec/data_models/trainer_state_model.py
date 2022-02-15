@@ -22,7 +22,3 @@ class TrainerState(ActorState):
     model_preproc = attr.ib()
     local_sample_number = attr.ib()
     local_training_steps = attr.ib()
-
-
-
-# TODO: add trainer state serializer

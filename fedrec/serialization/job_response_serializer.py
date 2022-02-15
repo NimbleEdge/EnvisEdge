@@ -1,9 +1,11 @@
 from typing import Dict
-
 from fedrec.serialization.abstract_serializer import AbstractSerializer
+from fedrec.utilities.serialization_utils import serializer_of
 from fedrec.data_models.job_response_model import JobResponseMessage
 
 
+
+@serializer_of(JobResponseMessage)
 class JobResponseSerializer(AbstractSerializer):
 
     def __init__(self, serialization_strategy):

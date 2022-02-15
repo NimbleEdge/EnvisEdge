@@ -1,4 +1,5 @@
 import sys
+sys.path.append("/home/ramesht/nimbleedge/origin/RecoEdge")
 import collections
 from abc import abstractproperty
 from typing import Callable, Dict
@@ -22,8 +23,9 @@ class AbstractTester():
         self.config = config
 
         self.comm_manager = registry.construct(
-            "communications",
-            config=config["multiprocessing"]["communications_interfaces"])
+            "communication_interface",
+            config=config["multiprocessing"]["communication_interface"])
+
         self.logger = NoOpLogger()
 
     def send_message(self, message):
@@ -72,8 +74,8 @@ class TestTrainer(AbstractTester):
             senderid=self.worker.worker_index,
             receiverid=self.worker.worker_index,
             job_type="train",
-            job_args=None,
-            job_kwargs=None
+            job_args=[],
+            job_kwargs={}
         )
         # check response message
         if response.status:
@@ -86,8 +88,8 @@ class TestTrainer(AbstractTester):
             senderid=self.worker.worker_index,
             receiverid=self.worker.worker_index,
             job_type="test",
-            job_args=None,
-            job_kwargs=None
+            job_args=[],
+            job_kwargs={}
         )
         if response.status:
             worker_state = response.results
@@ -145,7 +147,8 @@ class TestAggregator(AbstractTester):
 
 if __name__ == "__main__":
 
-    with open("../../configs/dlrm_fl.yml", 'r') as cfg:
+
+    with open("./configs/dlrm_fl.yml", 'r') as cfg:
         config = yaml.load(cfg, Loader=yaml.FullLoader)
 
     print(config['model'])

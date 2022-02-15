@@ -1,9 +1,7 @@
-from typing import Dict, List
-
-from fedrec.data_models.base_actor_state_model import ActorState
-from fedrec.utilities import registry
 from dataclasses import dataclass
-from fedrec.serialization.abstract_serializer import Serializable
+from fedrec.utilities.serialization_utils import Serializable
+
+
 
 @dataclass
 class Message(Serializable):
@@ -29,6 +27,3 @@ class Message(Serializable):
     def get_receiver_id(self):
         '''Returns senderid from Message Object'''
         return self.receiverid
-
-
-

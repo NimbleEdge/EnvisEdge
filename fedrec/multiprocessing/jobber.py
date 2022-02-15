@@ -4,7 +4,6 @@ from typing import Dict
 from fedrec.data_models import job_response_model, job_submit_model
 from fedrec.python_executors.base_actor import BaseActor
 from fedrec.utilities import registry
-from fedrec.utilities.serialization import deserialize_object, serialize_object
 
 
 class Jobber:
@@ -33,7 +32,7 @@ class Jobber:
                 "consumer_topic"] + "-" + self.worker.name
 
         self.comm_manager = registry.construct(
-            "communications", config=com_manager_config)
+            "communication_interface", config=com_manager_config)
         self.logger = logger
         atexit.register(self.stop)
 
