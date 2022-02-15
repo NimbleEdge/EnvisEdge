@@ -25,6 +25,7 @@ class TrainerStateSerializer(AbstractSerializer):
         return self.serialization_strategy.unparse(response_dict)
 
     def deserialize(self, obj: Dict):
+        obj = self.serialization_strategy.parse(obj)
 
         state_dict = self.deserialize_attribute(
             obj['state_dict'])
