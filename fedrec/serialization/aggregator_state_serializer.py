@@ -33,7 +33,7 @@ class AggregatorStateSerializer(AbstractSerializer):
         
 
         return AggregatorState(id=obj['id'],
-        obj['round_idx'],
-        state_dict,
-        obj['storage'],
-        neighbours)
+                               obj['round_idx'],
+                               state_dict,
+                               obj['storage'],
+                               neighbours)
