@@ -16,6 +16,8 @@ class JobResponseSerializer(AbstractSerializer):
             obj.senderid)
         response_dict["receiverid"] = self.serialize_attribute(
             obj.receiverid)
+        response_dict["results"] = self.serialize_attribute(
+            obj.results)
 
         return self.serialization_strategy.unparse(response_dict)
 
