@@ -4,7 +4,7 @@ from fedrec.serialization.abstract_serializer import AbstractSerializer
 from fedrec.data_models.aggregator_state_model import TrainerState
 
 
-class AggregatorStateSerializer(AbstractSerializer):
+class TrainerStateSerializer(AbstractSerializer):
 
     def __init__(self, serialization_strategy):
         super().__init__(serialization_strategy)
@@ -19,10 +19,8 @@ class AggregatorStateSerializer(AbstractSerializer):
         response_dict["storage"] = obj.storage
         response_dict["model_preproc"] = self.serialize_attribute(
             obj.model_preproc)
-        response_dict["local_sample_number"] = self.serialize_attribute(
-            obj.local_sample_number)
-        response_dict["local_training_steps"] = self.serialize_attribute(
-            obj.local_training_steps)
+        response_dict["local_sample_number"] = obj.local_sample_number
+        response_dict["local_training_steps"] = obj.local_training_steps
 
         return self.serialization_strategy.unparse(response_dict)
 
@@ -32,15 +30,11 @@ class AggregatorStateSerializer(AbstractSerializer):
             obj['state_dict'])
         model_preproc = self.deserialize_attribute(
             obj['model_preproc'])
-        local_sample_number = self.deserialize_attribute(
-            obj['local_sample_number'])
-        local_training_steps = self.deserialize_attribute(
-            obj['local_training_steps'])
 
-        return TrainerState(id=obj['id'],
-        obj['round_idx'],
-        state_dict,
-        obj['storage'],
-        model_preproc=model_preproc,
-        local_sample_number=local_sample_number,
-        local_training_steps=local_training_steps)
+        return TrainerState(id=obj["id"],
+                            obj["round_idx"],
+                            state_dict,
+                            obj["storage"],
+                            model_preproc=model_preproc,
+                            local_sample_number=obj["local_sample_number"],
+                            local_training_steps=obj["local_training_steps"])
