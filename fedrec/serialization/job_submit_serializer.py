@@ -28,7 +28,7 @@ class JobSubmitSerializer(AbstractSerializer):
         return self.serialization_strategy.unparse(response_dict)
 
     def deserialize(self, obj):
-        obj_dict = self.serialization_strategy.parse(obj)
+        obj = self.serialization_strategy.parse(obj)
         job_args = [self.deserialize_attribute(arg)
                     for arg in obj["job_args"]]
         job_kwargs = {kwarg_name: self.deserialize_attribute(kwarg)
