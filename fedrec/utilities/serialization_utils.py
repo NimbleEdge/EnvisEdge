@@ -15,7 +15,8 @@ class Serializable(object):
 
 
 def serializer_of(serialized_class):
-    assert issubclass(serialized_class, Serializable), NotSupportedError(serialized_class)
+    assert issubclass(serialized_class, Serializable), (
+        NotSupportedError(serialized_class))
 
     cls_type_name = serialized_class.type_name()
     def decorator(serializer_name):
