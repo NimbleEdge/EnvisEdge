@@ -24,6 +24,6 @@ jobs:
       working-directory: ${{ env.working-directory }}
       run: |
         # check formatting
-        flake8 . --select=E501,W291,F401,E301,E305,E201,E202,E203 --statistics
+        flake8 . --select=E501,W291,E301,E305,E201,E202,E203 --statistics
 
         
