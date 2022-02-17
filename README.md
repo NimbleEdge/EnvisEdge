@@ -67,9 +67,10 @@ model :
 ```
 Install the dependencies with conda or pip
 ```bash
-conda env create --name recoedge 
-conda activate recoedge
-conda install -c anaconda pip
+mkdir env
+cd env
+virtualenv recoedge 
+source recoedge/bin/activate 
 pip3 install -r requirements.txt
 ``` 
 Download kafka from [Here](https://github.com/apache/kafka) 👈
