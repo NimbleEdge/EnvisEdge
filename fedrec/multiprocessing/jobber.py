@@ -22,8 +22,7 @@ class Jobber:
 
     def __init__(self, worker, logger, com_manager_config: Dict) -> None:
         self.logger = logger
-        self.worker: 
-            BaseActor = worker
+        self.worker: BaseActor = worker
 
         # append worker infromation to dictionary
         if com_manager_config["producer_topic"] is not None:
