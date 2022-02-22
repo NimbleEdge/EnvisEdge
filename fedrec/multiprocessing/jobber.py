@@ -63,7 +63,7 @@ class Jobber:
         """
         Executes the BaseActor model ,implemented in the worker funcs
         And run them according to job_type 
-        See : https://github.com/NimbleEdge/RecoEdge/blob/main/fedrec/communications/messages.py
+        See : https://bit.ly/3JL2I6N
         Attributes
         ----------
         message: JobSubmitMessage
