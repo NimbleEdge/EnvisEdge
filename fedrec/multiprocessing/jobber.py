@@ -62,7 +62,7 @@ class Jobber:
     def execute(self, message: JobSubmitMessage):
         """
         Executes the BaseActor model ,implemented in the worker funcs
-        And run them according to job_type 
+        And run them according to job_type
         See : https://bit.ly/3JL2I6N
         Attributes
         ----------
@@ -72,7 +72,7 @@ class Jobber:
         Returns
         ----------
         result_message
-            JobResponseMessage containing response to message like job_result        
+            JobResponseMessage containing response to message like job_resule
         """
         result_message = JobResponseMessage(
             job_type=message.job_type,
