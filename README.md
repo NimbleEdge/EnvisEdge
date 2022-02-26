@@ -1,8 +1,8 @@
 <h1 align="center">
 
   <br>
-  <img src="./assets/EnvisEdge-banner-dark.png#gh-light-mode-only" alt="EnvisEdge"/ height="140" width="550">
-  <img src="./assets/EnvisEdge-banner-light.png#gh-dark-mode-only" alt="EnvisEdge"/ height="140" width="550">
+  <img src="./assets/envisedge-banner-dark.png#gh-light-mode-only" alt="EnvisEdge"/ height="350" width="700">
+  <img src="./assets/envisedge-banner-light.png#gh-dark-mode-only" alt="EnvisEdge"/ height="350" width="700">
   <br>
   Bringing Recommendations to the Edge
   <br>
@@ -69,8 +69,8 @@ Install the dependencies with conda or pip
 ```bash
 mkdir env
 cd env
-virtualenv EnvisEdge 
-source EnvisEdge/bin/activate 
+virtualenv envisedge 
+source envisedge/bin/activate 
 pip3 install -r requirements.txt
 ``` 
 Download kafka from [Here](https://github.com/apache/kafka) 👈
