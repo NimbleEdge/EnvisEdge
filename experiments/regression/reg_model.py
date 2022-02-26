@@ -49,7 +49,7 @@ class Regression(nn.Module):
                 + " is not supported"
             )
 
-    def forward(self, x):  
+    def forward(self, x):
         out = self.linear(x)
 
         if 0.0 < self.loss_threshold and self.loss_threshold < 1.0:
