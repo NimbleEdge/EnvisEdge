@@ -5,6 +5,7 @@ from typing import Dict
 import fedrec
 import experiments
 import fl_strategies
+import datasets
 import yaml
 from fedrec.data_models.job_response_model import JobResponseMessage
 from fedrec.data_models.job_submit_model import JobSubmitMessage

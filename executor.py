@@ -28,6 +28,7 @@ class JobExecutor():
             import experiments
             import fedrec
             import fl_strategies
+            import datasets
         self.worker = actorCls(
             0, config, logger, **kwargs)
         self.jobber = Jobber(

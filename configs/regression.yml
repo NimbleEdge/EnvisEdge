@@ -7,7 +7,7 @@ model :
 
   preproc :
     datafile : "/home/anubhav/Downloads/mnist_train_small.csv"
-    output_file : "Anubhav's_First_Issue"
+    output_file : "femnist_output"
     dataset_config :
       name : "kaggle"
       dataset_multiprocessing : True
