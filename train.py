@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 
 import torch
 import yaml
-from fedrec.trainers.base_trainer import BaseTrainer
+from fedrec.base_trainer import BaseTrainer
 from fedrec.utilities import registry
 from fedrec.utilities.logger import NoOpLogger, TBLogger
 

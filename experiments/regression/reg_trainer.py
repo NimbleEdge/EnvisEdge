@@ -1,11 +1,10 @@
 from typing import Dict
 
 import attr
-from fedrec import base_trainer
+from fedrec.base_trainer import BaseTrainer
 from fedrec.preprocessor import PreProcessor
 from fedrec.utilities import registry
 from fedrec.utilities.logger import BaseLogger
-from fedrec.utilities.random_state import Reproducible
 
 
 @attr.s
@@ -36,56 +35,14 @@ class RegressionConfig:
 
 
 @registry.load('trainer', 'regression')
-class RegressionTrainer(Reproducible):
+class RegressionTrainer(BaseTrainer):
 
     def __init__(
             self,
             config_dict: Dict,
             logger: BaseLogger) -> None:
 
-        super().__init__(config_dict["random"])
-        self.config_dict = config_dict
+        super().__init__(config_dict, logger)
         self.train_config = RegressionConfig(
             **config_dict["trainer"]["config"]
         )
-        self.logger = logger
-        modelCls = registry.lookup('model', config_dict["model"])
-        self.model_preproc: PreProcessor = registry.instantiate(
-            modelCls.Preproc,
-            config_dict["model"]['preproc'])
-
-        self._model = None
-        self._data_loaders = {}
-
-        self._optimizer = None
-        self._saver = None
-
-    base_trainer.reset_loaders()
-
-    # @staticmethod
-    base_trainer._yield_batches_from_epochs(loader, start_epoch)
-
-    # @property
-    base_trainer.model(self)
-
-    # @property
-    base_trainer.optimizer(self)
-    base_trainer.get_scheduler(self, optimi, **kwargs)
-
-    # @property
-    base_trainer.saver(self)
-
-    # @property
-    base_trainer.data_loaders(self)
-
-    # @staticmethod
-    base_trainer.eval_model(model,
-                            loader,
-                            eval_section,
-                            logger,
-                            num_eval_batches=-1,
-                            best_acc_test=None,
-                            best_auc_test=None,
-                            step=-1)
-    base_trainer.test(self)
-    base_trainer.train(self, modeldir=None)

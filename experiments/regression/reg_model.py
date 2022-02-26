@@ -1,7 +1,6 @@
-import abc
+
 import sys
 
-import numpy as np
 import torch
 from fedrec.preprocessor import RegressionPreprocessor
 from fedrec.utilities import registry
@@ -50,7 +49,7 @@ class Regression(nn.Module):
                 + " is not supported"
             )
 
-    def forward(self, x):  # TODO: where are we calling this function?
+    def forward(self, x):  
         out = self.linear(x)
 
         if 0.0 < self.loss_threshold and self.loss_threshold < 1.0:

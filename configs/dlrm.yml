@@ -29,32 +29,40 @@ model :
 
   
   preproc :
-    datafile : "/home/vkkhare/datablaze/criteo_dataset/train.txt"
+    datafile : "/home/ubuntu/dataset/train.txt"
     output_file : "kaggleAdDisplayChallenge_processed"
     dataset_config :
       name : "kaggle"
       dataset_multiprocessing : True
+  
+multiprocessing:
+  num_aggregators : 1
+  num_trainers : 1
 
+  process_manager : 
+    name : "ray"
+    
+  communication_interface : 
+    name : "kafka"
+    serialization : "json"
+    consumer : True
+    producer : True
+    consumer_port : 9092
+    consumer_url : "127.0.0.1"
+    consumer_topic : 'job-request'
+    consumer_group_id : 'test-consumer-group'
+    producer_port : 9092
+    producer_url : "127.0.0.1"
+    producer_topic : 'job-response'
 
-
-
-train :
+trainer :
   name : dlrm
   config:
-    name : "dlrm_std"
     batch_size : 128
     eval_batch_size : 512
     eval_every_n : 10000
     save_every_n : 5000
     num_workers : 10
-    # Seed for RNG used in shuffling the training data.
-    data_seed : 100
-    # Seed for RNG used in initializing the model.
-    init_seed : 100
-    # Seed for RNG used in computing the model's training loss.
-    # Only relevant with internal randomness in the model, e.g. with dropout.
-    model_seed : 100
-
 
   optimizer :
     name : "sgd"
@@ -66,3 +74,14 @@ train :
     num_warmup_steps : 30000
     decay_start_step : 150000
     num_decay_steps : 150000
+
+aggregator:
+  name : "fed_avg"
+
+random:
+  data_seed : 100
+  init_seed : 100
+  model_seed : 100
+
+log_dir:
+  PATH: "/home/ramesht/dump_tensor/"

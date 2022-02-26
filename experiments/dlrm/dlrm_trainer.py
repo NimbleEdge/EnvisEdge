@@ -1,22 +1,10 @@
 from typing import Dict
-from xml.parsers.expat import model
 
 import attr
-import numpy as np
-import torch
-from fedrec import base_trainer
+from fedrec.base_trainer import BaseTrainer
 from fedrec.preprocessor import PreProcessor
 from fedrec.utilities import registry
-from fedrec.utilities import saver_utils as saver_mod
-from fedrec.utilities.cuda_utils import map_to_cuda
 from fedrec.utilities.logger import BaseLogger
-from sklearn import metrics
-from tqdm import tqdm
-
-from fedrec.utilities.random_state import Reproducible
-
-
-from experiments.base_trainer_func import base_trainer
 
 
 @attr.s
@@ -47,53 +35,14 @@ class DLRMTrainConfig:
 
 
 @registry.load('trainer', 'dlrm')
-class DLRMTrainer(Reproducible):
+class DLRMTrainer(BaseTrainer):
 
     def __init__(
             self,
             config_dict: Dict,
             logger: BaseLogger) -> None:
 
-        super().__init__(config_dict["random"])
-        self.config_dict = config_dict
-        self.train_config = DLRMTrainConfig(**config_dict["trainer"]["config"])
-        self.logger = logger
-        modelCls = registry.lookup('model', config_dict["model"])
-        self.model_preproc: PreProcessor = registry.instantiate(
-            modelCls.Preproc,
-            config_dict["model"]['preproc'])
-
-        self._model = None
-        self._data_loaders = {}
-
-        self._optimizer = None
-        self._saver = None
-
-    base_trainer.reset_loaders()
-
-    base_trainer._yield_batches_from_epochs(loader, start_epoch)
-
-    # @property
-    base_trainer.model()
-
-    # @property
-    base_trainer.optimizer()
-    base_trainer.get_scheduler(optimi, **kwargs)
-
-    # @property
-    base_trainer.saver()
-
-    # @property
-    base_trainer.data_loaders(self)
-
-    # @staticmethod
-    base_trainer.eval_model(model,
-                     loader,
-                     eval_section,
-                     logger,
-                     num_eval_batches=-1,
-                     best_acc_test=None,
-                     best_auc_test=None,
-                     step=-1)
-    base_trainer.test(self)
-    base_trainer.train(self, modeldir=None)
+        super().__init__(config_dict, logger)
+        self.train_config = DLRMTrainConfig(
+            **config_dict["trainer"]["config"]
+        )

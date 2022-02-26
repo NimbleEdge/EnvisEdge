@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 import collections
+=======
+>>>>>>> fix femnist and regressor
 from abc import abstractproperty
 from typing import Dict
 
