@@ -1,16 +1,10 @@
 from typing import Dict
-from experiments.basic_func import Basic
+
 import attr
-import numpy as np
-import torch
+from fedrec import base_trainer
 from fedrec.preprocessor import PreProcessor
 from fedrec.utilities import registry
-from fedrec.utilities import saver_utils as saver_mod
-from fedrec.utilities.cuda_utils import map_to_cuda
 from fedrec.utilities.logger import BaseLogger
-from sklearn import metrics
-from tqdm import tqdm
-
 from fedrec.utilities.random_state import Reproducible
 
 
@@ -66,32 +60,32 @@ class RegressionTrainer(Reproducible):
         self._optimizer = None
         self._saver = None
 
-    Basic.reset_loaders(self)
+    base_trainer.reset_loaders()
 
     # @staticmethod
-    Basic._yield_batches_from_epochs(loader, start_epoch)
+    base_trainer._yield_batches_from_epochs(loader, start_epoch)
 
     # @property
-    Basic.model(self)
+    base_trainer.model(self)
 
     # @property
-    Basic.optimizer(self)
-    Basic.get_scheduler(self, optimi, **kwargs)
+    base_trainer.optimizer(self)
+    base_trainer.get_scheduler(self, optimi, **kwargs)
 
     # @property
-    Basic.saver(self)
+    base_trainer.saver(self)
 
     # @property
-    Basic.data_loaders(self)
+    base_trainer.data_loaders(self)
 
     # @staticmethod
-    Basic.eval_model(model,
-                     loader,
-                     eval_section,
-                     logger,
-                     num_eval_batches=-1,
-                     best_acc_test=None,
-                     best_auc_test=None,
-                     step=-1)
-    Basic.test(self)
-    Basic.train(self, modeldir=None)
+    base_trainer.eval_model(model,
+                            loader,
+                            eval_section,
+                            logger,
+                            num_eval_batches=-1,
+                            best_acc_test=None,
+                            best_auc_test=None,
+                            step=-1)
+    base_trainer.test(self)
+    base_trainer.train(self, modeldir=None)

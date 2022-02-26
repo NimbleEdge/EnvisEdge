@@ -4,6 +4,7 @@ from xml.parsers.expat import model
 import attr
 import numpy as np
 import torch
+from fedrec import base_trainer
 from fedrec.preprocessor import PreProcessor
 from fedrec.utilities import registry
 from fedrec.utilities import saver_utils as saver_mod
@@ -15,7 +16,7 @@ from tqdm import tqdm
 from fedrec.utilities.random_state import Reproducible
 
 
-from experiments.basic_func import Basic
+from experiments.base_trainer_func import base_trainer
 
 
 @attr.s
@@ -68,25 +69,25 @@ class DLRMTrainer(Reproducible):
         self._optimizer = None
         self._saver = None
 
-    Basic.reset_loaders(self)
+    base_trainer.reset_loaders()
 
-    Basic._yield_batches_from_epochs(loader, start_epoch)
-
-    # @property
-    Basic.model(self)
+    base_trainer._yield_batches_from_epochs(loader, start_epoch)
 
     # @property
-    Basic.optimizer(self)
-    Basic.get_scheduler(self, optimi, **kwargs)
+    base_trainer.model()
 
     # @property
-    Basic.saver(self)
+    base_trainer.optimizer()
+    base_trainer.get_scheduler(optimi, **kwargs)
 
     # @property
-    Basic.data_loaders(self)
+    base_trainer.saver()
+
+    # @property
+    base_trainer.data_loaders(self)
 
     # @staticmethod
-    Basic.eval_model(model,
+    base_trainer.eval_model(model,
                      loader,
                      eval_section,
                      logger,
@@ -94,5 +95,5 @@ class DLRMTrainer(Reproducible):
                      best_acc_test=None,
                      best_auc_test=None,
                      step=-1)
-    Basic.test(self)
-    Basic.train(self, modeldir=None)
+    base_trainer.test(self)
+    base_trainer.train(self, modeldir=None)
