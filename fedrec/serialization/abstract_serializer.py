@@ -44,7 +44,7 @@ class AbstractSerializer(ABC):
     def get_class_serializer(self, obj):
         return get_serializer(obj, self.serialization_strategy)
 
-    def serialize_attribute(self, obj):   
+    def serialize_attribute(self, obj):
         if isinstance(obj, Dict):
             return {k: self.serialize_attribute(v) for k,v in obj.items()}
         elif isinstance(obj, (List,Tuple)):
