@@ -8,7 +8,7 @@
 
 Before we put a code into production we need to evaluate the models and run benchmarks to get the expected accuracy gains.
 
-There is a [simulator](https://github.com/NimbleEdge/RecoEdge) created by NimbleEdge exactly for this purpose. 
+There is a [simulator](https://github.com/NimbleEdge/EnvisEdge) created by NimbleEdge exactly for this purpose. 
 
 - The FL simulator is designed in a way to make the architecture as close to real world deployments as possible.
 - You can simulate both the normal ML training and FL training with the simulator.
@@ -18,7 +18,7 @@ Let's take an example of FB AI's [DLRM](https://arxiv.org/abs/1906.00091). This 
 
 
 # Model Definition
-All the model descriptions go into [fedrec/modules](https://github.com/NimbleEdge/RecoEdge/tree/main/fedrec/modules). You can add your own folder of models as well and hook the registry with it.
+All the model descriptions go into [fedrec/modules](https://github.com/NimbleEdge/EnvisEdge/tree/main/fedrec/modules). You can add your own folder of models as well and hook the registry with it.
 
 We will create a file dlrm.py and write its implementation in standard pytorch code.
 
