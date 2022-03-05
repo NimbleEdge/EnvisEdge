@@ -1,4 +1,4 @@
-package org.nimbleedge.recoedge.models
+package org.nimbleedge.envisedge.models
 
 import java.security.{MessageDigest => MD}
 import java.nio.ByteBuffer

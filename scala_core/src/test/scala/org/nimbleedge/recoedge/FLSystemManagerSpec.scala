@@ -1,4 +1,4 @@
-package org.nimbleedge.recoedge
+package org.nimbleedge.envisedge
 
 import scala.concurrent.duration._
 
