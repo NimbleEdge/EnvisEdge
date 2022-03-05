@@ -52,3 +52,8 @@ Coding conventions
 -  Follow Google code style
 -  Please follow numpy style guides
    `here <https://numpydoc.readthedocs.io/en/latest/format.html>`__.
+
+Documentation
+-------------
+
+- The Design of documentation is based on `MLflow <https://www.mlflow.org/docs/latest/index.html>`__

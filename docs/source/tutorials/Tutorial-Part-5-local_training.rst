@@ -1,9 +1,3 @@
--  `On-device Training <#on-device-training>`__
-
-   -  `Creating the worker job <#creating-the-worker-job>`__
-   -  `Training hooks <#training-hooks>`__
-   -  `Running the training job <#running-the-training-job>`__
-
 On-device Training
 ==================
 

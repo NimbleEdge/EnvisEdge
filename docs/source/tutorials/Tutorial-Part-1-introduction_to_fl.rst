@@ -1,26 +1,3 @@
--  `What is Federated Learning? <#what-is-federated-learning>`__
-
-   -  `Clients <#clients>`__
-   -  `Aggregators <#aggregators>`__
-   -  `Neighbours <#neighbours>`__
-
--  `Federated Learning Cycle <#federated-learning-cycle>`__
-
-   -  `Client selection <#client-selection>`__
-   -  `Model download <#model-download>`__
-   -  `Local training <#local-training>`__
-   -  `Reporting <#reporting>`__
-   -  `Aggregation <#aggregation>`__
-
--  `Federated Learning in
-   Deployment <#federated-learning-in-deployment>`__
-
-   -  `Device instrumentation <#device-instrumentation>`__
-   -  `Simulation <#simulation>`__
-   -  `Federated model training <#federated-model-training>`__
-   -  `Federated model evaluation <#federated-model-evaluation>`__
-   -  `Deployment <#deployment>`__
-
 What is Federated Learning?
 ===========================
 

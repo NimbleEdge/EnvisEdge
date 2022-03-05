@@ -1,8 +1,3 @@
--  `The Simulation <#the-simulation>`__
--  `Model Definition <#model-definition>`__
--  `Hooking the registry <#hooking-the-registry>`__
--  `Standard Training <#standard-training>`__
-
 The Simulation
 ==============
 

@@ -4,7 +4,7 @@
 Getting started
 ***************
 
-.. figure:: _static/recoedge-banner-dark.png
+.. figure:: _static/envisedge-banner-dark.png
    :alt: RecoEdge
 
    RecoEdge

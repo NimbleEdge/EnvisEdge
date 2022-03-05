@@ -1,13 +1,3 @@
--  `FL Deployment <#fl-deployment>`__
-
-   -  `Orchestrator <#orchestrator>`__
-   -  `Plan Serialization <#plan-serialization>`__
-   -  `Setting FL hyper parameters <#setting-fl-hyper-parameters>`__
-   -  `Connecting to Orchestrator <#connecting-to-orchestrator>`__
-   -  `Hosting the models <#hosting-the-models>`__
-
--  `On-device Training <#on-device-training>`__
-
 FL Deployment
 =============
 
@@ -158,8 +148,7 @@ avaialble to beb downloaded by the workers.
        server_config=server_config,
    )
 
-On-device Training
-==================
+**On-device Training**
 
 The last step is to connect the user devices with the orchestrator to
 begin Training process. Hop into the `next
