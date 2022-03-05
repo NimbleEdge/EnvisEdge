@@ -1,4 +1,4 @@
-name := "EnvisEdge"
+name := "RecoEdge"
 
 version := "0.1"
 

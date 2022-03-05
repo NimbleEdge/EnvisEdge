@@ -1,4 +1,4 @@
-package org.nimbleedge.envisedge
+package org.nimbleedge.recoedge
 
 import akka.actor.typed.ActorSystem
 

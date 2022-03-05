@@ -10,7 +10,7 @@ learning rate, or number of clients per round), we need not change the
 code but only change the parameters in yaml configuration file.
 
 for detailed explaination on the use of registry, see:
-github.com/NimbleEdge/EnvisEdge/blob/main/docs/Tutorial-Part-2-starting_with_nimbleedge.md
+github.com/NimbleEdge/RecoEdge/blob/main/docs/Tutorial-Part-2-starting_with_nimbleedge.md
 '''
 
 import collections

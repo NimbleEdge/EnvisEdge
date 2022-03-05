@@ -13,7 +13,7 @@ List any dependencies that are required for this change.
 - List any relevant details for your test configuration.
 
 ## Checklist
-- [ ] I have followed the [Contribution Guidelines](https://github.com/NimbleEdge/EnvisEdge/blob/main/CONTRIBUTING.md) and [Code of Conduct](https://github.com/NimbleEdge/EnvisEdge/blob/main/CODE_OF_CONDUCT.md)
+- [ ] I have followed the [Contribution Guidelines](https://github.com/NimbleEdge/RecoEdge/blob/main/CONTRIBUTING.md) and [Code of Conduct](https://github.com/NimbleEdge/RecoEdge/blob/main/CODE_OF_CONDUCT.md)
 - [ ] I have commented my code following the [NimbleEdge Styleguide](https://numpydoc.readthedocs.io/en/latest/format.html)
-- [ ] I have labeled this PR with the relevant [Type labels](https://github.com/NimbleEdge/EnvisEdge/labels)
+- [ ] I have labeled this PR with the relevant [Type labels](https://github.com/NimbleEdge/RecoEdge/labels)
 - [ ] My changes are covered by tests

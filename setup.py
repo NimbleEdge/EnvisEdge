@@ -1,10 +1,10 @@
 from setuptools import setup
 
 setup(
-    name='envisedge',
+    name='recoedge',
     version='0.0.1',
     description='A simulator for federated learning',
-    url='https://github.com/NimbleEdge/envisedge',
+    url='https://github.com/NimbleEdge/RecoEdge',
     author='Varun Kumar Khare',
     author_email='vkkhare@nimbleedge.ai',
     license='Apache 2-clause',

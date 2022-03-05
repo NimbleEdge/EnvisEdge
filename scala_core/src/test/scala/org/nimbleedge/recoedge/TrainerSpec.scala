@@ -1,4 +1,4 @@
-package org.nimbleedge.envisedge
+package org.nimbleedge.recoedge
 
 import akka.actor.testkit.typed.scaladsl.ScalaTestWithActorTestKit
 import org.scalatest.wordspec.AnyWordSpecLike

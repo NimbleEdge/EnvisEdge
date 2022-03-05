@@ -1,4 +1,4 @@
-package org.nimbleedge.envisedge
+package org.nimbleedge.recoedge
 
 import models._
 

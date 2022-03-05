@@ -26,7 +26,7 @@ def test_message(senderid, receiverid):
     assert obj.get_receiver_id() == receiverid
     assert obj.__type__ == obj.__class__.__name__
 
-def test_worker_state(job_type, job_args, job_kwargs,
+def test_worker_state(job_type, job_args , job_kwargs,
                   senderid, receiverid, workerstate):
     """test get_worker_state method
     """
@@ -36,7 +36,7 @@ def test_worker_state(job_type, job_args, job_kwargs,
     
     assert obj.get_worker_state() == workerstate
 
-def test_job_type(job_type, job_args, job_kwargs,
+def test_job_type(job_type, job_args , job_kwargs,
                   senderid, receiverid, workerstate):
     """test get_job_type method
     """
@@ -57,7 +57,7 @@ def test_jobresponse_status(job_type, senderid, receiverid):
     else:
         assert obj.status == False
 
-def test_jobsubmitmessage(job_type, job_args, job_kwargs,
+def test_jobsubmitmessage(job_type, job_args , job_kwargs,
                           senderid, receiverid, workerstate):
 
     obj = JobSubmitMessage(job_type, job_args, job_kwargs,

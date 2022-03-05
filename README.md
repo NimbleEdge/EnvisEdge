@@ -1,29 +1,29 @@
 <h1 align="center">
 
   <br>
-  <img src="./assets/envisedge-banner-dark.png#gh-light-mode-only" alt="EnvisEdge"/ height="350" width="700">
-  <img src="./assets/envisedge-banner-light.png#gh-dark-mode-only" alt="EnvisEdge"/ height="350" width="700">
+  <img src="./assets/recoedge-banner-dark.png#gh-light-mode-only" alt="RecoEdge"/ height="140" width="550">
+  <img src="./assets/recoedge-banner-light.png#gh-dark-mode-only" alt="RecoEdge"/ height="140" width="550">
   <br>
   Bringing Recommendations to the Edge
   <br>
 
 </h1>
 <p align="center">
-<a href=""><img src="https://img.shields.io/github/license/NimbleEdge/EnvisEdge?style=plastic" alt="Lisence"></a>
-<a href=""><img src="https://img.shields.io/github/last-commit/NimbleEdge/EnvisEdge?style=plastic" alt="Activity"></a>
+<a href=""><img src="https://img.shields.io/github/license/NimbleEdge/RecoEdge?style=plastic" alt="Lisence"></a>
+<a href=""><img src="https://img.shields.io/github/last-commit/NimbleEdge/RecoEdge?style=plastic" alt="Activity"></a>
 <a href="https://nimbleedge.ai/discord"><img src="https://img.shields.io/discord/889803721339445288?color=purple&label=Discord&style=plastic" alt="Discord"></a>
-<img src="https://img.shields.io/github/issues/NimbleEdge/EnvisEdge?style=plastic&color=blue" alt="OpenIssues">
-<a href=""><img src="https://github.com/NimbleEdge/EnvisEdge/actions/workflows/codeql-analysis.yml/badge.svg"></a>  
+<img src="https://img.shields.io/github/issues/NimbleEdge/RecoEdge?style=plastic&color=blue" alt="OpenIssues">
+<a href=""><img src="https://github.com/NimbleEdge/RecoEdge/actions/workflows/codeql-analysis.yml/badge.svg"></a>  
 
 <br>
 <br>
-<a href="https://github.com/NimbleEdge/EnvisEdge/pulse"><img src="./assets/sparkline-banner.png" alt="Sparkline"/ height="50" width="250"></a>
+<a href="https://github.com/NimbleEdge/RecoEdge/pulse"><img src="./assets/sparkline-banner.png" alt="Sparkline"/ height="50" width="250"></a>
 <br>  
 </p>
 
 A one-stop solution to build your recommendation models, train them and, deploy them in a privacy-preserving manner-- right on the users' devices.
 
-EnvisEdge allows you to easily explore new federated learning algorithms and deploy them into production.
+RecoEdge allows you to easily explore new federated learning algorithms and deploy them into production.
 
 The steps to building an awesome recommendation system are:
 1. 🔩 **Standard ML training**: Pick up any ML model and benchmark it using standard settings.
@@ -34,7 +34,7 @@ The steps to building an awesome recommendation system are:
 # Repo Structure 🏢
   
  ```
-NimbleEdge/EnvisEdge
+NimbleEdge/RecoEdge
 ├── CONTRIBUTING.md           <-- Please go through the contributing guidelines before starting 🤓
 ├── README.md                 <-- You are here 📌
 ├── docs                      <-- Tutorials and walkthroughs 🧐
@@ -55,7 +55,7 @@ Let's train [Facebook AI's DLRM](https://arxiv.org/abs/1906.00091) on the edge. 
 
 Clone this repo and change the argument `datafile` in [configs/dlrm_fl.yml](configs/dlrm_fl.yml) to the above path.
 ```bash
-git clone https://github.com/NimbleEdge/EnvisEdge
+git clone https://github.com/NimbleEdge/RecoEdge
 ```
 ```yml
 model :
@@ -67,11 +67,8 @@ model :
 ```
 Install the dependencies with conda or pip
 ```bash
-mkdir env
-cd env
-virtualenv envisedge 
-source envisedge/bin/activate 
-pip3 install -r requirements.txt
+conda env create --name recoedge --file environment.yml
+conda activate recoedge
 ``` 
 Download kafka from [Here](https://github.com/apache/kafka) 👈
 and start the kafka server using the following commands
@@ -115,10 +112,10 @@ tensorboard --logdir $HOME/logs/kaggle_criteo --port 8888
 ```
 # Contribute
 
-1. Please go through our [CONTRIBUTING](https://github.com/NimbleEdge/EnvisEdge/blob/main/CONTRIBUTING.md) guidelines before starting.
+1. Please go through our [CONTRIBUTING](https://github.com/NimbleEdge/RecoEdge/blob/main/CONTRIBUTING.md) guidelines before starting.
 2. Star, fork, and clone the repo.
 3. Do your work.
 4. Push to your fork.
-5. Submit a PR to NimbleEdge/EnvisEdge
+5. Submit a PR to NimbleEdge/RecoEdge
 
 We welcome you to the [Discord](https://nimbleedge.ai/discord) for queries related to the library and contribution in general.
