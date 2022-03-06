@@ -11,7 +11,7 @@ class Message(object):
     '''
     Base class that is inherited by other Message classes
 
-    Attributes:
+    Attributes
     -----------
         senderid : str
             id of sender
@@ -39,7 +39,7 @@ class JobSubmitMessage(Message):
     '''
     Creates a message object for job submit request
 
-    Attributes:
+    Attributes
     -----------
         job_type : str
             type of job
@@ -84,7 +84,7 @@ class JobResponseMessage(Message):
     '''
     Creates message objects for job response message
 
-    Attributes:
+    Attributes
     -----------
         job_type : str
             type of job (train/test)

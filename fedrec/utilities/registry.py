@@ -10,7 +10,7 @@ learning rate, or number of clients per round), we need not change the
 code but only change the parameters in yaml configuration file.
 
 for detailed explaination on the use of registry, see:
-github.com/NimbleEdge/EnvisEdge/blob/main/docs/Tutorial-Part-2-starting_with_nimbleedge.md
+github.com/NimbleEdge/EnvisEdge/blob/main/docs/source/tutorial/Tutorial-Part-2-starting_with_nimbleedge.rst
 '''
 
 import collections
@@ -196,7 +196,7 @@ def instantiate(callable, config, unused_keys=(), **kwargs):
     # callable does not require and are not mentioned in unused_keys.
     missing = {}
     for key in list(merged.keys()):
-        if key not in signature.parameters:
+        if key not in signature.Parameters
             if key not in unused_keys:
                 missing[key] = merged[key]
             merged.pop(key)

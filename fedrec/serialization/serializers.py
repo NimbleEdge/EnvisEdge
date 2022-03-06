@@ -16,7 +16,7 @@ from fedrec.utilities.serialization import load_tensor, save_tensor
 class AbstractSerializer(ABC):
     """Abstract class for serializers and deserializers.
 
-    Attributes:
+    Attributes
     -----------
     serializer: str
         The serializer to use.
@@ -34,12 +34,12 @@ class AbstractSerializer(ABC):
         """Generates a dictionary from an object and
          appends type information for finding the appropriate serialiser.
 
-        Parameters:
+        Parameters
         -----------
         obj: object
             The object to serialize.
 
-        Returns:
+        Return
         --------
         dict:
             The dictionary representation of the object.
@@ -55,14 +55,14 @@ class AbstractSerializer(ABC):
         """
         Serializes an object.
 
-        Parameters:
+        Parameters
         -----------
         obj: object
             The object to serialize.
         file: file
             The file to write to.
 
-        Returns:
+        Return
         --------
         pkl_str: str
             The serialized object.
@@ -88,12 +88,12 @@ class AbstractSerializer(ABC):
         """
         Deserializes an object.
 
-        Parameters:
+        Parameters
         -----------
         obj: object
             The object to deserialize.
 
-        Returns:
+        Return
         --------
         object
             The deserialized object.
@@ -111,7 +111,7 @@ class TensorSerializer(AbstractSerializer):
     """
     TensorSerializer serializes and deserializes torch tensors.
 
-    Attributes:
+    Attributes
     ----------
     serializer: str
         The serializer to use.
@@ -122,14 +122,14 @@ class TensorSerializer(AbstractSerializer):
         """
         Serializes a tensor object.
 
-        Parameters:
+        Parameters
         -----------
         obj: object
             The object to serialize.
         file: file
             The file to write to.
 
-        Returns:
+        Return
         --------
         pkl_str: io.BytesIO
             The serialized object.
@@ -152,12 +152,12 @@ class TensorSerializer(AbstractSerializer):
         """
         Deserializes a tensor object.
 
-        Parameters:
+        Parameters
         -----------
         obj: object
             The object to deserialize.
 
-        Returns:
+        Return
         --------
         deserialized_obj: object
             The deserialized object.
@@ -186,7 +186,7 @@ class TensorSerializer(AbstractSerializer):
 class JSONSerializer(AbstractSerializer):
     """Uses json serialization strategy for objects.
 
-    Attributes:
+    Attributes
     ----------
     serializer: str
         The serializer to use.
@@ -196,11 +196,11 @@ class JSONSerializer(AbstractSerializer):
     def serialize(cls, obj):
         """Serializes a python object to json.
 
-        Parameters:
+        Parameters
         -----------
         obj: object
             The object to serialize.
-        Returns:
+        Return
         --------
         str:
             The serialized object.
@@ -214,12 +214,12 @@ class JSONSerializer(AbstractSerializer):
         """Deserializes the json object to python object
          as per the `type` mentioned in the json dictionary.
 
-        Parameters:
+        Parameters
         -----------
         obj: object
             The object to deserialize.
 
-        Returns:
+        Return
         --------
         deserialized_obj: object
             The deserialized object.

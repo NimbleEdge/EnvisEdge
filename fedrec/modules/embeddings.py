@@ -210,7 +210,7 @@ class QREmbeddingBag(nn.Module):
             will be a sparse tensor.
             See Notes for more details regarding sparse gradients.
             Note: this option is not supported when ``mode="max"``.
-    Attributes:
+    Attributes
         weight (Tensor):
             the learnable weights of each embedding table
             is the module of shape `(num_embeddings, embedding_dim)`
