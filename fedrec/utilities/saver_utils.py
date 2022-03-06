@@ -112,7 +112,7 @@ class Saver(object):
 
     def restore(self, model_dir, map_location=None, step=None):
         """Restores model and optimizer from given directory.
-        Returns
+        Returns:
            Last training step for the model restored.
         """
         last_step, epoch = load_checkpoint(
