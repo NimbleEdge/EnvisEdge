@@ -9,7 +9,7 @@ registry.load('optimizer', 'sparse_adam')(torch.optim.SparseAdam)
 @registry.load("optimizer", "rwsadagrad")
 class RWSAdagrad(Optimizer):
     """Implements Row Wise Sparse Adagrad algorithm.
-    
+
     Arguments:
         params (iterable): iterable of parameters to optimize or dicts defining
             parameter groups
@@ -66,6 +66,7 @@ class RWSAdagrad(Optimizer):
 
     def step(self, closure=None):
         """Performs a single optimization step.
+        
         Arguments:
             closure (callable, optional): A closure that reevaluates the model
                 and returns the loss.
