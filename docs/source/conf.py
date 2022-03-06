@@ -317,7 +317,7 @@ nitpicky = True
 nitpick_ignore = [
     # Ignore a missing reference in `envisedge/store/fedrec/paged_list.py`
     ("py:class", "T"),
-    # Ignore "parent class reference not found" errors for subclasses of 
+    # Ignore "parent class reference not found" errors for subclasses of
     # ``object``
     ("py:class", "null"),
     ("py:class", "string"),
