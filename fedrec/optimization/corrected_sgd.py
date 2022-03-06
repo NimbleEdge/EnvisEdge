@@ -61,7 +61,7 @@ def sgd(params: List[Tensor],
 class SGD(Optimizer):
     r"""Implements stochastic gradient descent (optionally with momentum).
     Nesterov momentum is based on the formula from
-    `On the importance of initialization and momentum in deep learning<>`__.   
+    `On the importance of initialization and momentum in deep learning<>`__. 
     
     Args:
         params (iterable): iterable of parameters to optimize or dicts defining
@@ -125,7 +125,7 @@ class SGD(Optimizer):
     @torch.no_grad()
     def step(self, closure=None):
         """Performs a single optimization step.
-        
+
         Args:
             closure (callable, optional): A closure that reevaluates the model
                 and returns the loss.
