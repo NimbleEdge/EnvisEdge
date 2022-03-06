@@ -39,7 +39,7 @@ class AbstractSerializer(ABC):
         obj: object
             The object to serialize.
 
-        Return
+        Returns
         --------
         dict:
             The dictionary representation of the object.
@@ -62,7 +62,7 @@ class AbstractSerializer(ABC):
         file: file
             The file to write to.
 
-        Return
+        Returns
         --------
         pkl_str: str
             The serialized object.
@@ -93,7 +93,7 @@ class AbstractSerializer(ABC):
         obj: object
             The object to deserialize.
 
-        Return
+        Returns
         --------
         object
             The deserialized object.
@@ -129,7 +129,7 @@ class TensorSerializer(AbstractSerializer):
         file: file
             The file to write to.
 
-        Return
+        Returns
         --------
         pkl_str: io.BytesIO
             The serialized object.
@@ -157,7 +157,7 @@ class TensorSerializer(AbstractSerializer):
         obj: object
             The object to deserialize.
 
-        Return
+        Returns
         --------
         deserialized_obj: object
             The deserialized object.
@@ -200,7 +200,7 @@ class JSONSerializer(AbstractSerializer):
         -----------
         obj: object
             The object to serialize.
-        Return
+        Returns
         --------
         str:
             The serialized object.
@@ -219,7 +219,7 @@ class JSONSerializer(AbstractSerializer):
         obj: object
             The object to deserialize.
 
-        Return
+        Returns
         --------
         deserialized_obj: object
             The deserialized object.

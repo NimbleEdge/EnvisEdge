@@ -196,7 +196,7 @@ def instantiate(callable, config, unused_keys=(), **kwargs):
     # callable does not require and are not mentioned in unused_keys.
     missing = {}
     for key in list(merged.keys()):
-        if key not in signature.Parameters
+        if key not in signature.parameters:
             if key not in unused_keys:
                 missing[key] = merged[key]
             merged.pop(key)
