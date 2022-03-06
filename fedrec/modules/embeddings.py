@@ -149,30 +149,32 @@ class QREmbeddingBag(nn.Module):
     using the quotient of the indices and the other using the remainder
     of the indices, without instantiating the intermediate embeddings,
     then performsan operation to combine these.
+
     For bags of constant length and no :attr:`per_sample_weights`, this class
-        * with ``mode="sum"`` is equivalent to
-            :class:`~torch.nn.Embedding` followed by ``torch.sum(dim=0)``,
-        * with ``mode="mean"`` is equivalent to
-            :class:`~torch.nn.Embedding` followed by ``torch.mean(dim=0)``,
-        * with ``mode="max"`` is equivalent to
-            :class:`~torch.nn.Embedding` followed by ``torch.max(dim=0)``.
+
+        * with ``mode="sum"`` is equivalent to :class:`~torch.nn.Embedding` followed by ``torch.sum(dim=1)``,
+        * with ``mode="mean"`` is equivalent to :class:`~torch.nn.Embedding` followed by ``torch.mean(dim=1)``,
+        * with ``mode="max"`` is equivalent to :class:`~torch.nn.Embedding` followed by ``torch.max(dim=1)``.
+
     However, :class:`~torch.nn.EmbeddingBag` is much more time and memory
     efficient than using a chain of these operations.
+
     QREmbeddingBag also supports per-sample weights as an argument
     to the forward pass. This scales the output of the Embedding
     before performing a weighted reduction as specified by ``mode``.
-    If :attr:`per_sample_weights`` is passed, the only
-    supported ``mode`` is ``"sum"``, which computes a weighted
-    sum according to :attr:`per_sample_weights`.
+
+    If :attr:`per_sample_weights`` is passed, the only supported ``mode`` is
+    ``"sum"``, which computes a weighted sum according to :attr:
+    `per_sample_weights`.
+
     Known Issues:
     Autograd breaks with multiple GPUs. It breaks only with
     multiple embeddings.
+
     Args:
-        num_categories (int):
-            total number of unique categories.
+        num_categories (int): total number of unique categories.
             The input indices must be in 0, 1, ..., num_categories - 1.
-        embedding_dim (list):
-            list of sizes for each embedding vector in each table.
+        embedding_dim (list): list of sizes for each embedding vector in each table.
             If ``"add"`` or ``"mult"`` operation are used, these embedding
             dimensions must be the same.
             If a single embedding_dim is used, then it will use this
@@ -195,37 +197,45 @@ class QREmbeddingBag(nn.Module):
             if given, this will scale gradients by the inverse
             of frequency of the words in the mini-batch.
             Default ``False``.
-            Note: this option is not supported when ``mode="max"``.
+
+            .. note::
+                This option is not supported when ``mode="max"``.
+
         mode (string, optional):
-            ``"sum"``, ``"mean"`` or ``"max"``.
-            Specifies the way to reduce the bag.
-            ``"sum"`` computes the weighted sum, taking
-            :attr:`per_sample_weights` into consideration.
-             ``"mean"`` computes the average of the values
-            in the bag,
-            ``"max"`` computes the max value over each bag.
+            ``"sum"``, ``"mean"`` or ``"max"``. Specifies the way to reduce the
+            bag.
+
+            * ``"sum"`` computes the weighted sum, taking `per_sample_weights` into consideration.
+            * ``"mean"`` computes the average of the values in the bag,
+            * ``"max"`` computes the max value over each bag.
+
             Default: ``"mean"``
+
         sparse (bool, optional):
             if ``True``, gradient w.r.t. :attr:`weight` matrix
             will be a sparse tensor.
             See Notes for more details regarding sparse gradients.
-            Note: this option is not supported when ``mode="max"``.
-    Attributes
+
+            .. note::
+                This option is not supported when ``mode="max"``.
+
+    Attributes:
         weight (Tensor):
             the learnable weights of each embedding table
             is the module of shape `(num_embeddings, embedding_dim)`
             initialized using a uniform distribution
             with sqrt(1 / num_categories).
+
     Inputs:
         :attr:`input` (LongTensor), :attr:`offsets` (LongTensor, optional), and
             :attr:`per_index_weights` (Tensor, optional)
-            - If :attr:`input` is 2D of shape `(B, N)`,
+            If :attr:`input` is 2D of shape `(B, N)`,
             it will be treated as ``B`` bags (sequences) each of
             fixed length ``N``, and this will return ``B`` values
             aggregated in a way depending on the :attr:`mode`.
             :attr:`offsets` is ignored and required to be ``None``
             in this case.
-            - If :attr:`input` is 1D of shape `(N)`,
+            If :attr:`input` is 1D of shape `(N)`,
             it will be treated as a concatenation of multiple bags (sequences).
             :attr:`offsets` is required to be a 1D tensor containing the
             starting index positions of each bag in :attr:`input`. Therefore,
@@ -239,8 +249,12 @@ class QREmbeddingBag(nn.Module):
             same shape as input and is treated as having the same
             :attr:`offsets`, if those are not ``None``.
             Only supported for ``mode='sum'``.
-    Output shape: `(B, embedding_dim)`
+
+    Returns:
+        The output tensor of shape `(B, embedding_dim)`
+
     """
+
     __constants__ = ['num_embeddings',
                      'embedding_dim',
                      'num_collisions',
