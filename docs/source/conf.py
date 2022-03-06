@@ -24,8 +24,8 @@ sys.path.insert(0, os.path.abspath("."))
 from docutils.nodes import Text
 from sphinx.addnodes import pending_xref
 
-import envisedge
-
+import fedrec
+import languagesections
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -317,28 +317,59 @@ nitpick_ignore = [
     # Ignore a missing reference in `envisedge/store/fedrec/paged_list.py`
     ("py:class", "T"),
     # Ignore "parent class reference not found" errors for subclasses of ``object``
+    ("py:class", "null"),
     ("py:class", "object"),
+    ("py:class", "logger"),
+    ("py:class", "callable"),
+    ("py:class", "file"),
     ("py:class", "enum.Enum"),
     ("py:class", "bytes"),
     ("py:class", "bytearray"),
+    ('py:class', 'type'),
+    ("py:class", "optional"),
+    ("py:class", "Module"),
+    ("py:class", "sparse"),
+    ("py:class", "builtins.object"),
+    ("py:class", "builtins.type"),
+    ("py:class", "io.BytesIO"),
+    ("py:class", "abc.ABC"),
+    ("py:class", "embedding_dim"),
+    ("py:class", "mode"),
+    ("py:class", "num_collisions"),
+    ("py:class", "norm_type"),
+    ("py:class", "per_sample_weights"),
+    ("py:class", "scale_grad_by_freq"),
+    # Suppress warning for missing refereces of attributes
+    ("py:attr", "input"),
+    ("py:attr", "offsets"),
+    ("py:attr", "mode"),
+    ("py:attr", "per_index_weights"),
+    ("py:attr", "per_sample_weights`"),
+    ("py:attr", "max_norm"),
+    ("py:attr", "per_sample_weights"),
+    ("py:attr", "scale_grad_by_freq"),
     # Suppress warnings for missing references in type annotations
+    ("py:class", "ActorState"),
+    ("py:class", "KafkaConsumer"),
+    ("py:class", "KafkaProducer"),
     ("py:class", "numpy.dtype"),
     ("py:class", "numpy.ndarray"),
     ("py:class", "pandas.core.series.Series"),
     ("py:class", "pandas.core.frame.DataFrame"),
     ("py:class", "pandas.DataFrame"),
-    ("py:class", "pyspark.sql.dataframe.DataFrame"),
     ("py:class", "matplotlib.figure.Figure"),
     ("py:class", "plotly.graph_objects.Figure"),
     ("py:class", "PIL.Image.Image"),
-    ("py:class", "envisedge.deployments.base.BaseDeploymentClient"),
-    ("py:class", "envisedge.types.schema.DataType"),
-    ("py:class", "envisedge.types.schema.ColSpec"),
-    ("py:class", "envisedge.types.schema.TensorSpec"),
-    ("py:class", "envisedge.types.schema.Schema"),
-    ("py:class", "envisedge.models.model.Model"),
-    ("py:class", "envisedge.models.signature.ModelSignature"),
-    ("py:class", "envisedgeInferableDataset"),
-    ("py:class", "scipy.sparse.csr.csr_matrix"),
-    ("py:class", "scipy.sparse.csc.csc_matrix"),
+    ("py:class", "torch.nn.Embedding"),
+    ("py:class", "torch.Tensor"),
+    ("py:class", "torch.nn.Module"),
+    ("py:class", "torch.nn.modules.module.Module"),
+    ("py:class", "torch.nn.EmbeddingBag"),
+    ("py:class", "torch.nn.modules.sparse.EmbeddingBag"),
+    ("py:class", "torch.nn.modules.sparse.EmbeddingBag.__init__"),
+    ("py:class", "torch.optim.SGD"),
+    ("py:class", "torch.optim.optimizer.Optimizer"),
+    ("py:class", "torch.optim.lr_scheduler._LRScheduler"),
+    ("py:class", "torch.utils.data.dataset.Dataset"),
+
 ]
