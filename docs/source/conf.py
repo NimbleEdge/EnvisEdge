@@ -151,8 +151,8 @@ html_theme = "envisedge"
 # html_logo = None
 
 # The name of an image file (relative to this directory) to use as a favicon of
-# the docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
-# pixels large.
+# the docs.  This file should be a Windows icon file (.ico) being 16x16 or
+# 32x32 pixels large.
 # html_favicon = None
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -244,7 +244,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, "envisedge.tex", "envisedge Documentation", "Databricks", "manual"),
+    (master_doc, "envisedge.tex", "envisedge Documentation", "Databricks",
+    "manual"),
 ]
 
 # Mock torch & fastai imports as per suggestion in
@@ -316,8 +317,12 @@ nitpicky = True
 nitpick_ignore = [
     # Ignore a missing reference in `envisedge/store/fedrec/paged_list.py`
     ("py:class", "T"),
-    # Ignore "parent class reference not found" errors for subclasses of ``object``
+    # Ignore "parent class reference not found" errors for subclasses of 
+    # ``object``
     ("py:class", "null"),
+    ("py:class", "string"),
+    ("py:class", "boolean"),
+    ("py:class", "Tensor"),
     ("py:class", "object"),
     ("py:class", "logger"),
     ("py:class", "callable"),
