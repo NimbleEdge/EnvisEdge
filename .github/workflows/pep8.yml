@@ -27,5 +27,3 @@ jobs:
         flake8 . --select=E501,W291,E301,E305,E201,E202,E203 --statistics
 
         
-
-        
