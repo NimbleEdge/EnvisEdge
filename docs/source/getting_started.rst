@@ -1,8 +1,8 @@
-***************
-Getting started
-***************
+********************
+Getting started with
+********************
 
-.. figure:: _static/envisedge-banner-dark.png
+.. figure:: _static/envisedge-banner-dark.svg
    :alt: EnvisEdge
 
    EnvisEdge

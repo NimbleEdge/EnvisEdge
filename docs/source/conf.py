@@ -25,7 +25,7 @@ from docutils.nodes import Text
 from sphinx.addnodes import pending_xref
 
 import fedrec
-import languagesections
+
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
