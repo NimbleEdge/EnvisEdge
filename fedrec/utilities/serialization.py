@@ -3,7 +3,6 @@ import os
 import torch
 import numpy as np
 import pathlib
-#import attr
 from collections.abc import Iterable
 import argparse
 import pickle
