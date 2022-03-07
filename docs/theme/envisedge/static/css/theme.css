@@ -2448,7 +2448,7 @@ a .icon {
     padding: 12px;
     line-height: 24px;
     margin-bottom: 24px;
-    background: #E9D8E1
+    background: #f3f4f7
 }
 .wy-alert-title,
 .rst-content .admonition-title {
@@ -2456,7 +2456,7 @@ a .icon {
     font-weight: bold;
     display: block;
     color: #fff;
-    background: #773544;
+    background: #B54747;
     margin: -12px;
     padding: 6px 12px;
     margin-bottom: 12px
@@ -2555,7 +2555,7 @@ a .icon {
 .rst-content .wy-alert-info.warning,
 .rst-content .seealso,
 .rst-content .wy-alert-info.admonition-todo {
-    background: #E9D8E1
+    background: #f3f4f7
 }
 .wy-alert.wy-alert-info .wy-alert-title,
 .rst-content .note .wy-alert-title,
@@ -2582,7 +2582,7 @@ a .icon {
 .rst-content .wy-alert-info.warning .admonition-title,
 .rst-content .seealso .admonition-title,
 .rst-content .wy-alert-info.admonition-todo .admonition-title {
-    background: #773544
+    background: #B54747
 }
 .wy-alert.wy-alert-success,
 .rst-content .wy-alert-success.note,
@@ -2679,7 +2679,7 @@ a .icon {
 .rst-content .wy-alert-neutral.warning a,
 .rst-content .wy-alert-neutral.seealso a,
 .rst-content .wy-alert-neutral.admonition-todo a {
-    color: #773544
+    color: #B54747
 }
 .wy-alert p:last-child,
 .rst-content .note p:last-child,
@@ -2722,7 +2722,7 @@ a .icon {
     background: #9C3430
 }
 .wy-tray-container li.wy-tray-item-info {
-    background: #773544
+    background: #B54747
 }
 .wy-tray-container li.wy-tray-item-warning {
     background: #E67E22
@@ -2846,7 +2846,7 @@ button[disabled] {
     background-color: #523557 !important
 }
 .btn-info:hover {
-    background-color: #773544 !important
+    background-color: #B54747 !important
 }
 .btn-neutral {
     background-color: #f3f6f6 !important;
@@ -2948,7 +2948,7 @@ button[disabled] {
     cursor: pointer
 }
 .wy-dropdown-menu>dd>a:hover {
-    background: #773544;
+    background: #B54747;
     color: #fff
 }
 .wy-dropdown-menu>dd.divider {
@@ -2987,7 +2987,7 @@ button[disabled] {
     padding: 6px 12px
 }
 .wy-dropdown.wy-dropdown-bubble .wy-dropdown-menu a:hover {
-    background: #773544;
+    background: #B54747;
     color: #fff
 }
 .wy-dropdown.wy-dropdown-left .wy-dropdown-menu {
@@ -3525,7 +3525,7 @@ input[type="checkbox"][disabled] {
     color: #E67E22
 }
 .wy-inline-validate.wy-inline-validate-info .wy-input-context {
-    color: #773544
+    color: #B54747
 }
 .rotate-90 {
     -webkit-transform: rotate(90deg);
@@ -3793,12 +3793,12 @@ input[type="checkbox"][disabled] {
     white-space: nowrap
 }
 a {
-    color: #773544;
+    color: #B54747;
     text-decoration: none;
     cursor: pointer
 }
 a:hover {
-    color: #773544
+    color: #B54747
 }
 a:visited {
     color: #9B59B6
@@ -3843,10 +3843,10 @@ a.wy-text-warning:hover {
     color: #eb9950 !important
 }
 .wy-text-info {
-    color: #773544 !important
+    color: #B54747 !important
 }
 a.wy-text-info:hover {
-    color: #64354d !important
+    color: #B54747 !important
 }
 .wy-text-success {
     color: #9C3430 !important
@@ -4059,7 +4059,7 @@ div[class^='highlight'] pre {
     white-space: pre;
     margin: 0px;
     padding: 12px 12px;
-    background-color: #F8F2F5;
+    background-color: #FAF9F0;
     font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
     font-size: 80%;
     line-height: 1.5;
@@ -4187,7 +4187,7 @@ div[class^='highlight'] pre {
     color: #342B4F
 }
 .nb {
-    color: #64354d
+    color: #B54747
 }
 .nc {
     color: #458;
@@ -4526,7 +4526,7 @@ div[class^='highlight'] pre {
     color: #b3b3b3
 }
 .wy-menu-vertical a:active {
-    background-color: #773544;
+    background-color: #B54747;
     cursor: pointer;
     color: #fff
 }
@@ -4539,7 +4539,7 @@ div[class^='highlight'] pre {
     padding: 0.809em;
     margin-bottom: 0.809em;
     z-index: 200;
-    background-color: #773544;
+    background-color: #B54747;
     text-align: center;
     padding: 0.809em;
     display: block;
@@ -4550,14 +4550,14 @@ div[class^='highlight'] pre {
     width: 100%;
     border-radius: 50px;
     padding: 6px 12px;
-    border-color: #773544
+    border-color: #B54747
 }
 .wy-side-nav-search img {
     display: block;
     margin: auto auto 0.809em auto;
     height: 45px;
     width: 45px;
-    background-color: #773544;
+    background-color: #B54747;
     padding: 5px;
     border-radius: 100%
 }
@@ -4595,13 +4595,13 @@ div[class^='highlight'] pre {
     color: rgba(255, 255, 255, 0.3)
 }
 .wy-nav .wy-menu-vertical header {
-    color: #773544
+    color: #B54747
 }
 .wy-nav .wy-menu-vertical a {
     color: #b3b3b3
 }
 .wy-nav .wy-menu-vertical a:hover {
-    background-color: #773544;
+    background-color: #B54747;
     color: #fff
 }
 [data-menu-wrap] {
@@ -4666,7 +4666,7 @@ div[class^='highlight'] pre {
 }
 .wy-nav-top {
     display: none;
-    background: #773544;
+    background: #B54747;
     color: #fff;
     padding: 0.4045em 0.809em;
     position: relative;
@@ -4691,7 +4691,7 @@ div[class^='highlight'] pre {
     margin-right: 12px;
     height: 45px;
     width: 45px;
-    background-color: #773544;
+    background-color: #B54747;
     padding: 5px;
     border-radius: 100%
 }
@@ -5202,12 +5202,12 @@ a .rst-content tt,
 a .rst-content tt,
 a .rst-content code {
     font-weight: bold;
-    color: #773544;
+    color: #B54747;
 }
 .rst-content a tt,
 .rst-content a tt,
 .rst-content a code {
-    color: #773544
+    color: #B54747
 }
 .rst-content dl {
     margin-bottom: 24px
@@ -5233,14 +5233,14 @@ a .rst-content code {
     margin: 6px 0;
     font-size: 90%;
     line-height: normal;
-    background: #E9D8E1;
-    color: #773544;
-    border-top: solid 3px #773544;
+    background: #f3f4f7;
+    color: #B54747;
+    border-top: solid 3px #B54747;
     padding: 6px;
     position: relative
 }
 .rst-content dl:not(.docutils) dt:before {
-    color: #773544
+    color: #B54747
 }
 .rst-content dl:not(.docutils) dt .headerlink {
     color: #404040;
@@ -5294,7 +5294,7 @@ a .rst-content code {
 .rst-content .viewcode-link,
 .rst-content .viewcode-back {
     display: inline-block;
-    color: #773544;
+    color: #B54747;
     font-size: 80%;
     padding-left: 24px
 }
@@ -5345,9 +5345,9 @@ a .rst-content code {
 /*# sourceMappingURL=theme.css.map */
 
 div.viewcode-block:target {
-    background-color: #E9D8E1;
-    border-top: 1px solid #D4AFC2;
-    border-bottom: 1px solid #D5AFC2;
+    background-color: #f3f4f9;
+    border-top: 1px solid #B54747;
+    border-bottom: 1px solid #B54747;
     margin: 0px -12px;
     padding: 0px 12px;
 }
