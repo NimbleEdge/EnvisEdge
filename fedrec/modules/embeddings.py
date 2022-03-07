@@ -152,7 +152,7 @@ class QREmbeddingBag(nn.Module):
 
     For bags of constant length and no :attr:`per_sample_weights`, this class
 
-        * with ``mode="sum"`` is equivalent to ``Embedding`` followed by ``sum(dim=1)``,
+        * with ``mode="sum"`` is equivalent to :class:`~torch.nn.Embedding` followed by ``sum(dim=1)``,
         * with ``mode="mean"`` is equivalent to :class:`~torch.nn.Embedding` followed by ``torch.mean(dim=1)``,
         * with ``mode="max"`` is equivalent to :class:`~torch.nn.Embedding` followed by ``torch.max(dim=1)``.
 
@@ -253,7 +253,7 @@ class QREmbeddingBag(nn.Module):
     Returns:
         The output tensor of shape `(B, embedding_dim)`
 
-    """
+    """  # noqa: E501
 
     __constants__ = ['num_embeddings',
                      'embedding_dim',
