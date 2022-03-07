@@ -25,7 +25,8 @@ jobs:
       run: |
         # check formatting
         flake8 . --select=E501,W291,E301,E305,E201,E202,E203 --statistics \
-        --exclude fedrec/modules/embeddings.py
+        --exclude /fedrec/modules/embeddings.py:155,156,157,177,208
+
         
 
         
