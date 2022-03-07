@@ -28,14 +28,6 @@ fedrec.communications.messages module
    :undoc-members:
    :show-inheritance:
 
-fedrec.communications.worker\_manager module
---------------------------------------------
-
-.. automodule:: fedrec.communications.worker_manager
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 fedrec.communications.zeroMQ\_interfaces module
 -----------------------------------------------
 

@@ -320,6 +320,7 @@ nitpick_ignore = [
     # Ignore "parent class reference not found" errors for subclasses of
     # ``object``
     ("py:class", "null"),
+    ("py:class", "iterable"),
     ("py:class", "string"),
     ("py:class", "boolean"),
     ("py:class", "Tensor"),

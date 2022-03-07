@@ -41,7 +41,8 @@ Getting started
        datafile : "<Path to Criteo>/criteo/train.txt"
     
 
-```{caution} You need to have conda or pip installed in your local.```
+.. caution::
+   You need to have conda or pip installed in your local.
 
 Install the dependencies with conda or pip
 
@@ -50,7 +51,8 @@ Install the dependencies with conda or pip
    conda env create --name recoedge --file environment.yml
    conda activate recoedge
 
-```{caution} You need to have Java installed` in your local``
+.. caution::
+   You need to have Java installed in your local
 
 `Download <https://www.apache.org/dyn/closer.cgi?path=/kafka/3.0.0/kafka_2.13-3.0.0.tgz>`
 the latest kafka release.
