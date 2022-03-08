@@ -29,7 +29,7 @@ Submitting Pull Requests
 ------------------------
 
 Please send a `GitHub Pull Request to
-RecoEdge <https://github.com/NimbleEdge/RecoEdge>`__ with a clear list
+EnvisEdge <https://github.com/NimbleEdge/EnvisEdge>`__ with a clear list
 of what you’ve done (read more about `pull
 requests <http://help.github.com/pull-requests/>`__). Please Squash your
 commits into one before sending the pull request.

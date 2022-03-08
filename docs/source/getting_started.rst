@@ -9,11 +9,11 @@ Getting started with
 
 .. code:: bash
 
-   git clone https://github.com/NimbleEdge/RecoEdge
+   git clone https://github.com/NimbleEdge/EnvisEdge
 
 .. code:: bash
 
-   cd RecoEdge
+   cd EnvisEdge
 
 .. code-block:: RST
 

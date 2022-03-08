@@ -27,7 +27,7 @@ Model Definition
 ----------------
 
 All the model descriptions go into
-`fedrec/modules <https://github.com/NimbleEdge/RecoEdge/tree/main/fedrec/modules>`__.
+`fedrec/modules <https://github.com/NimbleEdge/EnvisEdge/tree/main/fedrec/modules>`__.
 You can add your own folder of models as well and hook the registry with
 it.
 
