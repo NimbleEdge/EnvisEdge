@@ -48,8 +48,8 @@ Install the dependencies with conda or pip
 
 .. code:: bash
 
-   conda env create --name recoedge --file environment.yml
-   conda activate recoedge
+   conda env create --name envisedge --file environment.yml
+   conda activate envisedge
 
 .. caution::
    You need to have Java installed in your local
