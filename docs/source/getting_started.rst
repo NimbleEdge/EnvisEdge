@@ -1,11 +1,6 @@
-********************
-Getting started with
-********************
-
-.. figure:: _static/envisedge-banner-dark.svg
-   :alt: EnvisEdge
-
-   EnvisEdge
+******************************
+Getting started with EnvisEdge
+******************************
 
 .. code:: bash
 

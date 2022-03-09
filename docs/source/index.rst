@@ -2,6 +2,10 @@
 EnvisEdge documentation
 ***********************
 
+.. figure:: _static/envisedge-banner-dark.svg
+   :alt: EnvisEdge
+
+   
 |Lisence| |Activity| |Discord| |OpenIssues| |image4|
 
 A one-stop solution to build your recommendation models, train them and,
