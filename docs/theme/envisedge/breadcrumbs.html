@@ -15,12 +15,18 @@
   <ul class="wy-breadcrumbs">
     <li><a href="{{ pathto(master_doc) }}">Documentation</a> <span class="db-icon db-icon-chevron-right"></span></li>
     {% for doc in parents %}
-        <li><a href="{{ doc.link|e }}">{{ doc.title }}</a> <span class="db-icon db-icon-chevron-right"></span></li>
+        {% if doc.title == "&lt;no title&gt;" %}
+          <li><a href="{{ doc.link|e }}">EnvisEdge</a> <span class="db-icon db-icon-chevron-right"></span></li>
+        {% else %}
+          <li><a href="{{ doc.link|e }}">{{ doc.title }}</a> <span class="db-icon db-icon-chevron-right"></span></li>
+        {% endif %}
     {% endfor %}
-    {% if title %}
-      <li>{{ title }}</li>
+    {% if title == "&lt;no title&gt;" %}
+      <li>EnvisEdge</li>
     {% elif pagename == "search" %}
       <li>Search</li>
+    {% else %}
+      <li>{{ title }}</li>
     {% endif %}
     {% if not pagename == "search" %}
     <li class="wy-breadcrumbs-aside">

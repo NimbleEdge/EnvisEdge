@@ -1,5 +1,3 @@
-.. _recoedge-development:
-
 Contributing Guidelines
 =======================
 

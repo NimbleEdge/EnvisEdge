@@ -1,12 +1,8 @@
-***********************
-EnvisEdge documentation
-***********************
-
 .. figure:: _static/envisedge-banner-dark.svg
    :alt: EnvisEdge
+   :width: 70%
 
-   
-|Lisence| |Activity| |Discord| |OpenIssues| |image4|
+|License| |Activity| |Discord| |OpenIssues| |image4|
 
 A one-stop solution to build your recommendation models, train them and,
 deploy them in a privacy-preserving manner– right on the users’ devices.
@@ -21,7 +17,7 @@ The steps to building an awesome recommendation system are:
 * 🏭 **Industrial Deployment**: After all the testing and simulation, deploy easily using NimbleEdge suite
 * 🚀 **Edge Computing**: Leverage all the benefits of edge computing
 
-.. |Lisence| image:: https://img.shields.io/github/license/NimbleEdge/EnvisEdge?style=plastic
+.. |License| image:: https://img.shields.io/github/license/NimbleEdge/EnvisEdge?style=plastic
 .. |Activity| image:: https://img.shields.io/github/last-commit/NimbleEdge/EnvisEdge?style=plastic
 .. |Discord| image:: https://img.shields.io/discord/889803721339445288?color=purple&label=Discord&style=plastic
    :target: https://nimbleedge.ai/discord

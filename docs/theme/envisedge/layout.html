@@ -19,7 +19,13 @@
   {{ metatags }}
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   {% block htmltitle %}
-  <title>{{ title|striptags|e }}{{ titlesuffix }}</title>
+  <title>
+    {% if title|striptags|e =="&lt;no title&gt;" %}
+        EnvisEdge 0.0.1 documentation
+    {% else %}
+      {{ title|striptags|e }}{{ titlesuffix }}
+    {% endif %}
+    </title>
   {% endblock %}
   {# CANONICAL #} 
   <link rel="canonical" href="#">
