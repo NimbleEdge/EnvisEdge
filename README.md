@@ -133,7 +133,7 @@ You may also find the official documentation [here](https://docs.nimbleedge.ai/)
 1. Before you begin, please read our [CONTRIBUTOR'S](https://github.com/NimbleEdge/EnvisEdge/blob/main/CONTRIBUTING.md) GUIDELINES.
 2. Introduce yourself in the #introduction channel on [Discord](https://nimbleedge.ai/discord) ( Most of the talks and discussions happen here.)
 3. Look for an open issue that interests you. Liverage labels feature as shown below
-[Label wise issue search]() 
+![Label wise issue search](https://github.com/shaistha24/EnvisEdge/blob/main/assets/issues.gif) 
 4. Star, fork, and clone the repo. 
 5. Get down to business. Do your work.
 6. Push to your fork.
