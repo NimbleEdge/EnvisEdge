@@ -20,10 +20,8 @@
 <a href="https://github.com/NimbleEdge/EnvisEdge/pulse"><img src="./assets/sparkline-banner.png" alt="Sparkline"/ height="50" width="250"></a>
 <br>  
 </p>
-
-EnvisEdge simulates an edge-like experience for you to experiment with edge-related technologies on the cloud. 
-
-For example, it can simulates Federated Learning (FL) environment on cloud for 50-10000 workers. This might be useful for remote teams of data scientists, researchers and developers working on model development that can be tested online first and then deployed to the edge. Or for a research team working on initial concept generation and testing, with limited budget or the difficulty in obtaining the requisite hardware stack.
+ 
+EnvisEdge allows users to simulate an edge computing environment to test their ideas and models before putting them in place on the edge. Although edge computing offers significant privacy and security benefits. It also demands a large amount of computing power on the hardware side. EnvisEdge allows researchers, developers and data scientists to experiment and test their hypotheses, and produce production-ready code without having direct access to the edge devices. Creating a path for global research and growth in the domains of computing, artificial intelligence, and machine learning.
 
 **Life Stages of your ML Model from creation to Edge deployment:** 
 1. 🔩 **Standard ML training**: Take any machine learning model and benchmark it using standard parameters.
@@ -132,7 +130,7 @@ You may also find the official documentation [here](https://docs.nimbleedge.ai/)
 
 1. Before you begin, please read our [CONTRIBUTOR'S](https://github.com/NimbleEdge/EnvisEdge/blob/main/CONTRIBUTING.md) GUIDELINES.
 2. Introduce yourself in the #introduction channel on [Discord](https://nimbleedge.ai/discord) ( Most of the talks and discussions happen here.)
-3. Look for an open issue that interests you. Liverage labels feature as shown below
+3. Look for an open issue that interests you such as [`good first issue`](https://github.com/NimbleEdge/EnvisEdge/labels/good%20first%20issue), [`python`](https://github.com/NimbleEdge/EnvisEdge/labels/python), [`scala`](https://github.com/NimbleEdge/EnvisEdge/labels/scala), [`documentation`](https://github.com/NimbleEdge/EnvisEdge/labels/documentation%20%F0%9F%93%83) and more. Liverage labels feature as shown below
 ![Label wise issue search](https://github.com/shaistha24/EnvisEdge/blob/main/assets/issues.gif) 
 4. Star, fork, and clone the repo. 
 5. Get down to business. Do your work.
