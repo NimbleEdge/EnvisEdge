@@ -10,7 +10,7 @@ learning rate, or number of clients per round), we need not change the
 code but only change the parameters in yaml configuration file.
 
 for detailed explaination on the use of registry, see:
-github.com/NimbleEdge/EnvisEdge/blob/main/docs/Tutorial-Part-2-starting_with_nimbleedge.md
+github.com/NimbleEdge/EnvisEdge/blob/main/docs/source/tutorial/Tutorial-Part-2-starting_with_nimbleedge.rst
 '''
 
 import collections
@@ -117,9 +117,9 @@ def construct(kind, config, unused_keys=(), **kwargs):
                  Extra arguments to pass.
 
     Returns
-    ----------
+    -------
     object:
-        Constructed object using the parameters passed in config and **kwargs.
+        Constructed object using the parameters passed in config and \**kwargs.
 
     Examples
     ----------
@@ -162,7 +162,7 @@ def instantiate(callable, config, unused_keys=(), **kwargs):
     Returns
     ----------
     object:
-        Instantiated object by the parameters passed in config and **kwargs.
+        Instantiated object by the parameters passed in config and \**kwargs.
 
     Examples
     ----------

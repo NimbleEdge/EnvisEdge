@@ -1,7 +1,6 @@
 import logging
 import json
 import asyncio
-from federated_worker import FederatedWorker
 from fedrec.communications.worker_manager import WorkerComManager
 from fedrec.communications.comm_manager import (CommunicationManager,
                                                 tag_reciever)
