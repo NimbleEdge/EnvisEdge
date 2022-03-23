@@ -58,7 +58,7 @@ master_doc = "index"
 
 # General information about the project.
 project = 'EnvisEdge'
-copyright = '2022, NimbleEdge Community'
+copyright = '2021, NimbleEdge Community'
 author = 'NimbleEdge Community'
 
 # The version info for the project you're documenting, acts as replacement for
