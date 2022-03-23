@@ -32,8 +32,8 @@ def build_dataset_split(recon_epochs_max: int = 1,
             post_recon_dataset = clinet_dataset
 
         # Number of reconstruction epochs is exactly recon_epochs_max if
-        # recon_epochs_constant is True, and min(round_num, recon_epochs_max) if
-        # not
+        # recon_epochs_constant is True, and min(round_num, recon_epochs_max)
+        # if not
         num_recon_epochs = recon_epochs_max
         if not recon_epochs_constant:
             num_recon_epochs = torch.minimum(round_num, recon_epochs_max)
