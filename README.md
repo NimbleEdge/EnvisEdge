@@ -4,10 +4,11 @@
   <img src="./assets/envisedge-banner-dark.png#gh-light-mode-only" alt="EnvisEdge"/ height="350" width="700">
   <img src="./assets/envisedge-banner-light.png#gh-dark-mode-only" alt="EnvisEdge"/ height="350" width="700">
   <br>
-  Experience Edge on Cloud - An Edge Simulator!
+  Envision the Edge like never before...
   <br>
 
 </h1>
+
 <p align="center">
 <a href=""><img src="https://img.shields.io/github/license/NimbleEdge/EnvisEdge?style=plastic" alt="Lisence"></a>
 <a href=""><img src="https://img.shields.io/github/last-commit/NimbleEdge/EnvisEdge?style=plastic" alt="Activity"></a>
@@ -21,19 +22,20 @@
 <br>  
 </p>
  
-EnvisEdge allows users to simulate an edge computing environment to test their ideas and models before putting them in place on the edge. Although edge computing offers significant privacy and security benefits. It also demands a large amount of computing power on the hardware side. EnvisEdge allows researchers, developers and data scientists to experiment and test their hypotheses, and produce production-ready code without having direct access to the edge devices. Creating a path for global research and growth in the domains of computing, artificial intelligence, and machine learning.
+EnvisEdge allows users to simulate an edge computing environment to test their ideas and models before putting them in place on the edge. It takes care of all the complex stuff such as diversity across operating systems, computation power and communication mediums, allowing you to focus on the idea rather than the setup. 
 
-**Life Stages of your ML Model from creation to Edge deployment:** 
-1. 🔩 **Standard ML training**: Take any machine learning model and benchmark it using standard parameters.
-2. 🎮 **Federated Learning Simulation**: Once you're happy with your model, use the EnvisEdge to experiment with a variety of FL algorithms.
-3. 🏭 **Industrial Deployment**: After all of the testing and simulation, use the NimbleEdge stack to quickly deploy it.
-4. 🚀 **Edge Computing**: Leverage all the benefits of edge computing.
+EnvisEdge allows researchers, developers and data scientists to experiment and test their hypotheses, and produce production-ready code without having direct access to the edge devices. Creating a path for global research and growth in the domains of federated learning and edge computing.
 
 
-### Key features :star2: 
-1. Provides a platform for global or remote teams to run and test their models prior to edge deployments.
-2. Run, train and test FL models just like in Edge in EnvisEdge Simulation. 
-3. Hardware constraints may restrict edge computation. Use EnvisEdge to test your ideas. 
+## Key features :star2:  
+
+1. Provides a platform for global or remote teams to run and test their systems/models prior to deployment.
+2. Run, train and test FL algorithms and ML models. 
+3. Can setup environment of your choice with any arbitrary hardware constraints such as RAM, CPU and more. 
+4. Experience Edge on cloud and your devices.
+<br>
+
+
 
 # Repo Structure 🏢
   
@@ -52,7 +54,7 @@ NimbleEdge/EnvisEdge
       └── utilities               <-- Helper modules
 ├── fl_strategies             <-- Federated learning algorithms for our services.
 ├── notebooks                 <-- Jupyter Notebook examples
-├── scala-core                <-- Scala version of EnvisEdge
+├── scala-core                <-- Backbone of EnvisEdge
 ├── scripts                   <-- Separate DLRM recommender code  
 └── tests                     <-- tests
 ``` 
