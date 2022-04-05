@@ -6,6 +6,9 @@ from fedrec.utilities import registry
 
 
 class PreProcessor(ABC):
+     """
+        defining our abstract base class ‘Preproceessor' which takes ABC as an argument
+     """
     def __init__(self) -> None:
         super().__init__()
 
