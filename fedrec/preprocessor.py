@@ -6,6 +6,9 @@ from fedrec.utilities import registry
 
 
 class PreProcessor(ABC):
+     """
+        defining our abstract base class ‘Preproceessor' which takes ABC as an argument
+     """
     def __init__(self) -> None:
         super().__init__()
 
@@ -27,6 +30,12 @@ class PreProcessor(ABC):
 
 @registry.load('preproc', 'dlrm')
 class DLRMPreprocessor(PreProcessor):
+     """
+    The DLRM model handles continuous (dense) and categorical (sparse) features that describe users and products.
+    ----------    
+   
+    """  
+     
     def __init__(
             self,
             datafile,
@@ -59,6 +68,13 @@ class DLRMPreprocessor(PreProcessor):
         self.dataset_processor.load()
 
     def datasets(self, *splits):
+     """
+    Categorical features will be processed using embeddings
+    while continuous features will be processed with a bottom multilayer perceptron (MLP)
+    Attributes:
+    ----------    
+   
+    """  
         assert all([isinstance(split, str) for split in splits])
         return {
             split: self.dataset_processor.dataset(split)
