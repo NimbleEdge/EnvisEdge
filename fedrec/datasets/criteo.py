@@ -4,20 +4,47 @@ from __future__ import (absolute_import, division, print_function,
 import numpy as np
 # pytorch
 import torch
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset #importing all the necessary libraries
 
 
 class CriteoDataset(Dataset):
-    def __init__(
-            self,
+    """Class docstrings go here"""
+
+
+
+
+
+""""This class is used to represent the criteo dataset 
+
+
+...
+Attributes
+-----------
+X_int:
+X_cat:its an array storing some tensor value
+y:its an array storing some values
+max_ind_range: for defining the maximum range of indices
+    
+Methods 
+----------------------------------------------------------------
+__getitem__
+_default_preprocess
+collate_wrapper_criteo_offset
+offset_to_length_converter"""
+
+
+
+
+    def __init__(                       
+            self,                   
             X_int, X_cat, y,
-            max_ind_range):
+            max_ind_range):               
         self.max_ind_range = max_ind_range
-        self.X_int = X_int
+        self.X_int = X_int  #initializing or defining the variables
         self.X_cat = X_cat
         self.y = y
 
-    def __getitem__(self, index):
+    def __getitem__(self, index): #_getitem_() allows its instances to use the [] (indexer) operators
 
         if isinstance(index, slice):
             return [
@@ -109,7 +136,7 @@ def make_criteo_data_and_loaders(args, offset_to_length_converter=False):
         args.processed_data_file
     )
 
-    test_data = CriteoDataset(
+    test_data = CriteoDataset(           #defining the test data
         args.data_set,
         args.max_ind_range,
         args.data_sub_sample_rate,
@@ -123,7 +150,7 @@ def make_criteo_data_and_loaders(args, offset_to_length_converter=False):
     if offset_to_length_converter:
         collate_wrapper_criteo = collate_wrapper_criteo_length
 
-    train_loader = torch.utils.data.DataLoader(
+    train_loader = torch.utils.data.DataLoader(  #loading the  training parameters
         train_data,
         batch_size=args.mini_batch_size,
         shuffle=False,
@@ -133,7 +160,7 @@ def make_criteo_data_and_loaders(args, offset_to_length_converter=False):
         drop_last=False,  # True
     )
 
-    test_loader = torch.utils.data.DataLoader(
+    test_loader = torch.utils.data.DataLoader(   #loading the testing parameters 
         test_data,
         batch_size=args.test_mini_batch_size,
         shuffle=False,
