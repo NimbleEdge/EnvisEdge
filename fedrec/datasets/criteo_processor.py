@@ -17,7 +17,7 @@ from torch.multiprocessing import Manager, Process
 # split (bool) : to split into train, test, validation data-sets
 
 
-@registry.load('dset_proc', 'kaggle')
+@registry.load('dset_proc', 'kaggle')#We decorate the class definitions with registry.load and create a yaml configuration file of all the arguments to pass
 class CriteoDataProcessor:
     def __init__(
             self,
@@ -445,6 +445,6 @@ class CriteoDataProcessor:
             **self.data_items[split]
         )
 
-    @property
+    @property     #@property decorator which makes usage of getter and setters much easier in Object-Oriented Programming
     def collate_fn(self):
         return collate_wrapper_criteo_length
