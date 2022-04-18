@@ -309,7 +309,7 @@ class QREmbeddingBag(nn.Module):
             self.weight_r = Parameter(_weight[1])
         self.mode = mode
         self.sparse = sparse
-
+     #reseting the parameters 
     def reset_parameters(self):
         nn.init.uniform_(self.weight_q, np.sqrt(1 / self.num_categories))
         nn.init.uniform_(self.weight_r, np.sqrt(1 / self.num_categories))
@@ -317,6 +317,7 @@ class QREmbeddingBag(nn.Module):
     def forward(self, input, offsets=None, per_sample_weights=None):
         input_q = (input / self.num_collisions).long()
         input_r = torch.remainder(input, self.num_collisions).long()
+        """Computes Python’s modulus operation entrywise,the result has the same sign as the divisor other and its absolute value is less than that of other."""
 
         embed_q = F.embedding_bag(
             input_q, self.weight_q, offsets, self.max_norm,
