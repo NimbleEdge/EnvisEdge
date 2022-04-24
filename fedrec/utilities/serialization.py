@@ -89,8 +89,18 @@ def serialize_object(obj, file=None):
         return registry.lookup(
             "serializer",
             torch.Tensor.__name__).serialize(obj, file)
-
-    if isinstance(obj, str) or isinstance(obj, bytes):
+    
+    """The following types can be pickled:
+        None, True, and False;
+        integers, floating-point numbers, complex numbers;
+        strings, bytes, bytearrays;
+        tuples, lists, sets, and dictionaries containing only picklable objects;
+        functions (built-in and user-defined) defined at the top level of a module (using def, not lambda);
+        classes defined at the top level of a module;
+        instances of such classes whose __dict__ or the result of calling __getstate__() is picklable
+    """
+    if (isinstance(obj, str) 
+            or isinstance(obj, bytes)):
         # TODO : Pickle if bytes else pickled
         #  v/s bytes can't be differentiated. ̰
         return obj
@@ -106,12 +116,22 @@ def deserialize_object(obj, obj_type=None):
         param type: type of the object that needs
         to be deserialized, assuming we know the type.
     """
-    if obj_type and obj_type is torch.tensor:
+    if (obj_type 
+            and obj_type is torch.tensor):
         return registry.lookup(
             "serializer",
             torch.Tensor.__name__).deserialize(obj)
     # TODO: Implement and use custom serializers for different classes
     # which take into account of the size of the serialized messages.
+    """The following types can be pickled:
+        None, True, and False;
+        integers, floating-point numbers, complex numbers;
+        strings, bytes, bytearrays;
+        tuples, lists, sets, and dictionaries containing only picklable objects;
+        functions (built-in and user-defined) defined at the top level of a module (using def, not lambda);
+        classes defined at the top level of a module;
+        instances of such classes whose __dict__ or the result of calling __getstate__() is picklable
+    """
     if isinstance(obj, str):
         return obj
     else:
