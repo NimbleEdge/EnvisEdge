@@ -1,3 +1,8 @@
+"""Jobber python file for scheduling job requrests to run
+in sequence. It is a utility program that executes 
+the pipeline and publishes job requests.
+"""
+
 import atexit
 from typing import Dict
 
@@ -9,7 +14,7 @@ from fedrec.utilities.serialization import deserialize_object, serialize_object
 
 class Jobber:
     """
-    Jobber class handles job requests based on job type
+    Jobber class handles job requests based on job types
     Attributes
     ----------
     worker : BaseActor
@@ -32,6 +37,7 @@ class Jobber:
             com_manager_config["consumer_topic"] = com_manager_config[
                 "consumer_topic"] + "-" + self.worker.name
 
+        # look for the key in the dictionary and return its object
         self.comm_manager = registry.construct(
             "communications", config=com_manager_config)
         self.logger = logger
@@ -60,6 +66,13 @@ class Jobber:
             self.stop()
 
     def execute(self, message: JobSubmitMessage):
+        """
+        This function takes message object and stores the job request to publish.
+        Parameters
+        ----------
+        message : object
+            Creates a message object for job submit request
+        """
         result_message = JobResponseMessage(
             job_type=message.job_type,
             senderid=message.receiverid,
@@ -79,6 +92,10 @@ class Jobber:
     def publish(self, job_result: JobResponseMessage) -> None:
         """
         Publishes the result after executing the job request
+        Parameters
+        ----------
+        job_result : object
+            Creates message objects for job response message
         """
         self.comm_manager.send_message(job_result)
 
