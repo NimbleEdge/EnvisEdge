@@ -1,5 +1,5 @@
 """Jobber python file for scheduling job requrests to run
-in sequence. It is a utility program that executes 
+in sequence. It is a utility program that executes
 the pipeline and publishes job requests.
 """
 
@@ -67,7 +67,7 @@ class Jobber:
 
     def execute(self, message: JobSubmitMessage):
         """
-        This function takes message object and 
+        This function takes message object and
         stores the job request to publish.
         Parameters
         ----------
