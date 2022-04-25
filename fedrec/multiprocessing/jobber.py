@@ -67,7 +67,8 @@ class Jobber:
 
     def execute(self, message: JobSubmitMessage):
         """
-        This function takes message object and stores the job request to publish.
+        This function takes message object and 
+        stores the job request to publish.
         Parameters
         ----------
         message : object
