@@ -32,9 +32,6 @@ class Jobber:
         if com_manager_config["consumer_topic"] is not None:
             com_manager_config["consumer_topic"] = com_manager_config[
                 "consumer_topic"] + "-" + self.worker.name
-
-        # com_manager_config["producer_topic"] = "job-response-trainer"
-        # com_manager_config["consumer_topic"] = "job-request-trainer"
         self.comm_manager = registry.construct(
             "communication_interface", config=com_manager_config)
         self.logger = logger
@@ -87,5 +84,6 @@ class Jobber:
         pass
 
     def stop(self, success=True) -> None:
+        # stop the jobber 
         self.comm_manager.finish()
         os._exit(success)

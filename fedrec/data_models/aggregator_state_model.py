@@ -95,6 +95,7 @@ class AggregatorState(ActorState):
     out_neighbours=attr.ib(factory=dict)
 
     def serialize(self):
+        # pack the arguments from the objects to response dict 
         response_dict = {}
         response_dict["worker_index"] = self.worker_index
         response_dict["round_idx"] = self.round_idx
@@ -106,10 +107,10 @@ class AggregatorState(ActorState):
         response_dict["out_neighbours"] = serialize_attribute(
             self.out_neighbours)
         return self.append_type(response_dict)
-        # return self.serialization_strategy.unparse(response_dict)
 
     @classmethod
     def deserialize(cls, obj: Dict):
+        # unpack the response dict to create the object
         state_dict = deserialize_attribute(
             obj['state_dict'])
         in_neighbours = deserialize_attribute(

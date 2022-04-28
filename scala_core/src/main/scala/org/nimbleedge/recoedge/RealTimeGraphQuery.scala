@@ -1,6 +1,7 @@
-package org.nimbleedge.recoedge
+package org.nimbleedge.envisedge
 
-import org.nimbleedge.recoedge.models._
+
+import org.nimbleedge.envisedge.models._
 import scala.concurrent.duration.FiniteDuration
 import akka.actor.typed.Behavior
 import akka.actor.typed.ActorRef

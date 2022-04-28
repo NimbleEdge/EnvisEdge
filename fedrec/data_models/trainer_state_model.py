@@ -30,7 +30,7 @@ class TrainerState(ActorState):
     local_training_steps = attr.ib()
 
     def serialize(self):
-        # creates a dictiony of attributes to serialize
+        # creates a dictionary of attributes to serialize
         response_dict = {}
         response_dict["worker_index"] = self.worker_index
         response_dict["round_idx"] = self.round_idx
@@ -41,8 +41,6 @@ class TrainerState(ActorState):
             self.model_preproc)
         response_dict["local_sample_number"] = self.local_sample_number
         response_dict["local_training_steps"] = self.local_training_steps
-
-        # return self.serialization_strategy.unparse(response_dict)
         return self.append_type(response_dict)
 
     @classmethod

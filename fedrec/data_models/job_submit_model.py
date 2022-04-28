@@ -50,6 +50,7 @@ class JobSubmitMessage(Message):
         return self.job_type
 
     def serialize(self):
+        # pack the arguments after serilization into the resposne dict 
         response_dict = {
             "job_type": self.job_type,
             "job_args": serialize_attribute(
@@ -61,12 +62,11 @@ class JobSubmitMessage(Message):
             "workerstate": serialize_attribute(
                 self.workerstate)
         }
-
-        # self.serialization_strategy.unparse(response_dict)
         return self.append_type(response_dict)
 
     @classmethod
     def deserialize(cls, obj):
+        # unpack the response dict to create the class object
         job_args = deserialize_attribute(obj["job_args"])
         job_kwargs = deserialize_attribute(obj["job_kwargs"])
         worker_state = deserialize_attribute(obj["workerstate"])

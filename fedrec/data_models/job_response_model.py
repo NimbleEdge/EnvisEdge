@@ -43,18 +43,18 @@ class JobResponseMessage(Message):
             return False
 
     def serialize(self):
+        # pack the arguments after serilization into the resposne dict 
         response_dict = {}
         response_dict["job_type"] = self.job_type
         response_dict["senderid"] = self.senderid
         response_dict["receiverid"] = self.receiverid
         response_dict["results"] = serialize_attribute(
             self.results)
-
-        # return self.serialization_strategy.unparse(response_dict)
         return self.append_type(response_dict)
 
     @classmethod
     def deserialize(cls, obj: Dict):
+        # unpack the response dict to create the class object
         return cls(obj["job_type"],
                    obj["senderid"],
                    obj["receiverid"],

@@ -49,7 +49,6 @@ class EnvisPreProcessor(Serializable):
             "client_id": self.client_id,
             "dataset_config": self.dataset_config
         })
-        # return self.serialization_strategy.unparse(output)
         return output
 
     @classmethod

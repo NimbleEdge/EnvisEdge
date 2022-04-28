@@ -1,4 +1,4 @@
-name: recoedge
+name: envisedge
 channels:
   - conda-forge
   - pytorch
@@ -165,4 +165,4 @@ dependencies:
     - protobuf==3.19.1
     - ray==1.8.0
     - redis==3.5.3
-prefix: /home/varun/miniconda/envs/recoedge
+prefix: /home/varun/miniconda/envs/envisedge
