@@ -104,7 +104,7 @@ class EnvisBase(Reproducible):
             self._storables = {
                 "envis_state": self._get_default_state(self, False)
             }
-        else: 
+        else:
             a=self.store_state()
             self._storables = self._get_default_state(self.store_state())
 

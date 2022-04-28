@@ -25,7 +25,9 @@ class AbstractTester():
                  config: Dict,
                  type: str) -> None:
         self.config = deepcopy(config)
-        com_manager_config = self.config["multiprocessing"]["communication_interface"]
+        val_1 = "multiprocessing"
+        val_2 = "communication_interface"
+        com_manager_config = self.config[val_1][val_2]
        # append worker infromation to dictionary
 
         temp = deepcopy(com_manager_config["producer_topic"])

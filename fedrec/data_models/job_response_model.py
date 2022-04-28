@@ -1,10 +1,11 @@
+from dataclasses import dataclass
 from typing import Dict
 
 from fedrec.data_models.messages import Message
-from dataclasses import dataclass
-
-from fedrec.serialization.serializer_registry import deserialize_attribute, serialize_attribute
+from fedrec.serialization.serializer_registry import (deserialize_attribute,
+                                                      serialize_attribute)
 from fedrec.utilities.registry import Registrable
+
 
 @Registrable.register_class_ref
 @dataclass
@@ -25,7 +26,14 @@ class JobResponseMessage(Message):
         errors : null
     '''
 
-    def __init__(self, job_type, senderid, receiverid, results={}, errors=None):
+    def __init__(
+            self,
+            job_type,
+            senderid,
+            receiverid,
+            results={},
+            errors=None
+    ):
         super().__init__(senderid, receiverid)
         self.job_type: str = job_type
         self.results = results
@@ -43,7 +51,7 @@ class JobResponseMessage(Message):
             return False
 
     def serialize(self):
-        # pack the arguments after serilization into the resposne dict 
+        # pack the arguments after serilization into the resposne dict
         response_dict = {}
         response_dict["job_type"] = self.job_type
         response_dict["senderid"] = self.senderid

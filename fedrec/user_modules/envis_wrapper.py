@@ -8,7 +8,7 @@ from fedrec.serialization.serializer_registry import (deserialize_attribute,
 
 
 def create_serializer_hooks(class_ref):
-    # TODO : refactor the code, make a single 
+    # TODO : refactor the code, make a single
     # function to call these methods.
     def type_name(cls):
         return cls.__module__ + "." + cls.__name__
@@ -72,6 +72,7 @@ def add_envis_hooks(class_ref):
         class_ref, Registrable.get_name(class_ref))
     create_serializer_hooks(class_ref)
     create_envis_state_hooks(class_ref)
+
 
 add_envis_hooks(torch.optim.Optimizer)
 add_envis_hooks(torch.nn.Module)

@@ -1,12 +1,12 @@
 
-from collections import defaultdict
-from fedrec.utilities import registry
-from datasets.criteo.criteo_dataset import CriteoDataset, collate_wrapper_criteo_length
 import os
+from collections import defaultdict
 
 import numpy as np
+from datasets.criteo.criteo_dataset import (CriteoDataset,
+                                            collate_wrapper_criteo_length)
+from fedrec.utilities import registry
 from torch.multiprocessing import Manager, Process
-
 
 # Kaggle Display Advertising Challenge Dataset
 # dataset (str): name of dataset (Terabyte)

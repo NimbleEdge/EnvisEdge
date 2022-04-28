@@ -22,7 +22,7 @@ class StateTensors(EnvisTensors):
 
     def get_name(self) -> str:
         """
-        Creates a name for the tensor using the 
+        Creates a name for the tensor using the
             worker_id, round_idx, and tensor_type.
 
         Returns:
@@ -37,7 +37,7 @@ class StateTensors(EnvisTensors):
 
     def get_path(self) -> str:
         """
-        Creates path to save tensor the 
+        Creates path to save tensor the
             storage and get name method and suffix.
 
         Returns:

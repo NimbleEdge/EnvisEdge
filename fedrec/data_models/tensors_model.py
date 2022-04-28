@@ -23,7 +23,7 @@ class EnvisTensors(Serializable):
 
     def get_name(self) -> str:
         """
-        Creates a name of the tenosr using the 
+        Creates a name of the tenosr using the
             tensor_type and SUFFIX.
 
         Returns:

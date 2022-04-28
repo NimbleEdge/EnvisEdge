@@ -84,6 +84,6 @@ class Jobber:
         pass
 
     def stop(self, success=True) -> None:
-        # stop the jobber 
+        # stop the jobber
         self.comm_manager.finish()
         os._exit(success)

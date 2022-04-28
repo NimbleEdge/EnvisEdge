@@ -1,13 +1,13 @@
 from typing import Dict, List
 
 import attr
-
 from fedrec.data_models.base_actor_state_model import ActorState
 from fedrec.data_models.state_tensors_model import StateTensors
 from fedrec.serialization.serializable_interface import Serializable
 from fedrec.serialization.serializer_registry import (deserialize_attribute,
                                                       serialize_attribute)
 from fedrec.utilities.registry import Registrable
+
 
 @Registrable.register_class_ref
 class Neighbour(Serializable):
@@ -95,7 +95,7 @@ class AggregatorState(ActorState):
     out_neighbours=attr.ib(factory=dict)
 
     def serialize(self):
-        # pack the arguments from the objects to response dict 
+        # pack the arguments from the objects to response dict
         response_dict = {}
         response_dict["worker_index"] = self.worker_index
         response_dict["round_idx"] = self.round_idx

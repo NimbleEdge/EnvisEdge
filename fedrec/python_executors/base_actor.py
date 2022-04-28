@@ -1,13 +1,14 @@
-from abc import ABC, abstractclassmethod, abstractmethod
-from typing import Dict, List, Tuple
 import os
-import torch
+from abc import ABC, abstractclassmethod, abstractmethod
 from random import randint
+from typing import Dict, List, Tuple
+
+import torch
+from fedrec.data_models.state_tensors_model import StateTensors
 from fedrec.user_modules.envis_preprocessor import EnvisPreProcessor
 from fedrec.utilities import registry
 from fedrec.utilities.logger import BaseLogger
 from fedrec.utilities.random_state import Reproducible
-from fedrec.data_models.state_tensors_model import StateTensors
 
 
 class BaseActor(Reproducible, ABC):
@@ -87,7 +88,7 @@ class BaseActor(Reproducible, ABC):
             )
             if torch.cuda.is_available():
                 self._model.cuda()
-        # model being used by trainer 
+        # model being used by trainer
         return self._model
 
     def _get_model_params(self):
@@ -148,7 +149,8 @@ class BaseActor(Reproducible, ABC):
         elif isinstance(argument, torch.Tensor):
             return self.wrap_tensors(argument, randint(0, 100))
         elif isinstance(argument, Dict):
-            if all(isinstance(value, torch.Tensor) for value in argument.items()):
+            if (all(isinstance(value, torch.Tensor)
+                    for value in argument.items())):
                 return self.wrap_tensors(argument, randint(0, 100))
             return {
                 key: self.process_args(value)

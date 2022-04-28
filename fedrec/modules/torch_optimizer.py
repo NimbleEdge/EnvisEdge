@@ -10,4 +10,4 @@ class TorchOptimizer(Serializable):
 
 
     def serialize(self):
-        return 
+        return

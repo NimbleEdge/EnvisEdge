@@ -1,8 +1,9 @@
+import inspect
 from abc import ABC
 from typing import Dict
 
-import inspect
-from fedrec.data_models.aggregator_state_model import AggregatorState, Neighbour
+from fedrec.data_models.aggregator_state_model import (AggregatorState,
+                                                       Neighbour)
 from fedrec.python_executors.base_actor import BaseActor
 from fedrec.user_modules.envis_base_module import EnvisBase
 from fedrec.utilities import registry
@@ -42,15 +43,18 @@ class Aggregator(BaseActor, ABC):
         self.in_neighbours = in_neighbours
         self.out_neighbours = out_neighbours
         # TODO update trainer logic to avoid double model initialization
-        self.worker: EnvisBase = registry.construct('aggregator',
-                                                    config['aggregator'],
-                                                    unused_keys=(),
-                                                    config_dict=config,
-                                                    in_neighbours=in_neighbours,
-                                                    out_neighbours=out_neighbours)
+        self.worker: EnvisBase = registry.construct(
+            'aggregator',
+            config['aggregator'],
+            unused_keys=(),
+            config_dict=config,
+            in_neighbours=in_neighbours,
+            out_neighbours=out_neighbours
+        )
         self.worker_funcs = {
             func_name_list[0]: getattr(self.worker, func_name_list[0])
-            for func_name_list in inspect.getmembers(self.worker, predicate=inspect.ismethod)
+            for func_name_list in
+            inspect.getmembers(self.worker, predicate=inspect.ismethod)
         }
 
     def serialize(self):
