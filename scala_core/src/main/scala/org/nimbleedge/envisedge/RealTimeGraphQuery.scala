@@ -1,6 +1,5 @@
 package org.nimbleedge.envisedge
 
-
 import org.nimbleedge.envisedge.models._
 import scala.concurrent.duration.FiniteDuration
 import akka.actor.typed.Behavior

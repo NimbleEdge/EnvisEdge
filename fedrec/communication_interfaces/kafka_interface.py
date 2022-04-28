@@ -13,7 +13,7 @@ class Kafka(AbstractCommunicationManager):
     Implements the basic send/receive interface so that workers and
     the job executor can communicate with each other.
 
-    Attributes:
+    Parameters
     ----------
     serializer: AbstractSerializer
         The serializer to use.
@@ -38,8 +38,8 @@ class Kafka(AbstractCommunicationManager):
     producer_topic: str
         Topic to which producer will subscribe to send message token.
 
-    Raises:
-    -------
+    Raises
+    ------
     Exception
         If the consumer or producer is set to `False`.
     """
@@ -95,8 +95,8 @@ class Kafka(AbstractCommunicationManager):
         """
         Sends a message to the kafka broker.
 
-        Returns:
-        --------
+        Returns
+        -------
         message: object
             The message sent.
         """

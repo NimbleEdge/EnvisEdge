@@ -1,6 +1,5 @@
 package org.nimbleedge.envisedge
 
-
 import models._
 
 object Main {
