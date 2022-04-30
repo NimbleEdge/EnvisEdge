@@ -8,7 +8,7 @@ model :
   preproc :
     dataset_config:
       name : "femnist"
-      data_dir : "/home/ubuntu/dataset/femnist"
+      data_dir : <"Path to dataset">
       splits : ["train", "test", "val"]
       normalize : [0.1307, 0.3081]
 
@@ -64,4 +64,4 @@ random:
   model_seed : 100
 
 log_dir:
-  PATH: "/home/ramesht/dump_tensor/"
+  PATH: <"Path to logging directory">
