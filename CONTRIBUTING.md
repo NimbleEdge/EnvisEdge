@@ -13,6 +13,22 @@ Here are some important resources to get ready for contributing:
 
 The library is in the initial stages and we would like to build a complete suite of tests. Till then we can only test functionality 
 
+## Documentation
+
+When adding a new module/feature to EnvisEdge, please make sure to add the documentation for it. The documentation source is stored under the [docs](./docs) directory and written in [reStructuredText format](http://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html).
+
+You can build the documentation in HTML format locally:
+
+```bash
+cd docs
+make html
+```
+
+HTML files are generated under `build/html` directory. Open the `index.html` file in your browser to view the documentation.
+
+The design of the documentation is inspired from [Mlflow](https://mlflow.org/docs/latest/).
+
+
 ## Submitting Pull Requests
 
 Please send a [GitHub Pull Request to EnvisEdge](https://github.com/NimbleEdge/EnvisEdge) with a clear list of what you've done (read more about [pull requests](http://help.github.com/pull-requests/)). 
