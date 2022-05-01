@@ -105,7 +105,7 @@ Enter model : <Enter the config file of the model to update with the dataset pat
 Downloading femnist dataset...
 ```
 
-Run data preprocessing with [preprocess_data](preprocess_data.py) . Form this you will training dataset with with client mapping that would be send to the python workers for training the model.
+Run data preprocessing with [preprocess_data](preprocess_data.py) . Using this dataset, you will prepare a client mapping that will be sent to Python workers for training the model.
 ```bash
 python preprocess_data.py --config configs/regression.yml
 ```
@@ -130,10 +130,21 @@ You may also find the official documentation [here](https://docs.nimbleedge.ai/)
 2. Introduce yourself in the #introduction channel on [Discord](https://nimbleedge.ai/discord) ( Most of the talks and discussions happen here.)
 3. Look for an open issue that interests you such as [`good first issue`](https://github.com/NimbleEdge/EnvisEdge/labels/good%20first%20issue), [`python`](https://github.com/NimbleEdge/EnvisEdge/labels/python), [`scala`](https://github.com/NimbleEdge/EnvisEdge/labels/scala), [`documentation`](https://github.com/NimbleEdge/EnvisEdge/labels/documentation%20%F0%9F%93%83) and more. Liverage labels feature as shown below
 ![Label wise issue search](https://github.com/shaistha24/EnvisEdge/blob/main/assets/issues.gif) 
-4. Star, fork, and clone the repo. 
+4. Star, [Fork](https://docs.github.com/en/enterprise-server@3.4/get-started/quickstart/fork-a-repo), and [Clone](https://docs.github.com/en/enterprise-server@3.4/get-started/quickstart/fork-a-repo#cloning-your-forked-repository) the repo. 
 5. Get down to business. Do your work.
 6. Push to your fork.
-7. Send a pull request to NimbleEdge/EnvisEdge.
+7. Send a [PullRequest](https://docs.github.com/en/pull-requests) to NimbleEdge/EnvisEdge.
+
+## Maintainers
+The following people are Maintainers
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/ramesht007"><img src="https://avatars.githubusercontent.com/u/36106177?v=4" width="100px;" /><br/><sub><b>Ramesht Shukla
+    </b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/vkkhare"><img src="https://avatars.githubusercontent.com/u/18126069?v=4" width="100px;" /><br /><sub><b>Varun khare
+    </b></sub></a><br /></td>
+  </tr>
+</table>
 
 # License
 [Apache License 2.0](https://github.com/NimbleEdge/EnvisEdge/blob/refactor-user-module/LICENSE)
