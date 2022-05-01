@@ -134,6 +134,7 @@ You may also find the official documentation [here](https://docs.nimbleedge.ai/)
 5. Get down to business. Do your work.
 6. Push to your fork.
 7. Send a [PullRequest](https://docs.github.com/en/pull-requests) to NimbleEdge/EnvisEdge.</br>
+</br>
 This project follows the [all-contributors](https://github.com/NimbleEdge/EnvisEdge/blob/main/CONTRIBUTING.md) specification.Contributions of any kind are welcome!!
 
 ## Maintainers
