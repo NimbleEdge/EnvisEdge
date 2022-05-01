@@ -3,8 +3,15 @@ import os
 from collections.abc import Iterable
 import torch
 
-
 def load_tensors(path):
+    """
+    This function is used to load the tensors 
+    from the path passed as parameter.
+    --------------------------------------------
+    If a valid path is set as parameter then the
+    tensors are loaded and returned. Otherwise 
+    ValueError is thrown.
+    """
     if os.path.isfile(path) == True:
         tensors = torch.load(path)
         return tensors
@@ -13,6 +20,16 @@ def load_tensors(path):
 
 
 def to_dict_with_sorted_values(d, key=None):
+    """
+    This function is used to convert the given 
+    datastructure which is passed as parameter 
+    to a dictionary. 
+    The dictionary is returned in the end.
+    -------------------------------------------
+    The key and value pairs are extracted from 
+    the given datastructure to convert into a
+    dictionary format.
+    """
     return {k: sorted(v, key=key) for k, v in d.items()}
 
 
@@ -30,6 +47,17 @@ def to_dict_with_set_values(d):
 
 
 def save_tensors(tensors, path) -> str:
+    """
+    This function is used to save the tensors 
+    that were loaded and passed as parameters.
+    ------------------------------------------
+    If the path is a valid path then the tensors
+    are saved and the path is returned. Otherwise
+    multiple file paths are logically joined 
+    after OS Module interacts with the OS to 
+    form a correct path and then the tensors are
+    saved and the correct path is returned.
+    """
     if os.path.isfile(path) == True:
         torch.save(tensors, path)
         return path
