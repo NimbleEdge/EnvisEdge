@@ -42,11 +42,19 @@ def md_solver(n, alpha, d0=None, B=None, round_dim=True, k=None):
         undo_sort[v] = i
     return d[undo_sort]
 
-
+#defining the alpha 
 def alpha_power_rule(n, alpha, d0=None, B=None):
+    '''
+    
+    Inputs:
+    n -- (torch.LongTensor) ; Vector of num of rows for each embedding matrix
+    alpha -- (torch.FloatTensor); Scalar, non-negative, controls dim. skew
+    d0 -- (torch.FloatTensor); Scalar, baseline embedding dimension
+    B -- (torch.FloatTensor); Scalar, parameter budget for embedding layer
+    '''
     if d0 is not None:
         lamb = d0 * (n[0].type(torch.float) ** alpha)
-    elif B is not None:
+    elif B is not None: 
         lamb = B / torch.sum(n.type(torch.float) ** (1 - alpha))
     else:
         raise ValueError("Must specify either d0 or B")
@@ -60,6 +68,10 @@ def alpha_power_rule(n, alpha, d0=None, B=None):
 
 
 def pow_2_round(dims):
+    '''
+    Calculates to the power of 2
+    Inputs
+    dims -- (torch.LongTensor);takes dimension as input'''
     return 2 ** torch.round(torch.log2(dims.type(torch.float)))
 
 
@@ -99,12 +111,23 @@ class EmbeddingBag(nn.EmbeddingBag):
 
 @registry.load("embedding", "pr_emb")
 class PrEmbeddingBag(nn.Module):
+    '''It is like adding a extra rapper layer upon the embedding.
+        Inputs
+        nn.Module:Base class for all neural network modules.'''
     def __init__(self,
                  num_embeddings,
                  embedding_dim,
                  base_dim=None,
                  index=-1,
                  init=False):
+    '''Base class for all neural network modules.Used for the function definition
+    Inputs
+    self:
+    num_embeddings:(int) – size of the dictionary of embeddings
+    embedding_dim:(int) – the size of each embedding vector
+    base_dim=None
+    index:(int) -the particular index:
+    '''
         super(PrEmbeddingBag, self).__init__()
         if base_dim is None:
             assert index >= 0, "PR emb either specify"
@@ -309,12 +332,18 @@ class QREmbeddingBag(nn.Module):
             self.weight_r = Parameter(_weight[1])
         self.mode = mode
         self.sparse = sparse
-
+    #module for reseting the parameters
     def reset_parameters(self):
         nn.init.uniform_(self.weight_q, np.sqrt(1 / self.num_categories))
         nn.init.uniform_(self.weight_r, np.sqrt(1 / self.num_categories))
 
     def forward(self, input, offsets=None, per_sample_weights=None):
+        '''The forward function computes output Tensors from input Tensors
+        Inputs
+        input:long-Takes the input
+        offsets:offsets determines the starting index position of each bag (sequence) in input.
+        per_sample_weights:
+        '''
         input_q = (input / self.num_collisions).long()
         input_r = torch.remainder(input, self.num_collisions).long()
 
