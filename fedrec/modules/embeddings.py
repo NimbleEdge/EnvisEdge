@@ -339,10 +339,9 @@ class QREmbeddingBag(nn.Module):
 
     def forward(self, input, offsets=None, per_sample_weights=None):
         '''The forward function computes output Tensors from input Tensors
-        Inputs
-        input:long-Takes the input
+        Inputs:
+        input:long;Takes the input
         offsets:offsets determines the starting index position of each bag (sequence) in input.
-        per_sample_weights:
         '''
         input_q = (input / self.num_collisions).long()
         input_r = torch.remainder(input, self.num_collisions).long()
