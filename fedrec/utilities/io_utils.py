@@ -34,6 +34,20 @@ def to_dict_with_sorted_values(d, key=None):
 
 
 def to_dict_with_set_values(d):
+    """
+    This function
+    ---------------------------------------------
+    The key,value pairs in datatstucture passed as
+    parameter is iterated and then checked if the 
+    values are lists then only they are appended to 
+    the new list created in tuple format. 
+    And if they are not lists then they are directly
+    appended to the new list.
+    In the end the values in the new list is 
+    converted to set values to remove duplicacy. 
+    And finally they are put inside a new
+    dictionary which is returned in the end.
+    """
     result = {}
     for k, v in d.items():
         hashable_v = []
@@ -103,8 +117,8 @@ def dictify(iterable):
 
 def dash_separated_ints(value):
     """
-    This function is used to convert the digits in
-    a string format to integer values.
+    This function is used to convert the integer
+    numbers in a string format to integer values.
     ----------------------------------------------
     The elements in the string passed as parameter 
     is spilt on basis of '-' character and stored 
@@ -126,6 +140,17 @@ def dash_separated_ints(value):
 
 
 def dash_separated_floats(value):
+    """
+    This function is used to convert the float
+    numbers in a string format to integer values.
+    ----------------------------------------------
+    The elements in the string passed as parameter 
+    is spilt on basis of '-' character and stored 
+    in a list. After that on every iteraration in
+    the list each element of the list is tried to
+    convert to float format if it a proper object
+    to get converted. Otherwise ValueError is thrown.
+    """
     vals = value.split("-")
     for val in vals:
         try:
