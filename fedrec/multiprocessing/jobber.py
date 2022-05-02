@@ -106,7 +106,7 @@ class Jobber:
     def stop(self, success=True) -> None:
         """
         This function is called after the end of a job request
-        to perform cleanup, logging, etc.
+        to perform cleanup and logging.
         """
         self.comm_manager.finish()
         os._exit(success)
