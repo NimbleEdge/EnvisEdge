@@ -1,4 +1,4 @@
-"""Jobber python file for scheduling job requrests to run
+"""Jobber python module for scheduling job requrests to run
 in sequence. It is a utility program that executes
 the pipeline and publishes job requests.
 """
@@ -92,7 +92,7 @@ class Jobber:
 
     def publish(self, job_result: JobResponseMessage) -> None:
         """
-        Publishes the result after executing the job request
+        Publishes the result on kafka after executing the job request
         Parameters
         ----------
         job_result : object
@@ -101,4 +101,8 @@ class Jobber:
         self.comm_manager.send_message(job_result)
 
     def stop(self) -> None:
+        '''
+        This function is called after the end of a job request
+        to perform cleanup, logging, etc.
+        '''
         self.comm_manager.finish()
