@@ -137,17 +137,6 @@ You may also find the official documentation [here](https://docs.nimbleedge.ai/)
 
 This project follows the [all-contributors](https://github.com/NimbleEdge/EnvisEdge/blob/main/CONTRIBUTING.md) specification.Contributions of any kind are welcome!!
 
-## Maintainers
-The following people are Maintainers
-<table>
-  <tr>
-    <td align="center"><a href="https://github.com/ramesht007"><img src="https://avatars.githubusercontent.com/u/36106177?v=4" width="100px;" /><br/><sub><b>Ramesht Shukla
-    </b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/vkkhare"><img src="https://avatars.githubusercontent.com/u/18126069?v=4" width="100px;" /><br /><sub><b>Varun khare
-    </b></sub></a><br /></td>
-  </tr>
-</table>
-
 # License
 [Apache License 2.0](https://github.com/NimbleEdge/EnvisEdge/blob/refactor-user-module/LICENSE)
 
