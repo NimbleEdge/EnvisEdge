@@ -105,7 +105,7 @@ Enter model : <Enter the config file of the model to update with the dataset pat
 Downloading femnist dataset...
 ```
 
-Run data preprocessing with [preprocess_data](preprocess_data.py) . Using this dataset, you will prepare a client mapping that will be sent to Python workers for training the model.
+Run data preprocessing with [preprocess_data](preprocess_data.py) . Using this dataset, you will prepare a client_id mapping in the dataset that will be sent to Python workers for training the model.
 ```bash
 python preprocess_data.py --config configs/regression.yml
 ```
