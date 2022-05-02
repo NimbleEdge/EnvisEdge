@@ -24,7 +24,6 @@ def to_dict_with_sorted_values(d, key=None):
     This function is used to convert the given 
     datastructure which is passed as parameter 
     to a dictionary. 
-    The dictionary is returned in the end.
     -------------------------------------------
     The key and value pairs are extracted from 
     the given datastructure to convert into a
@@ -35,7 +34,9 @@ def to_dict_with_sorted_values(d, key=None):
 
 def to_dict_with_set_values(d):
     """
-    This function
+    This function is used to create a dictionary by 
+    key,value pairs but by conversion to a set first
+    to remove the duplicate elements.
     ---------------------------------------------
     The key,value pairs in datatstucture passed as
     parameter is iterated and then checked if the 
