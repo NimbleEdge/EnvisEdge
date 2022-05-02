@@ -3,26 +3,24 @@ from typing import Dict
 import attr
 import numpy as np
 import torch
-from fedrec.preprocessor import PreProcessor
+from fedrec.user_modules.envis_base_module import EnvisBase
+from fedrec.user_modules.envis_preprocessor import EnvisPreProcessor
 from fedrec.utilities import registry
 from fedrec.utilities import saver_utils as saver_mod
-from fedrec.utilities.cuda_utils import map_to_cuda
-from fedrec.utilities.logger import BaseLogger
 from sklearn import metrics
 from tqdm import tqdm
-
-from fedrec.utilities.random_state import Reproducible
+from fedrec.utilities.logger import BaseLogger
 
 
 @attr.s
-class DLRMTrainConfig:
+class TrainConfig:
     eval_every_n = attr.ib(default=10000)
     report_every_n = attr.ib(default=10)
     save_every_n = attr.ib(default=2000)
     keep_every_n = attr.ib(default=10000)
 
-    batch_size = attr.ib(default=128)
-    eval_batch_size = attr.ib(default=256)
+    batch_size = attr.ib(default=32)
+    eval_batch_size = attr.ib(default=128)
     num_epochs = attr.ib(default=-1)
 
     num_batches = attr.ib(default=-1)
@@ -39,29 +37,45 @@ class DLRMTrainConfig:
 
     num_workers = attr.ib(default=0)
     pin_memory = attr.ib(default=True)
+    log_gradients = attr.ib(default=False)
 
 
-@registry.load('trainer', 'dlrm')
-class DLRMTrainer(Reproducible):
-
+class EnvisTrainer(EnvisBase):
     def __init__(
             self,
             config_dict: Dict,
-            logger: BaseLogger) -> None:
+            logger: BaseLogger,
+            client_id=None) -> None:
 
-        super().__init__(config_dict["random"])
+        super().__init__(config_dict)
         self.config_dict = config_dict
-        self.train_config = DLRMTrainConfig(**config_dict["trainer"]["config"])
+        self.client_id = client_id
+        self.train_config = TrainConfig(**config_dict["trainer"]["config"])
         self.logger = logger
         modelCls = registry.lookup('model', config_dict["model"])
-        self.model_preproc: PreProcessor = registry.instantiate(
+        self.model_preproc: EnvisPreProcessor = registry.instantiate(
             modelCls.Preproc,
-            config_dict["model"]['preproc'])
+            config_dict["model"]['preproc'], unused_keys=(),
+            client_id=client_id)
 
-        self._model = None
+        with self.model_random:
+            # 1. Construct model
+            self.model_preproc.load_data_description()
+            self.model = registry.construct(
+                'model', self.config_dict["model"],
+                preprocessor=self.model_preproc,
+                unused_keys=('name', 'preproc')
+            )
+            if torch.cuda.is_available():
+                self.model.cuda()
+
         self._data_loaders = {}
+        self._scheduler = None
 
-        self._optimizer = None
+        with self.init_random:
+            self.optimizer = registry.construct(
+                'optimizer', self.config_dict['trainer']['optimizer'],
+                params=self.model.parameters())
         self._saver = None
 
     def reset_loaders(self):
@@ -74,35 +88,6 @@ class DLRMTrainer(Reproducible):
             for batch in loader:
                 yield batch, current_epoch
             current_epoch += 1
-
-    def test_run(self, arg1, arg2):
-        return arg1 + arg2
-
-    @property
-    def model(self):
-        if self._model is not None:
-            return self._model
-
-        with self.model_random:
-            # 1. Construct model
-            self.model_preproc.load_data_description()
-            self._model = registry.construct(
-                'model', self.config_dict["model"],
-                preprocessor=self.model_preproc,
-                unused_keys=('name', 'preproc')
-            )
-            if torch.cuda.is_available():
-                self._model.cuda()
-        return self._model
-
-    @property
-    def optimizer(self):
-        if self._optimizer is None:
-            with self.init_random:
-                self._optimizer = registry.construct(
-                    'optimizer', self.config_dict['trainer']['optimizer'],
-                    params=self.model.parameters())
-        return self._optimizer
 
     def get_scheduler(self, optimizer, **kwargs):
         if self._scheduler is None:
@@ -127,6 +112,8 @@ class DLRMTrainer(Reproducible):
     def data_loaders(self):
         if self._data_loaders:
             return self._data_loaders
+        # TODO : FIX if not client_id will load whole dataset
+        self.model_preproc.load()
         # 3. Get training data somewhere
         with self.data_random:
             train_data = self.model_preproc.dataset('train')
@@ -177,14 +164,14 @@ class DLRMTrainer(Reproducible):
             t_loader = tqdm(enumerate(loader), unit="batch", total=total_len)
             for i, testBatch in t_loader:
                 # early exit if nbatches was set by the user and was exceeded
-                if (num_eval_batches is not None) and (i >= num_eval_batches):
+                if (num_eval_batches > 0) and (i >= num_eval_batches):
                     break
                 t_loader.set_description(f"Running {eval_section}")
 
-                inputs, true_labels = map_to_cuda(testBatch, non_blocking=True)
+                inputs, true_labels = testBatch
 
                 # forward pass
-                Z_test = model.get_scores(model(*inputs))
+                Z_test = model.get_scores(model(inputs))
 
                 S_test = Z_test.detach().cpu().numpy()  # numpy array
                 T_test = true_labels.detach().cpu().numpy()  # numpy array
@@ -229,6 +216,12 @@ class DLRMTrainer(Reproducible):
 
         return False, results
 
+    def store_state(self):
+        assert self.model is not None
+        return {
+            'model': self.model
+        }
+
     def test(self):
         results = {}
         if self.train_config.eval_on_train:
@@ -265,7 +258,7 @@ class DLRMTrainer(Reproducible):
         with self.data_random:
             best_acc_test = 0
             best_auc_test = 0
-            dummy_input = map_to_cuda(next(iter(train_dl))[0])
+            dummy_input = next(iter(train_dl))[0]
             self.logger.add_graph(self.model, dummy_input[0])
             t_loader = tqdm(train_dl, unit='batch',
                             total=total_train_len)
@@ -273,10 +266,10 @@ class DLRMTrainer(Reproducible):
                 t_loader.set_description(f"Training Epoch {current_epoch}")
 
                 # Quit if too long
-                if self.train_config.num_batches > 0 &\
+                if self.train_config.num_batches > 0 and\
                         last_step >= self.train_config.num_batches:
                     break
-                if self.train_config.num_epochs > 0 &\
+                if self.train_config.num_epochs > 0 and\
                         current_epoch >= self.train_config.num_epochs:
                     break
 
@@ -306,9 +299,8 @@ class DLRMTrainer(Reproducible):
 
                 # Compute and apply gradient
                 with self.model_random:
-                    input, true_label = map_to_cuda(
-                        batch, non_blocking=True)
-                    output = self.model(*input)
+                    input, true_label = batch
+                    output = self.model(input)
                     loss = self.model.loss(output, true_label)
                     self.optimizer.zero_grad()
                     loss.backward()
@@ -330,3 +322,14 @@ class DLRMTrainer(Reproducible):
                 # Run saver
                 if last_step % self.train_config.save_every_n == 0:
                     self.saver.save(modeldir, last_step, current_epoch)
+        return self.model.state_dict()
+
+    def update(self, state: Dict):
+        # Update the model
+        self.model.load_state_dict(state["model"].tensors)
+        # # Update the optimizer
+        # self.optimizer.load_state_dict(state["optimizer"].tensors)
+        # # empty dataloaders for new dataset
+        # self.reset_loaders()
+        # # update dataset
+        # self.model_preproc = state["model_preproc"]

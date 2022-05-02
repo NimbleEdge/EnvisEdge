@@ -4,12 +4,13 @@ the pipeline and publishes job requests.
 """
 
 import atexit
+import os
 from typing import Dict
 
-from fedrec.communications.messages import JobResponseMessage, JobSubmitMessage
+from fedrec.data_models.job_response_model import JobResponseMessage
+from fedrec.data_models.job_submit_model import JobSubmitMessage
 from fedrec.python_executors.base_actor import BaseActor
 from fedrec.utilities import registry
-from fedrec.utilities.serialization import deserialize_object, serialize_object
 
 
 class Jobber:
@@ -39,7 +40,7 @@ class Jobber:
 
         # look for the key in the dictionary and return its object
         self.comm_manager = registry.construct(
-            "communications", config=com_manager_config)
+            "communication_interface", config=com_manager_config)
         self.logger = logger
         atexit.register(self.stop)
 
@@ -50,8 +51,8 @@ class Jobber:
         executes the job request and publishes the results
         in that order.
         """
-        try:
-            while True:
+        while True:
+            try:
                 print("Waiting for job request")
                 job_request = self.comm_manager.receive_message()
                 print(
@@ -61,11 +62,12 @@ class Jobber:
 
                 result = self.execute(job_request)
                 self.publish(result)
-        except Exception as e:
-            print(f"Exception {e}")
-            self.stop()
+            except Exception as e:
+                print(f"Exception {e}")
+                self.stop(False)
 
-    def execute(self, message: JobSubmitMessage):
+
+    def execute(self, message: JobSubmitMessage) -> JobResponseMessage:
         """
         This function takes message object and
         stores the job request to publish.
@@ -99,10 +101,12 @@ class Jobber:
             Creates message objects for job response message
         """
         self.comm_manager.send_message(job_result)
+        pass
 
-    def stop(self) -> None:
+    def stop(self, success=True) -> None:
         '''
         This function is called after the end of a job request
         to perform cleanup, logging, etc.
         '''
         self.comm_manager.finish()
+        os._exit(success)

@@ -10,7 +10,7 @@ learning rate, or number of clients per round), we need not change the
 code but only change the parameters in yaml configuration file.
 
 for detailed explaination on the use of registry, see:
-github.com/NimbleEdge/EnvisEdge/blob/main/docs/source/tutorial/Tutorial-Part-2-starting_with_nimbleedge.rst
+github.com/NimbleEdge/EnvisEdge/blob/main/docs/Tutorial-Part-2-starting_with_nimbleedge.md
 '''
 
 import collections
@@ -49,14 +49,16 @@ def load(kind, name):
     ...     self.arg = arg
     '''
 
+    assert kind != "class_map", "reserved keyword for kind \"class_map\""
     registry = LOOKUP_DICT[kind]
+    class_ref = LOOKUP_DICT["class_map"]
 
     def decorator(obj):
         if name in registry:
             raise LookupError('{} already present'.format(name, kind))
         registry[name] = obj
+        class_ref[obj.__module__ + "." + obj.__name__] = obj
         return obj
-
     return decorator
 
 
@@ -117,9 +119,9 @@ def construct(kind, config, unused_keys=(), **kwargs):
                  Extra arguments to pass.
 
     Returns
-    -------
+    ----------
     object:
-        Constructed object using the parameters passed in config and \**kwargs.
+        Constructed object using the parameters passed in config and **kwargs.
 
     Examples
     ----------
@@ -162,7 +164,7 @@ def instantiate(callable, config, unused_keys=(), **kwargs):
     Returns
     ----------
     object:
-        Instantiated object by the parameters passed in config and \**kwargs.
+        Instantiated object by the parameters passed in config and **kwargs.
 
     Examples
     ----------
@@ -204,3 +206,35 @@ def instantiate(callable, config, unused_keys=(), **kwargs):
         print('WARNING {}: superfluous {}'.format(
             callable, missing), file=sys.stderr)
     return callable(**merged)
+
+
+class Registrable(object):
+
+    def __init__(self) -> None:
+        pass
+    
+    @classmethod
+    def type_name(cls):
+        return cls.__module__ + "." + cls.__name__
+
+    @staticmethod
+    def get_name(obj):
+        if not callable(obj):
+            obj = obj.__class__
+        return obj.__module__ + "." + obj.__name__
+
+    @staticmethod
+    def register_class_ref(class_ref, name=None):
+        if name is None:
+            assert issubclass(class_ref, Registrable), \
+                'Annotated class must be a subclass of Registrable'
+            name = class_ref.type_name()
+        
+        LOOKUP_DICT["class_map"][name] = class_ref
+        return class_ref
+
+    @staticmethod
+    def lookup_class_ref(class_name):
+        if class_name not in LOOKUP_DICT["class_map"]:
+            raise KeyError('No class found for "{}"'.format(class_name))
+        return LOOKUP_DICT["class_map"][class_name]

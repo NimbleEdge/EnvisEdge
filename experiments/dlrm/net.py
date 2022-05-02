@@ -1,9 +1,8 @@
-import abc
 import sys
 
 import numpy as np
 import torch
-from fedrec.preprocessor import DLRMPreprocessor
+from experiments.dlrm.data_processor import DLRMPreprocessor
 from fedrec.utilities import registry
 from torch import nn, sigmoid
 from torch.nn.parameter import Parameter

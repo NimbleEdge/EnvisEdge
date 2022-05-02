@@ -41,49 +41,37 @@ EnvisEdge allows researchers, developers and data scientists to experiment and t
   
  ```
 NimbleEdge/EnvisEdge
-├── CONTRIBUTING.md           <-- Please go through the contributing guidelines before starting 🤓
-├── README.md                 <-- You are here 📌
-├── datasets                  <-- Sample datasets
-├── docs                      <-- Tutorials and walkthroughs 🧐
-├── experiments               <-- Recommendation models used by our services
-└── fedrec                    <-- Whole magic takes place here 😜 
-      ├── communications          <-- Modules for communication interfaces eg. Kafka
-      ├── multiprocessing         <-- Modules to run parallel worker jobs
-      ├── python_executors        <-- Contains worker modules eg. trainer and aggregator
-      ├── serialization           <-- Message serializers
-      └── utilities               <-- Helper modules
-├── fl_strategies             <-- Federated learning algorithms for our services.
-├── notebooks                 <-- Jupyter Notebook examples
-├── scala-core                <-- Backbone of EnvisEdge
-├── scripts                   <-- Separate DLRM recommender code  
-└── tests                     <-- tests
+├── CONTRIBUTING.md                         <-- Please go through the contributing guidelines before starting 🤓
+├── README.md                               <-- You are here 📌
+├── datasets                                <-- Sample datasets
+├── docs                                    <-- Tutorials and walkthroughs 🧐
+├── experiments                             <-- Recommendation models used by our services
+└── fedrec                                  <-- Whole magic takes place here 😜 
+      ├── communication_interfaces              <-- Modules for communication interfaces eg. Kafka
+      ├── data_models                           <-- All data modules that will be used for communication and thier serializers and  deserializers
+      ├── modules                               <-- All the modules related to transformers, embeddings etc.
+      ├── multiprocessing                       <-- Modules to run parallel worker jobs
+      ├── optimization                          <-- Modules realted to torch optimizers and gradient decesnt etc.
+      ├── python_executors                      <-- Contains worker modules eg. trainer and aggregator
+      ├── serialization                         <-- serialization interfaces for data models
+      ├── user_modules                          <-- Envis modules for wrapping toech modules for users. 
+      └── utilities                             <-- Helper modules
+├── fl_strategies                           <-- Federated learning algorithms for our services.
+├── notebooks                               <-- Jupyter Notebook examples
+├── scala-core                              <-- Backbone of EnvisEdge
+├── scripts                                 <-- bash scripts for creating and removing kfka topics.
+└── tests                                   <-- tests
 ``` 
   
 # QuickStart
+Update the config files of the model (can be found [here](https://github.com/NimbleEdge/EnvisEdge/tree/main/configs)) you are going to use with logging directory:
 
-Let's train [Facebook AI's DLRM](https://arxiv.org/abs/1906.00091) on the edge. DLRM has been a standard baseline for all neural network based recommendation models.
-
-Clone this repo and change the argument `datafile` in [configs/dlrm_fl.yml](configs/dlrm_fl.yml) to the above path.
-```bash
-git clone https://github.com/NimbleEdge/EnvisEdge
-```
 ```yml
-model :
-  name : 'dlrm'
-  ...
-  preproc :
-    datafile : "<Path to Criteo>/criteo/train.txt"
- 
+log_dir:
+  PATH: <path to your logging directory>
 ```
-Install the dependencies with conda or pip
-```bash
-mkdir env
-cd env
-virtualenv envisedge 
-source envisedge/bin/activate 
-pip3 install -r requirements.txt
-``` 
-Download kafka from [Here](https://github.com/apache/kafka) 👈
+
+Download kafka from [Here](https://www.apache.org/dyn/closer.cgi?path=/kafka/3.1.0/kafka_2.13-3.1.0.tgz) 👈
 and start the kafka server using the following commands
 
 ```bash
@@ -93,35 +81,43 @@ bin/kafka-server-start.sh config/server.properties
 Create kafka topics for the job executor
 
 ```bash
-bin/kafka-topics.sh --create --topic job-request-aggregator --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
-bin/kafka-topics.sh --create --topic job-request-trainer --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
-bin/kafka-topics.sh --create --topic job-response-aggregator --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
-bin/kafka-topics.sh --create --topic job-response-trainer --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+cd scripts
+$ bash add_topics.sh
+Enter path to kafka Directory : <Enter the path to the kafka directory>
+kafka url: <Enter the URL on which kafka is listening e.g if you are running it on localhost it would be 127.0.0.1>
+Creating Topics...
+```
+Install the dependencies using virtual environment
+```bash
+mkdir env
+cd env
+virtualenv envisedge
+source envisedge/bin/activate
+pip3 install -r requirements.txt
+``` 
+
+Download the federated dataset 
+
+```bash
+$ bash download.sh -f
+Enter global data path : <Enter the path you want your dataset to be saved>
+Enter model : <Enter the config file of the model to update with the dataset path>
+Downloading femnist dataset...
+```
+
+Run data preprocessing with [preprocess_data](preprocess_data.py) . Form this you will training dataset with with client mapping that would be send to the python workers for training the model.
+```bash
+python preprocess_data.py --config configs/regression.yml
 ```
 
 To start the multiprocessing executor run the following command:
 
 ```bash
-python executor.py --config configs/dlrm_fl.yml
+$ python executor.py --config configs/regression.yml
 ```
-Change the path in [Dlrm_fl.yml](configs/dlrm_fl.yml) to your data path.
-```
-preproc :
-    datafile : "<Your path to data>/criteo_dataset/train.txt"
-```
-Run data preprocessing with [preprocess_data](preprocess_data.py) and supply the config file. You should be able to generate per-day split from the entire dataset as well a processed data file
+To see how traning is done run the following command:
 ```bash
-python preprocess_data.py --config configs/dlrm_fl.yml --logdir $HOME/logs/kaggle_criteo/exp_1
-```
-
-**Begin Training**
-```bash
-python train.py --config configs/dlrm_fl.yml --logdir $HOME/logs/kaggle_criteo/exp_3 --num_eval_batches 1000 --devices 0
-```
-
-Run tensorboard to view training loss and validation metrics at [localhost:8888](http://localhost:8888/)
-```bash
-tensorboard --logdir $HOME/logs/kaggle_criteo --port 8888
+$ python tests/integration_tests/integration_test.py --config configs/regression.yml
 ```
 # Demos and Tutorials
 You may find all the EnvisEdge related demos and tutorials [here](https://github.com/NimbleEdge/EnvisEdge/tree/refactor-user-module/docs).

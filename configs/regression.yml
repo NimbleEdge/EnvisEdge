@@ -1,0 +1,67 @@
+model : 
+  name : "regression"
+  
+  input_dim: 49152
+  output_dim : 62
+  loss_function: "ce"
+
+  preproc :
+    dataset_config:
+      name : "femnist"
+      data_dir : <"Path to dataset">
+      splits : ["train", "test", "val"]
+      normalize : [0.1307, 0.3081]
+
+multiprocessing:
+  num_aggregators : 1
+  num_trainers : 5
+
+  process_manager : 
+    name : "ray"
+    
+  communication_interface : 
+    name : "kafka"
+    serialization : "json"
+    consumer : True
+    producer : True
+    consumer_port : 9092
+    consumer_url : "127.0.0.1"
+    consumer_topic : 'job-request'
+    consumer_group_id : 'test-consumer-group'
+    producer_port : 9092
+    producer_url : "127.0.0.1"
+    producer_topic : 'job-response'
+
+trainer :
+  name : regression
+  config:
+    batch_size : 4
+    eval_batch_size : 2
+    eval_every_n : 100
+    save_every_n : 500
+    num_workers : 1
+    num_batches : 4
+    num_eval_batches : 2
+    eval_on_val : False
+
+  optimizer :
+    name : "sgd"
+    momentum : 0.9
+    lr : 0.001
+    
+  lr_scheduler :
+    name : "dlrm"
+    num_warmup_steps : 300
+    decay_start_step : 1500
+    num_decay_steps : 1500
+
+aggregator:
+  name : "fed_avg"
+
+random:
+  data_seed : 100
+  init_seed : 100
+  model_seed : 100
+
+log_dir:
+  PATH: <"Path to logging directory">

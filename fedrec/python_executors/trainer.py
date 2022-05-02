@@ -1,33 +1,12 @@
-
+import inspect
 from abc import ABC
 from typing import Dict
 
-import attr
-from fedrec.python_executors.base_actor import ActorState, BaseActor
+from fedrec.data_models.trainer_state_model import TrainerState
+from fedrec.python_executors.base_actor import BaseActor
+from fedrec.user_modules.envis_base_module import EnvisBase
 from fedrec.utilities import registry
 from fedrec.utilities.logger import BaseLogger
-
-
-@attr.s(kw_only=True)
-class TrainerState(ActorState):
-    """Construct a workerState object to reinstatiate a worker when needed.
-
-    Attributes
-    ----------
-    id : int
-        Unique worker identifier
-    model_preproc : `Preprocessor`
-        The local dataset of the worker
-    round_idx : int
-        The number of local training cycles finished
-    state_dict : dict
-        A dictionary of state dicts storing model weights and optimizer dicts
-    storage : str
-        The address for persistent storage
-    """
-    model_preproc = attr.ib()
-    local_sample_number = attr.ib()
-    local_training_steps = attr.ib()
 
 
 class Trainer(BaseActor, ABC):
@@ -39,7 +18,7 @@ class Trainer(BaseActor, ABC):
                  worker_index: int,
                  config: Dict,
                  logger: BaseLogger,
-                 persistent_storage: str = None,
+                 client_id: int,
                  is_mobile: bool = True,
                  round_idx: int = 0):
         """
@@ -60,21 +39,26 @@ class Trainer(BaseActor, ABC):
 
         """
         super().__init__(worker_index, config, logger,
-                         persistent_storage, is_mobile, round_idx)
+                         is_mobile, round_idx)
         self.local_sample_number = None
         self.local_training_steps = 10
         self._data_loaders = {}
+        self.client_id = client_id
         # TODO update trainer logic to avoid double model initialization
-        self.worker = registry.construct(
+        self.worker: EnvisBase = registry.construct(
             'trainer',
             config["trainer"],
             unused_keys=(),
             config_dict=config,
+            client_id=self.client_id,
             logger=logger)
-        # self.worker_funcs =
-        # {func_name: getattr(self.worker, func_name) for func_name in dir(
-        #     self.worker) if callable(getattr(self.worker, func_name))}
-        self.worker_funcs = {"test_run": getattr(self.worker, "test_run")}
+
+        self.worker_funcs = {
+            func_name_list[0]: getattr(self.worker, func_name_list[0])
+            for func_name_list in
+            inspect.getmembers(self.worker, predicate=inspect.ismethod)
+        }
+        #  self.worker_funcs = {"test_run": getattr(self.worker, "test_run")}
 
     def reset_loaders(self):
         self._data_loaders = {}
@@ -90,13 +74,14 @@ class Trainer(BaseActor, ABC):
         """
         state = {
             'model': self._get_model_params(),
+            'worker_state': self.worker.envis_state,
             'step': self.local_training_steps
         }
         if self.optimizer is not None:
-            state['optimizer'] = self.optimizer.state_dict()
+            state['optimizer'] = self._get_optimizer_params()
 
         return TrainerState(
-            id=self.worker_index,
+            worker_index=self.worker_index,
             round_idx=self.round_idx,
             state_dict=state,
             model_preproc=self.model_preproc,
@@ -115,13 +100,14 @@ class Trainer(BaseActor, ABC):
         state : TrainerState
             TrainerState containing the weights
         """
-        self.worker_index = state.id
+        self.worker_index = state.worker_index
         self.persistent_storage = state.storage
         self.round_idx = state.round_idx
-        self.model.load_state_dict(state.state_dict['model'])
+        self.load_model(state.state_dict['model'])
         self.local_training_steps = state.state_dict['step']
         if self.optimizer is not None:
-            self.optimizer.load_state_dict(state.state_dict['optimizer'])
+            self.load_optimizer(state.state_dict['optimizer'])
+        self.worker.update(state.state_dict["worker_state"])
 
     def update_dataset(self, model_preproc):
         """Update the dataset, trainer_index and model_index .
@@ -146,7 +132,8 @@ class Trainer(BaseActor, ABC):
         """
         if func_name in self.worker_funcs:
             print(f"Running function name: {func_name}")
-            return self.worker_funcs[func_name](*args, **kwargs)
+            return self.process_args(
+                self.worker_funcs[func_name](*args, **kwargs))
         else:
             raise ValueError(
                 f"Job type <{func_name}> not part of worker"

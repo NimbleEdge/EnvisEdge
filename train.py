@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 
 import torch
 import yaml
-from fedrec.trainers.base_trainer import BaseTrainer
+from fedrec.user_modules.envis_trainer import EnvisTrainer
 from fedrec.utilities import registry
 from fedrec.utilities.logger import NoOpLogger, TBLogger
 
@@ -136,7 +136,7 @@ def main():
     )
 
     # Construct trainer and do training based on the trainer configurations
-    trainer: BaseTrainer = registry.construct(
+    trainer: EnvisTrainer = registry.construct(
         'trainer',
         config={'name': config_dict['train']['name']},
         config_dict=config_dict,

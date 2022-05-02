@@ -1,5 +1,6 @@
-from abc import ABC
 import atexit
+import logging
+from abc import ABC
 from collections import defaultdict
 from typing import Any, DefaultDict, Dict
 
@@ -58,8 +59,6 @@ class RayProcessManager(ProcessManager):
                    num_instances: int,
                    *args, **kwargs) -> None:
         dist_runnable = ray.remote(runnable)
-        print(args)
-        print(kwargs)
         new_runs = [dist_runnable.remote(*args, **kwargs)
                     for _ in range(num_instances)]
         self.workers[type] += new_runs

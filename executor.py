@@ -1,3 +1,4 @@
+import logging
 import sys
 from argparse import ArgumentParser
 from typing import Callable, Dict
@@ -20,19 +21,20 @@ class JobExecutor():
                  **kwargs) -> None:
         """ Class responsible for running aggregator/trainer on a single node.
         """
-
         # Construct trainer and do training
         self.config = config
         if not set(['experiments',
                     'fedrec',
                     'fl_strategies']).issubset(set(sys.modules.values())):
+            import datasets
             import experiments
             import fedrec
             import fl_strategies
         self.worker = actorCls(
             0, config, logger, **kwargs)
         self.jobber = Jobber(
-            self.worker, logger, config["multiprocessing"]["communications"])
+            self.worker, logger,
+            config["multiprocessing"]["communication_interface"])
 
     def run(self):
         return self.jobber.run()
@@ -56,6 +58,8 @@ def main():
     else:
         logger = NoOpLogger()
 
+    # JobExecutor(Trainer, config_dict, logger, client_id=0).run()
+    # JobExecutor(Aggregator, config_dict, logger).run()
     process_manager: ProcessManager = registry.construct(
         "process_manager", config_dict["multiprocessing"]["process_manager"])
 
@@ -63,13 +67,13 @@ def main():
         JobExecutor, Aggregator.__name__,
         config_dict["multiprocessing"]["num_aggregators"],
         actorCls=Aggregator,
-        config=config_dict, logger=logger
+        config=config_dict, logger=logger,
     )
     process_manager.distribute(
         JobExecutor, Trainer.__name__,
         config_dict["multiprocessing"]["num_trainers"],
         actorCls=Trainer,
-        config=config_dict, logger=logger
+        config=config_dict, logger=logger, client_id=0
     )
 
     process_manager.start(Aggregator.__name__, "run")

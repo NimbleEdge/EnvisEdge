@@ -1,61 +1,13 @@
-from abc import ABC, abstractmethod
+import inspect
+from abc import ABC
 from typing import Dict
 
-import attr
-from fedrec.python_executors.base_actor import ActorState, BaseActor
+from fedrec.data_models.aggregator_state_model import (AggregatorState,
+                                                       Neighbour)
+from fedrec.python_executors.base_actor import BaseActor
+from fedrec.user_modules.envis_base_module import EnvisBase
 from fedrec.utilities import registry
 from fedrec.utilities.logger import BaseLogger
-
-
-@attr.s
-class Neighbour:
-    """A class that represents a new Neighbour instance.
-
-    Attributes
-    ----------
-    id : int
-        Unique identifier for the worker
-    model : Dict
-        Model weights of the worker
-    sample_num : int
-        Number of datapoints in the neighbour's local dataset
-    last_sync : int
-        Last cycle when the models were synced
-    """
-    id = attr.ib()
-    model = attr.ib(None)
-    sample_num = attr.ib(None)
-    last_sync = attr.ib(-1)
-
-    def update(self, kwargs):
-        for k, v in kwargs:
-            if k == 'id' and v != self.id:
-                return
-            if hasattr(self, k):
-                setattr(self, k, v)
-
-
-@attr.s(kw_only=True)
-class AggregatorState(ActorState):
-    """Construct a AggregatorState object to reinstatiate a worker when needed.
-
-    Attributes
-    ----------
-    id : int
-        Unique worker identifier
-    round_idx : int
-        The number of local training cycles finished
-    state_dict : dict
-        A dictionary of state dicts storing model weights and optimizer dicts
-    storage : str
-        The address for persistent storage
-    neighbours :
-        {"in_neigh" : List[`Neighbour`], "out_neigh" : List[`Neighbour`]]
-        The states of in_neighbours and out_neighbours of the
-        worker when last synced
-    """
-    in_neighbours = attr.ib(dict)
-    out_neighbours = attr.ib(dict)
 
 
 class Aggregator(BaseActor, ABC):
@@ -84,22 +36,26 @@ class Aggregator(BaseActor, ABC):
                  logger: BaseLogger,
                  in_neighbours: Dict[int, Neighbour] = None,
                  out_neighbours: Dict[int, Neighbour] = None,
-                 persistent_storage: str = None,
                  is_mobile: bool = True,
                  round_idx: int = 0):
         super().__init__(worker_index, config, logger,
-                         persistent_storage, is_mobile, round_idx)
+                         is_mobile, round_idx)
         self.in_neighbours = in_neighbours
         self.out_neighbours = out_neighbours
         # TODO update trainer logic to avoid double model initialization
-        self.worker = registry.construct('aggregator',
-                                         config['aggregator'],
-                                         in_neighbours=in_neighbours,
-                                         out_neighbours=out_neighbours)
-        # self.worker_funcs =
-        # {func_name: getattr(self.worker, func_name) for func_name in dir(
-        #     self.worker) if callable(getattr(self.worker, func_name))}
-        self.worker_funcs = {"test_run": getattr(self.worker, "test_run")}
+        self.worker: EnvisBase = registry.construct(
+            'aggregator',
+            config['aggregator'],
+            unused_keys=(),
+            config_dict=config,
+            in_neighbours=in_neighbours,
+            out_neighbours=out_neighbours
+        )
+        self.worker_funcs = {
+            func_name_list[0]: getattr(self.worker, func_name_list[0])
+            for func_name_list in
+            inspect.getmembers(self.worker, predicate=inspect.ismethod)
+        }
 
     def serialize(self):
         """Serialise the state of the worker to a AggregatorState.
@@ -110,13 +66,18 @@ class Aggregator(BaseActor, ABC):
             The serialised class object to be written
             to Json or persisted into the file.
         """
+        state = {
+            'model': self._get_model_params(),
+            'worker_state': self.worker.envis_state,
+            'step': self.round_idx
+        }
+        if self.optimizer is not None:
+            state['optimizer'] = self._get_optimizer_params()
+
         return AggregatorState(
-            id=self.worker_index,
+            worker_index=self.worker_index,
             round_idx=self.round_idx,
-            state_dict={
-                'model': self._get_model_params(),
-                'step': self.round_idx
-            },
+            state_dict=state,
             storage=self.persistent_storage,
             in_neighbours=self.in_neighbours,
             out_neighbours=self.out_neighbours
@@ -132,14 +93,15 @@ class Aggregator(BaseActor, ABC):
         state : AggregatorState
             AggregatorState containing the weights
         """
-        self.worker_index = state.id
+        self.worker_index = state.worker_index
         self.persistent_storage = state.storage
         self.in_neighbours = state.in_neighbours
         self.out_neighbours = state.out_neighbours
         self.round_idx = state.round_idx
-        self.model.load_state_dict(state.state_dict['model'])
+        self.load_model(state.state_dict['model'])
         if self.optimizer is not None:
-            self.optimizer.load_state_dict(state.state_dict['optimizer'])
+            self.load_optimizer(state.state_dict['optimizer'])
+        self.worker.update(state.state_dict["worker_state"])
 
     def run(self, func_name, *args, **kwargs):
         """
@@ -149,7 +111,8 @@ class Aggregator(BaseActor, ABC):
         """
         if func_name in self.worker_funcs:
             print(f"Running function name: {func_name}")
-            return self.worker_funcs[func_name](*args, **kwargs)
+            return self.process_args(
+                self.worker_funcs[func_name](*args, **kwargs))
         else:
             raise ValueError(
                 f"Job type <{func_name}> not part of worker"

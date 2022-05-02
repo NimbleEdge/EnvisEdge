@@ -74,7 +74,7 @@ class RandomizationConfig:
     model_seed = attr.ib(default=None)
 
 
-class Reproducible:
+class Reproducible(object):
     def __init__(self, config: Dict) -> None:
         self.data_random = RandomContext(
             config["data_seed"])

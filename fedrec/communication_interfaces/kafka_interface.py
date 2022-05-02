@@ -1,11 +1,13 @@
-from fedrec.communications.abstract_comm_manager import \
+from json import dumps, loads
+from time import sleep
+
+from fedrec.communication_interfaces.abstract_comm_manager import \
     AbstractCommunicationManager
 from fedrec.utilities import registry
 from kafka import KafkaConsumer, KafkaProducer
-from json import loads, dumps
 
 
-@registry.load("communications", "kafka")
+@registry.load("communication_interface", "kafka")
 class Kafka(AbstractCommunicationManager):
     """
     Implements the basic send/receive interface so that workers and
@@ -41,8 +43,9 @@ class Kafka(AbstractCommunicationManager):
     Exception
         If the consumer or producer is set to `False`.
     """
+
     def __init__(self,
-                 serializer="json",
+                 serialization="json",
                  consumer=True,
                  producer=True,
                  consumer_port=9092,
@@ -52,13 +55,15 @@ class Kafka(AbstractCommunicationManager):
                  producer_port=9092,
                  producer_url="127.0.0.1",
                  producer_topic=None):
-        self.serializer = registry.construct("serializer", serializer)
+        super().__init__(serialization)
+
         if producer:
             self.producer_url = "{}:{}".format(
                 producer_url, producer_port)
             self.producer = KafkaProducer(
                 bootstrap_servers=[self.producer_url],
-                value_serializer=self.serializer.serialize)
+                value_serializer=self.serialize
+            )
             self.producer_topic = producer_topic
 
         if consumer:
@@ -67,20 +72,21 @@ class Kafka(AbstractCommunicationManager):
             self.consumer = KafkaConsumer(
                 consumer_topic,
                 bootstrap_servers=[self.consumer_url],
-                value_deserializer=self.serializer.deserialize,
+                value_deserializer=self.deserialize,
                 auto_offset_reset='latest',
                 enable_auto_commit=True,
+                auto_commit_interval_ms=50,
                 group_id=consumer_group_id)
 
     def receive_message(self):
         """
         Receives a message from the kafka broker.
-        
-        Returns
-        -------
+
+        Returns:
+        --------
         message: object
             The message received.
-        """
+        # """
         if not self.consumer:
             raise Exception("No consumer defined")
         return next(self.consumer).value
@@ -96,7 +102,8 @@ class Kafka(AbstractCommunicationManager):
         """
         if not self.producer:
             raise Exception("No producer defined")
-        self.producer.send(self.producer_topic, value=message)
+        self.producer.send(self.producer_topic, value=message).get()
+        self.producer.flush()
 
     def finish(self):
         """

@@ -110,11 +110,13 @@ class Saver(object):
         self._optimizer = optimizer
         self._keep_every_n = keep_every_n
 
-    def restore(self, model_dir, map_location=None, step=None):
+    def restore(self, model_dir=None, map_location=None, step=None):
         """Restores model and optimizer from given directory.
         Returns:
            Last training step for the model restored.
         """
+        if model_dir is None:
+            return 0, 0
         last_step, epoch = load_checkpoint(
             self._model, self._optimizer, model_dir, map_location, step)
         return last_step, epoch
