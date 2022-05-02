@@ -69,6 +69,16 @@ def save_tensors(tensors, path) -> str:
 
 
 def tuplify(dictionary):
+    """
+    This function is used to convert dictionary
+    passed as parameter to a tuple.
+    -------------------------------------------
+    If the dictionary is empty then an empty tuple
+    is returned. Otherwise it checks if the given
+    dictionary is a valid dictionary or not and 
+    the keys of the dictionary is stored in the 
+    tuple and then it is returned in the end.
+    """
     if dictionary is None:
         return tuple()
     assert isinstance(dictionary, dict)
@@ -77,11 +87,32 @@ def tuplify(dictionary):
 
 
 def dictify(iterable):
+    """
+    This function is used to convert an iterable 
+    datastructure to a dictionary.
+    --------------------------------------------
+    A checking is done if the object passed as
+    parameter is an iterable object or not. If it
+    is an iterable object then key,value pairs are
+    stored after every iterations in the dictionary.
+    It is then returned in the end.
+    """
     assert isinstance(iterable, Iterable)
     return {v: i for i, v in enumerate(iterable)}
 
 
 def dash_separated_ints(value):
+    """
+    This function is used to convert the digits in
+    a string format to integer values.
+    ----------------------------------------------
+    The elements in the string passed as parameter 
+    is spilt on basis of '-' character and stored 
+    in a list. After that on every iteraration in
+    the list each element of the list is tried to
+    convert to integer format if it a proper object
+    to get converted. Otherwise ValueError is thrown.
+    """
     vals = value.split("-")
     for val in vals:
         try:
