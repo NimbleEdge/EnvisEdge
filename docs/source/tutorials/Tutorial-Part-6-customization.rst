@@ -11,7 +11,7 @@ Good for non-persistent and dynamic settings like gpu device
 
 *In case of conflict, CLI argument supercedes config file parameter.*
 For further reference, check out `training config
-flags <configs/flags.md>`__
+flags <../../flags.md>`__
 
 Model Architecture
 ------------------
@@ -53,7 +53,7 @@ into registry.
            ... 
 
 You can define your own modules and add them in the
-`fedrec/modules <fedrec/modules>`__. Finally set the ``name`` flag of
+`fedrec/modules <../fedrec/fedrec.modules.rst>`__. Finally set the ``name`` flag of
 ``model`` tag in config file
 
 .. code::
