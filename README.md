@@ -120,7 +120,7 @@ To see how traning is done run the following command:
 $ python tests/integration_tests/integration_test.py --config configs/regression.yml
 ```
 # Demos and Tutorials
-You may find all the EnvisEdge related demos and tutorials [here](https://github.com/NimbleEdge/EnvisEdge/tree/refactor-user-module/docs).
+You may find all the EnvisEdge related demos and tutorials [here](https://github.com/NimbleEdge/EnvisEdge/blob/main/docs/Tutorial-Part-2-starting_with_nimbleedge.md).
 
 You may also find the official documentation [here](https://docs.nimbleedge.ai/).
 
