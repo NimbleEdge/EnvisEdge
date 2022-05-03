@@ -39,7 +39,7 @@ def to_dict_with_set_values(d):
     to remove the duplicate elements.
     ---------------------------------------------
     The key,value pairs in datatstucture passed as
-    parameter is iterated and then checked if the 
+    parameter is iterated and then checked if the
     values are lists then only they are appended to
     the new list created in tuple format.
     And if they are not lists then they are directly
