@@ -5,11 +5,11 @@ import torch
 
 def load_tensors(path):
     """
-    This function is used to load the tensors 
+    This function is used to load the tensors
     from the path passed as parameter.
     --------------------------------------------
     If a valid path is set as parameter then the
-    tensors are loaded and returned. Otherwise 
+    tensors are loaded and returned. Otherwise
     ValueError is thrown.
     """
     if os.path.isfile(path) == True:
@@ -21,11 +21,11 @@ def load_tensors(path):
 
 def to_dict_with_sorted_values(d, key=None):
     """
-    This function is used to convert the given 
-    datastructure which is passed as parameter 
-    to a dictionary. 
+    This function is used to convert the given
+    datastructure which is passed as parameter
+    to a dictionary.
     -------------------------------------------
-    The key and value pairs are extracted from 
+    The key and value pairs are extracted from
     the given datastructure to convert into a
     dictionary format.
     """
@@ -34,18 +34,18 @@ def to_dict_with_sorted_values(d, key=None):
 
 def to_dict_with_set_values(d):
     """
-    This function is used to create a dictionary by 
+    This function is used to create a dictionary by
     key,value pairs but by conversion to a set first
     to remove the duplicate elements.
     ---------------------------------------------
     The key,value pairs in datatstucture passed as
     parameter is iterated and then checked if the 
-    values are lists then only they are appended to 
-    the new list created in tuple format. 
+    values are lists then only they are appended to
+    the new list created in tuple format.
     And if they are not lists then they are directly
     appended to the new list.
-    In the end the values in the new list is 
-    converted to set values to remove duplicacy. 
+    In the end the values in the new list is
+    converted to set values to remove duplicacy.
     And finally they are put inside a new
     dictionary which is returned in the end.
     """
@@ -63,13 +63,13 @@ def to_dict_with_set_values(d):
 
 def save_tensors(tensors, path) -> str:
     """
-    This function is used to save the tensors 
+    This function is used to save the tensors
     that were loaded and passed as parameters.
     ------------------------------------------
     If the path is a valid path then the tensors
     are saved and the path is returned. Otherwise
-    multiple file paths are logically joined 
-    after OS Module interacts with the OS to 
+    multiple file paths are logically joined
+    after OS Module interacts with the OS to
     form a correct path and then the tensors are
     saved and the correct path is returned.
     """
@@ -90,8 +90,8 @@ def tuplify(dictionary):
     -------------------------------------------
     If the dictionary is empty then an empty tuple
     is returned. Otherwise it checks if the given
-    dictionary is a valid dictionary or not and 
-    the keys of the dictionary is stored in the 
+    dictionary is a valid dictionary or not and
+    the keys of the dictionary is stored in the
     tuple and then it is returned in the end.
     """
     if dictionary is None:
@@ -103,7 +103,7 @@ def tuplify(dictionary):
 
 def dictify(iterable):
     """
-    This function is used to convert an iterable 
+    This function is used to convert an iterable
     datastructure to a dictionary.
     --------------------------------------------
     A checking is done if the object passed as
@@ -121,8 +121,8 @@ def dash_separated_ints(value):
     This function is used to convert the integer
     numbers in a string format to integer values.
     ----------------------------------------------
-    The elements in the string passed as parameter 
-    is spilt on basis of '-' character and stored 
+    The elements in the string passed as parameter
+    is spilt on basis of '-' character and stored
     in a list. After that on every iteraration in
     the list each element of the list is tried to
     convert to integer format if it a proper object
@@ -145,8 +145,8 @@ def dash_separated_floats(value):
     This function is used to convert the float
     numbers in a string format to integer values.
     ----------------------------------------------
-    The elements in the string passed as parameter 
-    is spilt on basis of '-' character and stored 
+    The elements in the string passed as parameter
+    is spilt on basis of '-' character and stored
     in a list. After that on every iteraration in
     the list each element of the list is tried to
     convert to float format if it a proper object
