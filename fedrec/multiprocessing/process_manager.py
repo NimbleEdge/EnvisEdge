@@ -59,7 +59,7 @@ class RayProcessManager(ProcessManager):
                    num_instances: int,
                    *args, **kwargs) -> None:
         """
-        Allocates callable to separate Python worker to be 
+        Allocates callable to separate Python worker to be
         executed asynchronously
         
         Parameters
@@ -70,10 +70,10 @@ class RayProcessManager(ProcessManager):
             Name or type of runnable, acts as an identifier for the runnable
         num_instances : int
             Number of instances of the runnable to be processed asynchronously
-        *args : 
+        *args :
             Variable length keyword argument list.
-        **kwargs : 
-            Arbitrary keyword arguments: refer to ray.remote 
+        **kwargs :
+            Arbitrary keyword arguments: refer to ray.remote
             documentation for a list of all possible arguments.
         """
 
@@ -91,11 +91,11 @@ class RayProcessManager(ProcessManager):
         runnable_type : str
             Name or type of runnable, acts as an identifier for the runnable
         method : callable
-            the callable to be executed asynchronously 
-        *args : 
+            the callable to be executed asynchronously
+        *args :
             Variable length keyword argument list.
-        **kwargs : 
-            Arbitrary keyword arguments: refer to ray.remote 
+        **kwargs :
+            Arbitrary keyword arguments: refer to ray.remote
             documentation for a list of all possible arguments.
         """
         if callable(method):
