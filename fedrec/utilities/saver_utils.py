@@ -141,7 +141,7 @@ class Saver(object):
                         keep_every_n=self._keep_every_n, is_best=is_best)
 
     def restore_part(self, other_model_dir, remap):
-        """Restores part of the model from other directory with given remap. 
+        """Restores part of the model from other directory with given remap.
         Useful to initialize part of the model with another pretrained model and then update it.
         Args:
             other_model_dir: Model directory to load from.
