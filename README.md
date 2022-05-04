@@ -51,15 +51,15 @@ NimbleEdge/EnvisEdge
       ├── data_models                           <-- All data modules that will be used for communication and thier serializers and  deserializers
       ├── modules                               <-- All the modules related to transformers, embeddings etc.
       ├── multiprocessing                       <-- Modules to run parallel worker jobs
-      ├── optimization                          <-- Modules realted to torch optimizers and gradient decesnt etc.
+      ├── optimization                          <-- Modules related to torch optimizers and gradient decesnt etc.
       ├── python_executors                      <-- Contains worker modules eg. trainer and aggregator
       ├── serialization                         <-- serialization interfaces for data models
-      ├── user_modules                          <-- Envis modules for wrapping toech modules for users. 
+      ├── user_modules                          <-- Envis modules for wrapping torch modules for users. 
       └── utilities                             <-- Helper modules
 ├── fl_strategies                           <-- Federated learning algorithms for our services.
 ├── notebooks                               <-- Jupyter Notebook examples
 ├── scala-core                              <-- Backbone of EnvisEdge
-├── scripts                                 <-- bash scripts for creating and removing kfka topics.
+├── scripts                                 <-- bash scripts for creating and removing kafka topics.
 └── tests                                   <-- tests
 ``` 
   
