@@ -1,8 +1,8 @@
 documentation:
-- docs/**
+- docs/**/*
 
 scala:
-- scala_core/**
+- scala_core/**/*
 
 fedrec.communication_interfaces:
 - fedrec/communication_interfaces/**
