@@ -121,7 +121,7 @@ def construct(kind, config, unused_keys=(), **kwargs):
     Returns
     ----------
     object:
-        Constructed object using the parameters passed in config and **kwargs.
+        Constructed object using the parameters passed in config and \**kwargs.
 
     Examples
     ----------
@@ -164,7 +164,7 @@ def instantiate(callable, config, unused_keys=(), **kwargs):
     Returns
     ----------
     object:
-        Instantiated object by the parameters passed in config and **kwargs.
+        Instantiated object by the parameters passed in config and \**kwargs.
 
     Examples
     ----------

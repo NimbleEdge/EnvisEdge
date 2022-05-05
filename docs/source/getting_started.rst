@@ -38,7 +38,7 @@ Update the config files of the model (can be found
 `here <https://github.com/NimbleEdge/EnvisEdge/tree/main/configs>`__)
 you are going to use with logging directory:
 
-.. code:: yml
+.. code::
 
    log_dir:
      PATH: <path to your logging directory>

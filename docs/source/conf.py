@@ -90,7 +90,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ["*.yml"]
+exclude_patterns = ["*.yaml, *.yml"]
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -355,10 +355,12 @@ nitpick_ignore = [
     ("py:attr", "max_norm"),
     ("py:attr", "per_sample_weights"),
     ("py:attr", "scale_grad_by_freq"),
+    ("py:attr", "weight"),
     # Suppress warnings for missing references in type annotations
     ("py:class", "ActorState"),
     ("py:class", "KafkaConsumer"),
     ("py:class", "KafkaProducer"),
+    ("py:class", "AbstractSerializer"),
     ("py:class", "numpy.dtype"),
     ("py:class", "numpy.ndarray"),
     ("py:class", "pandas.core.series.Series"),

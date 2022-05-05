@@ -14,12 +14,12 @@ def is_primitives(obj):
 class Serializable(Registrable, ABC):
     """Abstract class for serializers and deserializers.
 
-    Attributes:
+    Attributes
     -----------
     serializer: str
         The serializer to use.
 
-    Methods:
+    Methods
     --------
     serialize(obj):
         Serializes an object.
@@ -42,12 +42,12 @@ class Serializable(Registrable, ABC):
         """Generates a dictionary from an object and
          appends type information for finding the appropriate serialiser.
 
-        Parameters:
+        Parameters
         -----------
         obj: object
             The object to serialize.
 
-        Returns:
+        Returns
         --------
         dict:
             The dictionary representation of the object.

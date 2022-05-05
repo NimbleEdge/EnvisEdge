@@ -219,7 +219,7 @@ class QREmbeddingBag(nn.Module):
             .. note::
                 This option is not supported when ``mode="max"``.
 
-    Attributes:
+    Attributes
         weight (Tensor):
             the learnable weights of each embedding table
             is the module of shape `(num_embeddings, embedding_dim)`
@@ -250,7 +250,7 @@ class QREmbeddingBag(nn.Module):
             :attr:`offsets`, if those are not ``None``.
             Only supported for ``mode='sum'``.
 
-    Returns:
+    Returns
         The output tensor of shape `(B, embedding_dim)`
 
     """  # noqa: E501

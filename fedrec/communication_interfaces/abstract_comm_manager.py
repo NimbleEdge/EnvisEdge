@@ -32,12 +32,12 @@ class AbstractCommunicationManager(ABC):
         """
         Serializes a message.
 
-        Parameters:
+        Parameters
         -----------
         obj: object
             The message to serialize.
 
-        Returns:
+        Returns
         --------
         message: str
             The serialized message.
@@ -49,12 +49,12 @@ class AbstractCommunicationManager(ABC):
         """
         Deserializes a message.
 
-        Parameters:
+        Parameters
         -----------
         message: str
             The message to deserialize.
 
-        Returns:
+        Returns
         --------
         message: object
             The deserialized message.

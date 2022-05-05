@@ -19,7 +19,7 @@ class SerializationStrategy(registry.Registrable, ABC):
 class JSONSerialization(SerializationStrategy):
     """Uses json serialization strategy for objects.
 
-    Attributes:
+    Attributes
     ----------
     serializer: str
         The serializer to use.
@@ -28,11 +28,11 @@ class JSONSerialization(SerializationStrategy):
     def parse(self, obj):
         """Serializes a python object to json.
 
-        Parameters:
+        Parameters
         -----------
         obj: object
             The object to serialize.
-        Returns:
+        Returns
         --------
         str
         """
@@ -42,11 +42,11 @@ class JSONSerialization(SerializationStrategy):
         """Deserializes the json object to python object
          as per the `type` mentioned in the json dictionary.
 
-        Parameters:
+        Parameters
         -----------
         obj: object
             The object to deserialize.
-        Returns:
+        Returns
         --------
         object
         """

@@ -82,7 +82,7 @@ class Kafka(AbstractCommunicationManager):
         """
         Receives a message from the kafka broker.
 
-        Returns:
+        Returns
         --------
         message: object
             The message received.

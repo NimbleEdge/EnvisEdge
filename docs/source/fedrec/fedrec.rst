@@ -7,24 +7,17 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   fedrec.communications
-   fedrec.datasets
+   fedrec.communication_interfaces
+   fedrec.data_models
    fedrec.modules
    fedrec.multiprocessing
    fedrec.optimization
    fedrec.serialization
+   fedrec.user_modules
    fedrec.utilities
 
 Submodules
 ----------
-
-fedrec.preprocessor module
---------------------------
-
-.. automodule:: fedrec.preprocessor
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 fedrec.worker\_dataset module
 -----------------------------
