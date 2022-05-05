@@ -51,14 +51,15 @@ class TrainerState(ActorState):
 
     @classmethod
     def deserialize(cls, obj: Dict):
-        """Function takes in a dictionary of serialized attributes and returns a deserialized new object.
+        """Function takes in a dictionary of serialized attributes and
+           returns a deserialized new object.
 
-        Attribute
-        ---------
-        cls : tuple
-          Contains deserialized object 
+        Attributes
+        ----------
         obj : dict
            Contains serialized dictionary
+        cls : tuple
+           Contains deserialized object
 
         """
         state_dict = deserialize_attribute(
