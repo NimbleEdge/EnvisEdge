@@ -86,7 +86,7 @@ class Kafka(AbstractCommunicationManager):
         --------
         message: object
             The message received.
-        # """
+        """
         if not self.consumer:
             raise Exception("No consumer defined")
         return next(self.consumer).value
