@@ -59,7 +59,7 @@ class RayProcessManager(ProcessManager):
                    num_instances: int,
                    *args, **kwargs) -> None:
         """
-        Allocates callable to separate Python worker to be
+        Allocates child processes to separate Python worker to be
         executed asynchronously
         
         Parameters
@@ -84,7 +84,7 @@ class RayProcessManager(ProcessManager):
 
     def start(self, runnable_type, method, *args, **kwargs) -> None:
         """
-        Executes asychronous processing of callable
+        Executes asychronous processing of child processes
         
         Parameters
         ----------
