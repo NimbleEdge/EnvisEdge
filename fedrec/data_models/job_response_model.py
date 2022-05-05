@@ -51,7 +51,17 @@ class JobResponseMessage(Message):
             return False
 
     def serialize(self):
-        # pack the arguments after serilization into the resposne dict
+        """
+        Converts the data objects (job response message) to a dictionary
+        format that allows for the storage or transmission of this data.
+        (i.e in our case this data is published on kafka.)
+
+        Returns
+        -------
+        `Serialized Response`
+            The serialized class object to be written
+            to JSON or persisted into the file.
+        """
         response_dict = {}
         response_dict["job_type"] = self.job_type
         response_dict["senderid"] = self.senderid
@@ -62,7 +72,23 @@ class JobResponseMessage(Message):
 
     @classmethod
     def deserialize(cls, obj: Dict):
-        # unpack the response dict to create the class object
+        """
+        Recreates the response message objects from data that is published
+        no kafka by unpacking the values and creating a class object.
+
+        Parameters
+        ----------
+        cls : tuple
+            the returned output that holds the deserialized objects.
+        obj : dict
+            dict of the serialized objects.
+
+        Returns
+        -------
+        `Deserialised Response`
+            Deserialises the serialized response(dict)
+            and returns it as an object(tuple).
+        """
         return cls(obj["job_type"],
                    obj["senderid"],
                    obj["receiverid"],
