@@ -134,7 +134,7 @@ Hosting the models
 ~~~~~~~~~~~~~~~~~~
 
 Finally, we host all the plans and global model weights and make them
-avaialble to beb downloaded by the workers.
+available to be downloaded by the workers.
 
 .. code:: python
 
