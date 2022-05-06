@@ -1,0 +1,41 @@
+documentation:
+- docs/**/*
+
+scala:
+- scala_core/**/*
+
+fedrec.communication_interfaces:
+- fedrec/communication_interfaces/**
+
+fedrec.data_models:
+- fedrec/data_models/**
+
+fedrec.datasets:
+- fedrec/datasets/**
+
+fedrec.modules:
+- fedrec/modules/**
+
+fedrec.multiprocessing:
+- fedrec/multiprocessing/**
+
+fedrec.optimization:
+- fedrec/optimization/**
+
+fedrec.python_executors:
+- fedrec/python_executors/**
+
+fedrec.serialilzation:
+- fedrec/serialization/**
+
+fedrec.user_modules:
+- fedrec/user_modules/**
+
+fedrec.utilities:
+- fedrec/utilities/**
+
+fl_strategies:
+- fl_strategies/**
+
+experiments:
+- experiments/**
