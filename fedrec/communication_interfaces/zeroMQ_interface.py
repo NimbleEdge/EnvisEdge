@@ -47,7 +47,7 @@ class ZeroMQ(AbstractCommunicationManager):
 
     def receive_message(self):
         """
-        Receives a message from the ZeroMQ subscriber
+        This receives a message from the ZeroMQ subscriber
         """
         if not self.subscriber:
             raise Exception("No subscriber defined")
