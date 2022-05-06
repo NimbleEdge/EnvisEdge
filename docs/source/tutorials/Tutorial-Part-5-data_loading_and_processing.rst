@@ -10,6 +10,24 @@ This tutorial is consists of four parts:
 
 Data Interfaces
 ---------------
+This section describes how to implement a getItem and length for dataset interface.  First, you have to understand what a dataset interface is, and how to implement it using get item and length.
+
+## What is a Dataset Interface.
+The purpose of the dataset interface is to provide a mechanism to describe the properties of datasets.  A dataset is composed of a collection of raw data points and describes the data points. The interface is designed in such a way as to allow new features to be added without disrupting current applications that use the dataset interface. Dataset interface give you the access to a collection of data point that you use the getItem to pick a specific data point to work with.
+
+## Using getItem and Length.
+This method below is called to fetch a data sample for a given key, if there is a specific data you need to fetch from the dataset Interface then this would work for you.
+
+fun getItem(index: Int): List<IValue>
+Using ‘val length:Int’ method you are calling the method to return the size of the dataset and overriding it as well.
+
+.. code:: kotlin
+
+interface Dataset {
+  
+    val length: Int
+    fun getItem(index: Int): List<IValue>
+}
 
 
 Data Loaders
