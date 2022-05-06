@@ -10,7 +10,12 @@ CHECKPOINT_PATTERN = re.compile('^model_checkpoint-(\d+)$')
 
 
 class ArgsDict(dict):
-
+    """A dictionary that can be accessed by attributes.
+    
+    Args:
+        self: The dict itself.
+        **kwargs: Keyword arguments to be passed to the dict.
+    """
     def __init__(self, **kwargs):
         super(ArgsDict, self).__init__()
         for key, value in kwargs.items():
@@ -19,6 +24,13 @@ class ArgsDict(dict):
 
 
 def create_link(original, link_name):
+    """Create a link to the latest checkpoint.
+   
+    Args:
+        original: The original checkpoint.
+        link_name: The link to create.
+    """
+
     if os.path.islink(link_name):
         os.unlink(link_name)
     try:
@@ -32,6 +44,16 @@ def load_checkpoint(model,
                     model_dir,
                     map_location=None,
                     step=None):
+    """Here function will load the latest checkpoint
+    after optimization for the model
+    
+    Args:
+        model: The model to load the checkpoint for.
+        optimizer: The optimizer to load the checkpoint for.
+        model_dir: The directory to load the checkpoint from.
+        map_location: The location to map the loaded parameters to.
+        step: The step to load the checkpoint for.
+    """
     path = os.path.join(model_dir, 'model_checkpoint')
     if step is not None:
         path += '-{:08d}'.format(step)
@@ -45,6 +67,14 @@ def load_checkpoint(model,
 
 
 def load_and_map_checkpoint(model, model_dir, remap):
+    """Load and store map checkpoints for
+    mapping the parameters of the model
+
+    Args:
+        model: The model to load the checkpoint for.
+        model_dir: The directory to load the checkpoint from.
+        remap: The remap to store the checkpoint for.
+    """
     path = os.path.join(model_dir, 'model_checkpoint')
     print("Loading parameters %s from %s" % (remap.keys(), model_dir))
     checkpoint = torch.load(path)
@@ -63,6 +93,19 @@ def save_checkpoint(model,
                     is_best,
                     ignore=[],
                     keep_every_n=10000000):
+    """This will save checkpoint for the model and
+    generate a link to the latest checkpoint
+
+    Args:
+        model: The model to save the checkpoint for.
+        optimizer: The optimizer to save the checkpoint for.
+        step: The step to save the checkpoint for.
+        epoch: The epoch to save the checkpoint for.
+        model_dir: The directory to save the checkpoint to.
+        is_best: Whether this is the best checkpoint.
+        ignore: The parameters to ignore when saving.
+        keep_every_n: The number of checkpoints to keep.
+    """
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)
     path_without_step = os.path.join(model_dir, 'model_checkpoint')
@@ -103,7 +146,14 @@ def save_checkpoint(model,
 
 
 class Saver(object):
-    """Class to manage save and restore for the model and optimizer."""
+    """Class to manage save and restore for the
+    model, optimizer and the every n step
+
+    Args:
+        model: The model to save the checkpoint for.
+        optimizer: The optimizer to save the checkpoint for.
+        keep_every_n: The number of checkpoints to keep.
+    """
 
     def __init__(self, model, optimizer, keep_every_n=None):
         self._model = model
@@ -112,8 +162,15 @@ class Saver(object):
 
     def restore(self, model_dir=None, map_location=None, step=None):
         """Restores model and optimizer from given directory.
+
+        Args:
+            model_dir: The directory to load the checkpoint from.
+            map_location: The location to map the loaded parameters to.
+            step: The step to load the checkpoint for.
+
         Returns:
            Last training step for the model restored.
+
         """
         if model_dir is None:
             return 0, 0
@@ -122,7 +179,8 @@ class Saver(object):
         return last_step, epoch
 
     def save(self, model_dir, step, epoch, is_best=False):
-        """Saves model and optimizer to given directory.
+        """Saves model and optimizer to given directory with given step.
+
         Args:
            model_dir: Model directory to save. If None ignore.
            step: Current training step.
@@ -133,8 +191,11 @@ class Saver(object):
                         keep_every_n=self._keep_every_n, is_best=is_best)
 
     def restore_part(self, other_model_dir, remap):
-        """Restores part of the model from other directory.
-        Useful to initialize part of the model with another pretrained model.
+        """Restores part of the model from other directory with given remap.
+
+        Useful to initialize part of the model with another
+        pretrained model and then update it.
+        
         Args:
             other_model_dir: Model directory to load from.
             remap: dict, remapping current parameters to the other model's.
