@@ -10,15 +10,59 @@ lifecycle of federated learning and set the standard definitions.
 fantastic survey of the current literature on Federated Learning. We
 quote them to define Federated Learning
 
-   **Federated learning**\ *is a machine learning setting where multiple
+   **Federated learning**\ * is a machine learning setting where multiple
    entities (*\ `clients <#clients>`__\ *) collaborate in solving a
    machine learning problem, under the coordination of a central server
    or service provider. Each client’s raw data is stored locally and not
-   exchanged or transferred; instead,focused updates intended for
+   exchanged or transferred; instead ,focused updates intended for
    immediate aggregation are used to achieve the learning objective.*
 
-Types of federated learning: - Cross silo Federated Learning - Cross
-device Federated Learning - Vertical Federated Learning
+
+Types of Federated learning
+---------------------------
+
+Federated Learning is broadly classified as 
+
+* **Model Centric:**
+  
+  When the distributed data is used to improve a central model with
+  a goal of delivering better centrally administered models, it is known
+  as Model-Centric Federated Learning.
+
+
+  Model Centric Federated Learning is further classifid into:
+  
+  * **Cross-Device Federated Learning**
+    
+    When Federated Learning takes place through suitable federated techniques
+    from data across a wide range of devices.
+
+    Typically, Cross-Device FL uses Horizontal Federated Learning
+    
+
+    * So when data sets share the same features but are different in samples.
+    * This is also called as Homogeneous Federated Learning.
+    * Supervised Learning uses Horizontal datasets.
+  
+  * **Cross-Silo Federated Learning**
+
+    Similar to Cross-Device FL, this FL aims to create a more centrally sound model.
+
+    But, instead of small concentration of data, here humongous amounts of data are
+    stored in clusters like Hadoop/Spark.
+
+    Here data sets are partitioned Vertically. Lets take a look at Vertical-FL.
+
+    * When the data set has similar samples, but has different feature sets, it is known
+      as Vertical-FL.
+   
+* **Data-Centric FL:**
+
+  * Data Centric Federated Learning is where private users can give organisations
+    access to build models on their data without sharing it.
+
+  * This concept can be further expaned to a Cloud of Cross-Silo FL, where similar
+    strategy could be implemented.
 
 Clients
 ~~~~~~~
