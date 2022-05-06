@@ -1,5 +1,5 @@
-Local Training
-==============
+Local Training on Android
+=========================
 
 On-device Training
 ------------------
