@@ -1,3 +1,7 @@
+"""ZeroMQ messaging library used in distributed or 
+concurrent applications and provides a message queue, 
+capable of running without a dedicated message broker.
+"""
 import zmq
 from zmq import Context
 from fedrec.utilities import registry
@@ -16,6 +20,16 @@ class ZeroMQ(AbstractCommunicationManager):
                  publisher_url="127.0.0.1",
                  publisher_topic=None,
                  protocol="tcp"):
+        """
+        Setting up a ZeroMQ publisher and subscriber using 
+        the connection details.
+        Parameters
+        ----------
+        subscriber : object
+            specifies it needs a ZeroMQ subscriber
+        publisher : object
+            specifies it needs a ZeroMQ publisher
+        """
         self.context = Context()
 
         if subscriber:
@@ -32,16 +46,31 @@ class ZeroMQ(AbstractCommunicationManager):
             self.publisher.connect(self.publisher_url)
 
     def receive_message(self):
+        """
+        Receives a message from the ZeroMQ subscriber
+        """
         if not self.subscriber:
             raise Exception("No subscriber defined")
         return self.subscriber.recv_multipart()
 
     def send_message(self, message):
+        """
+        Sends a message to the ZeroMQ publisher after 
+        receiving from the subscriber.
+        Parameters
+        ----------
+        message : object
+            Publishes a message to the zeromq publisher
+        """
         if not self.publisher:
             raise Exception("No publisher defined")
         self.publisher.send_pyobj(message)
 
     def close(self):
+        """
+        This function is called at the end to close the 
+        connection and terminate the context.
+        """
         if self.publisher:
             self.publisher.close()
         elif self.subscriber:
