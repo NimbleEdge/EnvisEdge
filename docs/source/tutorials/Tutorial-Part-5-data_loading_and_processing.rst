@@ -195,3 +195,240 @@ As the name suggests, it samples the elements sequentially and always in the sam
 
 Walkthrough using an example
 ----------------------------
+
+This tutorial explains about the class MNISTDataset. The use of MNIST Dataset is to create an object of it and use it to pass further into the dataLoader object. The MNIST class implements Dataset Interface and its primary constructor ask for a Resources object. First we have to specify the FEATURESIZE and DATASET_LENGTH as global constant variables.
+
+Step 1: Define Methods 
+returnDataLoader()
+returnLabelReader() 
+
+.. code:: kotlin
+
+  private fun returnDataReader() = BufferedReader(
+        InputStreamReader(
+            resources.openRawResource(R.raw.pixels)
+        )
+    )
+
+    private fun returnLabelReader() = BufferedReader(
+        InputStreamReader(
+            resources.openRawResource(R.raw.labels)
+        )
+    )
+
+These methods will be used for instantiating trainDataReader and labelDataReader variables by using resources object
+
+Step 2: Defining necessary variables
+
+Defining variables listed below 
+
+.. code:: kotlin
+
+private var trainDataReader = returnDataReader()
+private var labelDataReader = returnLabelReader()
+private val oneHotMap = HashMap<Int, List<Float>>()
+private val trainInput = arrayListOf<List<Float>>()
+private val labels = arrayListOf<List<Float>>()
+
+Step 3: restartReader() method 
+
+This method kills the initialized trainDataReader and labelDataReader and creates new instances of both the variables
+
+.. code:: kotlin
+
+   private fun restartReader() {
+        trainDataReader.close()
+        labelDataReader.close()
+        trainDataReader = returnDataReader()
+        labelDataReader = returnLabelReader()
+    }
+
+Step 4: readLine() method
+
+This method takes nothing and returns a Pair Object which is basically a pair of two Lists by reading the dataset. This method will be used to create a sample object.
+
+.. code:: kotlin
+
+private fun readLine(): Pair<List<String>, List<String>> {
+        var x = trainDataReader.readLine()?.split(",")
+        var y = labelDataReader.readLine()?.split(",")
+        if (x == null || y == null) {
+            restartReader()
+            x = trainDataReader.readLine()?.split(",")
+            y = labelDataReader.readLine()?.split(",")
+        }
+        if (x == null || y == null)
+            throw Exception("cannot read from dataset file")
+        return Pair(x, y)
+    }
+
+Step 5: Defining ReadSample() and ReadAllData() methods
+
+First we will create the ReadSample method which just takes two arraylists of type List<Float>as parameters (trainInput, labels) and them simply fills the two arraylists taken as parameters by using a sample variable which is defined using readLine(). As this method does this job once we need a method to call this method n number of times so we will create another method called ReadAllData().
+This method simply just calls ReadSample() the times of Dataset length defined as constant at starting of the program.
+
+.. code:: kotlin 
+
+private fun readSample(
+        trainInput: ArrayList<List<Float>>,
+        labels: ArrayList<List<Float>>
+    ) {
+        val sample = readLine()
+
+        trainInput.add(
+            sample.first.map { it.trim().toFloat() }
+        )
+        labels.add(
+            sample.second.map { it.trim().toFloat() }
+        )
+    }
+    
+    private fun readAllData() {
+        for (i in 0 until DATASET_LENGTH)
+            readSample(trainInput, labels)
+    }
+
+Step 6: Init {}
+
+Inside the init {} we will fill up the oneHotMap HashMap conditionally on the basis of index values and just call ReadAllData() method
+
+.. code:: kotlin
+
+init {
+        (0..9).forEach { i ->
+            oneHotMap[i] = List(10) { idx ->
+                if (idx == i)
+                    1.0f
+                else
+                    0.0f
+            }
+        }
+
+        readAllData()
+    }
+
+Step 7: getItem() method and length variable
+
+We are basically implementing the getItem() method and length variable from the Dataset class. The getItem() method will be used outside the class once we create an object of the MNISTDataset class. In the definition of the getItem() method it takes in the index number and returns a list of IValue Objects. The Ivalue is nothing but a locator value which describes certain location took in memory. The length variable stores the length of training inputs.
+
+ override val length: Int = trainInput.size
+
+    override fun getItem(index: Int): List<IValue> {
+        val trainingData = IValue.from(
+            Tensor.fromBlob(
+                trainInput[index].toFloatArray(),
+                longArrayOf(1, FEATURESIZE.toLong())
+            )
+        )
+
+        val trainingLabel = IValue.from(
+            Tensor.fromBlob(
+                labels[index].toFloatArray(),
+                longArrayOf(1, 10)
+            )
+        )
+
+        return listOf(trainingData, trainingLabel)
+    }
+
+MNISTDataset.Kt
+
+.. code:: kotlin
+
+private const val FEATURESIZE = 784
+private const val DATASET_LENGTH = 1000
+
+class MNISTDataset(private val resources: Resources) : Dataset {
+
+    private var trainDataReader = returnDataReader()
+    private var labelDataReader = returnLabelReader()
+    private val oneHotMap = HashMap<Int, List<Float>>()
+
+    private val trainInput = arrayListOf<List<Float>>()
+    private val labels = arrayListOf<List<Float>>()
+
+    init {
+        (0..9).forEach { i ->
+            oneHotMap[i] = List(10) { idx ->
+                if (idx == i)
+                    1.0f
+                else
+                    0.0f
+            }
+        }
+
+        readAllData()
+    }
+
+    override val length: Int = trainInput.size
+
+    override fun getItem(index: Int): List<IValue> {
+        val trainingData = IValue.from(
+            Tensor.fromBlob(
+                trainInput[index].toFloatArray(),
+                longArrayOf(1, FEATURESIZE.toLong())
+            )
+        )
+
+        val trainingLabel = IValue.from(
+            Tensor.fromBlob(
+                labels[index].toFloatArray(),
+                longArrayOf(1, 10)
+            )
+        )
+
+        return listOf(trainingData, trainingLabel)
+    }
+
+    private fun readAllData() {
+        for (i in 0 until DATASET_LENGTH)
+            readSample(trainInput, labels)
+    }
+
+    private fun readSample(
+        trainInput: ArrayList<List<Float>>,
+        labels: ArrayList<List<Float>>
+    ) {
+        val sample = readLine()
+
+        trainInput.add(
+            sample.first.map { it.trim().toFloat() }
+        )
+        labels.add(
+            sample.second.map { it.trim().toFloat() }
+        )
+    }
+
+    private fun readLine(): Pair<List<String>, List<String>> {
+        var x = trainDataReader.readLine()?.split(",")
+        var y = labelDataReader.readLine()?.split(",")
+        if (x == null || y == null) {
+            restartReader()
+            x = trainDataReader.readLine()?.split(",")
+            y = labelDataReader.readLine()?.split(",")
+        }
+        if (x == null || y == null)
+            throw Exception("cannot read from dataset file")
+        return Pair(x, y)
+    }
+
+    private fun restartReader() {
+        trainDataReader.close()
+        labelDataReader.close()
+        trainDataReader = returnDataReader()
+        labelDataReader = returnLabelReader()
+    }
+
+    private fun returnDataReader() = BufferedReader(
+        InputStreamReader(
+            resources.openRawResource(R.raw.pixels)
+        )
+    )
+
+    private fun returnLabelReader() = BufferedReader(
+        InputStreamReader(
+            resources.openRawResource(R.raw.labels)
+        )
+    )
+
+}
