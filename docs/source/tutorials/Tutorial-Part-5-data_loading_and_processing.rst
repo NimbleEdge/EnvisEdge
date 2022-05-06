@@ -10,38 +10,34 @@ This tutorial is consists of four parts:
 
 Data Interfaces
 ---------------
-This section describes how to implement a getItem and length for dataset interface.  First, you have to understand what a dataset interface is, and how to implement it using get item and length.
 
-## What is a Dataset Interface.
-The purpose of the dataset interface is to provide a mechanism to describe the properties of datasets.  A dataset is composed of a collection of raw data points and describes the data points. The interface is designed in such a way as to allow new features to be added without disrupting current applications that use the dataset interface. Dataset interface give you the access to a collection of data point that you use the getItem to pick a specific data point to work with.
+This section describes how to implement a getItem and length for the dataset interface. First, you have to understand what it is, and how to implement it using get item and length.
 
-## Using getItem and Length.
-This method below is called to fetch a data sample for a given key, if there is a specific data you need to fetch from the dataset Interface then this would work for you.
-
-fun getItem(index: Int): List<IValue>
-Using ‘val length:Int’ method you are calling the method to return the size of the dataset and overriding it as well.
+The dataset interface is to provide a mechanism to describe the properties of datasets. It is composed of a collection of raw data points and describes the data points. It is designed in such a way as to allow new features to be added without disrupting current applications that use the dataset interface. It gives you access to a collection of data points that you use the getItem to pick a specific data point to work with.
+  
+  * length: It describes the length of the dataset.
+  * getItem(): It fetches a data sample for a given key. 
 
 .. code:: kotlin
 
-interface Dataset {
-  
-    val length: Int
-    fun getItem(index: Int): List<IValue>
-}
+    interface Dataset {
+
+        val length: Int
+        fun getItem(index: Int): List<IValue>
+    }
 
 
 Data Loaders
 ------------
 
-In this section we will discuss how to use the data loaders to load and
-iterate through a dataset.
+In this section, we will discuss how to use the data loaders to load and iterate through a dataset.
 
 #. Dataloader
 #. Dataloader-iterators
 
 
 DataLoader
-------------
+~~~~~~~~~~
 
 This is the base class that defines the implementation of all DataLoaders.
 It’s an integral part of handling the entire Extract Transform Load (ETL) pipeline process of a dataset. It is an Iteratable object(dataset)
@@ -59,12 +55,12 @@ It’s an integral part of handling the entire Extract Transform Load (ETL) pipe
 
 
 Dataloader-iterator
--------------------
+~~~~~~~~~~~~~~~~~~~
 
 It’s used to load that dataset in samples and chunks.
 
     * dataLoader: this input is used to define the loading and sampling process of a particular dataset
-    * next(): this uses uses a specified index range to fetch and load data in chunks
+    * next(): this uses a specified index range to fetch and load data in chunks
     * hasNext(): this checks if the current index exists in the range of the dataset and returns true if there the current index is less than the length of the dataset otherwise false.
 
 
@@ -96,8 +92,8 @@ It’s used to load that dataset in samples and chunks.
 Data Samplers
 -------------
 
-In this section we will discuss how to use the data samplers to create a
-dataset of a fixed size. We will walk through the following various types of data samplers like:
+In this section, we will discuss how to use the data samplers to create a
+dataset of a fixed size. We will walk through the following various types of data samplers:
 
 #. Sampler
 #. Batch Sampler
@@ -107,7 +103,7 @@ dataset of a fixed size. We will walk through the following various types of dat
 Sampler
 ~~~~~~~~
 
-It’s the base for all Samplers. Whenever we create a sampler or a subclass of sampler, we need to provide two methods named Indices and length
+It’s the base for all Samplers. Whenever we create a sampler or a subclass of the sampler, we need to provide two methods named Indices and length
 
     * Indices: it provides a way to iterate over indices of dataset elements.
     * Length: It returns the length of the returned iterators.
@@ -124,11 +120,11 @@ It’s the base for all Samplers. Whenever we create a sampler or a subclass of 
 Batch Samplers
 ~~~~~~~~~~~~~~~~
 
-As the name suggests Batch, It process the samplers in a batch or group. It wraps another sampler to yield a mini-batch of indices. It has three properties:
+As the name suggests Batch, It processes the samplers in a batch or group. It wraps another sampler to yield a mini-batch of indices. It has three properties:
 
-    * indexer- It’s a base sampler which can be any iterable object.
+    * indexer- It’s a base sampler that can be any iterable object.
     * batchSize - The Size of mini-batch
-    * dropLast - If its value is True and the size would less than batchSize then the sampler will drop the last batch.
+    * dropLast - If its value is True and the size would be less than batchSize then the sampler will drop the last batch.
 
 .. code:: kotlin
 
@@ -214,11 +210,11 @@ As the name suggests, it samples the elements sequentially and always in the sam
 Walkthrough using an example
 ----------------------------
 
-This tutorial explains about the class MNISTDataset. The use of MNIST Dataset is to create an object of it and use it to pass further into the dataLoader object. The MNIST class implements Dataset Interface and its primary constructor ask for a Resources object. First we have to specify the FEATURESIZE and DATASET_LENGTH as global constant variables.
+This tutorial explains the class MNISTDataset. The use of the MNIST Dataset is to create an object of it and use it to pass further into the dataLoader object. The MNIST class implements Dataset Interface and its primary constructor asks for a Resources object. First, we have to specify the ``FEATURESIZE`` and ``DATASET_LENGTH as global constant variables.
 
 Step 1: Define Methods 
-returnDataLoader()
-returnLabelReader() 
+* returnDataLoader()
+* returnLabelReader() 
 
 .. code:: kotlin
 
@@ -234,7 +230,7 @@ returnLabelReader()
         )
     )
 
-These methods will be used for instantiating trainDataReader and labelDataReader variables by using resources object
+These methods will be used for instantiating ``trainDataReader`` and ``labelDataReader`` variables by using the resources object
 
 Step 2: Defining necessary variables
 
@@ -242,15 +238,15 @@ Defining variables listed below
 
 .. code:: kotlin
 
-private var trainDataReader = returnDataReader()
-private var labelDataReader = returnLabelReader()
-private val oneHotMap = HashMap<Int, List<Float>>()
-private val trainInput = arrayListOf<List<Float>>()
-private val labels = arrayListOf<List<Float>>()
+    private var trainDataReader = returnDataReader()
+    private var labelDataReader = returnLabelReader()
+    private val oneHotMap = HashMap<Int, List<Float>>()
+    private val trainInput = arrayListOf<List<Float>>()
+    private val labels = arrayListOf<List<Float>>()
 
-Step 3: restartReader() method 
+Step 3: ``restartReader()``method 
 
-This method kills the initialized trainDataReader and labelDataReader and creates new instances of both the variables
+This method kills the initialized ``trainDataReader`` and ``labelDataReader`` and creates new instances of both the variables
 
 .. code:: kotlin
 
@@ -261,122 +257,75 @@ This method kills the initialized trainDataReader and labelDataReader and create
         labelDataReader = returnLabelReader()
     }
 
-Step 4: readLine() method
+Step 4: ``readLine()`` method
 
-This method takes nothing and returns a Pair Object which is basically a pair of two Lists by reading the dataset. This method will be used to create a sample object.
+This method takes nothing and returns a Pair Object which is a pair of two Lists by reading the dataset. This method will be used to create a sample object.
 
 .. code:: kotlin
 
-private fun readLine(): Pair<List<String>, List<String>> {
-        var x = trainDataReader.readLine()?.split(",")
-        var y = labelDataReader.readLine()?.split(",")
-        if (x == null || y == null) {
-            restartReader()
-            x = trainDataReader.readLine()?.split(",")
-            y = labelDataReader.readLine()?.split(",")
+    private fun readLine(): Pair<List<String>, List<String>> {
+            var x = trainDataReader.readLine()?.split(",")
+            var y = labelDataReader.readLine()?.split(",")
+            if (x == null || y == null) {
+                restartReader()
+                x = trainDataReader.readLine()?.split(",")
+                y = labelDataReader.readLine()?.split(",")
+            }
+            if (x == null || y == null)
+                throw Exception("cannot read from dataset file")
+            return Pair(x, y)
         }
-        if (x == null || y == null)
-            throw Exception("cannot read from dataset file")
-        return Pair(x, y)
-    }
 
-Step 5: Defining ReadSample() and ReadAllData() methods
+Step 5: Defining ``ReadSample()`` and ``ReadAllData()`` methods
 
-First we will create the ReadSample method which just takes two arraylists of type List<Float>as parameters (trainInput, labels) and them simply fills the two arraylists taken as parameters by using a sample variable which is defined using readLine(). As this method does this job once we need a method to call this method n number of times so we will create another method called ReadAllData().
-This method simply just calls ReadSample() the times of Dataset length defined as constant at starting of the program.
+First, we will create the ReadSample method which just takes two arraylists of type ``List<Float>as parameters (trainInput, labels)`` and then simply fills the two arraylists taken as parameters by using a sample variable which is defined using ``readLine()``. As this method does this job once we need a method to call this method n number of times so we will create another method called ``ReadAllData()``.
+This method simply just calls  ``ReadSample()`` the times of Dataset length defined as constant at starting of the program.
 
 .. code:: kotlin 
 
-private fun readSample(
-        trainInput: ArrayList<List<Float>>,
-        labels: ArrayList<List<Float>>
-    ) {
-        val sample = readLine()
+      private fun readSample(
+              trainInput: ArrayList<List<Float>>,
+              labels: ArrayList<List<Float>>
+          ) {
+              val sample = readLine()
 
-        trainInput.add(
-            sample.first.map { it.trim().toFloat() }
-        )
-        labels.add(
-            sample.second.map { it.trim().toFloat() }
-        )
-    }
-    
-    private fun readAllData() {
-        for (i in 0 until DATASET_LENGTH)
-            readSample(trainInput, labels)
-    }
+              trainInput.add(
+                  sample.first.map { it.trim().toFloat() }
+              )
+              labels.add(
+                  sample.second.map { it.trim().toFloat() }
+              )
+          }
+
+          private fun readAllData() {
+              for (i in 0 until DATASET_LENGTH)
+                  readSample(trainInput, labels)
+          }
 
 Step 6: Init {}
 
-Inside the init {} we will fill up the oneHotMap HashMap conditionally on the basis of index values and just call ReadAllData() method
+Inside the ``init {}`` we will fill up the oneHotMap HashMap conditionally based on index values and just call the ReadAllData() method
 
 .. code:: kotlin
-
-init {
-        (0..9).forEach { i ->
-            oneHotMap[i] = List(10) { idx ->
-                if (idx == i)
-                    1.0f
-                else
-                    0.0f
-            }
-        }
-
-        readAllData()
-    }
-
-Step 7: getItem() method and length variable
-
-We are basically implementing the getItem() method and length variable from the Dataset class. The getItem() method will be used outside the class once we create an object of the MNISTDataset class. In the definition of the getItem() method it takes in the index number and returns a list of IValue Objects. The Ivalue is nothing but a locator value which describes certain location took in memory. The length variable stores the length of training inputs.
-
- override val length: Int = trainInput.size
-
-    override fun getItem(index: Int): List<IValue> {
-        val trainingData = IValue.from(
-            Tensor.fromBlob(
-                trainInput[index].toFloatArray(),
-                longArrayOf(1, FEATURESIZE.toLong())
-            )
-        )
-
-        val trainingLabel = IValue.from(
-            Tensor.fromBlob(
-                labels[index].toFloatArray(),
-                longArrayOf(1, 10)
-            )
-        )
-
-        return listOf(trainingData, trainingLabel)
-    }
-
-MNISTDataset.Kt
-
-.. code:: kotlin
-
-private const val FEATURESIZE = 784
-private const val DATASET_LENGTH = 1000
-
-class MNISTDataset(private val resources: Resources) : Dataset {
-
-    private var trainDataReader = returnDataReader()
-    private var labelDataReader = returnLabelReader()
-    private val oneHotMap = HashMap<Int, List<Float>>()
-
-    private val trainInput = arrayListOf<List<Float>>()
-    private val labels = arrayListOf<List<Float>>()
 
     init {
-        (0..9).forEach { i ->
-            oneHotMap[i] = List(10) { idx ->
-                if (idx == i)
-                    1.0f
-                else
-                    0.0f
+            (0..9).forEach { i ->
+                oneHotMap[i] = List(10) { idx ->
+                    if (idx == i)
+                        1.0f
+                    else
+                        0.0f
+                }
             }
+
+            readAllData()
         }
 
-        readAllData()
-    }
+Step 7: ``getItem()`` method and length variable
+
+We are implementing the ``getItem()`` method and length variable from the Dataset class. The ``getItem()`` method will be used outside the class once we create an object of the ``MNISTDataset class``. In the definition of the ``getItem()`` method it takes in the index number and returns a list of ``IValue Objects``. The ``Ivalue`` is nothing but a locator value that describes a certain location taken in memory. The length variable stores the length of training inputs.
+
+.. code:: kotlin
 
     override val length: Int = trainInput.size
 
@@ -398,24 +347,32 @@ class MNISTDataset(private val resources: Resources) : Dataset {
         return listOf(trainingData, trainingLabel)
     }
 
-    private fun readAllData() {
-        for (i in 0 until DATASET_LENGTH)
-            readSample(trainInput, labels)
-    }
+Step 8: End-part
 
-    private fun readSample(
-        trainInput: ArrayList<List<Float>>,
-        labels: ArrayList<List<Float>>
-    ) {
-        val sample = readLine()
+Read the whole dataset accordingly.
 
-        trainInput.add(
-            sample.first.map { it.trim().toFloat() }
-        )
-        labels.add(
-            sample.second.map { it.trim().toFloat() }
-        )
-    }
+.. code:: kotlin
+
+
+      private fun readAllData() {
+          for (i in 0 until DATASET_LENGTH)
+              readSample(trainInput, labels)
+      }
+
+      private fun readSample(
+          trainInput: ArrayList<List<Float>>,
+          labels: ArrayList<List<Float>>
+      ) {
+          val sample = readLine()
+
+          trainInput.add(
+              sample.first.map { it.trim().toFloat() }
+          )
+          labels.add(
+              sample.second.map { it.trim().toFloat() }
+          )
+      }
+
 
     private fun readLine(): Pair<List<String>, List<String>> {
         var x = trainDataReader.readLine()?.split(",")
@@ -448,5 +405,3 @@ class MNISTDataset(private val resources: Resources) : Dataset {
             resources.openRawResource(R.raw.labels)
         )
     )
-
-}
