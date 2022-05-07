@@ -37,8 +37,9 @@ Federated Learning is broadly classified as
     When Federated Learning takes place through suitable federated techniques
     from data across a wide range of devices.
 
-    Typically, Cross-Device FL uses Horizontal Federated Learning
-    
+    Typically, Cross-Device FL uses Horizontal Federated Learning or Homogeneous Federated Learning and it
+    can be described as a Federated Learning method which uses a dataset which shares the same features but
+    are different in samples.
 
     * So when data sets share the same features but are different in samples.
     * This is also called as Homogeneous Federated Learning.
