@@ -11,8 +11,8 @@ There is a `simulator <https://github.com/NimbleEdge/EnvisEdge>`__
 created by NimbleEdge exactly for this purpose.
 
 -  The FL simulator is designed in a way to make the architecture as
-   close to real world deployments as possible.
--  You can simulate both the normal ML training and FL training with the
+   close to real-world deployments as possible.
+-  You can simulate both normal ML training and FL training with the
    simulator.
 -  The design is scalable to hit 10000+ workers running in the
    simulation.
@@ -28,11 +28,11 @@ Model Definition
 
 All the model descriptions go into
 `fedrec/modules <https://github.com/NimbleEdge/EnvisEdge/tree/main/fedrec/modules>`__.
-You can add your own folder of models as well and hook the registry with
+You can add your folder of models as well and hook the registry with
 it.
 
 We will create a file dlrm.py and write its implementation in standard
-pytorch code.
+PyTorch code.
 
 .. code:: python
 
@@ -55,10 +55,10 @@ Hooking the registry
 --------------------
 
 The simulator makes it easy to experiment with different model
-architectures, hyper parameters, optimizers and other components of an
+architectures, hyper parameters, optimizers, and other components of an
 ML pipeline.
 
-We define a `registry class <../fedrec/utilities/registry.py>`__ which
+We define a `registry class <../fedrec/utilities/registry.py>`__ thats
 records all the model definitions, optimizers and attaches a
 configuration file to the top.
 
@@ -93,16 +93,16 @@ arguments and hyper parameters.
 Standard Training
 -----------------
 
-Training your model in the normal non-FL settting requires you to write
+Training your model in the normal non-FL setting requires you to write
 the implementations for ``train`` and ``test`` methods. You can also
 implement ``validate`` method if you want and all these methods will
 automatically be serialized into FL plans when we move into FL
 deployment.
 
 The `BaseTrainer <../fedrec/trainers/base_trainer.py>`__ abstracts away
-the basic methods needed to implemented.
+the basic methods needed to be implemented.
 
-Simply subclass the ``BaseTrainer`` and create your own trainer object.
+Simply subclass the ``BaseTrainer`` and create your trainer object.
 We will call this DLRMTrainer
 
 .. code:: python
@@ -135,14 +135,14 @@ and return them in the Trainer class.
 
 Define the train and test methods of ``BaseTrainer`` in ``DLRMTrainer``.
 
-With this you are ready to train your model. Till now we have been doing
+With this, you are ready to train your model. Till now we have been doing
 what you usually do to train your ML models. We have been writing
 standard PyTorch code and developing our ML pipeline.
 
 Federated Training
 ------------------
 
-Now we will simulate DLRM in federated setting. Create data split to
+Now we will simulate DLRM in a federated setting. Create data split to
 mimic your users. We use Drichlet sampling for creating non-IID datasets
 for the model.
 
@@ -163,14 +163,14 @@ method.
            '''
                `Run` function updates the local model. 
                Implement this method to determine how the roles interact with each other to determine the final updated model.
-               For example a worker which has both the `aggregator` and `trainer` roles might first train locally then run discounted `aggregate()` to get the fianl update model 
+               For example, a worker which has both the `aggregator` and `trainer` roles might first train locally and then run discounted `aggregate()` to get the final update model 
 
 
                In the following example,
                1. Aggregator requests models from the trainers before aggregating and updating its model.
                2. Trainer responds to aggregators' requests after updating its own model by local training.
 
-               Since standard FL requires force updates from central entity before each cycle, trainers always start with global model/aggregator's model 
+               Since standard FL requires force updates from the central entity before each cycle, trainers always start with the global model/aggregator's model 
 
            '''
            assert role in self.roles, InvalidStateError("unknown role for worker")
