@@ -4,11 +4,11 @@ Introduction to Federated Learning
 What is Federated Learning?
 ---------------------------
 
-Before we dive into how you can deploy an FL system lets go through the
+Before we dive into how you can deploy an FL system, let's go through the
 lifecycle of federated learning and set the standard definitions.
 `Kairouz et. al. <https://arxiv.org/pdf/1912.04977.pdf>`__ is a
 fantastic survey of the current literature on Federated Learning. We
-quote them to define Federated Learning
+quote them to define Federated Learning.
 
    **Federated learning**\ *is a machine learning setting where multiple
    entities (*\ `clients <#clients>`__\ *) collaborate in solving a
@@ -29,53 +29,53 @@ hold locally.
 Aggregators
 ~~~~~~~~~~~
 
-Aggregators are resposible for taking model updates from several clients
+Aggregators are responsible for taking model updates from several clients
 and generating an averaged model from the submissions. The same device
-can behave as both a client and aggregator as it happens in
+can behave as both a client and aggregator, as it happens in
 decentralized FL.
 
 Neighbours
 ~~~~~~~~~~
 
-Neighbours in the context of FL are workers (clients/aggregators) which
-can send and recieve model updates from each other. In the standard
+Neighbours in the context of FL are workers (clients/aggregators) who
+can send and receive model updates from each other. In the standard
 centralized FL setting, every client has only the central server as its
 neighbour.
 
 Federated Learning Cycle
 ------------------------
 
-An horizontal FL cycle consists of 5 steps:
+A horizontal FL cycle consists of 5 steps:
 
 Client selection
 ~~~~~~~~~~~~~~~~
 
-Before we start training our global model, we need to select the
-participants. Every aggregator samples a subset or all of its neighbours
-and asks for model updates from it. In some cases the neighbours first
-apply for participation and then the aggregator decides who amongst them
+Before training our global model, we need to select the
+participants. Every aggregator samples a subset of all of its neighbours
+and asks for model updates from it. In some cases, the neighbours first
+apply for participation, and then the aggregator decides who amongst them
 should be accepted.
 
 Model download
 ~~~~~~~~~~~~~~
 
 Download the model parameters and execution plans, if not done already.
-Once accepted into the cycle, the workers ask for necessary information
+Once accepted into the cycle, the workers ask for the necessary information
 to begin training.
 
 Local training
 ~~~~~~~~~~~~~~
 
 Each worker runs a specific number of iterations locally with the data
-that is available on the device. It updates its local model weights and
-uses them for inference
+available on the device. It updates its local model weights and
+uses them for inference.
 
 Reporting
 ~~~~~~~~~
 
 Once all the participants have finished the training process, they
-submit their model updates to the aggregator which began the cycle. The
-aggregator keeps on waiting until a fraction of accepted devices report
+submit their model updates to the aggregator, which begins the cycle. The
+aggregator waits until a fraction of accepted devices report
 back with their models.
 
 The workers often only send the compressed model weights to reduce the
@@ -85,13 +85,13 @@ Aggregation
 ~~~~~~~~~~~
 
 The aggregator then averages the model weights to generate the final
-global model. It often uses non-linear combination of these models to
-account for their history and error in communication.
+global model. It often uses a non-linear combination of these models to
+account for their history and communication errors.
 
 Federated Learning in Deployment
 --------------------------------
 
-Now lets explore the roles and steps needed to productionize the fl
+Now let's explore the roles and steps needed to produce the fl
 deployment. What will an engineer need to do to deploy these solutions?
 
 Device instrumentation
@@ -104,27 +104,27 @@ for recommendations, etc
 Simulation
 ~~~~~~~~~~
 
-Prototype model architectures and FL strategies on a dummy data on cloud
+Prototype model architectures and FL strategies on a dummy data on the cloud
 to set the expectations of the architecture.
 
 Federated model training
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Run training procedures for different types of models with different
-hyper parameters. At the end we choose the best ones for aggregation.
+hyperparameters. In the end, we choose the best ones for aggregation.
 
 Federated model evaluation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Metrics are extracted out on the held out data on cloud and the data
+Metrics are extracted from the held-out data on the cloud, and the data
 distributed on the devices to find the performance.
 
 Deployment
 ~~~~~~~~~~
 
-Manual quality assurance, live A/B testing and staged rollout. Usually
-the engineer determines this process. It is exactly similar to how a
-normally trained model will be deployed.
+Manual quality assurance, live A/B testing and staged rollout. Usually,
+the engineer determines this process. It is precisely similar to how a
+typically trained model will be deployed.
 
 We will first build a `normal ML
 pipeline <./Tutorial-Part-2-starting_with_nimbleedge.rst>`__ and then
