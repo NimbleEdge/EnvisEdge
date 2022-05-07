@@ -44,9 +44,17 @@ def md_solver(n, alpha, d0=None, B=None, round_dim=True, k=None):
 
 
 def alpha_power_rule(n, alpha, d0=None, B=None):
+    '''
+    
+    Inputs:
+    n -- (torch.LongTensor) ; Vector of num of rows for each embedding matrix
+    alpha -- (torch.FloatTensor); Scalar, non-negative, controls dim. skew
+    d0 -- (torch.FloatTensor); Scalar, baseline embedding dimension
+    B -- (torch.FloatTensor); Scalar, parameter budget for embedding layer
+    '''
     if d0 is not None:
         lamb = d0 * (n[0].type(torch.float) ** alpha)
-    elif B is not None:
+    elif B is not None: 
         lamb = B / torch.sum(n.type(torch.float) ** (1 - alpha))
     else:
         raise ValueError("Must specify either d0 or B")
@@ -60,11 +68,26 @@ def alpha_power_rule(n, alpha, d0=None, B=None):
 
 
 def pow_2_round(dims):
+    '''
+    Calculates to the power of 2
+    Inputs
+    dims -- (torch.LongTensor);takes dimension as input'''
     return 2 ** torch.round(torch.log2(dims.type(torch.float)))
 
 
 @registry.load("embedding", "torch_bag")
 class EmbeddingBag(nn.EmbeddingBag):
+    """Computes sums or means over two ‘bags’ of embeddings, 
+    one using the quotient of the indices and the other using the remainder 
+    of the indices, without instantiating the intermediate embeddings, then performsan operation to combine these.
+
+
+    Attributes
+    ----------
+    nn.EmbeddingBag: 
+        
+    
+    """
     def __init__(
             self,
             num_embeddings: int,
@@ -77,6 +100,22 @@ class EmbeddingBag(nn.EmbeddingBag):
             _weight: Optional[Tensor] = None,
             include_last_offset: bool = False,
             init=False) -> None:
+    """Computes sums or means over two ‘bags’ of embeddings, one using the quotient 
+        of the indices and the other using the remainder of the indices, without instantiating 
+        the intermediate embeddings, then performsan operation to combine these.
+
+
+        Parameters
+        -------------
+        
+        num_categories (int) – total number of unique categories. The input indices must be in 0, 1, …, num_categories - 1.
+        embedding_dim (list) – list of sizes for each embedding vector in each table. If "add" or "mult" operation are used, these embedding dimensions must be the same. If a single embedding_dim is used, then it will use this embedding_dim for both embedding tables.
+        num_collisions (int) – number of collisions to enforce.
+        operation (string, optional) – "concat", "add", or "mult". Specifies the operation to compose embeddings. ``"concat" concatenates the embeddings, "add" sums the embeddings, and "mult" multiplies (component-wise) the embeddings. Default: "mult"
+        max_norm (float, optional) – If given, each embedding vector with norm larger than max_norm is renormalized to have norm max_norm.
+        norm_type (float, optional) – The p of the p-norm to compute for the max_norm option. Default 2.
+        scale_grad_by_freq (boolean, optional) –
+        if given, this will scale gradients by the inverse of frequency of the words in the mini-batch. Default False."""
 
         super().__init__(num_embeddings,
                          embedding_dim,
@@ -99,12 +138,26 @@ class EmbeddingBag(nn.EmbeddingBag):
 
 @registry.load("embedding", "pr_emb")
 class PrEmbeddingBag(nn.Module):
+    '''It is like adding a extra rapper layer upon the embedding.
+        
+        Inputs----
+        nn.Module:Base class for all neural network modules.'''
+
+        
     def __init__(self,
                  num_embeddings,
                  embedding_dim,
                  base_dim=None,
                  index=-1,
                  init=False):
+    '''Base class for all neural network modules.Used for the function definition
+    Inputs
+    self:
+    num_embeddings:(int) – size of the dictionary of embeddings
+    embedding_dim:(int) – the size of each embedding vector
+    base_dim=None
+    index:(int) -the particular index:
+    '''
         super(PrEmbeddingBag, self).__init__()
         if base_dim is None:
             assert index >= 0, "PR emb either specify"
@@ -311,10 +364,24 @@ class QREmbeddingBag(nn.Module):
         self.sparse = sparse
 
     def reset_parameters(self):
+        """ Its used for resetting the parameters"""
         nn.init.uniform_(self.weight_q, np.sqrt(1 / self.num_categories))
         nn.init.uniform_(self.weight_r, np.sqrt(1 / self.num_categories))
 
     def forward(self, input, offsets=None, per_sample_weights=None):
+        '''Defines the computation performed at every call.
+            Should be overridden by all subclasses.
+        
+
+        Inputs
+        ------------------
+        input:long-Takes the input
+        offsets:offsets determines the starting index position of each bag (sequence) in input.
+        per_sample_weights:a tensor of double weights, or None to indicate all weights should be taken to be 1. 
+
+        Returns:(int)The output tensor of shape (B, embedding_dim)'''
+
+        
         input_q = (input / self.num_collisions).long()
         input_r = torch.remainder(input, self.num_collisions).long()
 
@@ -339,6 +406,16 @@ class QREmbeddingBag(nn.Module):
         return embed
 
     def extra_repr(self):
+        """" Set the extra representation of the module
+
+            To print customized extra information, you should 
+            re-implement this method in your own modules. Both single-line and multi-line strings are acceptable.
+
+
+            Returns
+            ----------------------
+            s.format()"""
+
         s = '{num_embeddings}, {embedding_dim}'
         if self.max_norm is not None:
             s += ', max_norm={max_norm}'
