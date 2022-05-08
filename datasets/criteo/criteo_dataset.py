@@ -36,8 +36,17 @@ class CriteoDataset(Dataset):
 
     def __getitem__(self, index): 
         '''_getitem_() allows its instances to use the [] (indexer) operators
-        Input
-        index:int -takes the index as input'''
+        
+        Arguments
+        -----------------
+        index:int -takes the index as input
+        
+        Returns
+        -------------
+        X_int[index](int)
+        X_cat[index](int)
+        y[index](int)
+        '''
 
         if isinstance(index, slice):
             return [
@@ -57,12 +66,17 @@ class CriteoDataset(Dataset):
 
     def _default_preprocess(self, X_int, X_cat, y):
         """It does the default preprocesses
-        Input
+        
+        Arguments
+        ---------------
         X_int:tensor  Integer variable
         X_cat:tensor Categorical variable
         y:tensor 
         
-        Returns:tensor the integer variable and the categorical variable"""
+        Returns
+        -----------------
+        tensor the integer variable and the categorical variable
+        """
         X_int = torch.log(torch.tensor(X_int, dtype=torch.float) + 1)
         if self.max_ind_range > 0:
             X_cat = torch.tensor(X_cat % self.max_ind_range, dtype=torch.long)
@@ -70,7 +84,7 @@ class CriteoDataset(Dataset):
             X_cat = torch.tensor(X_cat, dtype=torch.long)
         y = torch.tensor(y.astype(np.float32))
 
-        return X_int, X_cat, y #returns the integer variable and the categorical variable
+        return X_int, X_cat, y 
 
     def __len__(self):
         """Returns the length"""
@@ -80,9 +94,17 @@ class CriteoDataset(Dataset):
 
 def collate_wrapper_criteo_offset(list_of_tuples):
     """This function collects and combines the bias_value(offset) which will be used during model training
-    Input
+    Arguments
     ----------
-    list_of_tuples  : int returns tuples where each tuple is (X_int, X_cat, y)"""
+    list_of_tuples  : int returns tuples where each tuple is (X_int, X_cat, y)
+    
+     Return 
+     ---------
+     X_int-(int)
+     torch.stack(lS_o)
+     torch.stack(lS_i)
+     T
+    """
    
 
     transposed_data = list(zip(*list_of_tuples))#data represented in form of a list
@@ -103,14 +125,21 @@ def collate_wrapper_criteo_offset(list_of_tuples):
 
 def offset_to_length_converter(lS_o, lS_i):
     """This function converts the bias value to length converter
-    Input 
+    
+    Arguments
+    --------------
     lS_o:int 
     lS_i: int
+    
+    Return 
+    -----------
+    torch.stack-Concatenates a sequence of tensors along a new dimension.
+    
     """
     def diff(tensor):
         return tensor[1:] - tensor[:-1] #returns the length of the tensor
 
-    return torch.stack(   #Concatenates a sequence of tensors along a new dimension.
+    return torch.stack(  
 
         [
             diff(torch.cat((S_o, torch.tensor(lS_i[ind].shape))).int())
@@ -125,9 +154,16 @@ def collate_wrapper_criteo_length(list_of_tuples):
     # where each tuple is (X_int, X_cat, y)
 """This function collects and combines the length of the criteo
     
-    Parameters
+  Arguments
     ----------
-    list_of_tuples  : int """
+  list_of_tuples  : int 
+    
+    
+   Return 
+     --------------
+    (X_int, lS_l, lS_i)
+    T
+"""
 
 
 
@@ -150,10 +186,16 @@ def collate_wrapper_criteo_length(list_of_tuples):
 
 def make_criteo_data_and_loaders(args, offset_to_length_converter=False):
     '''
-    Input
+    Arguments
+    ----------
+  
     args:takes the arguments
     offset_to_length_converter:bool initial value has been taken false
-     Returns: the train data,train loader and test loader'''
+    
+    Returns
+     ----------------
+     the train data,train loader and test loader
+     '''
     train_data = CriteoDataset(
         args.data_set,
         args.max_ind_range,
