@@ -24,13 +24,19 @@ def md_solver(n, alpha, d0=None, B=None, round_dim=True, k=None):
     '''
     An external facing function call for mixed-dimension assignment
     with the alpha power temperature heuristic
-    Inputs:
+    
+    Arguments
+    ----------
     n -- (torch.LongTensor) ; Vector of num of rows for each embedding matrix
     alpha -- (torch.FloatTensor); Scalar, non-negative, controls dim. skew
     d0 -- (torch.FloatTensor); Scalar, baseline embedding dimension
     B -- (torch.FloatTensor); Scalar, parameter budget for embedding layer
     round_dim -- (bool); flag for rounding dims to nearest pow of 2
     k -- (torch.LongTensor) ; Vector of average number of queries per inference
+    
+    Return 
+    -------------
+    d(int)-Returns the undo_sort of the alpha power rule
     '''
     n, indices = torch.sort(n)
     k = k[indices] if k is not None else torch.ones(len(n))
@@ -45,12 +51,19 @@ def md_solver(n, alpha, d0=None, B=None, round_dim=True, k=None):
 
 def alpha_power_rule(n, alpha, d0=None, B=None):
     '''
+    Rounds the baseline embedding dimension to its nearest integer
     
-    Inputs:
+   Arguments
+    ---------------
     n -- (torch.LongTensor) ; Vector of num of rows for each embedding matrix
     alpha -- (torch.FloatTensor); Scalar, non-negative, controls dim. skew
     d0 -- (torch.FloatTensor); Scalar, baseline embedding dimension
     B -- (torch.FloatTensor); Scalar, parameter budget for embedding layer
+    
+    
+    Returns
+    --------
+    torch.round(d).type(torch.long))(Tensor)-Rounds elements of input to the nearest integer.
     '''
     if d0 is not None:
         lamb = d0 * (n[0].type(torch.float) ** alpha)
@@ -70,8 +83,16 @@ def alpha_power_rule(n, alpha, d0=None, B=None):
 def pow_2_round(dims):
     '''
     Calculates to the power of 2
-    Inputs
-    dims -- (torch.LongTensor);takes dimension as input'''
+    
+    Argument
+    --------------
+    dims -- (torch.LongTensor);takes dimension as input
+    
+    
+    Return
+    -------------
+    2 ** torch.round(torch.log2(dims.type(torch.float))
+    '''
     return 2 ** torch.round(torch.log2(dims.type(torch.float)))
 
 
@@ -80,9 +101,10 @@ class EmbeddingBag(nn.EmbeddingBag):
     """Computes sums or means over two ‘bags’ of embeddings, 
     one using the quotient of the indices and the other using the remainder 
     of the indices, without instantiating the intermediate embeddings, then performsan operation to combine these.
+    
     Attributes
     ----------
-    nn.EmbeddingBag: 
+    nn.EmbeddingBag
         
     
     """
@@ -136,7 +158,7 @@ class EmbeddingBag(nn.EmbeddingBag):
 class PrEmbeddingBag(nn.Module):
     '''It is like adding a extra rapper layer upon the embedding.
         
-        Inputs----
+        ----
         nn.Module:Base class for all neural network modules.'''
 
         
@@ -147,12 +169,13 @@ class PrEmbeddingBag(nn.Module):
                  index=-1,
                  init=False):
     '''Base class for all neural network modules.Used for the function definition
-    Inputs
-    self:
-    num_embeddings:(int) – size of the dictionary of embeddings
-    embedding_dim:(int) – the size of each embedding vector
-    base_dim=None
-    index:(int) -the particular index:
+   
+   Arguments
+   -----------------
+    num_embeddings:(int) – size of the dictionary of embedding.
+    embedding_dim:(int) – the size of each embedding vector.
+    base_dim-The base dimension.
+    index:(int) -the particular index.
     '''
         super(PrEmbeddingBag, self).__init__()
         if base_dim is None:
@@ -186,6 +209,27 @@ class PrEmbeddingBag(nn.Module):
                     torch.tensor(W, requires_grad=True))
 
     def forward(self, input, offsets=None, per_sample_weights=None):
+      """
+     Forward pass of EmbeddingBag.
+      
+      Arguments
+     --------------
+      input (Tensor) – Tensor containing bags of indices into the embedding matrix.
+
+      offsets (Tensor, optional) – Only used when input is 1D. offsets determines the starting 
+      index position of each bag (sequence) in input.
+
+      per_sample_weights (Tensor, optional) – a tensor of float / double weights, or 
+      None to indicate all weights should be taken to be 1. If specified, per_sample_weights must 
+      have exactly the same shape as input and is treated as having the same offsets, if those are not None. Only supported for mode='sum'.
+      
+      Returns
+      --------------
+      Tensor output shape of (B, embedding_dim).
+
+
+""""
+      
         return self.proj(self.embs(
             input,
             offsets=offsets,
@@ -300,6 +344,7 @@ class QREmbeddingBag(nn.Module):
                  operation='mult', max_norm=None, norm_type=2.,
                  scale_grad_by_freq=False, mode='mean', sparse=False,
                  _weight=None):
+      """__init__ function is called every time an object is created from a class."""
         super(QREmbeddingBag, self).__init__()
 
         assert operation in ['concat', 'mult', 'add'], 'Not valid operation!'
@@ -343,7 +388,7 @@ class QREmbeddingBag(nn.Module):
         self.sparse = sparse
 
     def reset_parameters(self):
-        """ Its used for resetting the parameters"""
+        """ Its used for resetting the parameters."""
         nn.init.uniform_(self.weight_q, np.sqrt(1 / self.num_categories))
         nn.init.uniform_(self.weight_r, np.sqrt(1 / self.num_categories))
 
@@ -351,12 +396,15 @@ class QREmbeddingBag(nn.Module):
         '''Defines the computation performed at every call.
             Should be overridden by all subclasses.
         
-        Inputs
+        Arguments
         ------------------
         input:long-Takes the input
         offsets:offsets determines the starting index position of each bag (sequence) in input.
         per_sample_weights:a tensor of double weights, or None to indicate all weights should be taken to be 1. 
-        Returns:(int)The output tensor of shape (B, embedding_dim)'''
+        
+        Returns
+        ----------------
+        (int)The output tensor of shape (B, embedding_dim)'''
 
         
         input_q = (input / self.num_collisions).long()
@@ -386,6 +434,8 @@ class QREmbeddingBag(nn.Module):
         """ Set the extra representation of the module
             To print customized extra information, you should 
             re-implement this method in your own modules. Both single-line and multi-line strings are acceptable.
+            
+            
             Returns
             ----------------------
             s.format()
