@@ -17,12 +17,12 @@ def create_serializer_hooks(class_ref):
         """Generates a dictionary from an object and
          appends type information for finding the appropriate serialiser.
 
-        Parameters:
+        Parameters
         -----------
         obj: object
             The object to serialize.
 
-        Returns:
+        Returns
         --------
         dict:
             The dictionary representation of the object.

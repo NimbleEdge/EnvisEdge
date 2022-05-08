@@ -26,7 +26,7 @@ class EnvisTensors(Serializable):
         Creates a name of the tenosr using the
             tensor_type and SUFFIX.
 
-        Returns:
+        Returns
         --------
         name: str
             The name of the tensor.
@@ -38,7 +38,7 @@ class EnvisTensors(Serializable):
         """
         Creates path to save tensor the storage and get name method.
 
-        Returns:
+        Returns
         --------
         path: str
             The path to the tensor.
@@ -53,12 +53,12 @@ class EnvisTensors(Serializable):
         """
         Splits the path into the storage, tensor_type.
 
-        Parameters:
+        Parameters
         -----------
         path: str
             The path to the tensor.
 
-        Returns:
+        Returns
         --------
         storage: int
             The storage path to the tensor.
@@ -75,14 +75,14 @@ class EnvisTensors(Serializable):
         """
         Serializes a tensor object.
 
-        Parameters:
+        Parameters
         -----------
         obj: object
             The object to serialize.
         file: file
             The file to write to.
 
-        Returns:
+        Returns
         --------
         pkl_str: io.BytesIO
             The serialized object.
@@ -96,12 +96,12 @@ class EnvisTensors(Serializable):
         """
         Deserializes a tensor object.
 
-        Parameters:
+        Parameters
         -----------
         obj: object
             The object to deserialize.
 
-        Returns:
+        Returns
         --------
         deserialized_obj: object
             The deserialized object.

@@ -82,11 +82,11 @@ class Kafka(AbstractCommunicationManager):
         """
         Receives a message from the kafka broker.
 
-        Returns:
+        Returns
         --------
         message: object
             The message received.
-        # """
+        """
         if not self.consumer:
             raise Exception("No consumer defined")
         return next(self.consumer).value

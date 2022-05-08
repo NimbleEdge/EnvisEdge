@@ -13,7 +13,7 @@ from fedrec.utilities.registry import Registrable
 class Neighbour(Serializable):
     """A class that represents a new Neighbour instance.
 
-    Attributes
+    Parameters
     ----------
     id : int
         Unique identifier for the worker

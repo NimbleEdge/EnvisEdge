@@ -25,7 +25,7 @@ class StateTensors(EnvisTensors):
         Creates a name for the tensor using the
             worker_id, round_idx, and tensor_type.
 
-        Returns:
+        Returns
         --------
         name: str
             The name of the tensor.
@@ -40,7 +40,7 @@ class StateTensors(EnvisTensors):
         Creates path to save tensor the
             storage and get name method and suffix.
 
-        Returns:
+        Returns
         --------
         path: str
             The path to the tensor.
@@ -55,12 +55,12 @@ class StateTensors(EnvisTensors):
         """
         Splits the path into the worker id, round idx, and tensor type.
 
-        Parameters:
+        Parameters
         -----------
         path: str
             The path to the tensor.
 
-        Returns:
+        Returns
         --------
         worker_id: int
             The worker id.
@@ -81,14 +81,14 @@ class StateTensors(EnvisTensors):
         """
         Serializes a tensor object.
 
-        Parameters:
+        Parameters
         -----------
         obj: object
             The object to serialize.
         file: file
             The file to write to.
 
-        Returns:
+        Returns
         --------
         pkl_str: io.BytesIO
             The serialized object.
@@ -106,12 +106,12 @@ class StateTensors(EnvisTensors):
         """
         Deserializes a tensor object.
 
-        Parameters:
+        Parameters
         -----------
         obj: object
             The object to deserialize.
 
-        Returns:
+        Returns
         --------
         deserialized_obj: object
             The deserialized object.

@@ -12,6 +12,14 @@ fedrec.utilities.cuda\_utils module
    :undoc-members:
    :show-inheritance:
 
+fedrec.utilities.io\_utils module
+---------------------------------
+
+.. automodule:: fedrec.utilities.io_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 fedrec.utilities.logger module
 ------------------------------
 
@@ -40,14 +48,6 @@ fedrec.utilities.saver\_utils module
 ------------------------------------
 
 .. automodule:: fedrec.utilities.saver_utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-fedrec.utilities.serialization module
--------------------------------------
-
-.. automodule:: fedrec.utilities.serialization
    :members:
    :undoc-members:
    :show-inheritance:

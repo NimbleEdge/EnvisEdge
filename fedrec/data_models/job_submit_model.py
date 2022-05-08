@@ -14,7 +14,7 @@ class JobSubmitMessage(Message):
     '''
     Creates a message object for job submit request
 
-    Attributes:
+    Attributes
     -----------
         job_type : str
             type of job

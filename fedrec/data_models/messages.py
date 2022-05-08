@@ -9,7 +9,7 @@ class Message(Serializable):
     '''
     Base class that is inherited by other Message classes
 
-    Attributes:
+    Attributes
     -----------
         senderid : str
             id of sender

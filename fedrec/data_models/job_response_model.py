@@ -13,7 +13,7 @@ class JobResponseMessage(Message):
     '''
     Creates message objects for job response message
 
-    Attributes:
+    Attributes
     -----------
         job_type : str
             type of job (train/test)
