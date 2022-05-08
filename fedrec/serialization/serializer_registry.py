@@ -10,12 +10,23 @@ def get_deserializer(serialized_obj_name):
   This function is used to check if the parameter passed 
   is present in the list of classes present in the memory
   during execution.
-  -------------------------------------------------------
-  If the class is not found in the class map, a KeyError is 
-  thrown.
-  Else, the value corresponding to that class in the memory
-  is returned.
   
+  -------------------------------------------------------
+  Arguments
+  ----------
+  serialized_obj_name : str
+  
+  --------------------------------------------------------
+  Returns
+  ---------
+  The value corresponding to that class name in the memory : str
+  
+  --------------------------------------------------------
+  Raises
+  ------
+  KeyError 
+    If the class name is not found in the class map.
+ 
   """
     # find the deserializer from registry
     # given object name.
@@ -24,25 +35,31 @@ def get_deserializer(serialized_obj_name):
 
 def serialize_attribute(obj):
     """
-    This function is broadly used to serialize an attribute
+    This function is used to serialize an attribute
     over the obj parameter.
+    
     -------------------------------------------------------
-    The if condition checks if obj is a Dictionary.
-    If yes, it returns the key-value pairs within the dictionary
-    obj using dictionary comprehension.
-    Here, the for the value, the function is called recursively
-    on each attribute.
+    Arguments
+    ---------- 
+    obj 
+    
     -------------------------------------------------------
-    The first elif condition checks if the prarameter obj is 
-    a List or Tuple. If the condition is satisfied, the serialize_attribute
-    function is called recursively on each attribute in (List, Tuple).
-    -------------------------------------------------------
-    The second elif condition checks if the obj parameter is a string, integer, 
-    float or boolean. If it is, the parameter is returned to the function as it is.
-    -------------------------------------------------------
-    The else statement first asserts if the object has an attribute named serialize,
-    if it is so, it returns the value of obj.serialize(), else it returns the 
-    statement, "Object must be serializable". 
+    Returns
+    ----------
+    Key-value pairs within the obj : dict
+      If obj is a dictionary.
+    
+    Elements of obj : list or tuple
+      If obj is list or tuple.
+    
+    obj : str, int, float or bool
+      If obj is string, integer, float or boolean.
+    
+    obj.serialize() 
+      If the object has an attribute named serialize.
+     
+    "Object must be serializable" : str
+      If the object does not have an attribute named serialize.
     
     """
     # TODO : make a single global function
@@ -66,31 +83,36 @@ def serialize_attribute(obj):
 
 def deserialize_attribute(obj: Dict):
     """
-    This function takes in the parameter obj which is of
-    type Dictionary. 
+    Arguments
+    ---------- 
+    obj : dict
+   
     -----------------------------------------------------
-    The if condition checks if obj contains a string, integer, float
-    or boolean. If the condition is satisfied, it returns 
-    the obj parameter.
+    Returns
+    ---------
+    obj : dict
+      If obj is a string, integer, float or boolean.
+    
+    The value corresponding to that class name in the memory : str
+      If __type__ is in the dictionary obj, the type of the object is 
+      called in the get_deserializable function.
+    
+    dictionary
+      key 
+        keys of obj.
+      value 
+        deserialize_attribute() is called recursively on each value in obj.
+      If obj is a dictionary.
+      
+    list or tuple
+      if obj is list or tuple, deserialize_attribute() is called recursively 
+      on each attribute in obj.
+      
     -----------------------------------------------------
-    The first elif condition checks if __type__ is in the
-    dictionary obj. If it is present, the type of the object is called 
-    in the get_deserializable function which returns if the corresponding
-    class is found in the class_map. The attribute of this class is deserialized
-    on the data of obj.
-    -----------------------------------------------------
-    The second elif condition checks if obj is a Dictionary.
-    If yes, it returns the key-value pairs within the dictionary
-    obj using dictionary comprehension.
-    Here, the for the value, the function is called recursively
-    on each attribute.
-    ------------------------------------------------------
-    The third elif condition checks if the prarameter obj is 
-    a List or Tuple. If the condition is satisfied, the deserialize_attribute
-    function is called recursively on each attribute in (List, Tuple). 
-    This has been done using dictionary comprehension.
-    ------------------------------------------------------
-    If none of these conditions are satisfied, a ValueError is thrown.
+    Raises
+    ---------
+    ValueError
+      If none of the conditions are satisfied.
     
     """
     # TODO : make a single global function
