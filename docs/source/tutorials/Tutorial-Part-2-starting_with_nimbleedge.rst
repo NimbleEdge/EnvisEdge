@@ -28,11 +28,11 @@ Model Definition
 
 All the model descriptions go into
 `fedrec/modules <https://github.com/NimbleEdge/EnvisEdge/tree/main/fedrec/modules>`__.
-You can add your own folder of models as well and hook the registry with
+You can add your folder of models as well and hook the registry with
 it.
 
 We will create a file dlrm.py and write its implementation in standard
-pytorch code.
+PyTorch code.
 
 .. code:: python
 
@@ -46,7 +46,7 @@ pytorch code.
        
        def forward(inputs):
            # process inputs
-           return output 
+           return output
 
 To see the real implementation of DLRM, please check out the `dlrm
 implementation in the repository <../fedrec/modules/dlrm.py>`__
@@ -80,7 +80,7 @@ annotating it with ``@registry.load(<Class Type>, <Name>)``
        
        def forward(inputs):
            # process inputs
-           return output 
+           return output
 
 Now create a `config.yml <../configs/dlrm.yml>`__ file to pass the
 arguments and hyper parameters.
@@ -88,7 +88,7 @@ arguments and hyper parameters.
 .. code:: yaml
 
    model: # The <Class Type> annotated in registry
-       name : 'dlrm' # The unique identifier key 
+       name : 'dlrm' # The unique identifier key
 
 Standard Training
 -----------------
@@ -114,7 +114,7 @@ We will call this DLRMTrainer
                self,
                config_dict: Dict,
                train_config: DLRMTrainConfig,
-               logger: BaseLogger, 
+               logger: BaseLogger,
                model_preproc: PreProcessor,) -> None:
 
            self.train_config = train_config
@@ -161,16 +161,16 @@ method.
 
        async def run(self):
            '''
-               `Run` function updates the local model. 
+               `Run` function updates the local model.
                Implement this method to determine how the roles interact with each other to determine the final updated model.
-               For example a worker which has both the `aggregator` and `trainer` roles might first train locally then run discounted `aggregate()` to get the fianl update model 
+               For example a worker which has both the `aggregator` and `trainer` roles might first train locally then run discounted `aggregate()` to get the fianl update model
 
 
                In the following example,
                1. Aggregator requests models from the trainers before aggregating and updating its model.
                2. Trainer responds to aggregators' requests after updating its own model by local training.
 
-               Since standard FL requires force updates from central entity before each cycle, trainers always start with global model/aggregator's model 
+               Since standard FL requires force updates from central entity before each cycle, trainers always start with global model/aggregator's model
 
            '''
            assert role in self.roles, InvalidStateError("unknown role for worker")
@@ -227,3 +227,5 @@ Begin FL simulation by
 In the `next section <./Tutorial-Part-3-simulating_fl_cycle.md>`__ we
 will see how easy it is to convert the normal ML pipeline into an FL
 pipeline.
+
+

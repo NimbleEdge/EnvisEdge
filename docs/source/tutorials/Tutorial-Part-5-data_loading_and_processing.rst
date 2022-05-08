@@ -190,7 +190,7 @@ Sequential Samplers:
 
 As the name suggests, it samples the elements sequentially and always in the same order. It also has a property named dataset:
 
-    * dataset: It’s the source from where we can sample the elements.
+    * dataset: It’s the source from which we can sample the elements.
 
 .. code:: kotlin
 

@@ -7,7 +7,7 @@ FL Deployment
 With the simulations done and benchmark results satisfactory, you may
 want to take things into production.
 
-The best thing about using NimbleEdge simulator is it already checks for
+The best thing about using the NimbleEdge simulator is it already checks for
 compatibility and serialization capabilties of the models.
 
 Let’s see the components needed to deploy the FL cycle.
@@ -42,7 +42,7 @@ Now the start the orchestrator in a docker container with
 Plan Serialization
 ~~~~~~~~~~~~~~~~~~
 
-We can serializes any torch computation graph into a plan for local
+We can serialize any torch computation graph into a plan for local
 execution. The simulator does this automatically for you.
 
 However, should you choose, you can write your custom methods and
@@ -154,5 +154,5 @@ avaialble to beb downloaded by the workers.
 **On-device Training**
 
 The last step is to connect the user devices with the orchestrator to
-begin Training process. Hop into the `next
+begin the Training process. Hop into the `next
 section <./Tutorial-Part-5-local_training.md>`__ for details.

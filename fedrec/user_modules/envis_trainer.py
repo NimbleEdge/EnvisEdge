@@ -14,6 +14,7 @@ from fedrec.utilities.logger import BaseLogger
 
 @attr.s
 class TrainConfig:
+""" Class for Training config"""
     eval_every_n = attr.ib(default=10000)
     report_every_n = attr.ib(default=10)
     save_every_n = attr.ib(default=2000)
@@ -27,6 +28,20 @@ class TrainConfig:
 
     @num_batches.validator
     def check_only_one_declaration(instance, _, value):
+    """ It checks so that there's only one declaration and raises value error if not
+        
+
+        Argument
+        ---------
+            instance:its an attribute whose object(num_epochs) is checked
+            value:(int)
+
+
+        Raises
+        ------
+        ValueError
+            only one out of num_epochs and num_batches must be declared!
+        """
         if instance.num_epochs > 0 & value > 0:
             raise ValueError(
                 "only one out of num_epochs and num_batches must be declared!")
@@ -41,11 +56,30 @@ class TrainConfig:
 
 
 class EnvisTrainer(EnvisBase):
+    """This class is to train Envis
+
+
+    Arguments
+    ------
+    EnvisBase
+
+
+    """
     def __init__(
             self,
             config_dict: Dict,
             logger: BaseLogger,
             client_id=None) -> None:
+    """ Initialize the EnvisTrainer class,it's run once when instantiating the Dataset object
+        
+
+        Argument
+        ------
+        dataset_config-It configures the dataset.
+        logger-Base logger handler.
+        client_id-(int) It's just an id.
+        
+        """
 
         super().__init__(config_dict)
         self.config_dict = config_dict
@@ -79,10 +113,27 @@ class EnvisTrainer(EnvisBase):
         self._saver = None
 
     def reset_loaders(self):
+        """Its used for reseting thr loaders"""
         self._data_loaders = {}
 
-    @staticmethod
+    @staticmethod #a built-in decorator that defines a static method in the class in Python
     def _yield_batches_from_epochs(loader, start_epoch):
+        """"It's used to yield batches from epochs
+
+        Arguments
+        --------
+        loader-It's used to load the dataset.
+        start_epoch-It's the starting epoch.
+
+
+        Yields
+        ------
+        int
+            batch, current_epoch
+
+
+
+        """
         current_epoch = start_epoch
         while True:
             for batch in loader:
@@ -90,6 +141,22 @@ class EnvisTrainer(EnvisBase):
             current_epoch += 1
 
     def get_scheduler(self, optimizer, **kwargs):
+        """It will init the scheduler based on the configuration provided to it.
+
+            Arguments
+            --------
+            optimizer-It optimizes Model Parameters.
+            **kwargs-Arbitrary keyword arguments.
+
+            
+            Returns
+            --------
+            self._scheduler
+            
+             """
+
+
+
         if self._scheduler is None:
             with self.init_random:
                 self._scheduler = registry.construct(
@@ -99,8 +166,16 @@ class EnvisTrainer(EnvisBase):
                     optimizer=optimizer, **kwargs)
         return self._scheduler
 
-    @property
+    @property #python property getter and setter
     def saver(self):
+    """ It's used for save the model paarmeters
+
+    Returns
+    --------
+    self._saver-: Saves a serialized object to disk.
+
+
+    """
         if self._saver is None:
             # 2. Restore model parameters
             self._saver = saver_mod.Saver(
@@ -110,6 +185,14 @@ class EnvisTrainer(EnvisBase):
 
     @property
     def data_loaders(self):
+    """ It's used for save the model paarmeters
+
+    Returns
+    -------
+    data_loaders
+
+    """
+
         if self._data_loaders:
             return self._data_loaders
         # TODO : FIX if not client_id will load whole dataset
@@ -156,6 +239,29 @@ class EnvisTrainer(EnvisBase):
             best_acc_test=None,
             best_auc_test=None,
             step=-1):
+     """ It's the evaluation model
+
+     Arguments
+     ----------
+       model-It loads the model.
+       loader-It helps to load the model.
+       eval_section-Its the evauation section.
+       logger-the use loggers is to just pass a list to the Traine.
+       num_eval_batches-(int) It gives us the no of evaluation batches
+       best_acc_test-It gives us the best accuracy
+       best_auc_test-It provides thae best ggregate measure of performance across all possible classification threshold.
+       step-(int) It counts the no of steps.
+
+
+    Returns
+    -------
+    bool-true 
+        if best_auc_test is not None else returns false
+    results-(dict)
+
+    """
+
+
         scores = []
         targets = []
         model.eval()
@@ -217,12 +323,26 @@ class EnvisTrainer(EnvisBase):
         return False, results
 
     def store_state(self):
+    """It's the store state
+
+
+        Returns
+        --------
+        model-Returns the state of the model.
+        """
         assert self.model is not None
         return {
             'model': self.model
         }
 
     def test(self):
+        """It gives us the results on the test dataset
+
+        Returns
+        ---------
+
+        results(dict)
+        """
         results = {}
         if self.train_config.eval_on_train:
             _, results['train_metrics'] = self.eval_model(
@@ -243,6 +363,17 @@ class EnvisTrainer(EnvisBase):
         return results
 
     def train(self, modeldir=None):
+        """It gives us the results on the train dataset
+
+        Arguments
+        ------------
+        modeldir
+
+        Returns(dict) the trained model.
+        ---------
+
+        results(dict)
+        """
         last_step, current_epoch = self.saver.restore(modeldir)
         lr_scheduler = self.get_scheduler(
             self.optimizer, last_epoch=last_step)
@@ -325,11 +456,14 @@ class EnvisTrainer(EnvisBase):
         return self.model.state_dict()
 
     def update(self, state: Dict):
+        """"It Updates model,updates the optimizer,loads the load_state_dict and then updates dataset"""
+        
         # Update the model
         self.model.load_state_dict(state["model"].tensors)
-        # # Update the optimizer
-        # self.optimizer.load_state_dict(state["optimizer"].tensors)
-        # # empty dataloaders for new dataset
-        # self.reset_loaders()
-        # # update dataset
-        # self.model_preproc = state["model_preproc"]
+        # Update the optimizer
+        self.optimizer.load_state_dict(state["optimizer"].tensors)
+        # empty dataloaders for new dataset
+        self.reset_loaders()
+        # update dataset
+        self.model_preproc = state["model_preproc"]
+
