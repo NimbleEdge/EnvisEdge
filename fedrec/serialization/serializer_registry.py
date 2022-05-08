@@ -23,7 +23,7 @@ def get_deserializer(serialized_obj_name):
   
   --------------------------------------------------------
   Raises
-  ------
+  ---------
   KeyError 
     If the class name is not found in the class map.
  
