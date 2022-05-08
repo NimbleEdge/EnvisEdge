@@ -16,30 +16,81 @@ from torch.multiprocessing import Manager, Process
 #            "total": randomizes total dataset
 # split (bool) : to split into train, test, validation data-sets
 
-
-@registry.load('dataset', 'kaggle')
+@registry.load('dset_proc', 'kaggle')#We decorate the class definitions with registry.load and create a yaml configuration file of all the arguments to pass
 class CriteoDataProcessor:
-    def __init__(
+
+
+
+"""
+    It's a simple data preprocessor for criteo
+    ...
+    Attributes
+    ----------
+    
+            datafile 
+            output_file : 
+            max_ind_range : int 
+            sub_sample_rate : float 
+            randomize : int 
+            dataset_multiprocessing boolean
+    Methods
+    -------
+    _process_one_file(c='rgb')
+    _transform_line: Used to preprocess the data in the dataset
+    clear_items: Used for clearing items
+    process_data:Changes from offset to length 
+    split_dataset: used for splitting dataset
+    get_counts: Getting counts of the variables
+    processCriteoAdData: Processing of the criteo Addata
+    process_files: Processing of the files 
+    load_data_description: Loading the desciption of the data
+    load : Used to load 
+    permute_data:Used to permute data
+    dataset: its the dataset
+    collate_fn: returns the length of collate_wrapper_criteo
+    """
+
+
+
+
+
+
+
+    def __init__(         
             self,
             datafile,
             output_file,
             max_ind_range=0,
             sub_sample_rate=0.0,
-            randomize="day",
+            randomize="day",#we are randomizing the dates for better results
             dataset_multiprocessing=False,
     ):
+     """Initialize and define the variables
+     
+     
+          Arguments
+          ------------
+            datafile-The input datafile.
+            output_file-The output datafile.
+            max_ind_range-The max range of indices.
+            sub_sample_rate(float)-It gives the subsample rate.
+            randomize-we are randomizing the dates for better results.
+            dataset_multiprocessing(bool)
+     
+     """
+        
         self.datafile = datafile
         self.output_file = output_file
         lstr = datafile.split("/")
         self.d_path = "/".join(lstr[0:-1]) + "/"
         self.d_file = lstr[-1].split(".")[0]
         self.npzfile = self.d_path + (self.d_file + "_day")
-        self.trafile = self.d_path + (self.d_file + "_fea")
+        self.trafile = self.d_path + (self.d_file + "_fea")#The tarfile makes it possible to read and write tar archives
         self.total_file = self.d_path + self.d_file + "_day_count.npz"
 
         self.dataset_multiprocessing = dataset_multiprocessing
         self.sub_sample_rate = sub_sample_rate
-        self.days = 7
+        self.days = 7 #There are 7 days in a week
         # dataset
         # tar_fea = 1   # single target
         self.den_fea = 13  # 13 dense  features
@@ -48,9 +99,9 @@ class CriteoDataProcessor:
         # tot_fea = tad_fea + spa_fea
         self.randomize = randomize
         self.max_ind_range = max_ind_range
-        self.clear_items()
+        self.clear_items() #clear() method removes all items from the list. 
 
-    @staticmethod
+    @staticmethod # plain functions but we can call them from an instance or the class"""
     def _process_one_file(
             datfile,
             npzfile,
@@ -62,6 +113,24 @@ class CriteoDataProcessor:
             convertDictsDay=None,
             resultDay=None
     ):
+    """Its used for the processing of the file
+        
+        
+        Arguments
+        ----------
+        split:it returns the split
+        num_data_in_split:for splitting the numerric data
+        dataset_multiprocessing:
+        days:int returns the no of days
+        convertDictsDay:converts the dictionary to the no of days
+        resultDay:string returns the resultDay
+        
+        
+       Return
+       --------
+       i(int)
+       
+        """
         if dataset_multiprocessing:
             convertDicts_day = [{} for _ in range(26)]
         else:
@@ -74,7 +143,7 @@ class CriteoDataProcessor:
             if sub_sample_rate == 0.0:
                 rand_u = 1.0
             else:
-                rand_u = np.random.uniform(
+                rand_u = np.random.uniform(                     #Draw samples from a uniform distribution.
                     low=0.0, high=1.0, size=num_data_in_split)
 
             i = 0
@@ -116,10 +185,10 @@ class CriteoDataProcessor:
                 np.savez_compressed(
                     filename_s,
                     X_int=X_int[0:i, :],
-                    X_cat_t=np.transpose(X_cat[0:i, :]),
+                    X_cat_t=np.transpose(X_cat[0:i, :]),# permute the axes of the array
                     y=y[0:i],
                 )
-                print("\nSaved " + npzfile + "_{0}.npz!".format(split))
+                print("\nSaved " + npzfile + "_{0}.npz!".format(split))#file saved in npz format
 
         if dataset_multiprocessing:
             resultDay[split] = i
@@ -130,6 +199,20 @@ class CriteoDataProcessor:
 
     @staticmethod
     def _transform_line(line, rand_u, sub_sample_rate):
+        """Used for the transforming the line
+        
+        
+        Arguments
+        ------------
+        line:(int) array of integers
+        rand_u: (int) returns random integer
+        sub_sample_rate:(int) – Sub Sample rate of line
+        
+       Returns
+       --------
+   
+       target(int)-Returns the target.
+        """
         line = line.split('\t')
         # set missing values to zero
         for j in range(len(line)):
@@ -148,12 +231,14 @@ class CriteoDataProcessor:
                 )
 
     def clear_items(self):
+    """ Used for clearing the items"""
         self.data_items = defaultdict(dict)
         self.ln_emb = None
         self.m_den = None
         self.n_emb = None
 
     def process_data(self):
+        """ Used for Processing the data"""
         _, total_per_file = self.get_counts()
         self.split_dataset(total_per_file)
 
@@ -167,7 +252,7 @@ class CriteoDataProcessor:
         counts = np.zeros(26, dtype=np.int32)
         # create dictionaries
         for j in range(26):
-            for i, x in enumerate(convertDicts[j]):
+            for i, x in enumerate(convertDicts[j]):#enumerate adds a counter to an iterable and returns it in a form of enumerating object
                 convertDicts[j][x] = i
             dict_file_j = self.d_path + self.d_file + \
                 "_fea_dict_{0}.npz".format(j)
@@ -200,10 +285,16 @@ class CriteoDataProcessor:
                 CriteoDataProcessor.processCriteoAdData(
                     self.npzfile, i, self.days, convertDicts)
 
-        return self.concat_data(self.output_file)
+        return self.concat_data(self.output_file) #pandas.concat()
 
     def split_dataset(self, total_per_file):
-        # split into days (simplifies code later on)
+       
+        """ split into days (simplifies code later on)
+        Arguments
+        --------------
+        total_per_file:its used to define the boundary of the splitting dataset
+        """
+        
         file_id = 0
         boundary = total_per_file[file_id]
         nf = open(self.npzfile + "_" + str(file_id), "w")
@@ -217,7 +308,15 @@ class CriteoDataProcessor:
                 nf.write(line)
         nf.close()
 
-    def get_counts(self):
+    def get_counts(self):   
+        """ gets total count
+        
+        
+        Returns
+        ----------
+        total_count(int)-total count in returned
+        total_per_file(int)-total count per file is returned.
+        """
         if os.path.exists(self.total_file):
             with np.load(self.total_file) as data:
                 total_per_file = list(data["total_per_file"])
@@ -232,7 +331,7 @@ class CriteoDataProcessor:
                     total_count += 1
             total_per_file.append(total_count)
             # reset total per file due to split
-            num_data_per_split, extras = divmod(total_count, self.days)
+            num_data_per_split, extras = divmod(total_count, self.days)#returns the division and mod
             total_per_file = [num_data_per_split] * self.days
             for j in range(extras):
                 total_per_file[j] += 1
@@ -242,9 +341,23 @@ class CriteoDataProcessor:
         self, total_count,
         total_file, total_per_file, dataset_multiprocessing
     ):
+    """Used for processing the files and convertDicts
+    
+    Arguments
+    ----------
+     total_count(int)-returns the total count 
+     total_file(int)-retuns the total no of files
+     total_per_file(int)
+     dataset_multiprocessing(int)
+     
+     
+    Return 
+    -------------
+    convertDicts(dict)
+     """
         convertDicts = [{} for _ in range(26)]
-        if dataset_multiprocessing:
-            resultDay = Manager().dict()
+        if dataset_multiprocessing:# multiprocessing package offers both local and remote concurrency
+            resultDay = Manager().dict()# every process creates own 'manager'
             convertDictsDay = Manager().dict()
             processes = [Process(target=CriteoDataProcessor._process_one_file,
                                  name="process_one_file:%i" % i,
@@ -273,7 +386,7 @@ class CriteoDataProcessor:
                         convertDicts[i][j] = 1
         else:
             for i in range(self.days):
-                total_per_file[i] = CriteoDataProcessor._process_one_file(
+                total_per_file[i] = CriteoDataProcessor._process_one_file(#processing into single file
                     self.npzfile + "_{0}".format(i),
                     self.npzfile,
                     i,
@@ -289,6 +402,22 @@ class CriteoDataProcessor:
         return convertDicts
 
     def processCriteoAdData(npzfile, i, days, convertDicts):
+        """processing the continuous and the categorical features
+       
+       
+       Arguments-
+        npzfile:takes input the npz file for processing 
+        i:(int)for accessing the index
+        days:(int) Returns the no of days
+        convertDicts:(int)converts the dictionary
+        
+        
+        
+        
+        Return
+        -----------
+        filename_i-The processed file is returned.
+        """
         filename_i = npzfile + "_{0}_processed.npz".format(i)
 
         if os.path.exists(filename_i):
@@ -315,6 +444,19 @@ class CriteoDataProcessor:
         print("Processed " + filename_i, end="\n")
 
     def concat_data(self, o_filename):
+        """Used for Concatenating the data to get its final form after preprocessing
+        
+        Arguments
+        ------------
+        o_filename
+        
+        Return
+        -------------
+        self.d_path + o_filenam(.npz)-The concatenated data is returned
+        """
+
+
+
         print("Concatenating multiple days into %s.npz file" %
               str(self.d_path + o_filename))
 
@@ -355,31 +497,37 @@ class CriteoDataProcessor:
         else:
             self.ln_emb = np.array(counts)
 
-        np.savez_compressed(self.d_path + o_filename + "_data_description.npz",
+        np.savez_compressed(self.d_path + o_filename + "_data_description.npz",#Saves several arrays into a single file in compressed .npz format.
                             m_den=self.m_den,
                             n_emb=self.n_emb,
                             ln_emb=self.ln_emb)
         return self.d_path + o_filename + ".npz"
 
     def load_data_description(self):
+        """loading the data descriptions"""
         if not os.path.exists(str(self.d_path + self.output_file + ".npz")):
-            assert False, "data not processed"
+            assert False, "data not processed"#This method compare test value with false and returns "data not processed" if false
 
-        with np.load(self.d_path + self.output_file
+        with np.load(self.d_path + self.output_file #Load arrays from .npz 
                      + "_data_description.npz") as data:
             self.m_den = data["m_den"]
             self.n_emb = data["n_emb"]
             self.ln_emb = data["ln_emb"]
 
-    def load(self):
-        if not os.path.exists(str(self.d_path + self.output_file + ".npz")):
-            assert False, "data not processed"
+    def load(self): 
+        """method in Python is used to check whether the specified path exists or not
+       
+          """
+
+        if not os.path.exists(str(self.d_path + self.output_file + ".npz")):#method in Python is used to check whether the specified path exists or notr
+            assert False, "data not processed" #This method compare test value with false and returns "data not processed" if false
+            assert False, "data not processed" 
 
         # pre-process data if needed
         # WARNNING: when memory mapping is used we get a collection of files
         print("Reading pre-processed data=%s" %
               (str(self.d_path + self.output_file + ".npz")))
-        file = str(self.d_path + self.output_file + ".npz")
+        file = str(self.d_path + self.output_file + ".npz")#concatenating the dpath,output file and the .npz file and returning in string folder 
 
         # get a number of samples per day
         total_file = self.d_path + self.d_file + "_day_count.npz"
@@ -395,7 +543,7 @@ class CriteoDataProcessor:
             X_int = data["X_int"]  # continuous  feature
             X_cat = data["X_cat"]  # categorical feature
             y = data["y"]          # target
-            counts = data["counts"]
+            counts = data["counts"]#gives the count of the data
 
         self.m_den = X_int.shape[1]  # den_fea
         self.n_emb = len(counts)
@@ -417,6 +565,20 @@ class CriteoDataProcessor:
             self.data_items[split]["y"] = [y[i] for i in indxs]
 
     def permute_data(self, length, offset_per_file):
+
+        """Permuting the data for better results
+        Arguments
+        --------------
+        length:(int)returns the length
+        offset_per_file:its the bias per file.
+        
+       Return
+       ------------
+       'train': train_indices
+       'val': val_indices
+       'test': test_indices
+       """
+        
         indices = np.arange(length)
         indices = np.array_split(indices, offset_per_file[1:-1])
 
@@ -426,25 +588,35 @@ class CriteoDataProcessor:
                 indices[i] = np.random.permutation(indices[i])
             print("Randomized indices per day ...")
 
-        train_indices = np.concatenate(indices[:-1])
-        test_indices = indices[-1]
-        test_indices, val_indices = np.array_split(test_indices, 2)
+        train_indices = np.concatenate(indices[:-1])#Join a sequence of arrays along an existing axis.
+        test_indices = indices[-1]#
+        test_indices, val_indices = np.array_split(test_indices, 2)#Split an array into 2 sub-arrays
 
         # randomize train data (across days)
         if self.randomize == "total":
-            train_indices = np.random.permutation(train_indices)
+            train_indices = np.random.permutation(train_indices) #Randomly permute the train indices.
             print("Randomized indices across days ...")
-
+        
+        #return the train_indices,val_indices,test_indices
         return {'train': train_indices,
                 'val': val_indices,
                 'test': test_indices}
 
     def dataset(self, split):
+        """Getting the final dataset
+        Input
+        split :The final dataset is returned according to the split computed"""
         return CriteoDataset(
             max_ind_range=self.max_ind_range,
             **self.data_items[split]
         )
 
-    @property
+    @property     #@property decorator  makes usage of getter and setters much easier in Oops
     def collate_fn(self):
+        """Returns the length of collate_wrapper_criteo
+          
+          Return
+          --------------
+          collate_wrapper_criteo_length
+          """
         return collate_wrapper_criteo_length
