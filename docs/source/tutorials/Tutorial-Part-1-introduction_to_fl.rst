@@ -115,7 +115,6 @@ hyper parameters. At the end we choose the best ones for aggregation.
 
 Federated model evaluation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 Metrics are extracted out on the held out data on cloud and the data
 distributed on the devices to find the performance.
 
