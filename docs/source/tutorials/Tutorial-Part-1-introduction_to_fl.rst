@@ -52,7 +52,7 @@ Client selection
 
 Before we start training our global model, we need to select the
 participants. Every aggregator samples a subset or all of its neighbours
-and asks for model updates from it. In some cases the neighbours first
+and asks for model updates from it.In some cases the neighbours first
 apply for participation and then the aggregator decides who amongst them
 should be accepted.
 

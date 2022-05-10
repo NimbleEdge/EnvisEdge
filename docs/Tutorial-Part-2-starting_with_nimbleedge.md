@@ -8,13 +8,13 @@
 
 Before we put a code into production we need to evaluate the models and run benchmarks to get the expected accuracy gains.
 
-There is a [simulator](https://github.com/NimbleEdge/EnvisEdge) created by NimbleEdge exactly for this purpose. 
+There is a [simulator](https://github.com/NimbleEdge/EnvisEdge) created by NimbleEdge exactly for this purpose.
 
 - The FL simulator is designed in a way to make the architecture as close to real world deployments as possible.
 - You can simulate both the normal ML training and FL training with the simulator.
 - The design is scalable to hit 10000+ workers running in the simulation.
 
-Let's take an example of FB AI's [DLRM](https://arxiv.org/abs/1906.00091). This is one of the standard baselines for recommendation engines. We will be training this model on [Kaggle Criteo Ads Data](https://www.kaggle.com/c/criteo-display-ad-challenge). 
+Let's take an example of FB AI's [DLRM](https://arxiv.org/abs/1906.00091). This is one of the standard baselines for recommendation engines. We will be training this model on [Kaggle Criteo Ads Data](https://www.kaggle.com/c/criteo-display-ad-challenge).
 
 
 # Model Definition
@@ -33,7 +33,7 @@ class DLRM_Net(nn.Module):
     
     def forward(inputs):
         # process inputs
-        return output 
+        return output
 ```
 
 To see the real implementation of DLRM, please check out the [dlrm implementation in the repository](../fedrec/modules/dlrm.py)
@@ -59,22 +59,22 @@ class DLRM_Net(nn.Module):
     
     def forward(inputs):
         # process inputs
-        return output 
+        return output
 
 ```
 
-Now create a [config.yml](../configs/dlrm.yml) file to pass the arguments and hyper parameters. 
+Now create a [config.yml](../configs/dlrm.yml) file to pass the arguments and hyper parameters.
 
 ```yaml
 model: # The <Class Type> annotated in registry
-    name : 'dlrm' # The unique identifier key 
+    name : 'dlrm' # The unique identifier key
 ```
 
 # Standard Training
 
 Training your model in the normal non-FL settting requires you to write the implementations for `train` and `test` methods. You can also implement `validate` method if you want and all these methods will automatically be serialized into FL plans when we move into FL deployment.
 
-The [BaseTrainer](../fedrec/trainers/base_trainer.py) abstracts away the basic methods needed to implemented. 
+The [BaseTrainer](../fedrec/trainers/base_trainer.py) abstracts away the basic methods needed to implemented.
 
 Simply subclass the `BaseTrainer` and create your own trainer object. We will call this DLRMTrainer
 
@@ -86,7 +86,7 @@ class DLRMTrainer(BaseTrainer):
             self,
             config_dict: Dict,
             train_config: DLRMTrainConfig,
-            logger: BaseLogger, 
+            logger: BaseLogger,
             model_preproc: PreProcessor,) -> None:
 
         self.train_config = train_config
@@ -126,16 +126,16 @@ class FedAvgWorker(FederatedWorker):
 
     async def run(self):
         '''
-            `Run` function updates the local model. 
+            `Run` function updates the local model.
             Implement this method to determine how the roles interact with each other to determine the final updated model.
-            For example a worker which has both the `aggregator` and `trainer` roles might first train locally then run discounted `aggregate()` to get the fianl update model 
+            For example a worker which has both the `aggregator` and `trainer` roles might first train locally then run discounted `aggregate()` to get the fianl update model
 
 
             In the following example,
             1. Aggregator requests models from the trainers before aggregating and updating its model.
             2. Trainer responds to aggregators' requests after updating its own model by local training.
 
-            Since standard FL requires force updates from central entity before each cycle, trainers always start with global model/aggregator's model 
+            Since standard FL requires force updates from central entity before each cycle, trainers always start with global model/aggregator's model
 
         '''
         assert role in self.roles, InvalidStateError("unknown role for worker")
@@ -190,4 +190,6 @@ mpirun -np 20 python -m mpi4py.futures train_fl.py --num_workers 1000.
 ```
 
 In the [next section](./Tutorial-Part-3-simulating_fl_cycle.md) we will see how easy it is to convert the normal ML pipeline into an FL pipeline.
+
+
 

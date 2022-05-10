@@ -239,8 +239,11 @@ class EnvisTrainer(EnvisBase):
             best_acc_test=None,
             best_auc_test=None,
             step=-1):
-     """ It's the evaluation model
-
+     """ It's the evaluation model .
+     The scores and the targets would be stored in  a list.
+     We do 3 tests here S test ,Z test and T test append S_test.
+     Then we calculate the recall , precision , average  precision score ,f1 score  roc _ auc and finally the accuracy.
+     
      Arguments
      ----------
        model-It loads the model.
@@ -457,8 +460,7 @@ class EnvisTrainer(EnvisBase):
 
     def update(self, state: Dict):
         """"It Updates model,updates the optimizer,loads the load_state_dict and then updates dataset"""
-        
-        # Update the model
+         # Update the model
         self.model.load_state_dict(state["model"].tensors)
         # Update the optimizer
         self.optimizer.load_state_dict(state["optimizer"].tensors)

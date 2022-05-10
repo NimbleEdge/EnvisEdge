@@ -1,6 +1,7 @@
 Guidelines for docs:
 --------------------
 
+
 If there is a new file in `fedrec` module. Please add it to the docs by
  
 ```
