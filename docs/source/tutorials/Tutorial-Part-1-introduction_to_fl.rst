@@ -166,6 +166,7 @@ distributed on the devices to find the performance.
 
 Deployment
 ~~~~~~~~~~
+
 Manual quality assurance, live A/B testing and staged rollout. Usually,
 the engineer determines this process. It is precisely similar to how a
 typically trained model will be deployed.
