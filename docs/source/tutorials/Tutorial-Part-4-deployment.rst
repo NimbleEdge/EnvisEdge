@@ -8,10 +8,14 @@ With the simulations done and benchmark results satisfactory, you may
 want to take things into production.
 
 
+
 The best thing about using the NimbleEdge simulator is it already checks for
 compatibility and serialization capabilties of the models.
 
 The best thing about using NimbleEdge simulator is it already checks for
+=======
+The best thing about using the NimbleEdge simulator is it already checks for
+
 compatibility and serialization capabilities of the models.
 
 
@@ -112,7 +116,7 @@ whenever they begin the FL cycle.
    }
 
    server_config = {
-       "num_cycles": 30,  # total number of cycles (how many times global model is updated)
+       "num_cycles": 30,  # total number of cycles (how many times the global model is updated)
        "cycle_length": 60*60*24,  # max duration of the training cycle in seconds
        "max_diffs": 1,  # number of diffs to collect before updating global model
        "minimum_upload_speed": 0,

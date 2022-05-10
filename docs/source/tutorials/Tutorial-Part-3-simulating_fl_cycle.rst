@@ -11,8 +11,8 @@ computation it will perform.
 It is the role of orchestrator to define these roles for the workers and
 initialize them.
 
-For the purposes of the simulator the `train_fl <../train_fl.py>`__ file
-behaves as the orchestrator and inititates all the workers.
+For the purposes of the simulator, the `train_fl <../train_fl.py>`__ file
+behaves as the orchestrator and initiates all the workers.
 
 Federated Worker
 ----------------
@@ -65,13 +65,13 @@ We define these roles in the ``run()`` method of Federated Worker.
 Aggregation Strategy
 ~~~~~~~~~~~~~~~~~~~~
 
-Aggregation strategy defines how the model updates from trainers will be
+The aggregation strategy defines how the model updates from trainers will be
 combined into a single model update. Every FL paper proposes different
 Fl strategies for personalization, parallelization, accuracy
 improvement, etc.
 
 The most recent ones propose a second order aggregation strategy to
-accomodate losses in the communication. We here would be running the
+accommodate losses in communication. We here would be running the
 simplest one - average them all!
 
 .. code:: python
