@@ -218,6 +218,7 @@ method.
            logging.info("worker_indexes = %s" % str(selected_neighbours))
            return selected_neighbours
 
+
 Begin FL simulation by
 
 .. code:: bash

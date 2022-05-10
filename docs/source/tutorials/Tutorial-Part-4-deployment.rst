@@ -153,6 +153,7 @@ available to be downloaded by the workers.
 
 **On-device Training**
 
+
 The last step is to connect the user devices with the orchestrator to
 begin the Training process. Hop into the `next
 section <./Tutorial-Part-5-local_training.md>`__ for details.

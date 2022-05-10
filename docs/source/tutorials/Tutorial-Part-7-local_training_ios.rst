@@ -3,9 +3,9 @@ Local Training on iOS
 
 In this example, we will train our machine learning models and we will also learn how to use NimbleEdge SDK to train a plan with local data on an iOS device.
 
-We will import the device SDK into our application to take care of managing the FL cycle,Create an ios project and add the cocoa dependency.
+We will import the device SDK into our application to take care of managing the FL cycle, Create an ios project and add the cocoa dependency.
 
-We will create a new client using cloud aggregating service URL. This client is stored as a property to prevent it from delocatiog during the training.
+We will create a new client using a cloud aggregating service URL. This client is stored as a property to prevent it from dislocation during the training.
 
 .. code:: Swift
 
@@ -23,9 +23,9 @@ To create a training job locally, you need to supply the model name and version.
 
 Training Hooks
 ~~~~~~~~~~~~~~
-Here is a function called onReady( ) that's called when NimbleEdge SDK has downloaded plans, parameters from cloud aggregating service and is ready to train the model on your data.The function onReady( )
-consists of four parameters where modelParams contains the tensor parameters of your model and update these tensors during training in order to generate the diff at the end of your training run. Plans contain all code information to execute on the devices. 
-ClientConfig contains the configuration for the training cycle and metadata for the model. ModelReport is used as a complete block and reports the diff to cloud aggregating service.
+Here is a function called onReady( ) that's called when NimbleEdge SDK has downloaded plans, and parameters from the cloud aggregating service and is ready to train the model on your data.The function onReady( )
+consists of four parameters where modelParams contains the tensor parameters of your model and update these tensors during training to generate the diff at the end of your training run. Plans contain all code information to execute on the devices.
+ClientConfig contains the configuration for the training cycle and metadata for the model. ModelReport is used as a complete block and reports the diff to the cloud aggregating service.
 
 
 .. code:: Swift
@@ -123,3 +123,5 @@ At this point, you are ready to start the job and you can even add some specific
 
        self.syftJob?.start(chargeDetection: true, wifiDetection: true)
     }
+
+

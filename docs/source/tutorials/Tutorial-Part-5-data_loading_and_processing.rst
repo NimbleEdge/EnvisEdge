@@ -12,7 +12,6 @@ Data Interfaces
 ---------------
 
 This section describes how to implement a getItem and length for the dataset interface. First, you have to understand what it is, and how to implement it using get item and length.
-
 The dataset interface is to provide a mechanism to describe the properties of datasets. It is composed of a collection of raw data points and describes the data points. It is designed in such a way as to allow new features to be added without disrupting current applications that use the dataset interface. It gives you access to a collection of data points that you use the getItem to pick a specific data point to work with.
   
   * length: It describes the length of the dataset.
@@ -190,7 +189,7 @@ Sequential Samplers:
 
 As the name suggests, it samples the elements sequentially and always in the same order. It also has a property named dataset:
 
-    * dataset: It’s the source from where we can sample the elements.
+    * dataset: It’s the source from which we can sample the elements.
 
 .. code:: kotlin
 
