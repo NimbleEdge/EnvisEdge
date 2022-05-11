@@ -15,7 +15,7 @@ def get_deserializer(serialized_obj_name):
   ----------
   serialized_obj_name : str
   
-  --------------------------------------------------------
+  
   Returns
   ---------
   The value corresponding to that class name in the memory : str
