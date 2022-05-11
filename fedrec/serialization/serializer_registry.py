@@ -37,7 +37,7 @@ def serialize_attribute(obj):
     This function is used to serialize an attribute
     over the obj parameter.
     
-    -------------------------------------------------------
+    
     Arguments
     ---------- 
     obj 
