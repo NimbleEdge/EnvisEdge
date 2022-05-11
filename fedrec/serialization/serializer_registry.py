@@ -42,7 +42,7 @@ def serialize_attribute(obj):
     ---------- 
     obj 
     
-    -------------------------------------------------------
+   
     Returns
     ----------
     Key-value pairs within the obj : dict
