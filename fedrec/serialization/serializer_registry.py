@@ -86,7 +86,7 @@ def deserialize_attribute(obj: Dict):
     ---------- 
     obj : dict
    
-    -----------------------------------------------------
+    
     Returns
     ---------
     obj : dict
