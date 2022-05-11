@@ -107,7 +107,7 @@ def deserialize_attribute(obj: Dict):
       if obj is list or tuple, deserialize_attribute() is called recursively 
       on each attribute in obj.
       
-    -----------------------------------------------------
+    
     Raises
     ---------
     ValueError
