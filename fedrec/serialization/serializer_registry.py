@@ -11,7 +11,6 @@ def get_deserializer(serialized_obj_name):
   is present in the list of classes present in the memory
   during execution.
   
-  -------------------------------------------------------
   Arguments
   ----------
   serialized_obj_name : str
