@@ -20,7 +20,7 @@ def get_deserializer(serialized_obj_name):
   ---------
   The value corresponding to that class name in the memory : str
   
-  --------------------------------------------------------
+ 
   Raises
   ---------
   KeyError 
