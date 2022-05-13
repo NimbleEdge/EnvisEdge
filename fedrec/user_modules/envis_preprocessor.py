@@ -92,14 +92,16 @@ class EnvisPreProcessor(Serializable):
 
 
         Returns:
-        torch.utils.data.DataLoader-Its a python iterable over a dataset supporting single- and multi-process Data Loading.
+        torch.utils.data.DataLoader-Its a python iterable
+        over a dataset supporting single- and multi-process Data Loading.
         """
         return torch.utils.data.DataLoader(
             data, **kwargs
         )
 
     def serialize(self):
-        """It's used to serialize the dataset and append the proc_name ,clien_id and the dataset config.
+        """It's used to serialize the dataset and
+        append the proc_name ,clien_id and the dataset config.
 
         Returns
         --------
