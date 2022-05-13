@@ -89,15 +89,18 @@ class CriteoDataset(Dataset):
       return len(self.y)
 
     def collate_wrapper_criteo_offset(list_of_tuples):
-        """In this function each tuple is (X, lS_o, lS_i, T),it collects and combines the bias_value(offset)
+        """In this function each tuple is (X, lS_o, lS_i, T),
+            it collects and combines the bias_value(offset)
             which will be used during model training.
         Arguments
         ----------
-        list_of_tuples(list)-returns tuples where each tuple is (X_int, X_cat, y)
+        list_of_tuples(list)-returns tuples where each tuple is
+        (X_int, X_cat, y)
 
         Return
         ---------
-        X_int(tuple)-returns a new tensor with the natural logarithm of the elements of input
+        X_int(tuple)-returns a new tensor with the
+        natural logarithm of the elements of input
         torch.stack(lS_o)-tuple
         torch.stack(lS_i)-tuple
         T:tuple
@@ -145,8 +148,9 @@ class CriteoDataset(Dataset):
     def collate_wrapper_criteo_length(list_of_tuples):
         # where each tuple is (X_int, X_cat, y)
         """This function collects and joins two tuples together,
-        creates a multi-dimensional matrix containing elements of a single data type
-        and returns a new tensor with the same data as the self tensor but of a different shape.
+        creates a multi-dimensional matrix containing elements
+        of a single data type returns a new tensor with
+        the same data as the self tensor but of a different shape.
 
         Arguments
         ----------
@@ -154,7 +158,9 @@ class CriteoDataset(Dataset):
 
         Return
             --------------
-            (X_int, lS_l, lS_i)(tuple)-computes the categorical feature in the range of feature count
+            (X_int, lS_l, lS_i)(tuple)-computes the categorical feature
+            in the range of feature count.
+
             T(tuple)
         """
 
