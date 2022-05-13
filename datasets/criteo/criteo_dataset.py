@@ -106,7 +106,8 @@ class CriteoDataset(Dataset):
         T:tuple
         """
         transposed_data = list(zip(*list_of_tuples))
-        X_int = torch.log(torch.tensor(transposed_data[0], dtype=torch.float) + 1)
+        X_int = torch.log(torch.tensor(transposed_data[0],
+                                    dtype=torch.float) + 1)
         X_cat = torch.tensor(transposed_data[1], dtype=torch.long)
         T = torch.tensor(transposed_data[2], dtype=torch.float32).view(-1, 1)
 
@@ -167,7 +168,8 @@ class CriteoDataset(Dataset):
 
 
         transposed_data = list(zip(*list_of_tuples))
-        X_int = torch.log(torch.tensor(transposed_data[0], dtype=torch.float) + 1)
+        X_int = torch.log(torch.tensor(transposed_data[0],
+                                    dtype=torch.float) + 1)
         X_cat = torch.tensor(transposed_data[1], dtype=torch.long)
         T = torch.tensor(transposed_data[2], dtype=torch.float32).view(-1, 1)
 
