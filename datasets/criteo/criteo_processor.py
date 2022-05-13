@@ -16,19 +16,21 @@ from torch.multiprocessing import Manager, Process
 #            "total": randomizes total dataset
 # split (bool) : to split into train, test, validation data-sets
 
-@registry.load('dset_proc', 'kaggle')#We decorate the class definitions with registry.load and create a yaml configuration file of all the arguments to pass
+@registry.load('dset_proc', 'kaggle')
 class CriteoDataProcessor:
     """
-        It's a simple data preprocessor for criteo
+        It's a simple data preprocessor for criteo and
+        We decorate the class definitions with registry.load
+        and create a yaml configuration file of all the arguments to pass.
         ...
         Attributes
         ----------
-        datafile
-        output_file :
+        datafile:the input dataset
+        output_file:the output dataset file
         max_ind_range : int
         sub_sample_rate : float
         randomize : int
-        dataset_multiprocessing boolean
+        dataset_multiprocessing:boolean
 
         Methods
         -------
@@ -46,13 +48,6 @@ class CriteoDataProcessor:
         dataset: its the dataset
         collate_fn: returns the length of collate_wrapper_criteo
         """
-
-
-
-
-
-
-
     def __init__(
             self,
             datafile,
@@ -94,7 +89,7 @@ class CriteoDataProcessor:
         # tot_fea = tad_fea + spa_fea
         self.randomize = randomize
         self.max_ind_range = max_ind_range
-        self.clear_items() #clear() method removes all items from the list.
+        self.clear_items()
 
     @staticmethod
     def _process_one_file(
@@ -124,7 +119,7 @@ class CriteoDataProcessor:
         --------
         i(int)
 
-            """
+        """
         if dataset_multiprocessing:
             convertDicts_day = [{} for _ in range(26)]
         else:
@@ -285,6 +280,7 @@ class CriteoDataProcessor:
     def split_dataset(self, total_per_file):
 
         """ split into days (simplifies code later on)
+
         Arguments
         --------------
         total_per_file:its used to define the boundary of the splitting dataset
@@ -520,12 +516,14 @@ class CriteoDataProcessor:
             self.ln_emb = data["ln_emb"]
 
     def load(self):
-        """method in Python is used to check whether the specified path exists or not
-            compares test value with false and returns "data not processed" if false
+        """method in Python is used to check whether the specified
+            path exists or not compares test value with false and
+            returns "data not processed" if false
             prints the sparse and the dense features
           """
 
-        if not os.path.exists(str(self.d_path + self.output_file + ".npz")):
+        if not os.path.exists(str(self.d_path +
+                                  self.output_file + ".npz")):
             assert False, "data not processed"
             assert False, "data not processed"
 
