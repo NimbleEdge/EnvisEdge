@@ -6,30 +6,30 @@ from fedrec.utilities.registry import Registrable
 
 @Registrable.register_class_ref
 class EnvisPreProcessor(Serializable):
-    """  
+    """
     Class for preprocessing Envis
 
     ...
 
     Argument:
         Serializable
-        
+
 
     """
     def __init__(
             self,
             dataset_config,
             client_id=None) -> None:
-     """ Initialize the EnvisPreProcessor class.
-        
+        """
+        Initialize the EnvisPreProcessor class.
 
-        ...
-        Argument
-        -----------------
+            ...
+            Argument
+            -----------------
 
-        dataset_config-It configures the dataset
-        client_id-(int) It's just an id 
-        
+            dataset_config-It configures the dataset
+            client_id-(int) It's just an id
+
 
         """
         super().__init__()
@@ -54,14 +54,12 @@ class EnvisPreProcessor(Serializable):
 
     def datasets(self, *splits):
         """It splits the dataset
-
-
         Returns
         -----------
         split:The value by which the dataset should be splitted
 
         """
-        
+
         assert all([isinstance(split, str) for split in splits])
         return {
             split: self.dataset_processor.dataset(split)
@@ -87,9 +85,7 @@ class EnvisPreProcessor(Serializable):
 
     def data_loader(self, data, **kwargs):
         """It loads the data.
-
-
-        Argument
+         Argument
         ------------
              data:The input data.
             **kwargs: Arbitrary keyword arguments.
@@ -104,12 +100,12 @@ class EnvisPreProcessor(Serializable):
 
     def serialize(self):
         """It's used to serialize the dataset and append the proc_name ,clien_id and the dataset config.
-        
+
         Returns
         --------
         output:Outputs the appended dataset.
         """
-        
+
         output = self.append_type({
             "proc_name": self.type_name(),
             "client_id": self.client_id,
@@ -117,7 +113,7 @@ class EnvisPreProcessor(Serializable):
         })
         return output
 
-    @classmethod #It's a built-in function decorator that gets evaluated after function is defined.
+    @classmethod
     def deserialize(cls, obj):
         """It's used to deserialize the dataset.
 
@@ -129,7 +125,6 @@ class EnvisPreProcessor(Serializable):
         Returns
         ----------
         preproc_cls:It returns the dataset config and client_id of the object
-        
         """
         preproc_cls = Registrable.lookup_class_ref(obj['proc_name'])
         return preproc_cls(
