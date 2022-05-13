@@ -14,7 +14,7 @@ from fedrec.utilities.logger import BaseLogger
 
 @attr.s
 class TrainConfig:
-""" Class for Training config"""
+    """ Class for Training config"""
     eval_every_n = attr.ib(default=10000)
     report_every_n = attr.ib(default=10)
     save_every_n = attr.ib(default=2000)
@@ -28,20 +28,19 @@ class TrainConfig:
 
     @num_batches.validator
     def check_only_one_declaration(instance, _, value):
-    """ It checks so that there's only one declaration and raises value error if not
-        
+        """ It checks so that there's only one declaration and raises value error if not
 
-        Argument
-        ---------
-            instance:its an attribute whose object(num_epochs) is checked
-            value:(int)
+            Argument
+            ---------
+                instance:its an attribute whose object(num_epochs) is checked
+                value:(int)
 
 
-        Raises
-        ------
-        ValueError
-            only one out of num_epochs and num_batches must be declared!
-        """
+            Raises
+            ------
+            ValueError
+                only one out of num_epochs and num_batches must be declared!
+            """
         if instance.num_epochs > 0 & value > 0:
             raise ValueError(
                 "only one out of num_epochs and num_batches must be declared!")
@@ -70,16 +69,15 @@ class EnvisTrainer(EnvisBase):
             config_dict: Dict,
             logger: BaseLogger,
             client_id=None) -> None:
-    """ Initialize the EnvisTrainer class,it's run once when instantiating the Dataset object
-        
-
-        Argument
-        ------
-        dataset_config-It configures the dataset.
-        logger-Base logger handler.
-        client_id-(int) It's just an id.
-        
         """
+         Initialize the EnvisTrainer class,it's run once when instantiating the Dataset object
+
+            Argument
+            ------
+            dataset_config-It configures the dataset.
+            logger-Base logger handler.
+            client_id-(int) It's just an id.
+         """
 
         super().__init__(config_dict)
         self.config_dict = config_dict
@@ -148,12 +146,12 @@ class EnvisTrainer(EnvisBase):
             optimizer-It optimizes Model Parameters.
             **kwargs-Arbitrary keyword arguments.
 
-            
+
             Returns
             --------
             self._scheduler
-            
-             """
+
+            """
 
 
 
@@ -168,14 +166,14 @@ class EnvisTrainer(EnvisBase):
 
     @property #python property getter and setter
     def saver(self):
-    """ It's used for save the model paarmeters
+        """ It's used for save the model paarmeters
 
-    Returns
-    --------
-    self._saver-: Saves a serialized object to disk.
+        Returns
+        --------
+        self._saver-: Saves a serialized object to disk.
 
 
-    """
+        """
         if self._saver is None:
             # 2. Restore model parameters
             self._saver = saver_mod.Saver(
@@ -185,13 +183,13 @@ class EnvisTrainer(EnvisBase):
 
     @property
     def data_loaders(self):
-    """ It's used for save the model paarmeters
+        """ It's used for save the model paarmeters
 
-    Returns
-    -------
-    data_loaders
+        Returns
+        -------
+        data_loaders
 
-    """
+        """
 
         if self._data_loaders:
             return self._data_loaders
@@ -239,32 +237,31 @@ class EnvisTrainer(EnvisBase):
             best_acc_test=None,
             best_auc_test=None,
             step=-1):
-     """ It's the evaluation model .
-     The scores and the targets would be stored in  a list.
-     We do 3 tests here S test ,Z test and T test append S_test.
-     Then we calculate the recall , precision , average  precision score ,f1 score  roc _ auc and finally the accuracy.
-     
-     Arguments
-     ----------
-       model-It loads the model.
-       loader-It helps to load the model.
-       eval_section-Its the evauation section.
-       logger-the use loggers is to just pass a list to the Traine.
-       num_eval_batches-(int) It gives us the no of evaluation batches
-       best_acc_test-It gives us the best accuracy
-       best_auc_test-It provides thae best ggregate measure of performance across all possible classification threshold.
-       step-(int) It counts the no of steps.
+        """
+                It's the evaluation model .
+                The scores and the targets would be stored in  a list.
+                We do 3 tests here S test ,Z test and T test append S_test.
+                Then we calculate the recall , precision , average  precision score ,f1 score  roc _ auc and finally the accuracy.
+
+                Arguments
+                ----------
+                model-It loads the model.
+                loader-It helps to load the model.
+                eval_section-Its the evauation section.
+                logger-the use loggers is to just pass a list to the Traine.
+                num_eval_batches-(int) It gives us the no of evaluation batches
+                best_acc_test-It gives us the best accuracy
+                best_auc_test-It provides thae best ggregate measure of performance across all possible classification threshold.
+                step-(int) It counts the no of steps.
 
 
-    Returns
-    -------
-    bool-true 
-        if best_auc_test is not None else returns false
-    results-(dict)
+                    Returns
+                    -------
+                    bool-true
+                        if best_auc_test is not None else returns false
+                    results-(dict)
 
-    """
-
-
+        """
         scores = []
         targets = []
         model.eval()
@@ -326,13 +323,13 @@ class EnvisTrainer(EnvisBase):
         return False, results
 
     def store_state(self):
-    """It's the store state
+        """It's the store state
 
 
-        Returns
-        --------
-        model-Returns the state of the model.
-        """
+            Returns
+            --------
+            model-Returns the state of the model.
+            """
         assert self.model is not None
         return {
             'model': self.model
@@ -459,13 +456,11 @@ class EnvisTrainer(EnvisBase):
         return self.model.state_dict()
 
     def update(self, state: Dict):
-        """"It Updates model,updates the optimizer,loads the load_state_dict and then updates dataset"""
-         # Update the model
+        # Update the model
         self.model.load_state_dict(state["model"].tensors)
-        # Update the optimizer
-        self.optimizer.load_state_dict(state["optimizer"].tensors)
-        # empty dataloaders for new dataset
-        self.reset_loaders()
-        # update dataset
-        self.model_preproc = state["model_preproc"]
-
+        # # Update the optimizer
+        # self.optimizer.load_state_dict(state["optimizer"].tensors)
+        # # empty dataloaders for new dataset
+        # self.reset_loaders()
+        # # update dataset
+        # self.model_preproc = state["model_preproc"]
