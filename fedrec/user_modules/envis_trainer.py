@@ -242,8 +242,9 @@ class EnvisTrainer(EnvisBase):
         It's the evaluation model .
         The scores and the targets would be stored in  a list.
         We do 3 tests here S test ,Z test and T test append
-        S_test.Then we calculate the recall , precision , average  precision score
-        ,f1 score  roc _ auc and finally the accuracy.
+        S_test.Then we calculate the recall,precision average
+        precision score,f1 score  roc _ auc and
+        finally the accuracy.
 
         Arguments
         ----------
