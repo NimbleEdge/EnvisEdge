@@ -28,7 +28,7 @@ class TrainConfig:
 
     @num_batches.validator
     def check_only_one_declaration(instance, _, value):
-        """ It checks so that there's only one declaration and raises value error if not
+        """It checks so that there's only one declaration and raises value error if not
 
             Argument
             ---------
@@ -70,7 +70,8 @@ class EnvisTrainer(EnvisBase):
             logger: BaseLogger,
             client_id=None) -> None:
         """
-         Initialize the EnvisTrainer class,it's run once when instantiating the Dataset object
+        Initialize the EnvisTrainer class,it's run once when
+        instantiating the Dataset object
 
             Argument
             ------
@@ -114,7 +115,7 @@ class EnvisTrainer(EnvisBase):
         """Its used for reseting thr loaders"""
         self._data_loaders = {}
 
-    @staticmethod #a built-in decorator that defines a static method in the class in Python
+    @staticmethod
     def _yield_batches_from_epochs(loader, start_epoch):
         """"It's used to yield batches from epochs
 
@@ -238,28 +239,30 @@ class EnvisTrainer(EnvisBase):
             best_auc_test=None,
             step=-1):
         """
-                It's the evaluation model .
-                The scores and the targets would be stored in  a list.
-                We do 3 tests here S test ,Z test and T test append S_test.
-                Then we calculate the recall , precision , average  precision score ,f1 score  roc _ auc and finally the accuracy.
+        It's the evaluation model .
+        The scores and the targets would be stored in  a list.
+        We do 3 tests here S test ,Z test and T test append
+        S_test.Then we calculate the recall , precision , average  precision score
+        ,f1 score  roc _ auc and finally the accuracy.
 
-                Arguments
-                ----------
-                model-It loads the model.
-                loader-It helps to load the model.
-                eval_section-Its the evauation section.
-                logger-the use loggers is to just pass a list to the Traine.
-                num_eval_batches-(int) It gives us the no of evaluation batches
-                best_acc_test-It gives us the best accuracy
-                best_auc_test-It provides thae best ggregate measure of performance across all possible classification threshold.
-                step-(int) It counts the no of steps.
+        Arguments
+        ----------
+        model-It loads the model.
+        loader-It helps to load the model.
+        eval_section-Its the evauation section.
+        logger-the use loggers is to just pass a list to the Traine.
+        num_eval_batches(int)-It gives us the no of evaluation batches
+        best_acc_test-It gives us the best accuracy
+        best_auc_test-It provides thae best ggregate measure of
+        performance across all possible classification threshold.
+        step-(int) It counts the no of steps.
 
 
-                    Returns
-                    -------
-                    bool-true
-                        if best_auc_test is not None else returns false
-                    results-(dict)
+        Returns
+        -------
+        bool-true
+        if best_auc_test is not None else returns false
+        results-(dict)
 
         """
         scores = []
