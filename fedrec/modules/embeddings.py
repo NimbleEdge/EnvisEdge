@@ -62,7 +62,8 @@ def alpha_power_rule(n, alpha, d0=None, B=None):
 
     Returns
     --------
-    torch.round(d).type(torch.long))(Tensor)-Rounds elements of input to the nearest integer.
+    torch.round(d).type(torch.long))(Tensor)-Rounds elements
+    of input to the nearest integer.
     '''
     if d0 is not None:
         lamb = d0 * (n[0].type(torch.float) ** alpha)
@@ -87,7 +88,6 @@ def pow_2_round(dims):
     --------------
     dims -- (torch.LongTensor);takes dimension as input
 
-
     Return
     -------------
     2 ** torch.round(torch.log2(dims.type(torch.float))
@@ -99,7 +99,8 @@ def pow_2_round(dims):
 class EmbeddingBag(nn.EmbeddingBag):
     """Computes sums or means over two bags of embeddings,
     one using the quotient of the indices and the other using the remainder
-    of the indices, without instantiating the intermediate embeddings, then performsan operation to combine these.
+    of the indices, without instantiating the intermediate embeddings,
+    then performsan operation to combine these.
 
     Attributes
     ----------
@@ -119,20 +120,29 @@ class EmbeddingBag(nn.EmbeddingBag):
             _weight: Optional[Tensor] = None,
             include_last_offset: bool = False,
             init=False) -> None:
-        """Computes sums or means over two bags of embeddings, one using the quotient
-            of the indices and the other using the remainder of the indices, without instantiating
+        """Computes sums or means over two bags of embeddings,
+            one using the quotient of the indices and the other using the
+            remainder of the indices, without instantiating
             the intermediate embeddings, then performsan operation to combine these.
+
             Parameters
             -------------
+            num_categories (int) -total number of unique categories. The input indices must be in 0, 1, …, num_categories - 1.
+            embedding_dim (list)-list of sizes for each embedding vector in each table. If "add" or "mult"
+            operation are used, these embedding dimensions must be the same
+            If a single embedding_dim is used, then it will use this embedding_dim for both embedding tables.
 
-            num_categories (int)  total number of unique categories. The input indices must be in 0, 1, …, num_categories - 1.
-            embedding_dim (list) list of sizes for each embedding vector in each table. If "add" or "mult" operation are used, these embedding dimensions must be the same. If a single embedding_dim is used, then it will use this embedding_dim for both embedding tables.
-            num_collisions (int) number of collisions to enforce.
-            operation (string, optional)  "concat", "add", or "mult". Specifies the operation to compose embeddings. ``"concat" concatenates the embeddings, "add" sums the embeddings, and "mult" multiplies (component-wise) the embeddings. Default: "mult"
-            max_norm (float, optional)  If given, each embedding vector with norm larger than max_norm is renormalized to have norm max_norm.
+            num_collisions (int)-number of collisions to enforce.
+            operation (string, optional)-"concat", "add", or "mult". Specifies the
+            operation to compose embeddings. ``"concat" concatenates the
+            embeddings, "add" sums the embeddings and "mult" multiplies
+            (component-wise) the embeddings. Default: "mult"
+
+            max_norm (float, optional) -If given, each embedding vector with norm larger than max_norm is renormalized to have norm max_norm.
             norm_type (float, optional)  The p of the p-norm to compute for the max_norm option. Default 2.
             scale_grad_by_freq (boolean, optional)
-            if given, this will scale gradients by the inverse of frequency of the words in the mini-batch. Default False."""
+            if given, this will scale gradients by the inverse of frequency of the words in the mini-batch. Default False.
+            """
 
         super().__init__(num_embeddings,
                          embedding_dim,
@@ -233,9 +243,10 @@ class PrEmbeddingBag(nn.Module):
 
 @registry.load("embedding", "qr_emb")
 class QREmbeddingBag(nn.Module):
-    r"""Computes sums or means over two 'bags' of embeddings, one
-        using the quotient of the indices and the other using the remainder
-        of the indices, without instantiating the intermediate embeddings,
+    r"""Computes sums or means over two 'bags' of embeddings,
+        one using the quotient of the indices and the other
+        using the remainder of the indices, without
+        instantiating the intermediate embeddings,
         then performsan operation to combine these.
 
         For bags of constant length and no :attr:`per_sample_weights`, this class
@@ -394,7 +405,8 @@ class QREmbeddingBag(nn.Module):
 
     def reset_parameters(self):
         """ Its used for resetting the parameters."""
-        nn.init.uniform_(self.weight_q, np.sqrt(1 / self.num_categories))
+        nn.init.uniform_(self.weight_q,
+                         np.sqrt(1 / self.num_categories))
         nn.init.uniform_(self.weight_r, np.sqrt(1 / self.num_categories))
 
     def forward(self, input, offsets=None, per_sample_weights=None):
@@ -438,7 +450,8 @@ class QREmbeddingBag(nn.Module):
     def extra_repr(self):
         """Set the extra representation of the module
             To print customized extra information, you should
-            re-implement this method in your own modules. Both single-line and multi-line strings are acceptable.
+            re-implement this method in your own modules.
+            Both single-line and multi-line strings are acceptable.
 
 
             Returns
