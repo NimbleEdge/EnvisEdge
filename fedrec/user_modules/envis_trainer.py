@@ -75,12 +75,14 @@ class EnvisTrainer(EnvisBase):
             client_id=None) -> None:
         """
         Initialize the EnvisTrainer class,it's run once when
-        instantiating the Dataset object 
-        The super call delegates the function call to the parent class
-        This is needed to initialize properly.
-        "register" means act of recording a name or information on an official list"
-        model.cuda() adds support CUDA tensor types that implement the same function as
-        CPU tensors.Returns the random number generator state as a torch.ByteTensor
+        instantiating the Dataset object
+        The super call delegates the function call to the
+        parent class.This is needed to initialize properly.
+        "register" means act of recording a name or information
+        on an official list",model.cuda() adds support CUDA
+        tensor types that implement the same function as
+        CPU tensors.Returns the random number generator
+        state as a torch.ByteTensor
 
         Argument
         ------
@@ -125,11 +127,13 @@ class EnvisTrainer(EnvisBase):
 
     @staticmethod
     def _yield_batches_from_epochs(loader, start_epoch):
-        """It's used to yield batches from epoch the batch size is a number of samples processed
-        before the model is updated,epochs is the number of complete
-        passes through the training dataset,The size of a batch must
-        be more than or equal to one and less than
-        or equal to the number of samples in the training dataset.
+        """It's used to yield batches from epoch the batch
+        size is a number of samples processed before the
+        model is updated,epochs is the number of complete
+        passes through the training dataset,The size of
+        a batch must be more than or equal to one and
+        less than or equal to the number
+        of samples in the training dataset.
 
         Arguments
         --------
@@ -189,18 +193,19 @@ class EnvisTrainer(EnvisBase):
 
     @property
     def data_loaders(self):
-        """ It's used for save the model paarmeters
+        """
+        It's used for save the model paarmeters
 
         Returns
         -------
-        data_loaders-that allow you to use pre-loaded datasets as well
-        s your own dataCombines a dataset and a sampler,
-        and provides an iterable over the given dataset,supports
-        both map-style and iterable-style datasets with single- or multi-process
+        data_loaders-that allow you to use pre-loaded
+        datasets as well your own dataCombines a dataset
+        and a sampler and provides an iterable over the
+        given dataset,supports both map-style and
+        iterable-style datasets with single- or multi-process
         loading, customizing loading order and optional
-        automatic batching (collation) and memory pinning
+        automatic batching (collation) and memory pinning.
         """
-
         if self._data_loaders:
             return self._data_loaders
         # TODO : FIX if not client_id will load whole dataset
@@ -267,13 +272,11 @@ class EnvisTrainer(EnvisBase):
         performance across all possible classification threshold.
         step-(int) It counts the no of steps.
 
-
         Returns
         -------
         bool-true
         if best_auc_test is not None else returns false
         results-(dict)
-
         """
         scores = []
         targets = []
@@ -336,23 +339,29 @@ class EnvisTrainer(EnvisBase):
         return False, results
 
     def store_state(self):
-        """It's the store state which
-            stores the model and retuns it.
-            Returns
-            --------
-            model-Returns the state of the model.
-            """
+        """
+        It's the store state which
+        stores the model and retuns it.
+        Returns
+        --------
+        model-Returns the state of the model.
+        """
         assert self.model is not None
         return {
             'model': self.model
         }
 
     def test(self):
-        """It gives us the results on the test data
+        """
+        It gives us the results on the test data computes
+        with respect to training dataset and the validation data
+        taking the parameters data loaders,num_eval_batches
+        and logger function with the intitial step value-=1
+        and finally returns test results
 
         Returns
         ---------
-        results(dict)
+        results(dict)-the test results are returned
         """
         results = {}
         if self.train_config.eval_on_train:
@@ -392,7 +401,6 @@ class EnvisTrainer(EnvisBase):
 
         Returns(dict) the trained model.
         ---------
-
         results(dict)
         """
         last_step, current_epoch = self.saver.restore(modeldir)
