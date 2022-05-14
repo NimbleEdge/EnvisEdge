@@ -9,12 +9,9 @@ class EnvisPreProcessor(Serializable):
     """
     Class for preprocessing Envis
 
-    ...
-
     Argument:
-        Serializable
-
-
+        Serializable-load PyTorch tensors and module states in Python
+        and how to serialize Python modules so they can be loaded in C++.
     """
     def __init__(
             self,
@@ -23,14 +20,11 @@ class EnvisPreProcessor(Serializable):
         """
         Initialize the EnvisPreProcessor class.
 
-            ...
-            Argument
-            -----------------
+        Argument
+        -----------------
 
-            dataset_config-It configures the dataset
-            client_id-(int) It's just an id
-
-
+        dataset_config-It configures the dataset
+        client_id-(int) It's just an id
         """
         super().__init__()
         self.client_id = client_id
@@ -57,9 +51,7 @@ class EnvisPreProcessor(Serializable):
         Returns
         -----------
         split:The value by which the dataset should be splitted
-
         """
-
         assert all([isinstance(split, str) for split in splits])
         return {
             split: self.dataset_processor.dataset(split)
@@ -68,27 +60,24 @@ class EnvisPreProcessor(Serializable):
 
     def dataset(self, split):
         """It's used to get the splitted dataset.
-        ...
         Arguments
         ------------
 
         split-(int):It's the value by which the dataset should be splitted.
-
-
         Returns
         ------------
         dataset_processor.dataset(split)-The splitted dataset.
-
         """
         assert isinstance(split, str)
         return self.dataset_processor.dataset(split)
 
     def data_loader(self, data, **kwargs):
-        """It loads the data.
-         Argument
+        """
+        It loads the data.
+        Argument
         ------------
-             data:The input data.
-            **kwargs: Arbitrary keyword arguments.
+        data:The input data.
+        **kwargs: Arbitrary keyword arguments.
 
 
         Returns:
@@ -107,7 +96,6 @@ class EnvisPreProcessor(Serializable):
         --------
         output:Outputs the appended dataset.
         """
-
         output = self.append_type({
             "proc_name": self.type_name(),
             "client_id": self.client_id,
@@ -118,6 +106,12 @@ class EnvisPreProcessor(Serializable):
     @classmethod
     def deserialize(cls, obj):
         """It's used to deserialize the dataset.
+           Class method is used as its specific to
+           particular instance but still
+           involve the class in some way.
+           it means to (unpickle) files.
+           for configuring  file,we need
+           object serialization and deserialization.
 
         Arguments
         ----------
