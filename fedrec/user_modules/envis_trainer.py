@@ -14,7 +14,15 @@ from fedrec.utilities.logger import BaseLogger
 
 @attr.s
 class TrainConfig:
-    """ Class for Training config"""
+    """
+    Class for Training config
+    attrs gives class decorator and a way to
+    define the attributes on class
+    eval_every_n evaluates after every n epochs
+    report_every_n reports after every n epochs
+    save_every_n saves model after n epochs
+    keep_every_n keeps it after n epochs
+    """
     eval_every_n = attr.ib(default=10000)
     report_every_n = attr.ib(default=10)
     save_every_n = attr.ib(default=2000)
@@ -56,13 +64,9 @@ class TrainConfig:
 
 class EnvisTrainer(EnvisBase):
     """This class is to train Envis
-
-
     Arguments
     ------
-    EnvisBase
-
-
+    EnvisBase-we are using the envis base as the input parameter
     """
     def __init__(
             self,
@@ -71,15 +75,19 @@ class EnvisTrainer(EnvisBase):
             client_id=None) -> None:
         """
         Initialize the EnvisTrainer class,it's run once when
-        instantiating the Dataset object
+        instantiating the Dataset object 
+        The super call delegates the function call to the parent class
+        This is needed to initialize properly.
+        "register" means act of recording a name or information on an official list"
+        model.cuda() adds support CUDA tensor types that implement the same function as
+        CPU tensors.Returns the random number generator state as a torch.ByteTensor
 
-            Argument
-            ------
-            dataset_config-It configures the dataset.
-            logger-Base logger handler.
-            client_id-(int) It's just an id.
+        Argument
+        ------
+        dataset_config-It configures the dataset.
+        logger-Base logger handler.
+        client_id-(int) It's just an id.
          """
-
         super().__init__(config_dict)
         self.config_dict = config_dict
         self.client_id = client_id
@@ -112,26 +120,26 @@ class EnvisTrainer(EnvisBase):
         self._saver = None
 
     def reset_loaders(self):
-        """Its used for reseting thr loaders"""
+        """Its used for reseting random loaders"""
         self._data_loaders = {}
 
     @staticmethod
     def _yield_batches_from_epochs(loader, start_epoch):
-        """"It's used to yield batches from epochs
+        """It's used to yield batches from epoch the batch size is a number of samples processed
+        before the model is updated,epochs is the number of complete
+        passes through the training dataset,The size of a batch must
+        be more than or equal to one and less than
+        or equal to the number of samples in the training dataset.
 
         Arguments
         --------
         loader-It's used to load the dataset.
         start_epoch-It's the starting epoch.
 
-
         Yields
         ------
         int
             batch, current_epoch
-
-
-
         """
         current_epoch = start_epoch
         while True:
@@ -141,6 +149,9 @@ class EnvisTrainer(EnvisBase):
 
     def get_scheduler(self, optimizer, **kwargs):
         """It will init the scheduler based on the configuration provided to it.
+        get_scheduler will change the learning rate based on  model
+        optimizer implements various optimization algorithms.
+        config_dict-python dict has associated pretrained model configurations as values.
 
             Arguments
             --------
@@ -153,9 +164,6 @@ class EnvisTrainer(EnvisBase):
             self._scheduler
 
             """
-
-
-
         if self._scheduler is None:
             with self.init_random:
                 self._scheduler = registry.construct(
@@ -165,15 +173,12 @@ class EnvisTrainer(EnvisBase):
                     optimizer=optimizer, **kwargs)
         return self._scheduler
 
-    @property #python property getter and setter
+    @property
     def saver(self):
         """ It's used for save the model paarmeters
-
         Returns
         --------
         self._saver-: Saves a serialized object to disk.
-
-
         """
         if self._saver is None:
             # 2. Restore model parameters
@@ -188,8 +193,12 @@ class EnvisTrainer(EnvisBase):
 
         Returns
         -------
-        data_loaders
-
+        data_loaders-that allow you to use pre-loaded datasets as well
+        s your own dataCombines a dataset and a sampler,
+        and provides an iterable over the given dataset,supports
+        both map-style and iterable-style datasets with single- or multi-process
+        loading, customizing loading order and optional
+        automatic batching (collation) and memory pinning
         """
 
         if self._data_loaders:
@@ -327,9 +336,8 @@ class EnvisTrainer(EnvisBase):
         return False, results
 
     def store_state(self):
-        """It's the store state
-
-
+        """It's the store state which
+            stores the model and retuns it.
             Returns
             --------
             model-Returns the state of the model.
@@ -340,11 +348,10 @@ class EnvisTrainer(EnvisBase):
         }
 
     def test(self):
-        """It gives us the results on the test dataset
+        """It gives us the results on the test data
 
         Returns
         ---------
-
         results(dict)
         """
         results = {}
@@ -367,11 +374,21 @@ class EnvisTrainer(EnvisBase):
         return results
 
     def train(self, modeldir=None):
-        """It gives us the results on the train dataset
+        """
+        It gives us the results on the train dataset
+        lr_scheduler here is the learning rate scheduler
+        which  detemines the step size at each parameter
+        and optimizes,calculates the total training length
+        loading the training parameters ,training the model,
+        tqdm is the default iterator, it takes an iterator object
+        as argument,and displays a progress bar as
+        it iterates over it applying the gradient
+        and then computing the metrics such as training
+        loss saving the model and then returning it.
 
         Arguments
         ------------
-        modeldir
+        modeldir-the model.
 
         Returns(dict) the trained model.
         ---------
@@ -461,6 +478,9 @@ class EnvisTrainer(EnvisBase):
 
     def update(self, state: Dict):
         # Update the model
+        """PyTorch Tensor can run on either CPU or GPU,that's why we are
+            returning the model in tensor
+        """
         self.model.load_state_dict(state["model"].tensors)
         # # Update the optimizer
         # self.optimizer.load_state_dict(state["optimizer"].tensors)
