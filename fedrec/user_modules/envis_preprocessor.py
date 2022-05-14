@@ -22,14 +22,12 @@ class EnvisPreProcessor(Serializable):
 
         Argument
         -----------------
-
         dataset_config-It configures the dataset
         client_id-(int) It's just an id
         """
         super().__init__()
         self.client_id = client_id
         self.dataset_config = dataset_config
-
         self.dataset_processor = registry.construct(
             'dataset', self.dataset_config,
             unused_keys=())
@@ -115,7 +113,6 @@ class EnvisPreProcessor(Serializable):
 
         Arguments
         ----------
-
         obj:An object
 
         Returns
