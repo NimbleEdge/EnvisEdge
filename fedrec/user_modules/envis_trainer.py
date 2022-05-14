@@ -155,7 +155,7 @@ class EnvisTrainer(EnvisBase):
         """It will init the scheduler based on the configuration provided to it.
         get_scheduler will change the learning rate based on  model
         optimizer implements various optimization algorithms.
-        config_dict-python dict has associated pretrained 
+        config_dict-python dict has associated pretrained
         model configurations as values.
 
             Arguments
