@@ -131,10 +131,11 @@ class EmbeddingBag(nn.EmbeddingBag):
         -------------
         num_categories (int) -total number of unique categories.
         The input indices must be in 0, 1, …, num_categories - 1.
-        embedding_dim (list)-list of sizes for each embedding vector in each table.
-        If "add" or "mult" operation are used, these embedding
-        dimensions must be the same If a single embedding_dim is used,
-        then it will use this embedding_dim for both embedding tables.
+        embedding_dim (list)-list of sizes for each embedding
+        vector in each table.If "add" or "mult" operation are used,
+        these embedding dimensions must be the sameIf a single
+        embedding_dim is used,then it will use this embedding_dim
+        for both embedding tables.
         num_collisions (int)-number of collisions to enforce.
         operation (string, optional)-"concat", "add", or "mult".
         Specifies the operation to compose embeddings.
@@ -225,14 +226,17 @@ class PrEmbeddingBag(nn.Module):
         Forward pass of EmbeddingBag.
 
         Arguments
-        --------------
-        input (Tensor)Tensor containing bags of indices into the embedding matrix.
-        offsets (Tensor, optional) Only used when input is 1D. offsets
-        determines the starting index position of each bag (sequence) in input.
-        per_sample_weights (Tensor, optional)  a tensor of float / double weights, or
-        None to indicate all weights should be taken to be 1. If specified, per_sample_weights
-        must have exactly the same shape as input and is treated as having the same
-        offsets,if those are not None. Only supported for mode='sum'.
+        --------
+        input (Tensor)Tensor containing bags of indices into the
+        embedding matrix.offsets (Tensor, optional) Only used when
+        input is 1D. offsets determines the starting index
+        position of each bag (sequence) in input.
+        per_sample_weights (Tensor, optional)  a tensor
+        of float / double weights, or None to indicate all weights
+        should be taken to be 1. If specified, per_sample_weights
+        must have exactly the same shape as input and is treated
+        as having the same offsets,if those are not None.
+        Only supported for mode='sum'.
 
         Returns
         --------------
@@ -354,11 +358,10 @@ class QREmbeddingBag(nn.Module):
                      'norm_type',
                      'scale_grad_by_freq',
                      'mode', 'sparse']
-
-    def __init__(self, num_embeddings, embedding_dim, num_collisions,
-                operation='mult', max_norm=None, norm_type=2,
-                scale_grad_by_freq=False, mode='mean', sparse=False,
-                 _weight=None):
+    def __init__(self, num_embeddings, embedding_dim,
+                num_collisions,operation='mult', max_norm=None,
+                norm_type=2,scale_grad_by_freq=False,
+                mode='mean', sparse=False,_weight=None):
         """__init__ function is called every time an object is created from a class."""
     def __init__(self, num_embeddings, embedding_dim, num_collisions,
                  operation='mult', max_norm=None, norm_type=2.,
