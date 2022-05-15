@@ -27,7 +27,7 @@ def md_solver(n, alpha, d0=None, B=None, round_dim=True, k=None):
 
     Arguments
     ----------
-    n(torch.LongTensor); Vector of num of rows for each embedding matrix
+    n(torch.LongTensor)-Vector of num of rows for each embedding matrix
     alpha -- (torch.FloatTensor); Scalar, non-negative, controls dim. skew
     d0 -- (torch.FloatTensor); Scalar, baseline embedding dimension
     B -- (torch.FloatTensor); Scalar, parameter budget for embedding layer
