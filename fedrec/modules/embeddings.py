@@ -220,7 +220,7 @@ class PrEmbeddingBag(nn.Module):
 
         Arguments
         --------------
-        input (Tensor)  Tensor containing bags of indices into the embedding matrix.
+        input(Tensor)- Tensor containing bags of indices into the embedding matrix.
 
         offsets (Tensor, optional) Only used when input is 1D. offsets determines the starting
         index position of each bag (sequence) in input.
