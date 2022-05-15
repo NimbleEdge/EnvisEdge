@@ -28,11 +28,11 @@ def md_solver(n, alpha, d0=None, B=None, round_dim=True, k=None):
     Arguments
     ----------
     n(torch.LongTensor)-Vector of num of rows for each embedding matrix
-    alpha -- (torch.FloatTensor); Scalar, non-negative, controls dim. skew
-    d0 -- (torch.FloatTensor); Scalar, baseline embedding dimension
-    B -- (torch.FloatTensor); Scalar, parameter budget for embedding layer
-    round_dim -- (bool); flag for rounding dims to nearest pow of 2
-    k -- (torch.LongTensor) ; Vector of average number of queries per inference
+    alpha-(torch.FloatTensor)-Scalar, non-negative, controls dim. skew
+    d0-(torch.FloatTensor)-Scalar, baseline embedding dimension
+    B-(torch.FloatTensor)-Scalar, parameter budget for embedding layer
+    round_dim-(bool)-flag for rounding dims to nearest pow of 2
+    k-(torch.LongTensor)-Vector of average number of queries per inference
 
     Return
     -------------
@@ -55,10 +55,10 @@ def alpha_power_rule(n, alpha, d0=None, B=None):
 
    Arguments
     ---------------
-    n(torch.LongTensor) - ; Vector of num of rows for each embedding matrix
-    alpha -- (torch.FloatTensor); Scalar, non-negative, controls dim. skew
-    d0 -- (torch.FloatTensor); Scalar, baseline embedding dimension
-    B -- (torch.FloatTensor); Scalar, parameter budget for embedding layer
+    n(torch.LongTensor)-Vector of num of rows for each embedding matrix
+    alpha-(torch.FloatTensor)-Scalar, non-negative, controls dim. skew
+    d0-(torch.FloatTensor)-Scalar, baseline embedding dimension
+    B -(torch.FloatTensor)-Scalar, parameter budget for embedding layer
 
     Returns
     --------
@@ -86,7 +86,7 @@ def pow_2_round(dims):
 
     Argument
     --------------
-    dims -- (torch.LongTensor);takes dimension as input
+    dims-(torch.LongTensor)-takes dimension as input
 
     Return
     -------------
@@ -185,10 +185,10 @@ class PrEmbeddingBag(nn.Module):
 
     Arguments
     -----------------
-        num_embeddings:(int)  size of the dictionary of embedding.
-        embedding_dim:(int) the size of each embedding vector.
+        num_embeddings:(int)-size of the dictionary of embedding.
+        embedding_dim:(int)-the size of each embedding vector.
         base_dim-The base dimension.
-        index:(int) -the particular index.
+        index:(int)-the particular index.
         '''
         super(PrEmbeddingBag, self).__init__()
         if base_dim is None:
@@ -452,11 +452,11 @@ class QREmbeddingBag(nn.Module):
         return embed
 
     def extra_repr(self):
-        """Set the extra representation of the module
+        """
+            Set the extra representation of the module
             To print customized extra information, you should
             re-implement this method in your own modules.
             Both single-line and multi-line strings are acceptable.
-
 
             Returns
             ----------------------
