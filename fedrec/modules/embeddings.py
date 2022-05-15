@@ -358,11 +358,11 @@ class QREmbeddingBag(nn.Module):
                      'norm_type',
                      'scale_grad_by_freq',
                      'mode', 'sparse']
-    def __init__(self, num_embeddings, embedding_dim,
+    def __init__(self, num_embeddings,embedding_dim,
                 num_collisions,operation='mult', max_norm=None,
                 norm_type=2,scale_grad_by_freq=False,
                 mode='mean', sparse=False,_weight=None):
-        """__init__ function is called every time an object is created from a class."""
+        """__init__ function is called every time an object is created."""
     def __init__(self, num_embeddings, embedding_dim, num_collisions,
                  operation='mult', max_norm=None, norm_type=2.,
                  scale_grad_by_freq=False, mode='mean', sparse=False,
