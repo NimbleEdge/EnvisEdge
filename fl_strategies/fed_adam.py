@@ -33,8 +33,8 @@ class FedAdam(EnvisBase):
                 preprocessor=self.model_preproc,
                 unused_keys=('name', 'preproc')
             )
-        self.momentum = {key:0 for key in (self.in_neighbours.values())[0].model}
-        self.v = {key:0 for key in (self.in_neighbours.values())[0].model}
+        self.momentum = {key:0 for key in ((self.in_neighbours.values())[0].model).keys()}
+        self.v = {key:0 for key in ((self.in_neighbours.values())[0].model).keys()}
         self.beta1 = beta1
         self.beta2 = beta2
         self.lr = lr
@@ -50,7 +50,7 @@ class FedAdam(EnvisBase):
     def aggregate(self):
         model_list = [None] * len(self.in_neighbours.values())
         training_num = 0
-        model_params = self.model
+        model_params = self.model.state_dict()
         for idx, neighbour in enumerate(self.in_neighbours.values()):
             model_list[idx] = (neighbour.sample_num, neighbour.model)
             training_num += neighbour.sample_num
