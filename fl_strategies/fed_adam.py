@@ -33,8 +33,8 @@ class FedAdam(EnvisBase):
                 preprocessor=self.model_preproc,
                 unused_keys=('name', 'preproc')
             )
-        self.momentum = {key:0 for key in ((self.in_neighbours.values())[0].model).keys()}
-        self.v = {key:0 for key in ((self.in_neighbours.values())[0].model).keys()}
+        self.momentum = {key:0 for key in ((self.in_neighbours)[0].model).keys()}
+        self.v = {key:0 for key in ((self.in_neighbours)[0].model).keys()}
         self.beta1 = beta1
         self.beta2 = beta2
         self.lr = lr
