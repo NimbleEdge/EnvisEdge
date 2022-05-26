@@ -8,5 +8,6 @@ projectDependencies ++= Seq(
   DefinedDependencies.Akka.actorTyped,
   DefinedDependencies.Logging.slf4jBackend,
   DefinedDependencies.AkkaTest.testkit,
-  DefinedDependencies.AkkaTest.scalatest
+  DefinedDependencies.AkkaTest.scalatest,
+  DefinedDependencies.Kafka.kafka
 )

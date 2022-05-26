@@ -11,6 +11,7 @@ import akka.actor.typed.scaladsl.ActorContext
 import akka.actor.typed.scaladsl.AbstractBehavior
 import akka.actor.typed.Signal
 import akka.actor.typed.PostStop
+import org.apache.kafka.clients.producer.KafkaProducer
 
 object Aggregator {
     def apply(aggId: AggregatorIdentifier): Behavior[Command] =
@@ -24,6 +25,8 @@ object Aggregator {
     
     private final case class TrainerTerminated(actor: ActorRef[Trainer.Command], traId: TrainerIdentifier)
         extends Aggregator.Command
+    
+    final case class JobSubmit(producer: KafkaProducer[String,String], job: String) extends Aggregator.Command with Trainer.Command
 
     // TODO
     // Add messages here
@@ -158,6 +161,11 @@ class Aggregator(context: ActorContext[Aggregator.Command], aggId: AggregatorIde
             case TrainerTerminated(actor, traId) =>
                 context.log.info("Trainer with id {} has been terminated", traId.toString())
                 // TODO
+                this
+            
+            case jobMsg @ JobSubmit(_, _) => 
+                aggregatorIdsToRef.values.foreach((a) => a ! jobMsg)
+                trainerIdsToRef.values.foreach((a) => a ! jobMsg)
                 this
         }
     

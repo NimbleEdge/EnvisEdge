@@ -1,8 +1,10 @@
 package org.nimbleedge.envisedge
 
 import models._
+import Utils._
 import scala.concurrent.duration._
 import scala.collection.mutable.{Map => MutableMap}
+import scala.jdk.CollectionConverters._
 
 import akka.actor.typed.ActorRef
 import akka.actor.typed.Behavior
@@ -11,6 +13,7 @@ import akka.actor.typed.scaladsl.ActorContext
 import akka.actor.typed.scaladsl.AbstractBehavior
 import akka.actor.typed.Signal
 import akka.actor.typed.PostStop
+import org.apache.kafka.clients.producer.KafkaProducer
 
 object Orchestrator {
   def apply(orcId: OrchestratorIdentifier): Behavior[Command] =
@@ -21,6 +24,8 @@ object Orchestrator {
   // In case any Aggregator Termination
   private final case class AggregatorTerminated(actor: ActorRef[Aggregator.Command], aggId: AggregatorIdentifier)
     extends Orchestrator.Command
+
+  final case class JobSubmit(job: String) extends Command
 
   // TODO
   // Add messages here
@@ -34,6 +39,8 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
   // Add state and persistent information
   var aggIdToRef : MutableMap[AggregatorIdentifier, ActorRef[Aggregator.Command]] = MutableMap.empty
   context.log.info("Orchestrator {} started", orcId.name())
+
+  val kafka_producer = new KafkaProducer[String,String](context.system.settings.config.getConfig("consumer-config").toMap.asJava)
   
   private def getAggregatorRef(aggId: AggregatorIdentifier): ActorRef[Aggregator.Command] = {
     aggIdToRef.get(aggId) match {
@@ -104,6 +111,10 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
       case AggregatorTerminated(actor, aggId) =>
         context.log.info("Aggregator with id {} has been terminated", aggId.toString())
         // TODO
+        this
+
+      case JobSubmit(message) => 
+        aggIdToRef.values.foreach((a) => a ! Aggregator.JobSubmit(kafka_producer,message))
         this
     }
   

@@ -5,7 +5,8 @@ object DefinedDependencies {
   private object Versions {
     val akka            = "2.6.18"
     val scalatest       = "3.2.10"
-    val logbackClassic = "1.2.10"
+    val logbackClassic  = "1.2.10"
+    val kafka           = "3.2.0"
   }
 
   object Akka {
@@ -21,6 +22,10 @@ object DefinedDependencies {
 
   object Logging {
     val slf4jBackend = "ch.qos.logback" % "logback-classic" % Versions.logbackClassic
+  }
+
+  object Kafka {
+    val kafka = "org.apache.kafka" % "kafka-clients" % Versions.kafka
   }
 
 }
