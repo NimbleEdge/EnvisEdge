@@ -4,8 +4,8 @@ import akka.actor.testkit.typed.scaladsl.ScalaTestWithActorTestKit
 import org.scalatest.wordspec.AnyWordSpecLike
 
 class AggregatorSpec extends ScalaTestWithActorTestKit with AnyWordSpecLike {
-	import models._
+  import models._
 
-	// TODO
-	// Add Aggregator tests here
+  // TODO
+  // Add Aggregator tests here
 }

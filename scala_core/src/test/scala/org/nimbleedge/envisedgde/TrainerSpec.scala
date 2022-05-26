@@ -4,8 +4,8 @@ import akka.actor.testkit.typed.scaladsl.ScalaTestWithActorTestKit
 import org.scalatest.wordspec.AnyWordSpecLike
 
 class TrainerSpec extends ScalaTestWithActorTestKit with AnyWordSpecLike {
-	import models._
+  import models._
 
-	// TODO
-	// Add Trainer tests here
+  // TODO
+  // Add Trainer tests here
 }
