@@ -12,7 +12,6 @@ import akka.actor.typed.Signal
 import org.apache.kafka.clients.consumer.{KafkaConsumer,ConsumerRecords, ConsumerRecord}
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import java.time.Duration
-import scala.concurrent.Await
 import akka.actor.typed.PostStop
 import scala.jdk.CollectionConverters._
 
@@ -22,8 +21,8 @@ object TrainerHelper{
     
     trait Command
 
-    final case class Consume(topic: String, replyTo: ActorRef[Trainer.Command]) extends Command
-    final case class Produce(producer: KafkaProducer[String,String], topic: String, message: String) extends Command
+    final case class Receive(topic: String, replyTo: ActorRef[Trainer.Command]) extends Command
+    final case class Send(topic: String, message: String) extends Command
 }
 
 class TrainerHelper(context: ActorContext[TrainerHelper.Command], traId: TrainerIdentifier) extends AbstractBehavior[TrainerHelper.Command](context) {
@@ -34,21 +33,24 @@ class TrainerHelper(context: ActorContext[TrainerHelper.Command], traId: Trainer
 
     override def onMessage(msg: Command): Behavior[Command] =
         msg match {
-            case Produce(producer, topic, message) => 
+            case Send(topic, message) => 
+                val producer = new KafkaProducer[String,String](context.system.settings.config.getConfig("producer-config").toMap.asJava)
                 val result = producer.send(new ProducerRecord(topic, message))
                 result.get()
+                producer.close()
                 this
 
-            case Consume(topic, replyTo) => 
+            case Receive(topic, replyTo) => 
                 val consumer = new KafkaConsumer[String,String](context.system.settings.config.getConfig("consumer-config").toMap.asJava)
                 consumer.subscribe(Vector(topic).asJava)
-                val records: ConsumerRecords[String,String] = consumer.poll(Duration.ofSeconds(10))
+                val records: ConsumerRecords[String,String] = consumer.poll(Duration.ofSeconds(2))
                 val response = if (records.isEmpty()) {
                     "Timeout"
                 } else {
                     records.records(topic).iterator().next().value()
                 }
                 replyTo ! JobResponse(response)
+                consumer.close()
                 Behaviors.stopped
         }
     

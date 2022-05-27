@@ -25,8 +25,6 @@ object Aggregator {
     
     private final case class TrainerTerminated(actor: ActorRef[Trainer.Command], traId: TrainerIdentifier)
         extends Aggregator.Command
-    
-    final case class JobSubmit(producer: KafkaProducer[String,String], job: String) extends Aggregator.Command with Trainer.Command
 
     // TODO
     // Add messages here
@@ -34,6 +32,7 @@ object Aggregator {
 
 class Aggregator(context: ActorContext[Aggregator.Command], aggId: AggregatorIdentifier) extends AbstractBehavior[Aggregator.Command](context) {
     import Aggregator._
+    import Orchestrator.JobSubmit
     import FLSystemManager.{ RequestTrainer, TrainerRegistered, RequestAggregator, AggregatorRegistered, RequestRealTimeGraph }
 
     // TODO
@@ -163,7 +162,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], aggId: AggregatorIde
                 // TODO
                 this
             
-            case jobMsg @ JobSubmit(_, _) => 
+            case jobMsg @ JobSubmit(_) => 
                 aggregatorIdsToRef.values.foreach((a) => a ! jobMsg)
                 trainerIdsToRef.values.foreach((a) => a ! jobMsg)
                 this

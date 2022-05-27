@@ -26,8 +26,8 @@ object Trainer {
 
 class Trainer(context: ActorContext[Trainer.Command], traId: TrainerIdentifier) extends AbstractBehavior[Trainer.Command](context) {
     import Trainer._
-    import TrainerHelper.{Consume,Produce}
-    import Aggregator.JobSubmit
+    import TrainerHelper.{Send,Receive}
+    import Orchestrator.JobSubmit
 
     // TODO
     // Add state and persistent information
@@ -38,11 +38,11 @@ class Trainer(context: ActorContext[Trainer.Command], traId: TrainerIdentifier) 
 
     override def onMessage(msg: Command): Behavior[Command] =
         msg match {
-            case JobSubmit(producer, job) => 
+            case JobSubmit(job) => 
                 val actorRef = context.spawn(TrainerHelper(traId),s"trainer-helper-${traId.name()}",DispatcherSelector.blocking())
                 context.watchWith(actorRef, HelperTerminated(actorRef))
-                actorRef ! Produce(producer, topic, job)
-                actorRef ! Consume(topic, context.self)
+                actorRef ! Send(topic, job)
+                actorRef ! Receive(topic, context.self)
                 this
 
             // TODO
