@@ -111,7 +111,8 @@ class RayProcessManager(ProcessManager):
 
     def get_status(self) -> Any:
         """
-        Gets the results of asynchronous processing
+        Get the results of child processes.
+        The function will wait until all results are available in sequence.
         
         Returns
         -------
