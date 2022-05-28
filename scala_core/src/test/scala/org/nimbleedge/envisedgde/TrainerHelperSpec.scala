@@ -8,6 +8,7 @@ import org.apache.kafka.clients.consumer.{KafkaConsumer,ConsumerRecords, Consume
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import scala.jdk.CollectionConverters._
 import java.time.Duration
+import java.util.UUID
 
 class TrainerHelperSpec extends ScalaTestWithActorTestKit with AnyWordSpecLike {
 	import models._
@@ -25,11 +26,12 @@ class TrainerHelperSpec extends ScalaTestWithActorTestKit with AnyWordSpecLike {
 
     val consumerProps = new Properties();
     consumerProps.put("bootstrap.servers", "localhost:9092")
-    consumerProps.put("group.id", "test")
+    consumerProps.put("group.id", UUID.randomUUID().toString())
     consumerProps.put("enable.auto.commit", "true")
     consumerProps.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
     consumerProps.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
     consumerProps.put("max.poll.records", 1)
+    consumerProps.put("auto.offset.reset", "earliest")
     
     // These tests require Kafka server to be running on localhost:9092
 
@@ -42,9 +44,8 @@ class TrainerHelperSpec extends ScalaTestWithActorTestKit with AnyWordSpecLike {
             val consumer = new KafkaConsumer[String,String](consumerProps);
             consumer.subscribe(Vector(topic).asJava);
             val records: ConsumerRecords[String,String] = consumer.poll(Duration.ofSeconds(2));
-            /*records.count() should === (1)
-            records.records(topic).iterator().next().value() should === (message)*/
-            1 should === (1)
+            records.count() should !== (0)
+            records.records(topic).iterator().next().value() should === (message)
             consumer.close()
         }
 
