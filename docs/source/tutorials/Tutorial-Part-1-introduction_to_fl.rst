@@ -60,10 +60,10 @@ Federated Learning is broadly classified as
 * **Data-Centric FL:**
 
   * Data-Centric Federated Learning is where private users can give organisations
-    access to building models on their data without sharing it.
+    access to build models on their data without sharing it.
 
   * This concept can be further expanded to a Cloud of Cross-Silo FL, where similar
-    the strategy could be implemented.
+    strategy could be implemented.
 
 Clients
 ~~~~~~~
