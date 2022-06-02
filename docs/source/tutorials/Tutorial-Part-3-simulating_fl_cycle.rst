@@ -8,7 +8,7 @@ For the simulator, both the aggregator and trainer are defined as a
 worker. Each worker has an assigned role that determines the kind of
 computation it will perform.
 
-It is the role of orchestrator to define these roles for the workers and
+It is the role of the orchestrator to define these roles for the workers and
 initialize them.
 
 For the purposes of the simulator, the `train_fl <../train_fl.py>`__ file
@@ -70,7 +70,7 @@ combined into a single model update. Every FL paper proposes different
 Fl strategies for personalization, parallelization, accuracy
 improvement, etc.
 
-The most recent ones propose a second order aggregation strategy to
+The most recent ones propose a second-order aggregation strategy to
 accommodate losses in communication. We here would be running the
 simplest one - average them all!
 
@@ -97,14 +97,14 @@ simplest one - average them all!
 Client Selection
 ~~~~~~~~~~~~~~~~
 
-This is one of the most crucial stages of FL cycle. It is necessary to
+This is one of the most crucial stages of the FL cycle. It is necessary to
 build a robust client selection strategy. It can save you from
 malicious poisoning attacks, biased models, and slow training cycles.
 
-NimbleEdge brings along specific algorithms that augments the client
+NimbleEdge brings along specific algorithms that augment the client
 selection strategy to deal with the above problems.
 
-For now we just take random selection…
+For now, we just take random selection…
 
 .. code:: python
 
