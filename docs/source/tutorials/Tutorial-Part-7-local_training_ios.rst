@@ -3,9 +3,9 @@ Local Training on iOS
 
 In this example, we will train our machine learning models and we will also learn how to use NimbleEdge SDK to train a plan with local data on an iOS device.
 
-We will import the device SDK into our application to take care of managing the FL cycle,Create an ios project and add the cocoa dependency.
+We will import the device SDK into our application to take care of managing the FL cycle, Create an ios project and add the cocoa dependency.
 
-We will create a new client using cloud aggregating service URL. This client is stored as a property to prevent it from delocatiog during the training.
+We will create a new client using a cloud aggregating service URL. This client is stored as a property to prevent it from delocating during the training.
 
 .. code:: Swift
 
@@ -23,9 +23,9 @@ To create a training job locally, you need to supply the model name and version.
 
 Training Hooks
 ~~~~~~~~~~~~~~
-Here is a function called onReady( ) that's called when NimbleEdge SDK has downloaded plans, parameters from cloud aggregating service and is ready to train the model on your data.The function onReady( )
+Here is a function called onReady( ) that's called when NimbleEdge SDK has downloaded plans, and parameters from the cloud aggregating service and is ready to train the model on your data.The function onReady( )
 consists of four parameters where modelParams contains the tensor parameters of your model and update these tensors during training in order to generate the diff at the end of your training run. Plans contain all code information to execute on the devices. 
-ClientConfig contains the configuration for the training cycle and metadata for the model. ModelReport is used as a complete block and reports the diff to cloud aggregating service.
+ClientConfig contains the configuration for the training cycle and metadata for the model. ModelReport is used as a complete block and reports the diff to the cloud aggregating service.
 
 
 .. code:: Swift
@@ -54,7 +54,7 @@ ClientConfig contains the configuration for the training cycle and metadata for 
 
 Execution of plan
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The plan is executed using the training and validation dataset and hyperparameters such as batch size, the learning rate, model parameters.
+The plan is executed using the training and validation dataset and hyperparameters such as batch size, the learning rate, and model parameters.
 
 .. code:: Swift
 
@@ -69,7 +69,7 @@ The plan is executed using the training and validation dataset and hyperparamete
 
 List of returned Tensors
 ~~~~~~~~~~~~~~~~~~~~~~~~
-From the above example, the list of tensors is returned in the following order - loss, accuracy,updated model parameters that are sent back to the cloud aggregating service for aggregation.
+From the above example, the list of tensors is returned in the following order - loss, accuracy, and updated model parameters that are sent back to the cloud aggregating service for aggregation.
 
 .. code:: Swift
 
@@ -98,7 +98,7 @@ From the above example, the list of tensors is returned in the following order -
 
 Error Handlers
 ~~~~~~~~~~~~~~
-Here are two error handlers that get implemented on specific conditions: 1. onError( ) This is the error handler for any job execution errors like failure to connecting to cloud aggregating service. 2. onRejected( ) If you are being rejected from participating in the training cycle this error handler comes into play where you can retry again after the suggested timeout.
+Here are two error handlers that get implemented on specific conditions: 1. onError( ) This is the error handler for any job execution errors like failure to connect a cloud aggregating service. 2. onRejected( ) If you are being rejected from participating in the training cycle this error handler comes into play where you can retry again after the suggested timeout.
 
 .. code:: Swift
 
