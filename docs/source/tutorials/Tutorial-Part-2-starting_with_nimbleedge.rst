@@ -58,7 +58,7 @@ The simulator makes it easy to experiment with different model
 architectures, hyper parameters, optimizers, and other components of an
 ML pipeline.
 
-We define a `registry class <../fedrec/utilities/registry.py>`__ thats
+We define a `registry class <../fedrec/utilities/registry.py>`__ that
 records all the model definitions, optimizers and attaches a
 configuration file to the top.
 
@@ -95,7 +95,7 @@ Standard Training
 
 Training your model in the normal non-FL setting requires you to write
 the implementations for ``train`` and ``test`` methods. You can also
-implement ``validate`` method if you want and all these methods will
+implement the ``validate`` method if you want and all these methods will
 automatically be serialized into FL plans when we move into FL
 deployment.
 
@@ -120,8 +120,8 @@ We will call this DLRMTrainer
            self.train_config = train_config
            super().__init__(config_dict, train_config, logger, model_preproc)
 
-Next implement the data loaders. These are standard PyTorch dataloaders
-and return them in the Trainer class.
+Next, implement the data loaders. These are standard PyTorch data loaders
+and return them to the Trainer class.
 
 .. code:: python
 
@@ -146,7 +146,7 @@ Now we will simulate DLRM in a federated setting. Create data split to
 mimic your users. We use Drichlet sampling for creating non-IID datasets
 for the model.
 
-Implement your own federated learning algorithm. In the demo we are
+Implement your own federated learning algorithm. In the demo, we are
 using Federated Averaging. You just need to sub-class
 `FederatedWorker <fedrec/federated_worker.py>`__ and implement ``run()``
 method.
