@@ -14,7 +14,7 @@ quote them to define Federated Learning.
    entities (*\ `clients <#clients>`__\ *) collaborate in solving a
    machine learning problem, under the coordination of a central server
    or service provider. Each client’s raw data is stored locally and not
-   exchanged or transferred; instead ,focused updates intended for
+   exchanged or transferred; instead, focused updates intended for
    immediate aggregation are used to achieve the learning objective.*
 
 
@@ -49,21 +49,21 @@ Federated Learning is broadly classified as
 
     Similar to Cross-Device FL, this FL aims to create a more centrally sound model.
 
-    But, instead of small concentration of data, here humongous amounts of data are
+    But, instead of a small concentration of data, here humongous amounts of data are
     stored in clusters like Hadoop/Spark.
 
-    Here data sets are partitioned Vertically. Lets take a look at Vertical-FL.
+    Here data sets are partitioned Vertically. Let's take a look at Vertical-FL.
 
     * When the data set has similar samples, but has different feature sets, it is known
       as Vertical-FL.
    
 * **Data-Centric FL:**
 
-  * Data Centric Federated Learning is where private users can give organisations
-    access to build models on their data without sharing it.
+  * Data-Centric Federated Learning is where private users can give organisations
+    access to building models on their data without sharing it.
 
-  * This concept can be further expaned to a Cloud of Cross-Silo FL, where similar
-    strategy could be implemented.
+  * This concept can be further expanded to a Cloud of Cross-Silo FL, where similar
+    the strategy could be implemented.
 
 Clients
 ~~~~~~~
