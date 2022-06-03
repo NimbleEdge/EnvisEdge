@@ -81,7 +81,7 @@ Download the federated dataset
    Enter model : <Enter the config file of the model to update with the dataset path>
    Downloading femnist dataset...
 
-Run data preprocessing with `preprocess_data <preprocess_data.py>`__ .
+Run data preprocessing with `preprocess_data <https://github.com/NimbleEdge/EnvisEdge/blob/main/preprocess_data.py>`__ .
 Using this dataset, you will prepare a client_id mapping in the dataset
 that will be sent to Python workers for training the model.
 
