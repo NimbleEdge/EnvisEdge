@@ -1,8 +1,10 @@
+from fedrec.utilities.error_handler import errorhandler
 import torch
 import socket
 import logging
+from error_handler import errorhandler
 
-
+@errorhandler
 def map_to_cuda(args, device=None, **kwargs):
     if isinstance(args, (list, tuple)):
         return [map_to_cuda(arg, device, **kwargs) for arg in args]
@@ -13,13 +15,13 @@ def map_to_cuda(args, device=None, **kwargs):
     else:
         raise TypeError("unsupported type for cuda migration")
 
-
+@errorhandler
 def map_to_list(model_params):
     for k in model_params.keys():
         model_params[k] = model_params[k].detach().numpy().tolist()
     return model_params
 
-
+@errorhandler
 def mapping_processes_to_gpus(gpu_config, process_id, worker_number):
     if gpu_config == None:
         device = torch.device("cpu")

@@ -2,20 +2,42 @@ import argparse
 import os
 from collections.abc import Iterable
 import torch
+from error_handler import errorhandler
+from fedrec.serialization.s3_db import S3Interface
+import yaml
 
+global data
 
+"""
+    Loads the S3 DB creds from config file
+"""
+with open(r'./configs/regression.yml') as conf:
+  
+    data = yaml.load(conf, Loader=yaml.FullLoader)
+    conf.close()
+# Initialize the S3 service client
+
+global s3_client
+s3_client = S3Interface(data['s3']['region'], data['s3']['aws_access_key'], data['s3']['aws_secret_access_key'], data['log_dir']['PATH'])
+global storage
+storage = data['log_dir']['PATH']
+
+def process_path(path:str) -> str:
+    #process the path here 
+    return path.replace("//", '/')
+
+@errorhandler
 def load_tensors(path):
-    if os.path.isfile(path) == True:
-        tensors = torch.load(path)
-        return tensors
-    else:
-        raise ValueError("Path does not exist.")
+    path = process_path(path)
+    s3_path = path.replace(storage, '')
+    file_path = s3_client.download(data['s3']['bucket_name'], s3_path)
+    return torch.load(file_path)
 
-
+@errorhandler
 def to_dict_with_sorted_values(d, key=None):
     return {k: sorted(v, key=key) for k, v in d.items()}
 
-
+@errorhandler
 def to_dict_with_set_values(d):
     result = {}
     for k, v in d.items():
@@ -28,18 +50,15 @@ def to_dict_with_set_values(d):
         result[k] = set(hashable_v)
     return result
 
-
+@errorhandler
 def save_tensors(tensors, path) -> str:
-    if os.path.isfile(path) == True:
-        torch.save(tensors, path)
-        return path
-    else:
-        completeName = os.path.join(path)
-        file1 = open(completeName, "wb")
-        torch.save(tensors, file1)
-        return completeName
+    path = process_path(path)
+    torch.save(tensors, path)
+    s3_path = path.replace(storage, '')
+    s3_client.upload(data['s3']['bucket_name'], path, s3_path)
+    return path
 
-
+@errorhandler
 def tuplify(dictionary):
     if dictionary is None:
         return tuple()
@@ -51,6 +70,7 @@ def tuplify(dictionary):
 def dictify(iterable):
     assert isinstance(iterable, Iterable)
     return {v: i for i, v in enumerate(iterable)}
+
 
 
 def dash_separated_ints(value):

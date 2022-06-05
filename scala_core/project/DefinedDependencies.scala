@@ -23,4 +23,9 @@ object DefinedDependencies {
     val slf4jBackend = "ch.qos.logback" % "logback-classic" % Versions.logbackClassic
   }
 
+  object  AmazonS3 {
+    val aws = "com.amazonaws"	%	"aws-java-sdk"		%	"1.12.230"
+    val typesafeConfig = "com.typesafe" % "config" % "1.4.1"
+  }
+
 }
