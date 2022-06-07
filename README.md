@@ -63,7 +63,7 @@ NimbleEdge/EnvisEdge
 └── tests                                   <-- tests
 ```
 
-# QuickStart
+# Installation
 Update the config files of the model (can be found [here](https://github.com/NimbleEdge/EnvisEdge/tree/main/configs)) you are going to use with logging directory:
 
 ```yml
@@ -119,10 +119,21 @@ To see how traning is done run the following command:
 ```bash
 $ python tests/integration_tests/integration_test.py --config configs/regression.yml
 ```
-# Demos and Tutorials
-You may find all the EnvisEdge related demos and tutorials [here](https://github.com/NimbleEdge/EnvisEdge/tree/main/docs/source/tutorials).
+# Getting started
+[Tuitorials : to help you get started with understanding and implementing envisedge](https://github.com/NimbleEdge/EnvisEdge/tree/main/docs/source/tutorials).
+[Examples : ]()
 
-You may also find the official documentation [here](https://docs.nimbleedge.ai/).
+# Resources
+[EnvisEdge.ai](https://docs.nimbleedge.ai/)
+[Introduction to Python](https://docs.python.org/3/tutorial/)
+[Introduction to python libraries]()
+[Introduction to Edge Computing](https://www.coursera.org/lecture/iot-wireless-cloud-computing/5-10-edge-computing-pOK8T)
+[NimbleEdge Blogs](https://blog.nimbleedge.ai/)
+[NimbleEdge Twitter](https://twitter.com/nimbleedgeinc?s=11&t=EAZr_ENlCYqBi6qxGz394w)
+[NimbleEdge Linkedin](https://www.linkedin.com/company/nimbleedge/)
+
+
+
 
 # Start Contributing
 
