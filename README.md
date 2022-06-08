@@ -121,7 +121,6 @@ $ python tests/integration_tests/integration_test.py --config configs/regression
 ```
 # Getting started
 * [Tuitorials : to help you get started with understanding and implementing envisedge](https://github.com/NimbleEdge/EnvisEdge/tree/main/docs/source/tutorials).
-* [Examples : ]()
 
 # Resources
 * [EnvisEdge.ai](https://docs.nimbleedge.ai/)
