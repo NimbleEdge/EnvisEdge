@@ -139,7 +139,7 @@ $ python tests/integration_tests/integration_test.py --config configs/regression
 
 1. Before you begin, please read our [CONTRIBUTOR'S](https://github.com/NimbleEdge/EnvisEdge/blob/main/CONTRIBUTING.md) GUIDELINES.
 2. Introduce yourself in the #introduction channel on [Discord](https://nimbleedge.ai/discord) ( Most of the talks and discussions happen here.)
-3. Look for an open issue that interests you such as [`good first issue`](https://github.com/NimbleEdge/EnvisEdge/labels/good%20first%20issue), [`python`](https://github.com/NimbleEdge/EnvisEdge/labels/python), [`scala`](https://github.com/NimbleEdge/EnvisEdge/labels/scala), [`documentation`](https://github.com/NimbleEdge/EnvisEdge/labels/documentation%20%F0%9F%93%83) and more. Liverage labels feature as shown below
+3. Look for an open issue that interests you such as [`good first issue`](https://github.com/NimbleEdge/EnvisEdge/labels/good%20first%20issue), [`python`](https://github.com/NimbleEdge/EnvisEdge/labels/python), [`scala`](https://github.com/NimbleEdge/EnvisEdge/labels/scala), [`documentation`](https://github.com/NimbleEdge/EnvisEdge/labels/documentation%20%F0%9F%93%83) and more. Liverage labels feature as shown below.
 ![Label wise issue search](https://github.com/shaistha24/EnvisEdge/blob/main/assets/issues.gif)
 4. Star, [Fork](https://docs.github.com/en/enterprise-server@3.4/get-started/quickstart/fork-a-repo), and [Clone](https://docs.github.com/en/enterprise-server@3.4/get-started/quickstart/fork-a-repo#cloning-your-forked-repository) the repo.
 5. Get down to business. Do your work.
@@ -149,8 +149,7 @@ $ python tests/integration_tests/integration_test.py --config configs/regression
 This project follows the [all-contributors](https://github.com/NimbleEdge/EnvisEdge/blob/main/CONTRIBUTING.md) specification.Contributions of any kind are welcome!!
 
 # FAQ and Other Questions
-You can know more about Nimbleedge on the [about nimbleedge page](https://www.nimbleedge.ai/about-us)
-If you have question about the code or any general question about the repository or project, please head towards our [discord](https://nimbleedge.ai/discord)
+You can know more about Nimbleedge on the [about nimbleedge page](https://www.nimbleedge.ai/about-us).If you have question about the code or any general question about the repository or project, please head towards our [discord](https://nimbleedge.ai/discord).
 
 # License
 EnvisEdge has a [Apache License 2.0](https://github.com/NimbleEdge/EnvisEdge/blob/refactor-user-module/LICENSE)
