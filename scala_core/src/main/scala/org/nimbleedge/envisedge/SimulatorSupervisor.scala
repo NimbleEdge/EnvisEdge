@@ -8,21 +8,20 @@ import akka.actor.typed.scaladsl.ActorContext
 import akka.actor.typed.scaladsl.Behaviors
 
 object SimulatorSupervisor {
-	// Update this to manager to other entities
-	def apply(): Behavior[Nothing] =
-		Behaviors.setup[Nothing](new SimulatorSupervisor(_))
+  // Update this to manager to other entities
+  def apply(): Behavior[Nothing] =
+    Behaviors.setup[Nothing](new SimulatorSupervisor(_))
 }
 
 class SimulatorSupervisor(context: ActorContext[Nothing]) extends AbstractBehavior[Nothing](context) {
-	context.log.info("Simulator Supervisor started")
+  context.log.info("Simulator Supervisor started")
 
-	override def onMessage(msg: Nothing): Behavior[Nothing] = {
-		Behaviors.unhandled
-	}
+  override def onMessage(msg: Nothing): Behavior[Nothing] = {
+    Behaviors.unhandled
+  }
 
-	override def onSignal: PartialFunction[Signal, Behavior[Nothing]] = {
-		case PostStop =>
-			context.log.info("Simulator Supervisor stopped")
-			this
-	}
+  override def onSignal: PartialFunction[Signal, Behavior[Nothing]] = { case PostStop =>
+    context.log.info("Simulator Supervisor stopped")
+    this
+  }
 }
