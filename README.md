@@ -63,7 +63,7 @@ NimbleEdge/EnvisEdge
 └── tests                                   <-- tests
 ```
 
-# Installation
+# Quickstart
 Update the config files of the model (can be found [here](https://github.com/NimbleEdge/EnvisEdge/tree/main/configs)) you are going to use with logging directory:
 
 ```yml
@@ -87,6 +87,7 @@ Enter path to kafka Directory : <Enter the path to the kafka directory>
 kafka url: <Enter the URL on which kafka is listening e.g if you are running it on localhost it would be 127.0.0.1>
 Creating Topics...
 ```
+## Installation
 Install the dependencies using virtual environment
 ```bash
 mkdir env
