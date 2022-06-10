@@ -155,19 +155,18 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
         }
         this
 
-      case RegisterDevice(clientId) =>
+      case RegisterDevice(device) =>
         context.log.info("Orc id:{} device registration for device:{}", orcId.name(), device)
-        val clientId = "client-" + device
         val aggId = getAvailableAggregator()
+        val clientId = Hasher.getHash(device.getBytes).toString
         //update this pair to the redis
-        val dataMap = Map("clientId" -> clientId, "aggId" -> aggId.toString(), "orcId" -> orcId.name(), "cycleAccepted" -> 0)
-        RedisClientHelper.hmset(device, dataMap)
+        val dataMap = Map("name" -> device, "clientId" -> clientId, "aggId" -> aggId.name(), "orcId" -> orcId.name(), "cycleAccepted" -> 0)
+        RedisClientHelper.hmset(clientId, dataMap)
         RedisClientHelper.rpush(aggId.toString(), clientId)
 
         aggIdToClientCount(aggId) += 1
         this
 
-      
       case AggregatorTerminated(actor, aggId) =>
         context.log.info("Aggregator with id {} has been terminated", aggId.toString())
         routerRef ! RemoveAggregator(aggId.toString())

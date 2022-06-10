@@ -87,3 +87,10 @@ object JsonDecoder {
       }
   }
 }
+
+object Hasher {
+  import java.security.MessageDigest
+
+  def getHash(data: Array[Byte]): Array[Byte] =
+    MessageDigest.getInstance("MD5").digest(data)
+}

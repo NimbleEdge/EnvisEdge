@@ -271,14 +271,14 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                                 // TODO: Handle the response appropriately
                                 parent ! Orchestrator.SamplingCheckpoint(aggId)
                                 // set cycle accepted to 1
-                                // selectedList.foreach((c) => RedisClientHelper.hset(c, cycleAccepted, 1))
+                                // selectedList.foreach((c) => RedisClientHelper.hset(c, "cycleAccepted", "1"))
                                 timers.startSingleTimer(TimerKey, CheckS3ForModels(), ConfigManager.aggregatorS3ProbeIntervalMinutes.minutes)
                             case "aggregate" => 
                                 // TODO: Handle the reponse appropriately
                                 AmazonS3Communicator.emptyDir(AmazonS3Communicator.s3Config.getString("bucket"), s"/clients/${aggId.toString()}/")
                                 round_index += 1
                                 val clientList = RedisClientHelper.getList(aggId.toString()).toList.flatten.flatten
-                                clientList.foreach((c) => RedisClientHelper.hset(c, cycleAccepted, 0))
+                                clientList.foreach((c) => RedisClientHelper.hset(c, "cycleAccepted", "0"))
                             case _ => throw new IllegalArgumentException(s"Invalid response_type : ${msg}")
                         }
                         
