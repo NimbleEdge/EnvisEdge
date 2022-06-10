@@ -10,7 +10,7 @@ import collection.JavaConverters._
 
 object AmazonS3Communicator {
     val s3Config = ConfigManager.staticConfig.getConfig("s3")
-    val credentials = new BasicAWSCredentials(s3Config.getString("s3.aws_access_key"), s3Config.getString("s3.aws_secret_access_key"))
+    val credentials = new BasicAWSCredentials(s3Config.getString("aws_access_key"), s3Config.getString("aws_secret_access_key"))
     val amazonS3Client = new AmazonS3Client(credentials)
     println("S3 Client Init...")
 
@@ -42,7 +42,7 @@ object AmazonS3Communicator {
             //val data = amazonS3Client.getObjectMetadata(bucket, fileKeyName)
             val splitPath = fileKeyName.split("/")
 
-            val filePath = s3Config.getString("s3.save_location") + "d-" + splitPath.last
+            val filePath = s3Config.getString("save_location") + "d-" + splitPath.last
             
             amazonS3Client.getObject(new GetObjectRequest(bucket, fileKeyName), new File(filePath))
             

@@ -84,7 +84,7 @@ class FLSystemManager(context: ActorContext[FLSystemManager.Command]) extends Ab
     KafkaProducer.init(ConfigManager.staticConfig.getConfig("producer-config"))
 
     val FLSysKafkaConsumerRef = context.spawn(
-        KafkaConsumer(ConfigManager.staticConfig.getConfig("consumer-config"), Right(context.self)), "FLSystemManager KafkaConsumer", DispatcherSelector.blocking()
+        KafkaConsumer(ConfigManager.staticConfig.getConfig("consumer-config"), Right(context.self)), "FLSystemManagerKafkaConsumer", DispatcherSelector.blocking()
     )
 
     context.log.info("FLSystemManager Started")

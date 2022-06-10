@@ -48,10 +48,10 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
   var aggIdSamplingCompletedSet : mutable.Set[AggregatorIdentifier] = mutable.Set.empty
   var aggIdAggregationCompletedSet : mutable.Set[AggregatorIdentifier] = mutable.Set.empty
 
-  val routerRef = context.spawn(LocalRouter(), s"LocalRouter- ${orcId.toString()}")
+  val routerRef = context.spawn(LocalRouter(), s"LocalRouter-${orcId.toString()}")
 
   val aggKafkaConsumerRef = context.spawn(
-      KafkaConsumer(ConfigManager.staticConfig.getConfig("consumer-config"), Left(routerRef)), s"Aggregator KafkaConsumer ${orcId.toString()}", DispatcherSelector.blocking()
+      KafkaConsumer(ConfigManager.staticConfig.getConfig("consumer-config"), Left(routerRef)), s"AggregatorKafkaConsumer-${orcId.toString()}", DispatcherSelector.blocking()
   )
 
   context.log.info("Orchestrator {} started", orcId.name())
@@ -155,12 +155,12 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
         }
         this
 
-      case RegisterDevice(device) =>
+      case RegisterDevice(clientId) =>
         context.log.info("Orc id:{} device registration for device:{}", orcId.name(), device)
         val clientId = "client-" + device
         val aggId = getAvailableAggregator()
         //update this pair to the redis
-        val dataMap = Map("name" -> device, "clientId" -> clientId, "aggId" -> aggId.toString(), "orcId" -> orcId.name(), "cycleAccepted" -> 0)
+        val dataMap = Map("clientId" -> clientId, "aggId" -> aggId.toString(), "orcId" -> orcId.name(), "cycleAccepted" -> 0)
         RedisClientHelper.hmset(device, dataMap)
         RedisClientHelper.rpush(aggId.toString(), clientId)
 
