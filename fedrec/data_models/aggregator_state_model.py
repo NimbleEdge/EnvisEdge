@@ -15,7 +15,7 @@ class Neighbour(Serializable):
 
     Parameters
     ----------
-    id : int
+    id : str
         Unique identifier for the worker
     model : Dict
         Model weights of the worker
@@ -27,7 +27,7 @@ class Neighbour(Serializable):
     
     def __init__(
         self,
-        worker_index: int,
+        worker_index: str,
         model_state: StateTensors,
         sample_num,
         last_sync=0
@@ -77,7 +77,7 @@ class AggregatorState(ActorState):
 
     Attributes
     ----------
-    id : int
+    id : str
         Unique worker identifier
     round_idx : int
         The number of local training cycles finished

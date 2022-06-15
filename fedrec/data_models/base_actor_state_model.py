@@ -9,7 +9,7 @@ class ActorState(Serializable):
 
     Attributes
     ----------
-    id : int
+    id : str
         Unique worker identifier
     round_idx : int
         The number of local training cycles finished

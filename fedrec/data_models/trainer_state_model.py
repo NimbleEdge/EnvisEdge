@@ -14,7 +14,7 @@ class TrainerState(ActorState):
 
     Attributes
     ----------
-    wokrer_index : int
+    woker_index : str
         Unique worker identifier
     model_preproc : `Preprocessor`
         The local dataset of the worker
