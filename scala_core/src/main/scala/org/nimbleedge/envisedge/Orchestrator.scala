@@ -54,6 +54,9 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
       KafkaConsumer(ConfigManager.staticConfig.getConfig("consumer-config"), Left(routerRef)), s"AggregatorKafkaConsumer-${orcId.toString()}", DispatcherSelector.blocking()
   )
 
+  AmazonS3Communicator.createEmptyDir(AmazonS3Communicator.s3Config.getString("bucket"), s"models/${orcId.name()}/")
+  AmazonS3Communicator.createEmptyDir(AmazonS3Communicator.s3Config.getString("bucket"), s"clients/${orcId.name()}/")
+
   context.log.info("Orchestrator {} started", orcId.name())
 
   private def spawnAggregator(aggId : AggregatorIdentifier) : ActorRef[Aggregator.Command] = {
@@ -158,9 +161,9 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
       case RegisterDevice(device) =>
         context.log.info("Orc id:{} device registration for device:{}", orcId.name(), device)
         val aggId = getAvailableAggregator()
-        val clientId = Hasher.getHash(device.getBytes).toString
+        val clientId = Hasher.getHash(device)
         //update this pair to the redis
-        val dataMap = Map("name" -> device, "clientId" -> clientId, "aggId" -> aggId.name(), "orcId" -> orcId.name(), "cycleAccepted" -> 0)
+        val dataMap = Map("name" -> device, "clientId" -> clientId, "aggId" -> aggId.toString(), "orcId" -> orcId.name(), "cycleAccepted" -> 0)
         RedisClientHelper.hmset(clientId, dataMap)
         RedisClientHelper.rpush(aggId.toString(), clientId)
 

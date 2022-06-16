@@ -12,6 +12,7 @@ object DefinedDependencies {
     val circe           = "0.14.1"
     val redis           = "3.41"
     val aws             = "1.12.230"
+    val guava           = "23.0"
   }
 
   object Akka {
@@ -53,5 +54,9 @@ object DefinedDependencies {
   object Aws {
     val sdk = "com.amazonaws"	%	"aws-java-sdk" % Versions.aws
     val conf = "com.typesafe" % "config" % "1.4.1" 
+  }
+
+  object Guava {
+    val guava = "com.google.guava" % "guava" % Versions.guava
   }
 }

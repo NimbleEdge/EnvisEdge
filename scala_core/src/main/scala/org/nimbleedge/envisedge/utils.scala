@@ -7,7 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import org.apache.kafka.common.errors.SerializationException
 import org.apache.kafka.common.serialization.Serializer
-import scala.util.Random
+import scala.collection.mutable.{Map => MutableMap}
+import com.google.common.hash.Hashing
+import java.nio.charset.StandardCharsets
 
 //Circe imports
 import io.circe._
@@ -53,44 +55,50 @@ object JsonDecoder {
           case Left(parsingError) =>
               throw new IllegalArgumentException(s"Invalid json object : ${parsingError.message}")
           case Right(json) =>
-                val response = mapper.readValue(json_string, classOf[JobResponseMessage])
+                /*val response = mapper.readValue(json_string, classOf[JobResponseMessage])
                 println(response)
-                return response
+                return response*/
               // Navigate through the fields of json object
-            //   val cursor: HCursor = json.hcursor
-            //   val job_type : Decoder.Result[String] = 
-            //       cursor.downField("job_type").as[String]
+              val cursor: HCursor = json.hcursor
+              val job_type : Decoder.Result[String] = 
+                  cursor.downField("__type__").as[String]
               
-            //   job_type match {
-            //       case Left(decodingFailure) => 
-            //           throw new IllegalArgumentException(s"Cant find the field : ${decodingFailure}")
-            //       case Right(__type__) =>
-            //           if(__type__ == "sampling-response") {
-            //               println("In Sampling Response")
-            //               val sampling_response = mapper.readValue(json_string, classOf[Sampling_JobResponse])
-            //               println(sampling_response)
-            //               return sampling_response
-            //           }
-            //           else if (__type__ == "aggregation-response") {
-            //               println("In Aggregation Response")
-            //               val aggregation_response = mapper.readValue(json_string, classOf[Aggregation_JobResponse])
-            //               println(aggregation_response)
-            //               return aggregation_response
-            //           } 
-            //           // Handle other cases here
-            //           // Training Response and Recommendation Response
-            //           else {
-            //               // If invalid job Type
-            //               throw new IllegalArgumentException(s"Invalid job_type : ${__type__}")
-            //           }
-            //   }   
+              job_type match {
+                  case Left(decodingFailure) => 
+                      //throw new IllegalArgumentException(s"Cant find the field : ${decodingFailure}")
+                      val response = mapper.readValue(json_string, classOf[MutableMap[String,String]])
+                      println(response)
+                      return response
+                  case Right(__type__) =>
+                    val response = mapper.readValue(json_string, classOf[JobResponseMessage])
+                    println(response)
+                    return response
+                      /*if(__type__ == "sampling-response") {
+                          println("In Sampling Response")
+                          val sampling_response = mapper.readValue(json_string, classOf[Sampling_JobResponse])
+                          println(sampling_response)
+                          return sampling_response
+                      }
+                      else if (__type__ == "aggregation-response") {
+                          println("In Aggregation Response")
+                          val aggregation_response = mapper.readValue(json_string, classOf[Aggregation_JobResponse])
+                          println(aggregation_response)
+                          return aggregation_response
+                      } 
+                      // Handle other cases here
+                      // Training Response and Recommendation Response
+                      else {
+                          // If invalid job Type
+                          throw new IllegalArgumentException(s"Invalid job_type : ${__type__}")
+                      }*/
+              }   
       }
   }
 }
 
 object Hasher {
-  import java.security.MessageDigest
 
-  def getHash(data: Array[Byte]): Array[Byte] =
-    MessageDigest.getInstance("MD5").digest(data)
+  def getHash(data: String): String = {
+    return Hashing.md5().hashString(data, StandardCharsets.UTF_8).toString
+  }
 }

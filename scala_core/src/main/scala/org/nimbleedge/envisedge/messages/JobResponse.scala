@@ -9,7 +9,7 @@ case class JobResponseData (
     job_type : String,
     senderid : String,
     receiverid : String,
-    results : JobResponseResults,
+    results : String,
 )
 
 case class JobResponseResults (

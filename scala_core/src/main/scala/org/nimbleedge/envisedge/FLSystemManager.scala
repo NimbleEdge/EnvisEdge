@@ -81,13 +81,16 @@ class FLSystemManager(context: ActorContext[FLSystemManager.Command]) extends Ab
     // TODO insert host, port from config
     RedisClientHelper.initConnection()
 
+    context.log.info("FLSystemManager Started")
+
     KafkaProducer.init(ConfigManager.staticConfig.getConfig("producer-config"))
 
     val FLSysKafkaConsumerRef = context.spawn(
         KafkaConsumer(ConfigManager.staticConfig.getConfig("consumer-config"), Right(context.self)), "FLSystemManagerKafkaConsumer", DispatcherSelector.blocking()
     )
 
-    context.log.info("FLSystemManager Started")
+    AmazonS3Communicator.createEmptyDir(AmazonS3Communicator.s3Config.getString("bucket"), "models/")
+    AmazonS3Communicator.createEmptyDir(AmazonS3Communicator.s3Config.getString("bucket"), "clients/")
 
     private def getOrchestratorRef(orcId: OrchestratorIdentifier): ActorRef[Orchestrator.Command] = {
         orcIdToRef.get(orcId) match {
@@ -169,10 +172,10 @@ class FLSystemManager(context: ActorContext[FLSystemManager.Command]) extends Ab
                 // TODO cycle termination
                 this
 
-            case AggregationCheckpoint(_) =>
+            case AggregationCheckpoint(orcId) =>
                 context.log.info("FLSystemManager: Aggregation finished")
                 // inform HTTP Service to broadcast update model 
-                KafkaProducer.send(ConfigManager.FLSYS_REQUEST_TOPIC, "UpdateModel", "")
+                KafkaProducer.send(ConfigManager.FLSYS_REQUEST_TOPIC, "CycleTerminated", orcId.name())
                 this
 
             case KafkaResponse(requestId, message) => 

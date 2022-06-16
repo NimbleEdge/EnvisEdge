@@ -67,6 +67,9 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
 
     private var round_index = 0
 
+    AmazonS3Communicator.createEmptyDir(AmazonS3Communicator.s3Config.getString("bucket"), s"models/${aggId.toString()}/")
+    AmazonS3Communicator.createEmptyDir(AmazonS3Communicator.s3Config.getString("bucket"), s"clients/${aggId.toString()}/")
+
     context.log.info("Aggregator {} started", aggId.toString())
 
     def getTrainerRef(trainerId: TrainerIdentifier): ActorRef[Trainer.Command] = {
@@ -177,7 +180,37 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                                         )
                                     )
                                 ),
-                                in_neighbours = Map(), // Initialize this
+                                in_neighbours = Map(
+                                    "0" -> Neighbour(
+                                        "fedrec.data_models.aggregator_state_model.Neighbour",
+                                        NeighbourData(
+                                            "0",
+                                            2,
+                                            2,
+                                            NeighbourDataModelState(
+                                                "fedrec.data_models.state_tensors_model.StateTensors",
+                                                NeighbourDataModelStateData(
+                                                    s"/clients/${aggId.toString}/0_${round_index}_trainer41.pt"
+                                                )
+                                            )
+                                        )
+                                    ),
+                                    "1" -> Neighbour(
+                                        "fedrec.data_models.aggregator_state_model.Neighbour",
+                                        NeighbourData(
+                                            "1",
+                                            2,
+                                            2,
+                                            NeighbourDataModelState(
+                                                "fedrec.data_models.state_tensors_model.StateTensors",
+                                                NeighbourDataModelStateData(
+                                                    s"/clients/${aggId.toString}/1_${round_index}_trainer41.pt"
+                                                )
+                                            )
+                                        )
+                                    ),
+
+                                ), // Initialize this
                                 out_neighbours = Map()
                             )
                         )
@@ -269,10 +302,17 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                         resp.__data__.job_type match {
                             case "sampling" =>
                                 // TODO: Handle the response appropriately
-                                parent ! Orchestrator.SamplingCheckpoint(aggId)
-                                // set cycle accepted to 1
-                                // selectedList.foreach((c) => RedisClientHelper.hset(c, "cycleAccepted", "1"))
-                                timers.startSingleTimer(TimerKey, CheckS3ForModels(), ConfigManager.aggregatorS3ProbeIntervalMinutes.minutes)
+                                val mp = JsonDecoder.deserialize(resp.__data__.results)
+                                mp match {
+                                    case l: Map[_,_] =>
+                                        val selectedList = l.keySet.toList
+                                        parent ! Orchestrator.SamplingCheckpoint(aggId)
+                                        // set cycle accepted to 1
+                                        selectedList.foreach((c) => RedisClientHelper.hset(c.toString, "cycleAccepted", "1"))
+                                        timers.startSingleTimer(TimerKey, CheckS3ForModels(), ConfigManager.aggregatorS3ProbeIntervalMinutes.minutes)
+                                    case _ => throw new IllegalArgumentException(s"Invalid response_type : ${resp.__data__.results}")
+                                }
+                                
                             case "aggregate" => 
                                 // TODO: Handle the reponse appropriately
                                 AmazonS3Communicator.emptyDir(AmazonS3Communicator.s3Config.getString("bucket"), s"/clients/${aggId.toString()}/")
