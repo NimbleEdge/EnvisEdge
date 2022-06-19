@@ -51,7 +51,7 @@ try:
 
     class TBLogger(SummaryWriter, BaseLogger):
         """ 
-           Helps in visualizing the data through the tensorboard class.
+        Helps in visualizing the data through the tensorboard class.
         """
         def __init__(self, log_dir, comment="", max_queue=10):
             super().__init__(log_dir=log_dir,
@@ -63,7 +63,7 @@ try:
 
         def log_gradients(self, model, step, to_normalize=True):
             """
-               Returns a scalar or histogram on the basis of bool value given to to_normalize.
+            Returns a scalar or histogram on the basis of bool value given to to_normalize.
             """
             for name, param in model.named_parameters():
                 if to_normalize:
