@@ -12,13 +12,19 @@ import akka.actor.typed.scaladsl.AbstractBehavior
 import akka.actor.typed.DispatcherSelector
 import akka.actor.typed.Signal
 import akka.actor.typed.PostStop
+import akka.actor.Timers
+import akka.actor.typed.scaladsl.TimerScheduler
 
 import messages._
 import scala.collection.mutable
 
 object Orchestrator {
   def apply(orcId: OrchestratorIdentifier, parent: ActorRef[FLSystemManager.Command]): Behavior[Command] =
-    Behaviors.setup(new Orchestrator(_, orcId, parent))
+    Behaviors.setup{ context => 
+      Behaviors.withTimers { timers =>
+        new Orchestrator(context, orcId, parent, timers)
+      }
+    }
 
   trait Command
 
@@ -30,12 +36,14 @@ object Orchestrator {
 
   final case class SamplingCheckpoint(aggId: AggregatorIdentifier) extends Orchestrator.Command
   final case class AggregationCheckpoint(aggId: AggregatorIdentifier) extends Orchestrator.Command
+  final case class ResetRoundIdx() extends Orchestrator.Command
 
+  private case object TimerKey
   // TODO
   // Add messages here
 }
 
-class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: OrchestratorIdentifier, parent: ActorRef[FLSystemManager.Command]) extends AbstractBehavior[Orchestrator.Command](context) {
+class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: OrchestratorIdentifier, parent: ActorRef[FLSystemManager.Command], timers: TimerScheduler[Orchestrator.Command]) extends AbstractBehavior[Orchestrator.Command](context) {
   import Orchestrator._
   import FLSystemManager.{ RequestAggregator, AggregatorRegistered, RequestTrainer, RequestRealTimeGraph, StartCycle}
   import LocalRouter.RemoveAggregator
@@ -49,6 +57,8 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
   var aggIdAggregationCompletedSet : mutable.Set[AggregatorIdentifier] = mutable.Set.empty
 
   val routerRef = context.spawn(LocalRouter(), s"LocalRouter-${orcId.toString()}")
+
+  private var roundIndex = 0
 
   val aggKafkaConsumerRef = context.spawn(
       KafkaConsumer(ConfigManager.staticConfig.getConfig("consumer-config"), Left(routerRef)), s"AggregatorKafkaConsumer-${orcId.toString()}", DispatcherSelector.blocking()
@@ -163,7 +173,7 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
         val aggId = getAvailableAggregator()
         val clientId = Hasher.getHash(device)
         //update this pair to the redis
-        val dataMap = Map("name" -> device, "clientId" -> clientId, "aggId" -> aggId.toString(), "orcId" -> orcId.name(), "cycleAccepted" -> 0)
+        val dataMap = Map("name" -> device, "clientId" -> clientId, "aggId" -> aggId.toString(), "orcId" -> orcId.name(), "cycleAccepted" -> 0, "modelVersion" -> "")
         RedisClientHelper.hmset(clientId, dataMap)
         RedisClientHelper.rpush(aggId.toString(), clientId)
 
@@ -177,8 +187,12 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
         this
 
       case StartCycle(_) =>
-        val aggMsg = Aggregator.InitiateSampling(ConfigManager.samplingPolicy)
+        val aggMsg = Aggregator.InitiateSampling(ConfigManager.samplingPolicy, roundIndex)
         aggIdToRef.values.foreach((a) => a ! aggMsg)
+        this
+
+      case ResetRoundIdx() =>
+        roundIndex = 0
         this
 
       case SamplingCheckpoint(aggId) =>
@@ -195,7 +209,9 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
         aggIdAggregationCompletedSet += aggId
         if (aggIdAggregationCompletedSet.size == orcId.getChildren().size) {
           context.log.info("Orc id:{} Aggregation Checkpoint Finished for all Aggs, sending next checkpoint to FLSystemManager", orcId.name())
-          parent ! FLSystemManager.AggregationCheckpoint(orcId)
+          parent ! FLSystemManager.AggregationCheckpoint(orcId, roundIndex)
+          roundIndex += 1
+          timers.startSingleTimer(TimerKey, StartCycle(orcId.name()), ConfigManager.nextRoundStartIntervalHours.hours)
         }
         // reset all sturctures
         reset()

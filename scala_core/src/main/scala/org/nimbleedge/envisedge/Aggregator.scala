@@ -34,7 +34,7 @@ object Aggregator {
     private final case class TrainerTerminated(actor: ActorRef[Trainer.Command], traId: TrainerIdentifier)
         extends Aggregator.Command
 
-    final case class InitiateSampling(samplingPolicy: String) extends Aggregator.Command
+    final case class InitiateSampling(samplingPolicy: String, roundIdx: Int) extends Aggregator.Command
     private final case class StartAggregation(aggregationPolicy: String) extends Aggregator.Command
 
     final case class CheckS3ForModels() extends Aggregator.Command
@@ -65,7 +65,16 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
 
     routerRef ! RegisterAggregator(aggId.toString(), context.self)
 
-    private var round_index = 0
+    private var roundIndex = 0
+
+    private var aggStateDict: Map[String, Object] = Map(
+        "model" -> Message(
+            __type__ = "fedrec.data_models.state_tensors_model.StateTensors",
+            __data__ = Map("storage" -> s"models/${aggId.toString}/${aggId.name}.pb")
+        )
+    )
+
+    private var curModelVersion = s"v_${aggId.getOrchestrator().name()}${roundIndex}"
 
     AmazonS3Communicator.createEmptyDir(AmazonS3Communicator.s3Config.getString("bucket"), s"models/${aggId.toString()}/")
     AmazonS3Communicator.createEmptyDir(AmazonS3Communicator.s3Config.getString("bucket"), s"clients/${aggId.toString()}/")
@@ -123,102 +132,69 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
         return trainerHistoryToRef
     }
 
-    def makeSamplingJobSubmit(clientList: List[String]) : JobSubmitMessage = {
+    def getInNeighbours() : Map[String, Message] = {
+        val clientList = RedisClientHelper.getList(aggId.toString()).toList.flatten.flatten
+        var neighbours: MutableMap[String, Message] = MutableMap.empty
+        clientList.foreach((c) => {
+            val version = RedisClientHelper.hget(c, "modelVersion").get
+            if (version == curModelVersion) {
+                neighbours += (c -> Message (
+                    __type__ = "fedrec.data_models.aggregator_state_model.Neighbour",
+                    __data__ = Neighbour (
+                        worker_index = c,
+                        last_sync = 0,
+                        model_state = Message (
+                            __type__ = "fedrec.data_models.state_tensors_model.StateTensors",
+                            __data__ = Map(
+                                "storage" -> s"clients/${aggId.toString()}/${c}.pd"
+                            )
+                        )
+                    )
+                ))
+            }
+        })
+        return Map.empty ++ neighbours
+    }
+
+    def makeSamplingJobSubmit(clientList: List[String]) : Message = {
         println("In make Sampling message")
         println(trainerIdsToRef)
-        var samplingMessage = JobSubmitMessage (
+        return Message (
             __type__ = "fedrec.data_models.job_submit_model.JobSubmitMessage",
-            __data__ = JobSubmitMessageData (
+            __data__ = JobSubmitMessage (
                 job_args = clientList,
-                job_kwargs = null,
+                job_kwargs = List(),
                 workerstate = null,
                 senderid = aggId.name(),
                 receiverid = aggId.name(),
                 job_type = "sampling"
             )
         )
-        return samplingMessage
     }
 
-    def makeAggregationJobSubmit() : JobSubmitMessage = {
+    def makeAggregationJobSubmit(in_neighbours: Map[String, Message]) : Message = {
         println("In make Aggregation message")
-        var aggregationMessage = JobSubmitMessage (
+        return Message (
             __type__ = "fedrec.data_models.job_submit_model.JobSubmitMessage",
-            __data__ = JobSubmitMessageData (
+            __data__ = JobSubmitMessage (
                 job_args = List(),
-                job_kwargs = null,
+                job_kwargs = List(),
                 senderid = aggId.name(),
                 receiverid = aggId.name(), // confirm this
                 job_type = "aggregate",
-                workerstate = WorkerState (
+                workerstate = Message (
                     __type__ = "fedrec.data_models.aggregator_state_model.AggregatorState",
-                    __data__ = WorkerStateData (
+                    __data__ = AggregatorState (
                         worker_index = aggId.name(),
-                        round_index = round_index,
-                        model_prepoc = null,
-                        storage = s"/models/${aggId.toString()}/model_file-${round_index-1}.pt", // Confirm this
-                        local_sample_number = 0,
-                        local_training_steps = 0,
-                        state_dict = StateDict (
-                            step = 0,
-                            model = StateDictModel (
-                                __type__ = "fedrec.data_models.state_tensors_model.StateTensors",
-                                __data__ = StateDictModelData (
-                                    storage = s"/models/${aggId.toString()}/model_file-${round_index-1}.pt" // configure this 
-                                )
-                            ),
-                            worker_state = SubWorkerState (
-                                model = SubWorkerStateModel (
-                                    __type__ = "experiments.regression.net.Regression_Net",
-                                    __data__ = SubWorkerStateModelData (
-                                        class_ref_name = "experiments.regression.net.Regression_Net",
-                                        state = SubWorkerStateModelDataState (
-                                            __type__ = "fedrec.data_models.tensors_model.EnvisTensors",
-                                            __data__ = SubWorkerStateModelDataStateData (
-                                                tensor_path = s"/models/${aggId.toString()}/model_file-${round_index}.pt" // configure this
-                                            )
-                                        )
-                                    )
-                                ),
-                                in_neighbours = Map(
-                                    "0" -> Neighbour(
-                                        "fedrec.data_models.aggregator_state_model.Neighbour",
-                                        NeighbourData(
-                                            "0",
-                                            2,
-                                            2,
-                                            NeighbourDataModelState(
-                                                "fedrec.data_models.state_tensors_model.StateTensors",
-                                                NeighbourDataModelStateData(
-                                                    s"/clients/${aggId.toString}/0_${round_index}_trainer41.pt"
-                                                )
-                                            )
-                                        )
-                                    ),
-                                    "1" -> Neighbour(
-                                        "fedrec.data_models.aggregator_state_model.Neighbour",
-                                        NeighbourData(
-                                            "1",
-                                            2,
-                                            2,
-                                            NeighbourDataModelState(
-                                                "fedrec.data_models.state_tensors_model.StateTensors",
-                                                NeighbourDataModelStateData(
-                                                    s"/clients/${aggId.toString}/1_${round_index}_trainer41.pt"
-                                                )
-                                            )
-                                        )
-                                    ),
-
-                                ), // Initialize this
-                                out_neighbours = Map()
-                            )
-                        )
+                        round_index = roundIndex,
+                        storage = s"/models/${aggId.toString()}/${aggId.name()}.pb", // Confirm this
+                        state_dict = aggStateDict,
+                        in_neighbours = in_neighbours,
+                        out_neighbours = Map(),
                     )
                 )
             )
         )
-        return aggregationMessage
     }
 
     override def onMessage(msg: Command): Behavior[Command] =
@@ -268,8 +244,9 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                 }
                 this
 
-            case InitiateSampling(samplingPolicy) =>
+            case InitiateSampling(samplingPolicy, roundIdx) =>
                 context.log.info("Aggregator Id:{} Initiate Sampling", aggId.toString())
+                roundIndex = roundIdx
                 // fetch list of clientIds from the Redis
                 val clientList = RedisClientHelper.getList(aggId.toString()).toList.flatten.flatten
 
@@ -280,46 +257,43 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                 // Convert Message to Json String to send via kafka
                 val serializedMsg = JsonEncoder.serialize(samplingMessage)
                 // TODO Send job to Python Service using Kafka
-                KafkaProducer.send(AGGR_SAMPLING_REQUEST_TOPIC, samplingMessage.__data__.receiverid, serializedMsg)
+                KafkaProducer.send(AGGR_SAMPLING_REQUEST_TOPIC, aggId.name(), serializedMsg)
                 
                 this
 
             case StartAggregation(aggregationPolicy) =>
                 context.log.info("Aggregator Id:{} Start Aggregation", aggId.toString())
 
-                val aggregationMessage = makeAggregationJobSubmit()
+                val neighbours = getInNeighbours()
+                val aggregationMessage = makeAggregationJobSubmit(neighbours)
                 context.log.info("Aggregator Id:{} Aggregation Message: {}", aggId.toString(), aggregationMessage)
 
                 val serializedMsg = JsonEncoder.serialize(aggregationMessage)
-                // TODO Send job to Python Service using Kafka
-                KafkaProducer.send(AGGR_AGGREGATION_REQUEST_TOPIC, aggregationMessage.__data__.receiverid, serializedMsg)
+                KafkaProducer.send(AGGR_AGGREGATION_REQUEST_TOPIC, aggId.name(), serializedMsg)
                 this
 
             case KafkaResponse(requestId, message) =>
                 val msg = JsonDecoder.deserialize(message)
                 msg match {
-                    case  resp @ JobResponseMessage(_,_) => 
-                        resp.__data__.job_type match {
+                    case  resp: JobResponseMessage => 
+                        resp.job_type match {
                             case "sampling" =>
                                 // TODO: Handle the response appropriately
-                                val mp = JsonDecoder.deserialize(resp.__data__.results)
-                                mp match {
-                                    case l: Map[_,_] =>
-                                        val selectedList = l.keySet.toList
-                                        parent ! Orchestrator.SamplingCheckpoint(aggId)
-                                        // set cycle accepted to 1
-                                        selectedList.foreach((c) => RedisClientHelper.hset(c.toString, "cycleAccepted", "1"))
-                                        timers.startSingleTimer(TimerKey, CheckS3ForModels(), ConfigManager.aggregatorS3ProbeIntervalMinutes.minutes)
-                                    case _ => throw new IllegalArgumentException(s"Invalid response_type : ${resp.__data__.results}")
-                                }
+                                val res = resp.results.asInstanceOf[Map[String, List[String]]]
+                                val selectedList = res("clients")
+                                parent ! Orchestrator.SamplingCheckpoint(aggId)
+                                // set cycle accepted to 1
+                                selectedList.foreach((c) => RedisClientHelper.hset(c.toString, "cycleAccepted", "1"))
+                                timers.startSingleTimer(TimerKey, CheckS3ForModels(), ConfigManager.aggregatorS3ProbeIntervalMinutes.minutes)
                                 
                             case "aggregate" => 
                                 // TODO: Handle the reponse appropriately
-                                AmazonS3Communicator.emptyDir(AmazonS3Communicator.s3Config.getString("bucket"), s"/clients/${aggId.toString()}/")
-                                round_index += 1
+                                aggStateDict = resp.results
+                                parent ! Orchestrator.AggregationCheckpoint(aggId)
+                                curModelVersion = s"v_${aggId.getOrchestrator().name()}${roundIndex}"
                                 val clientList = RedisClientHelper.getList(aggId.toString()).toList.flatten.flatten
                                 clientList.foreach((c) => RedisClientHelper.hset(c, "cycleAccepted", "0"))
-                            case _ => throw new IllegalArgumentException(s"Invalid response_type : ${msg}")
+                            case _ => throw new IllegalArgumentException(s"Invalid response_type : ${resp}")
                         }
                         
                     case _ => throw new IllegalArgumentException(s"Invalid response_type : ${msg}")
@@ -338,7 +312,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                     timers.startSingleTimer(TimerKey, CheckS3ForModels(), ConfigManager.aggregatorS3ProbeIntervalMinutes.minutes)
                 }
                 this
-            
+
             case trackMsg @ RequestRealTimeGraph(requestId, entity, replyTo) =>
                 entity match {
                     case Left(x) => 

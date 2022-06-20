@@ -1,37 +1,19 @@
 package org.nimbleedge.envisedge.messages
 
-case class JobResponseMessage (
-    __type__ : String,
-    __data__ : JobResponseData
-)
+object JobResponseMessage {
+    def deserialize(dict: Map[String, Object]) : JobResponseMessage = {
+        return JobResponseMessage (
+            job_type = dict("job_type").asInstanceOf[String],
+            senderid = dict("senderid").asInstanceOf[String],
+            receiverid = dict("receiverid").asInstanceOf[String],
+            results = dict("results").asInstanceOf[Map[String,Object]]
+        )
+    }
+}
 
-case class JobResponseData (
+case class JobResponseMessage (
     job_type : String,
     senderid : String,
     receiverid : String,
-    results : String,
+    results : Map[String, Object],
 )
-
-case class JobResponseResults (
-    linearWeight : LinearWeight,
-    linearBias : LinearBias
-)
-
-case class LinearWeight (
-    __type__ : String,
-    __data__ : Storage
-)
-
-case class LinearBias (
-    __type__ : String,
-    __data__ : Storage
-)
-
-case class Storage (
-    storage : String,
-)
-
-
-
-
-

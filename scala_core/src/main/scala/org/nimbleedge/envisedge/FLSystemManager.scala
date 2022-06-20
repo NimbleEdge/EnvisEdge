@@ -58,9 +58,9 @@ object FLSystemManager {
     // Start cycle
     // TODO
     // final case class StartCycle(requestId: Long, replyTo: ActorRef[RespondModel]) extends FLSystemManager.Command with Orchestrator.Command with Aggregator.Command
-    final case class StartCycle(taskId : String) extends FLSystemManager.Command with Orchestrator.Command with Aggregator.Command
+    final case class StartCycle(taskId : String) extends FLSystemManager.Command with Orchestrator.Command
     final case class SamplingCheckpoint(orcId : OrchestratorIdentifier) extends FLSystemManager.Command
-    final case class AggregationCheckpoint(orcId : OrchestratorIdentifier) extends FLSystemManager.Command
+    final case class AggregationCheckpoint(orcId : OrchestratorIdentifier, roundIdx: Int) extends FLSystemManager.Command
     final case class RespondModel(requestId: Long)
 
     // TODO
@@ -172,10 +172,13 @@ class FLSystemManager(context: ActorContext[FLSystemManager.Command]) extends Ab
                 // TODO cycle termination
                 this
 
-            case AggregationCheckpoint(orcId) =>
+            case AggregationCheckpoint(orcId, roundIdx) =>
                 context.log.info("FLSystemManager: Aggregation finished")
                 // inform HTTP Service to broadcast update model 
                 KafkaProducer.send(ConfigManager.FLSYS_REQUEST_TOPIC, "CycleTerminated", orcId.name())
+                if (roundIdx == ConfigManager.NUM_ROUNDS) {
+                    getOrchestratorRef(orcId) ! Orchestrator.ResetRoundIdx()
+                }
                 this
 
             case KafkaResponse(requestId, message) => 

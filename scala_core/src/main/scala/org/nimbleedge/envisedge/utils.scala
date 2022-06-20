@@ -49,7 +49,15 @@ object JsonDecoder {
 
       // Parse String Object to check whether it is valid json or not
       json_string.stripMargin
-      val parse_result: Either[ParsingFailure,Json] = parse(json_string)
+
+      val msg = mapper.readValue(json_string, classOf[Message])
+      msg.__type__ match {
+        case "fedrec.data_models.job_response_model.JobResponseMessage" => 
+          return JobResponseMessage.deserialize(msg.__data__.asInstanceOf[Map[String,Object]])
+        case _ => new IllegalArgumentException(s"Cant find the field")
+      }
+
+      /*val parse_result: Either[ParsingFailure,Json] = parse(json_string)
 
       parse_result match {
           case Left(parsingError) =>
@@ -60,19 +68,26 @@ object JsonDecoder {
                 return response*/
               // Navigate through the fields of json object
               val cursor: HCursor = json.hcursor
-              val job_type : Decoder.Result[String] = 
+              val message_type : Decoder.Result[String] = 
                   cursor.downField("__type__").as[String]
               
-              job_type match {
+              message_type match {
                   case Left(decodingFailure) => 
-                      //throw new IllegalArgumentException(s"Cant find the field : ${decodingFailure}")
-                      val response = mapper.readValue(json_string, classOf[MutableMap[String,String]])
-                      println(response)
-                      return response
+                      throw new IllegalArgumentException(s"Cant find the field : ${decodingFailure}")
                   case Right(__type__) =>
-                    val response = mapper.readValue(json_string, classOf[JobResponseMessage])
-                    println(response)
-                    return response
+                    __type__ match {
+                      case "fedrec.data_models.job_response_model.JobResponseMessage" => {
+                        val message_data = cursor.field("__data__").as[JobResponseMessage]
+                        message_data match {
+                          case Left(decodingError) => throw new IllegalArgumentException(s"Cant find the field : ${decodingError}")
+                          case Right(data) => return mapper.readValue(data, classOf[JobResponseMessage])
+                        }
+                      }
+                      case _ => throw new IllegalArgumentException(s"Received Unexpected message of type: ${__type__}")
+                    }
+                    // val response = mapper.readValue(json_string, classOf[JobResponseMessage])
+                    // println(response)
+                    // return response
                       /*if(__type__ == "sampling-response") {
                           println("In Sampling Response")
                           val sampling_response = mapper.readValue(json_string, classOf[Sampling_JobResponse])
@@ -91,8 +106,8 @@ object JsonDecoder {
                           // If invalid job Type
                           throw new IllegalArgumentException(s"Invalid job_type : ${__type__}")
                       }*/
-              }   
-      }
+              }
+      }*/
   }
 }
 

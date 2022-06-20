@@ -82,6 +82,7 @@ object Main {
         // val t24 = TrainerIdentifier(a23, "T24")
         val t25 = TrainerIdentifier(a22, "T25")
 
+
         // println(t1.toString())
         // println(t2.toString())
         // println(t3.toString())
