@@ -4,7 +4,7 @@ from typing import Dict
 import torch
 
 from fedrec.serialization.serializable_interface import Serializable
-from fedrec.utilities.io_utils import load_tensors, save_tensors
+from fedrec.utilities.io_utils import load_tensors, save_tensors, save_proto
 from fedrec.utilities.registry import Registrable
 from envisproto.state.model_state_pb2 import State
 from envisproto.state.state_tensor_pb2 import StateTensor
@@ -110,7 +110,7 @@ class EnvisTensors(Serializable):
 
         """
         # TODO: add saving function for proto file
-        proto_path = self._create_tensor(self.get_name(), self.tensor)
+        proto_path = save_proto(self.storage, self.get_name(), self._create_tensor(self.get_name(), self.tensor))
         return self.append_type({"tensor_path": proto_path})
 
     @classmethod

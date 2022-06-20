@@ -77,3 +77,10 @@ def dash_separated_floats(value):
             )
 
     return value
+
+def save_proto(storage, name, state):
+    complete_name = os.path.join(storage, name) + '.pb'
+    with open(complete_name, 'wb') as f:
+        f.write(state.SerializeToString())
+        
+    return complete_name
