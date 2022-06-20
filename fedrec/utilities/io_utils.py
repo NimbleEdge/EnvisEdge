@@ -89,5 +89,6 @@ def load_proto(proto_path, tensors):
     if os.path.isfile(proto_path):
         with open(proto_path, 'rb') as f:
             tensors.ParseFromString(f.read())
+        return tensors
     else:
         raise ValueError("Path does not exist.")

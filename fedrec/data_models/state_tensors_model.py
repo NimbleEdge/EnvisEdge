@@ -3,7 +3,7 @@ import torch
 
 from fedrec.data_models.tensors_model import EnvisTensors
 from fedrec.serialization.serializable_interface import Serializable
-from fedrec.utilities.io_utils import load_tensors, save_tensors
+from fedrec.utilities.io_utils import load_proto, load_tensors, save_tensors, load_proto
 from fedrec.utilities.registry import Registrable
 from envisproto.state.model_state_pb2 import State
 from envisproto.state.state_tensor_pb2 import StateTensor
@@ -131,7 +131,8 @@ class StateTensors(Serializable):
         """
         path = obj['storage']
         # load tensor from the path
-        tensors = load_tensors(path)
+        tensors = TorchTensor()
+        tensors = load_proto(path, tensors)
         worker_id, round_idx, tensor_type = cls.split_path(path)
         return StateTensors(
             path, worker_id, round_idx, tensors, tensor_type
