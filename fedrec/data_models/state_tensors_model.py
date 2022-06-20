@@ -109,7 +109,7 @@ class StateTensors(Serializable):
                               for name, tensor in self.envistensors.items()])
 
         # TODO : add logic to save the state to a file.
-        proto_path = save_proto(state)
+        proto_path = save_proto(self.storage, self.get_name(), state)
         return self.append_type({
             "storage": proto_path
         })

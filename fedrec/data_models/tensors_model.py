@@ -77,8 +77,8 @@ class EnvisTensors(Serializable):
         """
         storage = "/".join(path.split("/")[:-1])
         name = path.split("/")[-1]
-        tensor_type, suffix = name.split("_")
-        return storage, tensor_type
+        # tensor_type, suffix = name.split("_")
+        return storage, name
 
     def get_proto_object(self):
         """
@@ -129,6 +129,7 @@ class EnvisTensors(Serializable):
             The deserialized object.
         """
         path = obj["tensor_path"]
-        tensors = load_tensors(path)
+        tensors = TorchTensor()
+        load_tensors(path, tensors)
         storage, tensor_type = cls.split_path(path)
         return cls(storage, tensors, tensor_type)

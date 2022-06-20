@@ -79,8 +79,15 @@ def dash_separated_floats(value):
     return value
 
 def save_proto(storage, name, state):
-    complete_name = os.path.join(storage, name) + '.pb'
-    with open(complete_name, 'wb') as f:
+    proto_path = os.path.join(storage, name) + '.pb'
+    with open(proto_path, 'wb') as f:
         f.write(state.SerializeToString())
-        
-    return complete_name
+
+    return proto_path
+
+def load_proto(proto_path, tensors):
+    if os.path.isfile(proto_path):
+        with open(proto_path, 'rb') as f:
+            tensors.ParseFromString(f.read())
+    else:
+        raise ValueError("Path does not exist.")
