@@ -8,7 +8,7 @@ model :
   preproc :
     dataset_config:
       name : "femnist"
-      data_dir : <"Path to dataset">
+      data_dir : "/home/ubuntu/dataset/femnist"
       splits : ["train", "test", "val"]
       normalize : [0.1307, 0.3081]
 
@@ -57,6 +57,7 @@ trainer :
 
 aggregator:
   name : "fed_avg"
+  min_num_clients : 1
 
 random:
   data_seed : 100
@@ -64,7 +65,7 @@ random:
   model_seed : 100
 
 log_dir:
-  PATH: <"Path to logging directory">
+  PATH: "/home/varun/logs/envis/"
 
 s3:
   aws_access_key: ''

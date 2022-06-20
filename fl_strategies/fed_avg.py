@@ -1,5 +1,5 @@
 import logging
-from typing import Dict
+from typing import Dict, List
 
 import numpy as np
 from fedrec.python_executors.aggregator import Neighbour
@@ -19,6 +19,7 @@ class FedAvg(EnvisBase):
         self.in_neighbours = in_neighbours
         self.out_neighbours = out_neighbours
         self.config_dict = config_dict
+        self.min_num_clients = config_dict["aggregator"]["min_num_clients"]
         modelCls = registry.lookup('model', self.config_dict["model"])
         self.model_preproc: EnvisPreProcessor = registry.instantiate(
             modelCls.Preproc,
@@ -56,16 +57,15 @@ class FedAvg(EnvisBase):
 
         return averaged_params
 
-    def sample_clients(self, round_idx, client_num_per_round):
-        num_neighbours = len(self.in_neighbours)
-        if num_neighbours == client_num_per_round:
-            selected_neighbours = [
-                neighbour for neighbour in self.in_neighbours]
+    def sample_clients(self, list_of_clients: List[str], round_idx: int = 0):
+        num_neighbours = len(list_of_clients)
+        if num_neighbours <= self.min_num_clients:
+            selected_neighbours = list_of_clients
         else:
             with RandomContext(round_idx):
                 selected_neighbours = np.random.choice(
                     self.in_neighbours,
-                    min(client_num_per_round, num_neighbours),
-                    replace=False)
+                    min(self.min_num_clients, num_neighbours),
+                    replace=False).tolist()
         logging.info("worker_indexes = %s" % str(selected_neighbours))
         return selected_neighbours
