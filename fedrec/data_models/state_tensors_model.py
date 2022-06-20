@@ -1,12 +1,20 @@
 from typing import Dict
+import torch
 
 from fedrec.data_models.tensors_model import EnvisTensors
+from fedrec.serialization.serializable_interface import Serializable
 from fedrec.utilities.io_utils import load_tensors, save_tensors
 from fedrec.utilities.registry import Registrable
+from envisproto.state.model_state_pb2 import State
+from envisproto.state.state_tensor_pb2 import StateTensor
+from envisproto.tensors.parameter_pb2 import Parameter
+from envisproto.tensors.tensor_data_pb2 import TensorData
+from envisproto.tensors.torch_tensor_pb2 import TorchTensor
+from envisproto.commons.id_pb2 import Id
 
 
 @Registrable.register_class_ref
-class StateTensors(EnvisTensors):
+class StateTensors(Serializable):
     def __init__(
             self,
             storage,
@@ -15,10 +23,14 @@ class StateTensors(EnvisTensors):
             tensors,
             tensor_type,
             suffix=""):
-        super().__init__(storage, tensors, tensor_type)
         self.worker_id = worker_id
         self.round_idx = round_idx
+        self.storage = storage
+        self.tensors = tensors
+        self.tensor_type = tensor_type
         self.suffix = suffix
+        self.envistensors = {name: EnvisTensors(
+            self.storage, tensor, self.tensor_type) for name, tensor in tensors.items()}
 
     def get_name(self) -> str:
         """
@@ -34,21 +46,6 @@ class StateTensors(EnvisTensors):
             [str(self.worker_id),
              str(self.round_idx),
              self.tensor_type])
-
-    def get_path(self) -> str:
-        """
-        Creates path to save tensor the
-            storage and get name method and suffix.
-
-        Returns
-        --------
-        path: str
-            The path to the tensor.
-        """
-        return "{}/{}{}.pt".format(
-            str(self.storage),
-            str(self.get_name()),
-            self.suffix)
 
     @staticmethod
     def split_path(path):
@@ -77,6 +74,19 @@ class StateTensors(EnvisTensors):
         tensor_type = info[2]
         return worker_id, round_idx, tensor_type
 
+    def _create_parameter(self, name: str, tensor: EnvisTensors):
+        parameter = Parameter()
+        id = Id()
+        id.id_str = name
+        parameter.id.CopyFrom(id)
+        parameter.tensor.CopyFrom(tensor.get_proto_object())
+        return parameter
+
+    def _create_state_tensor(self, name: str, tensor: EnvisTensors):
+        state = StateTensor()
+        state.torch_param.CopyFrom(self._create_parameter(name, tensor))
+        return state
+
     def serialize(self):
         """
         Serializes a tensor object.
@@ -94,11 +104,14 @@ class StateTensors(EnvisTensors):
             The serialized object.
 
         """
-        # if file is provided, save the tensor
-        # to the file and return the file path.
-        path = save_tensors(self.get_torch_obj(), self.get_path())
+        state = State()
+        state.tensors.extend([self._create_state_tensor(name, tensor)
+                              for name, tensor in self.envistensors.items()])
+
+        # TODO : add logic to save the state to a file.
+        proto_path = save_proto(state)
         return self.append_type({
-            "storage": path
+            "storage": proto_path
         })
 
     @classmethod

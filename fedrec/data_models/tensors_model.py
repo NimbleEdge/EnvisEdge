@@ -1,10 +1,18 @@
 import os
 import random
 from typing import Dict
+import torch
 
 from fedrec.serialization.serializable_interface import Serializable
 from fedrec.utilities.io_utils import load_tensors, save_tensors
 from fedrec.utilities.registry import Registrable
+from envisproto.state.model_state_pb2 import State
+from envisproto.state.state_tensor_pb2 import StateTensor
+from envisproto.tensors.parameter_pb2 import Parameter
+from envisproto.tensors.tensor_data_pb2 import TensorData
+from envisproto.tensors.torch_tensor_pb2 import TorchTensor
+from envisproto.execution.plan_pb2 import Plan
+from envisproto.commons.id_pb2 import Id
 
 
 @Registrable.register_class_ref
@@ -13,11 +21,11 @@ class EnvisTensors(Serializable):
     def __init__(
             self,
             storage,
-            tensors,
+            tensor,
             tensor_type) -> None:
         super().__init__()
         self.storage = storage
-        self.tensors = tensors
+        self.tensor = tensor
         self.tensor_type = tensor_type
         self.SUFFIX = 0
 
@@ -34,19 +42,20 @@ class EnvisTensors(Serializable):
         self.SUFFIX += 1
         return "_".join([str(self.tensor_type), str(self.SUFFIX)])
 
-    def get_path(self):
-        """
-        Creates path to save tensor the storage and get name method.
+    def _create_tensor_data(self, tensor: torch.Tensor):
+        tensor_data = TensorData()
+        tensor_data.dtype = tensor.dtype.__repr__()
+        tensor_data.shape.dims.extend(tensor.shape)
+        tensor_data.contents_float64.extend(tensor.view(-1).tolist())
+        return tensor_data
 
-        Returns
-        --------
-        path: str
-            The path to the tensor.
-        """
-        return "{}/{}.pt".format(str(self.storage), str(self.get_name()))
-
-    def get_torch_obj(self):
-        return self.tensors
+    def _create_tensor(self, name: str, tensor: torch.Tensor):
+        t_tensor = TorchTensor()
+        id = Id()
+        id.id_str = name
+        t_tensor.id.CopyFrom(id)
+        t_tensor.contents_data.CopyFrom(self._create_tensor_data(tensor))
+        return t_tensor
 
     @staticmethod
     def split_path(path):
@@ -71,6 +80,18 @@ class EnvisTensors(Serializable):
         tensor_type, suffix = name.split("_")
         return storage, tensor_type
 
+    def get_proto_object(self):
+        """
+        Returns the proto object.
+
+        Returns
+        --------
+        proto_object: object
+            The proto object.
+
+        """
+        return self._create_tensor(self.get_name(), self.tensor)
+
     def serialize(self):
         """
         Serializes a tensor object.
@@ -88,8 +109,9 @@ class EnvisTensors(Serializable):
             The serialized object.
 
         """
-        path = save_tensors(self.tensors, self.get_path())
-        return self.append_type({"tensor_path": path})
+        # TODO: add saving function for proto file
+        proto_path = self._create_tensor(self.get_name(), self.tensor)
+        return self.append_type({"tensor_path": proto_path})
 
     @classmethod
     def deserialize(cls, obj: Dict):

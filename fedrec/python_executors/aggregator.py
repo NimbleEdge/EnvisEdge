@@ -101,6 +101,8 @@ class Aggregator(BaseActor, ABC):
         self.load_model(state.state_dict['model'])
         if self.optimizer is not None:
             self.load_optimizer(state.state_dict['optimizer'])
+        # TODO : Check if dict is null then create dict from above patameters
+        # if no state then reandomly intialize the empty dict
         self.worker.update(state.state_dict["worker_state"])
 
     def run(self, func_name, *args, **kwargs):

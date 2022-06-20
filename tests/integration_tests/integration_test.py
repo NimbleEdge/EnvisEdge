@@ -145,7 +145,7 @@ class TestAggregator(AbstractTester):
         response: JobResponseMessage = self.submit_message(
             senderid=self.worker.worker_index,
             receiverid=self.worker.worker_index,
-            job_type="sample_clients",
+            job_type="sample_client",
             job_args=[],
             job_kwargs={}
         )
