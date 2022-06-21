@@ -12,8 +12,8 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from fedrec.envisproto.state import state_tensor_pb2 as envisproto_dot_state_dot_state__tensor__pb2
-from fedrec.envisproto.state import placeholder_pb2 as envisproto_dot_state_dot_placeholder__pb2
+from envisproto.state import state_tensor_pb2 as envisproto_dot_state_dot_state__tensor__pb2
+from envisproto.state import placeholder_pb2 as envisproto_dot_state_dot_placeholder__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -64,7 +64,7 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 State = _reflection.GeneratedProtocolMessageType('State', (_message.Message,), dict(
   DESCRIPTOR = _STATE,
-  __module__ = 'envisproto.state.model_state_pb2'
+  __module__ = 'fedrec.envisproto.state.model_state_pb2'
   # @@protoc_insertion_point(class_scope:envisproto.state.State)
   ))
 _sym_db.RegisterMessage(State)

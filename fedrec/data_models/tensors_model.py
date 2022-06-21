@@ -2,15 +2,11 @@ from typing import Dict
 import torch
 
 from fedrec.serialization.serializable_interface import Serializable
-from fedrec.utilities.io_utils import load_tensors, save_tensors, save_proto, load_proto
+from fedrec.utilities.io_utils import save_proto, load_proto
 from fedrec.utilities.registry import Registrable
-from fedrec.envisproto.state.model_state_pb2 import State
-from fedrec.envisproto.state.state_tensor_pb2 import StateTensor
-from fedrec.envisproto.tensors.parameter_pb2 import Parameter
-from fedrec.envisproto.tensors.tensor_data_pb2 import TensorData
-from fedrec.envisproto.tensors.torch_tensor_pb2 import TorchTensor
-from fedrec.envisproto.execution.plan_pb2 import Plan
-from fedrec.envisproto.commons.id_pb2 import Id
+from envisproto.tensors.tensor_data_pb2 import TensorData
+from envisproto.tensors.torch_tensor_pb2 import TorchTensor
+from envisproto.commons.id_pb2 import Id
 
 
 @Registrable.register_class_ref
@@ -18,13 +14,18 @@ class EnvisTensors(Serializable):
 
     def __init__(
             self,
+            id,
             storage,
-            tensor : torch.Tensor) -> None:
+            tensor: torch.Tensor) -> None:
         super().__init__()
         self.storage = storage
         self.tensor = tensor
+        self.id = id
         self.tensor_type = tensor.dtype.__repr__()
         self.SUFFIX = 0
+
+    def get_torch_obj(self):
+        return self.tensor
 
     def get_name(self) -> str:
         """
@@ -36,8 +37,7 @@ class EnvisTensors(Serializable):
         name: str
             The name of the tensor.
         """
-        self.SUFFIX += 1
-        return "_".join([str(self.tensor_type), str(self.SUFFIX)])
+        return self.id
 
     def _create_tensor_data(self, tensor: torch.Tensor):
         tensor_data = TensorData()
@@ -90,28 +90,23 @@ class EnvisTensors(Serializable):
         return self._create_tensor(self.get_name(), self.tensor)
 
     @classmethod
-    def from_proto_object(cls, storage, proto_object):
+    def from_proto_object(cls, proto_object):
         """
         Creates a EnvisTensors object from a proto object.
 
         Parameters
         -----------
-        storage: str
-            The storage path to the tensor.
         proto_object: object
             The proto object.
 
         Returns
         --------
-        tensor: EnvisTensors
-            The EnvisTensors object.
+        tensor: Tensor
+            The Tensor object.
 
         """
-        return EnvisTensors(storage, cls._from_tensor_data(proto_object.contents_data))
-
-    @classmethod
-    def _from_tensor_data(cls, tensor_data: TensorData):
-        return torch.tensor(tensor_data.contents_float64, dtype=tensor_data.dtype).reshape(tensor_data.shape.dims)
+        tensor_data = proto_object.contents_data
+        return torch.tensor(tensor_data.contents_float64, dtype=torch.float64).reshape(tuple(tensor_data.shape.dims))
 
     def serialize(self):
         """
@@ -131,7 +126,8 @@ class EnvisTensors(Serializable):
 
         """
         # TODO: add saving function for proto file
-        proto_path = save_proto(self.storage, self.get_name(), self._create_tensor(self.get_name(), self.tensor))
+        proto_path = save_proto(self.storage, self.get_name(
+        ), self._create_tensor(self.get_name(), self.tensor))
         return self.append_type({"tensor_path": proto_path})
 
     @classmethod
@@ -155,4 +151,4 @@ class EnvisTensors(Serializable):
 
         storage = "/".join(path.split("/")[:-1])
 
-        return cls(storage, cls.from_proto_object(storage, tensor))
+        return cls(tensor.id.id_str, storage, cls.from_proto_object(tensor))

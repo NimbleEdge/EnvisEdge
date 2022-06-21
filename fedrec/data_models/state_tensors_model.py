@@ -6,10 +6,8 @@ from fedrec.data_models.tensors_model import EnvisTensors
 from fedrec.serialization.serializable_interface import Serializable
 from fedrec.utilities.io_utils import load_proto, save_proto
 from fedrec.utilities.registry import Registrable
-from fedrec.envisproto.state.model_state_pb2 import State
-from fedrec.envisproto.state.state_tensor_pb2 import StateTensor
-from fedrec.envisproto.tensors.parameter_pb2 import Parameter
-from fedrec.envisproto.commons.id_pb2 import Id
+from envisproto.state.model_state_pb2 import State
+from envisproto.state.state_tensor_pb2 import StateTensor
 
 
 @Registrable.register_class_ref
@@ -23,7 +21,10 @@ class StateTensors(Serializable):
         self.tensors = tensors
         self.suffix = suffix
         self.envistensors = {name: EnvisTensors(
-            self.storage, tensor) for name, tensor in tensors.items()}
+            name, self.storage, tensor) for name, tensor in tensors.items()}
+
+    def get_torch_obj(self):
+        return self.tensors
 
     def get_name(self) -> str:
         """
@@ -119,7 +120,7 @@ class StateTensors(Serializable):
         storage = "/".join(path.split("/")[:-1])
 
         tensors = {
-            state_tensor.torch_tensor.id.id_str: EnvisTensors.from_proto_object(storage, state_tensor.torch_tensor) for state_tensor in state.tensors
+            state_tensor.torch_tensor.id.id_str: EnvisTensors.from_proto_object(state_tensor.torch_tensor) for state_tensor in state.tensors
         }
 
         return StateTensors(

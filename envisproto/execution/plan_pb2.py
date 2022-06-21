@@ -12,8 +12,8 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from fedrec.envisproto.commons import id_pb2 as envisproto_dot_commons_dot_id__pb2
-from fedrec.envisproto.execution import type_wrapper_pb2 as envisproto_dot_execution_dot_type__wrapper__pb2
+from envisproto.commons import id_pb2 as envisproto_dot_commons_dot_id__pb2
+from envisproto.execution import type_wrapper_pb2 as envisproto_dot_execution_dot_type__wrapper__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(

@@ -322,7 +322,7 @@ class EnvisTrainer(EnvisBase):
                 # Run saver
                 if last_step % self.train_config.save_every_n == 0:
                     self.saver.save(modeldir, last_step, current_epoch)
-        return self.model.state_dict()
+        return {"state" : self.model.state_dict()}
 
     def update(self, state: Dict):
         

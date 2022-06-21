@@ -52,7 +52,7 @@ class Jobber:
         in that order.
         """
         while True:
-            try:
+            # try:
                 print("Waiting for job request")
                 job_request = self.comm_manager.receive_message()
                 print(
@@ -62,9 +62,9 @@ class Jobber:
 
                 result = self.execute(job_request)
                 self.publish(result)
-            except Exception as e:
-                print(f"Exception {e}")
-                self.stop(False)
+            # except Exception as e:
+            #     print(f"Exception {e}")
+            #     self.stop(False)
 
 
     def execute(self, message: JobSubmitMessage) -> JobResponseMessage:
@@ -80,16 +80,16 @@ class Jobber:
             job_type=message.job_type,
             senderid=message.receiverid,
             receiverid=message.senderid)
-        try:
-            self.worker.load_worker(message.workerstate)
-            job_result = self.worker.run(message.job_type,
-                                         *message.job_args,
-                                         **message.job_kwargs)
-            print(job_result)
-            result_message.results = job_result
-        except Exception as e:
-            print(e)
-            result_message.errors = e
+        # try:
+        self.worker.load_worker(message.workerstate)
+        job_result = self.worker.run(message.job_type,
+                                        *message.job_args,
+                                        **message.job_kwargs)
+        print(job_result)
+        result_message.results = job_result
+        # except Exception as e:
+        #     print(e)
+        #     result_message.errors = e
         return result_message
 
     def publish(self, job_result: JobResponseMessage) -> None:

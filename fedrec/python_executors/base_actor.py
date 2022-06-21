@@ -5,6 +5,7 @@ from typing import Dict, List, Tuple
 
 import torch
 from fedrec.data_models.state_tensors_model import StateTensors
+from fedrec.data_models.tensors_model import EnvisTensors
 from fedrec.user_modules.envis_preprocessor import EnvisPreProcessor
 from fedrec.utilities import registry
 from fedrec.utilities.logger import BaseLogger
@@ -116,7 +117,7 @@ class BaseActor(Reproducible, ABC):
             The model weights to be loaded into the optimizer
         """
         if isinstance(state_dict, dict):
-            assert all(isinstance(value, StateTensors)
+            assert all(isinstance(value, EnvisTensors)
                        for value in state_dict.values())
             self.model.load_state_dict({
                 k: v.get_torch_obj() for k, v in state_dict.items()})
@@ -144,11 +145,11 @@ class BaseActor(Reproducible, ABC):
                 for arg in argument
             ]
         elif isinstance(argument, torch.Tensor):
-            return self.wrap_tensors(argument, randint(0, 100))
+            return EnvisTensors(str(randint(0,100)), self.persistent_storage, argument)
         elif isinstance(argument, Dict):
             if (all(isinstance(value, torch.Tensor)
                     for value in argument.items())):
-                return self.wrap_tensors(argument, randint(0, 100))
+                return self.wrap_tensors(argument, str(randint(0, 100)))
             return {
                 key: self.process_args(value)
                 for key, value in argument.items()

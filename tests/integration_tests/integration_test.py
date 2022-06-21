@@ -93,7 +93,7 @@ class TestTrainer(AbstractTester):
         # check response message
         if response.status:
             model_dict = response.results
-            self.worker.load_model(model_dict)
+            self.worker.load_model(model_dict["state"])
             # print(f"Worker state {response.results}")
 
     def test_testing_method(self):
@@ -120,7 +120,7 @@ class TestAggregator(AbstractTester):
         super().__init__(config, "aggregator")
         self.in_neighbours = in_neighbours
         self.out_neighbours = out_neighbours
-        self.worker = Aggregator(worker_id=0, config=config,
+        self.worker = Aggregator(worker_id="0", config=config,
                                  logger=self.logger,
                                  in_neighbours=self.in_neighbours,
                                  out_neighbours=self.out_neighbours,
@@ -173,13 +173,8 @@ if __name__ == "__main__":
     # start aggregator
     # TODO : HARD coded stuff need to be removed
     # ------------------------------------------------------------
-    tensor = StateTensors(
-        storage='/home/ramesht/dump_tensor/',
-        worker_id=0, round_idx=0,
-        tensors=torch.load(
-            '/home/ramesht/dump_tensor/test.pt'),
-        tensor_type='trainer',
-        suffix="41")
+
+    tensor = StateTensors.deserialize({'storage' : '/home/varun/logs/envis/worker_id_0/remove_this_1223432344232_.pb'})
 
     test_aggregator = TestAggregator(
         config=config,

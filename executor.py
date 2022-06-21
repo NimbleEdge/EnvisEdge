@@ -58,26 +58,26 @@ def main():
     else:
         logger = NoOpLogger()
 
-    # JobExecutor(Trainer, config_dict, logger, client_id=0).run()
+    JobExecutor(Trainer, config_dict, logger, client_id=0).run()
     # JobExecutor(Aggregator, config_dict, logger).run()
-    process_manager: ProcessManager = registry.construct(
-        "process_manager", config_dict["multiprocessing"]["process_manager"])
+    # process_manager: ProcessManager = registry.construct(
+    #     "process_manager", config_dict["multiprocessing"]["process_manager"])
 
-    process_manager.distribute(
-        JobExecutor, Aggregator.__name__,
-        config_dict["multiprocessing"]["num_aggregators"],
-        actorCls=Aggregator,
-        config=config_dict, logger=logger,
-    )
-    process_manager.distribute(
-        JobExecutor, Trainer.__name__,
-        config_dict["multiprocessing"]["num_trainers"],
-        actorCls=Trainer,
-        config=config_dict, logger=logger, client_id=0
-    )
+    # process_manager.distribute(
+    #     JobExecutor, Aggregator.__name__,
+    #     config_dict["multiprocessing"]["num_aggregators"],
+    #     actorCls=Aggregator,
+    #     config=config_dict, logger=logger,
+    # )
+    # process_manager.distribute(
+    #     JobExecutor, Trainer.__name__,
+    #     config_dict["multiprocessing"]["num_trainers"],
+    #     actorCls=Trainer,
+    #     config=config_dict, logger=logger, client_id=0
+    # )
 
-    process_manager.start(Aggregator.__name__, "run")
-    process_manager.start(Trainer.__name__, "run")
+    # process_manager.start(Aggregator.__name__, "run")
+    # process_manager.start(Trainer.__name__, "run")
 
     import time
     time.sleep(234234)
