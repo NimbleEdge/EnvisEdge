@@ -12,8 +12,8 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from envisproto.state import state_tensor_pb2 as envisproto_dot_state_dot_state__tensor__pb2
-from envisproto.state import placeholder_pb2 as envisproto_dot_state_dot_placeholder__pb2
+from fedrec.envisproto.state import state_tensor_pb2 as envisproto_dot_state_dot_state__tensor__pb2
+from fedrec.envisproto.state import placeholder_pb2 as envisproto_dot_state_dot_placeholder__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(

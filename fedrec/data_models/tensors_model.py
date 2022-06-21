@@ -1,18 +1,16 @@
-import os
-import random
 from typing import Dict
 import torch
 
 from fedrec.serialization.serializable_interface import Serializable
 from fedrec.utilities.io_utils import load_tensors, save_tensors, save_proto, load_proto
 from fedrec.utilities.registry import Registrable
-from envisproto.state.model_state_pb2 import State
-from envisproto.state.state_tensor_pb2 import StateTensor
-from envisproto.tensors.parameter_pb2 import Parameter
-from envisproto.tensors.tensor_data_pb2 import TensorData
-from envisproto.tensors.torch_tensor_pb2 import TorchTensor
-from envisproto.execution.plan_pb2 import Plan
-from envisproto.commons.id_pb2 import Id
+from fedrec.envisproto.state.model_state_pb2 import State
+from fedrec.envisproto.state.state_tensor_pb2 import StateTensor
+from fedrec.envisproto.tensors.parameter_pb2 import Parameter
+from fedrec.envisproto.tensors.tensor_data_pb2 import TensorData
+from fedrec.envisproto.tensors.torch_tensor_pb2 import TorchTensor
+from fedrec.envisproto.execution.plan_pb2 import Plan
+from fedrec.envisproto.commons.id_pb2 import Id
 
 
 @Registrable.register_class_ref

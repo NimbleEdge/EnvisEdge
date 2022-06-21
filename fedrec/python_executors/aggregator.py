@@ -98,12 +98,37 @@ class Aggregator(BaseActor, ABC):
         self.in_neighbours = state.in_neighbours
         self.out_neighbours = state.out_neighbours
         self.round_idx = state.round_idx
-        self.load_model(state.state_dict['model'])
+        if state.state_dict is not None:
+            self.update_local_state(state.state_dict)
+        
+        self.update_worker_state(state.state_dict)
+
+    def update_local_state(self, state_dict):
+        """
+        Update the state dict of the worker.
+
+        state_dict : Dict
+            Dictionary of the state to be updated
+        """
+        self.load_model(state_dict['model'])
         if self.optimizer is not None:
-            self.load_optimizer(state.state_dict['optimizer'])
-        # TODO : Check if dict is null then create dict from above patameters
-        # if no state then reandomly intialize the empty dict
-        self.worker.update(state.state_dict["worker_state"])
+            self.load_optimizer(state_dict['optimizer'])
+
+    def update_worker_state(self, state_dict):
+        """
+        Update the state of the worker.
+
+        state : Dict
+            Dictionary of the state to be updated
+        """
+        if ("worker_state" not in state_dict) or (state_dict is None):
+            local_state = {
+                "model" : self.model.state_dict(),
+                "in_neighbours" : self.in_neighbours,
+            }
+        else :
+            local_state = state_dict["worker_state"]
+        self.worker.update(local_state)
 
     def run(self, func_name, *args, **kwargs):
         """

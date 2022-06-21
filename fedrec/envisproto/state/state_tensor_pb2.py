@@ -12,8 +12,8 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from envisproto.tensors import torch_tensor_pb2 as envisproto_dot_tensors_dot_torch__tensor__pb2
-from envisproto.tensors import parameter_pb2 as envisproto_dot_tensors_dot_parameter__pb2
+from fedrec.envisproto.tensors import torch_tensor_pb2 as envisproto_dot_tensors_dot_torch__tensor__pb2
+from fedrec.envisproto.tensors import parameter_pb2 as envisproto_dot_tensors_dot_parameter__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(

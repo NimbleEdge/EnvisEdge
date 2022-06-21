@@ -73,10 +73,11 @@ class JobSubmitMessage(Message):
     @classmethod
     def deserialize(cls, obj):
         # unpack the response dict to create the class object
+        worker_state = None
         job_args = deserialize_attribute(obj["job_args"])
         job_kwargs = deserialize_attribute(obj["job_kwargs"])
         worker_state = deserialize_attribute(obj["workerstate"])
-
+        
         return cls(
             obj["job_type"],
             job_args,

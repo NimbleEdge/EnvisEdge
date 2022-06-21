@@ -12,7 +12,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from envisproto.tensors import shape_pb2 as envisproto_dot_tensors_dot_shape__pb2
+from fedrec.envisproto.tensors import shape_pb2 as envisproto_dot_tensors_dot_shape__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
