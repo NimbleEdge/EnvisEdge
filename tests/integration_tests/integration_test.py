@@ -74,7 +74,7 @@ class TestTrainer(AbstractTester):
     def __init__(self,
                  config: Dict) -> None:
         super().__init__(config, "trainer")
-        self.worker = Trainer(worker_index=0,
+        self.worker = Trainer(worker_id="0",
                               config=self.config,
                               logger=NoOpLogger(),
                               client_id=2
@@ -84,8 +84,8 @@ class TestTrainer(AbstractTester):
         # create JobSubmitMessage with Job_type="train"
         # response = self.submit_message(1,1,"train",[],{})
         response: JobResponseMessage = self.submit_message(
-            senderid=self.worker.worker_index,
-            receiverid=self.worker.worker_index,
+            senderid=self.worker.worker_id,
+            receiverid=self.worker.worker_id,
             job_type="train",
             job_args=[],
             job_kwargs={}
@@ -98,8 +98,8 @@ class TestTrainer(AbstractTester):
 
     def test_testing_method(self):
         response: JobResponseMessage = self.submit_message(
-            senderid=self.worker.worker_index,
-            receiverid=self.worker.worker_index,
+            senderid=self.worker.worker_id,
+            receiverid=self.worker.worker_id,
             job_type="test",
             job_args=[],
             job_kwargs={}
@@ -120,7 +120,7 @@ class TestAggregator(AbstractTester):
         super().__init__(config, "aggregator")
         self.in_neighbours = in_neighbours
         self.out_neighbours = out_neighbours
-        self.worker = Aggregator(worker_index=0, config=config,
+        self.worker = Aggregator(worker_id=0, config=config,
                                  logger=self.logger,
                                  in_neighbours=self.in_neighbours,
                                  out_neighbours=self.out_neighbours,
@@ -128,8 +128,8 @@ class TestAggregator(AbstractTester):
 
     def test_aggregation(self):
         response: JobResponseMessage = self.submit_message(
-            senderid=self.worker.worker_index,
-            receiverid=self.worker.worker_index,
+            senderid=self.worker.worker_id,
+            receiverid=self.worker.worker_id,
             job_type="aggregate",
             job_args=[],
             job_kwargs={}
@@ -143,8 +143,8 @@ class TestAggregator(AbstractTester):
     def test_sample_client(self,
                            client_num_per_round):
         response: JobResponseMessage = self.submit_message(
-            senderid=self.worker.worker_index,
-            receiverid=self.worker.worker_index,
+            senderid=self.worker.worker_id,
+            receiverid=self.worker.worker_id,
             job_type="sample_client",
             job_args=[],
             job_kwargs={}

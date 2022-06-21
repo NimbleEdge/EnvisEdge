@@ -1,6 +1,7 @@
 import torch
 from typing import Any, Dict
 from fedrec.data_models.tensors_model import EnvisTensors
+from fedrec.data_models.state_tensors_model import StateTensors
 from fedrec.utilities.registry import Registrable
 from fedrec.serialization.serializer_registry import (deserialize_attribute,
                                                       serialize_attribute)
@@ -53,13 +54,12 @@ def create_serializer_hooks(class_ref):
 def create_envis_state_hooks(class_ref):
     
     def envis_state(self: Any):
-        return EnvisTensors(
+        return StateTensors(
                 storage=self.storage,
                 tensors=self.state_dict(),
-                tensor_type="user-module"
             )
 
-    def load_envis_state(self, state: Dict):
+    def load_envis_state(self, state: StateTensors):
         self.load_state_dict(state.tensors)
 
     setattr(class_ref, "envis_state", property(envis_state))

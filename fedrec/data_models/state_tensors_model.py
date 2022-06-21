@@ -1,14 +1,14 @@
-from typing import Dict
+from typing import Dict, List
+
+from torch import Tensor
 
 from fedrec.data_models.tensors_model import EnvisTensors
 from fedrec.serialization.serializable_interface import Serializable
-from fedrec.utilities.io_utils import load_proto, save_proto, load_tensors, save_tensors
+from fedrec.utilities.io_utils import load_proto, save_proto
 from fedrec.utilities.registry import Registrable
 from fedrec.envisproto.state.model_state_pb2 import State
 from fedrec.envisproto.state.state_tensor_pb2 import StateTensor
 from fedrec.envisproto.tensors.parameter_pb2 import Parameter
-from fedrec.envisproto.tensors.tensor_data_pb2 import TensorData
-from fedrec.envisproto.tensors.torch_tensor_pb2 import TorchTensor
 from fedrec.envisproto.commons.id_pb2 import Id
 
 
@@ -16,20 +16,14 @@ from fedrec.envisproto.commons.id_pb2 import Id
 class StateTensors(Serializable):
     def __init__(
             self,
-            storage,
-            worker_id,
-            round_idx,
-            tensors,
-            tensor_type,
+            storage : str,
+            tensors : Dict[str, Tensor],
             suffix=""):
-        self.worker_id = worker_id
-        self.round_idx = round_idx
         self.storage = storage
         self.tensors = tensors
-        self.tensor_type = tensor_type
         self.suffix = suffix
         self.envistensors = {name: EnvisTensors(
-            self.storage, tensor, self.tensor_type) for name, tensor in tensors.items()}
+            self.storage, tensor) for name, tensor in tensors.items()}
 
     def get_name(self) -> str:
         """
@@ -42,9 +36,7 @@ class StateTensors(Serializable):
             The name of the tensor.
         """
         return "_".join(
-            [str(self.worker_id),
-             str(self.round_idx),
-             self.tensor_type])
+            ["remove_this_1223432344232",self.suffix])
 
     @staticmethod
     def split_path(path):
@@ -58,32 +50,23 @@ class StateTensors(Serializable):
 
         Returns
         --------
-        worker_id: int
-            The worker id.
-        round_idx: int
-            The round idx.
-        tensor_type: str
-            The tensor type.
+        storage: str
 
         """
-        path_split = path.split("/")
-        info = path_split[-1].split("_")
-        worker_id = int(info[0])
-        round_idx = int(info[1])
-        tensor_type = info[2]
-        return worker_id, round_idx, tensor_type
+        return "/".join(path.split("/")[:-1])
 
-    def _create_parameter(self, name: str, tensor: EnvisTensors):
-        parameter = Parameter()
-        id = Id()
-        id.id_str = name
-        parameter.id.CopyFrom(id)
-        parameter.tensor.CopyFrom(tensor.get_proto_object())
-        return parameter
+    # def _create_parameter(self, name: str, tensor: EnvisTensors):
+    #     tensor._create_tensor
+    #     parameter = Parameter()
+    #     id = Id()
+    #     id.id_str = name
+    #     parameter.id.CopyFrom(id)
+    #     parameter.tensor.CopyFrom(tensor.get_proto_object())
+    #     return parameter
 
     def _create_state_tensor(self, name: str, tensor: EnvisTensors):
         state = StateTensor()
-        state.torch_param.CopyFrom(self._create_parameter(name, tensor))
+        state.torch_tensor.CopyFrom(tensor.get_proto_object())
         return state
 
     def serialize(self):
@@ -125,14 +108,20 @@ class StateTensors(Serializable):
 
         Returns
         --------
-        deserialized_obj: object
+        StateTensor: StateTensor
             The deserialized object.
         """
         path = obj['storage']
         # load tensor from the path
-        tensors = TorchTensor()
-        tensors = load_proto(path, tensors)
-        worker_id, round_idx, tensor_type = cls.split_path(path)
+        state = State()
+        load_proto(path, state)
+
+        storage = "/".join(path.split("/")[:-1])
+
+        tensors = {
+            state_tensor.torch_tensor.id.id_str: EnvisTensors.from_proto_object(storage, state_tensor.torch_tensor) for state_tensor in state.tensors
+        }
+
         return StateTensors(
-            path, worker_id, round_idx, tensors, tensor_type
+            storage, tensors
         )

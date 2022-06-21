@@ -85,10 +85,10 @@ def save_proto(storage, name, state):
 
     return proto_path
 
-def load_proto(proto_path, tensors):
+def load_proto(proto_path, proto_obj):
     if os.path.isfile(proto_path):
         with open(proto_path, 'rb') as f:
-            tensors.ParseFromString(f.read())
-        return tensors
+            proto_obj.ParseFromString(f.read())
+        return proto_obj
     else:
         raise ValueError("Path does not exist.")

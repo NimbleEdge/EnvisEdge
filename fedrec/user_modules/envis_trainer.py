@@ -325,6 +325,7 @@ class EnvisTrainer(EnvisBase):
         return self.model.state_dict()
 
     def update(self, state: Dict):
+        
         # Update the model
         self.model.load_state_dict(state["model"].tensors)
         # # Update the optimizer

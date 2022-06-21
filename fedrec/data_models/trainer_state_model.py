@@ -32,7 +32,7 @@ class TrainerState(ActorState):
     def serialize(self):
         # creates a dictionary of attributes to serialize
         response_dict = {}
-        response_dict["worker_index"] = self.worker_index
+        response_dict["worker_id"] = self.worker_id
         response_dict["round_idx"] = self.round_idx
         response_dict["state_dict"] = serialize_attribute(
             self.state_dict)
@@ -52,7 +52,7 @@ class TrainerState(ActorState):
             obj['model_preproc'])
 
         return cls(
-            worker_index=obj["worker_index"],
+            worker_id=obj["worker_id"],
             round_idx=obj["round_idx"],
             state_dict=state_dict,
             storage=obj["storage"],

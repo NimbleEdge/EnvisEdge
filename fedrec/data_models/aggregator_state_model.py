@@ -27,12 +27,12 @@ class Neighbour(Serializable):
     
     def __init__(
         self,
-        worker_index: int,
+        worker_id: str,
         model_state: StateTensors,
         sample_num,
         last_sync=0
     ) -> None:
-        self.worker_index = worker_index
+        self.worker_id = worker_id
         self.model_state = model_state
         self.sample_num = sample_num
         self.last_sync = last_sync
@@ -50,7 +50,7 @@ class Neighbour(Serializable):
 
     def serialize(self):
         response_dict = {}
-        response_dict["worker_index"] = self.worker_index
+        response_dict["worker_id"] = self.worker_id
         response_dict["last_sync"] = self.last_sync
         response_dict["model_state"] = serialize_attribute(self.model_state)
         response_dict["sample_num"] = self.sample_num
@@ -58,13 +58,13 @@ class Neighbour(Serializable):
 
     @classmethod
     def deserialize(cls, obj: Dict):
-        worker_index = obj["worker_index"]
+        worker_id = obj["worker_id"]
         last_sync = obj["last_sync"]
         model_state = deserialize_attribute(obj["model_state"])
         sample_num = obj["sample_num"]
 
         return cls(
-            worker_index=worker_index,
+            worker_id=worker_id,
             last_sync=last_sync,
             model_state=model_state,
             sample_num=sample_num,
@@ -97,7 +97,7 @@ class AggregatorState(ActorState):
     def serialize(self):
         # pack the arguments from the objects to response dict
         response_dict = {}
-        response_dict["worker_index"] = self.worker_index
+        response_dict["worker_id"] = self.worker_id
         response_dict["round_idx"] = self.round_idx
         response_dict["state_dict"] = serialize_attribute(
             self.state_dict)
@@ -121,7 +121,7 @@ class AggregatorState(ActorState):
             obj['out_neighbours'])
 
         return cls(
-            worker_index=obj['worker_index'],
+            worker_id=obj['worker_id'],
             round_idx=obj['round_idx'],
             state_dict=state_dict,
             storage=obj['storage'],

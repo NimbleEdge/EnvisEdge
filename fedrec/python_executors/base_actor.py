@@ -19,7 +19,7 @@ class BaseActor(Reproducible, ABC):
 
     Attributes
     ----------
-    worker_index : int
+    worker_id : str
         The unique id alloted to the worker by the orchestrator
     persistent_storage : str
         The location to serialize and store the `WorkerState`
@@ -30,7 +30,7 @@ class BaseActor(Reproducible, ABC):
     """
 
     def __init__(self,
-                 worker_index: int,
+                 worker_id: str,
                  config: Dict,
                  logger: BaseLogger,
                  is_mobile: bool = True,
@@ -38,11 +38,11 @@ class BaseActor(Reproducible, ABC):
 
         super().__init__(config["random"])
         self.round_idx = round_idx
-        self.worker_index = worker_index
+        self.worker_id = worker_id
         self.is_mobile = is_mobile
         self.persistent_storage = (config["log_dir"]["PATH"]
                                    + "worker_id_"
-                                   + str(self.worker_index))
+                                   + str(self.worker_id))
         if not os.path.exists(self.persistent_storage):
             os.makedirs(self.persistent_storage)
         self.config = config
@@ -131,10 +131,7 @@ class BaseActor(Reproducible, ABC):
     def wrap_tensors(self, tensors, suffix=""):
         return StateTensors(
             storage=self.persistent_storage,
-            worker_id=self.worker_index,
             tensors=tensors,
-            round_idx=self.round_idx,
-            tensor_type=self.name,
             suffix=suffix
         )
 

@@ -19,8 +19,8 @@ class Message(Serializable):
 
     def __init__(self, senderid, receiverid):
         super().__init__()
-        self.senderid = senderid
-        self.receiverid = receiverid
+        self.senderid : str = senderid
+        self.receiverid : str = receiverid
 
     def get_sender_id(self):
         '''Returns senderid from Message Object'''

@@ -18,7 +18,7 @@ class Aggregator(BaseActor, ABC):
     ----------
     round_idx : int
         Number of local iterations finished
-    worker_index : int
+    worker_id : str
         The unique id alloted to the worker by the orchestrator
     is_mobile : bool
         Whether the worker represents a mobile device or not
@@ -31,14 +31,14 @@ class Aggregator(BaseActor, ABC):
     """
 
     def __init__(self,
-                 worker_index: int,
+                 worker_id: str,
                  config: Dict,
                  logger: BaseLogger,
                  in_neighbours: Dict[int, Neighbour] = None,
                  out_neighbours: Dict[int, Neighbour] = None,
                  is_mobile: bool = True,
                  round_idx: int = 0):
-        super().__init__(worker_index, config, logger,
+        super().__init__(worker_id, config, logger,
                          is_mobile, round_idx)
         self.in_neighbours = in_neighbours
         self.out_neighbours = out_neighbours
@@ -75,7 +75,7 @@ class Aggregator(BaseActor, ABC):
             state['optimizer'] = self._get_optimizer_params()
 
         return AggregatorState(
-            worker_index=self.worker_index,
+            worker_id=self.worker_id,
             round_idx=self.round_idx,
             state_dict=state,
             storage=self.persistent_storage,
@@ -93,7 +93,7 @@ class Aggregator(BaseActor, ABC):
         state : AggregatorState
             AggregatorState containing the weights
         """
-        self.worker_index = state.worker_index
+        self.worker_id = state.worker_id
         self.persistent_storage = state.storage
         self.in_neighbours = state.in_neighbours
         self.out_neighbours = state.out_neighbours

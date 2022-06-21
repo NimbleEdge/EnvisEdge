@@ -18,7 +18,7 @@ class ActorState(Serializable):
     storage : str
         The address for persistent storage
     """
-    worker_index = attr.ib()
+    worker_id = attr.ib()
     round_idx = attr.ib(0)
     state_dict = attr.ib(None)
     storage = attr.ib(None)

@@ -19,12 +19,11 @@ class EnvisTensors(Serializable):
     def __init__(
             self,
             storage,
-            tensor,
-            tensor_type) -> None:
+            tensor : torch.Tensor) -> None:
         super().__init__()
         self.storage = storage
         self.tensor = tensor
-        self.tensor_type = tensor_type
+        self.tensor_type = tensor.dtype.__repr__()
         self.SUFFIX = 0
 
     def get_name(self) -> str:
@@ -90,6 +89,30 @@ class EnvisTensors(Serializable):
         """
         return self._create_tensor(self.get_name(), self.tensor)
 
+    @classmethod
+    def from_proto_object(cls, storage, proto_object):
+        """
+        Creates a EnvisTensors object from a proto object.
+
+        Parameters
+        -----------
+        storage: str
+            The storage path to the tensor.
+        proto_object: object
+            The proto object.
+
+        Returns
+        --------
+        tensor: EnvisTensors
+            The EnvisTensors object.
+
+        """
+        return EnvisTensors(storage, cls._from_tensor_data(proto_object.contents_data))
+
+    @classmethod
+    def _from_tensor_data(cls, tensor_data: TensorData):
+        return torch.tensor(tensor_data.contents_float64, dtype=tensor_data.dtype).reshape(tensor_data.shape.dims)
+
     def serialize(self):
         """
         Serializes a tensor object.
@@ -123,11 +146,13 @@ class EnvisTensors(Serializable):
 
         Returns
         --------
-        deserialized_obj: object
+        EnvisTensors: EnvisTensors
             The deserialized object.
         """
         path = obj["tensor_path"]
-        tensors = TorchTensor()
-        tensors = load_proto(path, tensors)
-        storage, tensor_type = cls.split_path(path)
-        return cls(storage, tensors, tensor_type)
+        tensor = TorchTensor()
+        load_proto(path, tensor)
+
+        storage = "/".join(path.split("/")[:-1])
+
+        return cls(storage, cls.from_proto_object(storage, tensor))

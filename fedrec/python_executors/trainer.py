@@ -15,7 +15,7 @@ class Trainer(BaseActor, ABC):
     """
 
     def __init__(self,
-                 worker_index: int,
+                 worker_id: str,
                  config: Dict,
                  logger: BaseLogger,
                  client_id: int,
@@ -28,7 +28,7 @@ class Trainer(BaseActor, ABC):
         ----------
         round_idx : int
             Number of local iterations finished
-        worker_index : int
+        worker_id : str
             The unique id alloted to the worker by the orchestrator
         is_mobile : bool
             Whether the worker represents a mobile device or not
@@ -38,7 +38,7 @@ class Trainer(BaseActor, ABC):
             The number of datapoints in the local dataset
 
         """
-        super().__init__(worker_index, config, logger,
+        super().__init__(worker_id, config, logger,
                          is_mobile, round_idx)
         self.local_sample_number = None
         self.local_training_steps = 10
@@ -81,7 +81,7 @@ class Trainer(BaseActor, ABC):
             state['optimizer'] = self._get_optimizer_params()
 
         return TrainerState(
-            worker_index=self.worker_index,
+            worker_id=self.worker_id,
             round_idx=self.round_idx,
             state_dict=state,
             model_preproc=self.model_preproc,
@@ -100,7 +100,7 @@ class Trainer(BaseActor, ABC):
         state : TrainerState
             TrainerState containing the weights
         """
-        self.worker_index = state.worker_index
+        self.worker_id = state.worker_id
         self.persistent_storage = state.storage
         self.round_idx = state.round_idx
         self.load_model(state.state_dict['model'])
@@ -114,8 +114,6 @@ class Trainer(BaseActor, ABC):
 
         Parameters
         ----------
-        worker_index : int
-            unique worker id
         model_preproc : `Preprocessor`
             The preprocessor contains the dataset of the worker
         """
