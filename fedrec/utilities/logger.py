@@ -8,14 +8,14 @@ class BaseLogger(ABC):
     This logger class performs the logging messages and
     visualization activities.
 
-    The logging module in python is a way to store information 
-    about the script and track of events that occur. Similarly 
+    The logging module in python is a way to store information
+    about the script and track of events that occur. Similarly
     here,logging.info() helps in printing the aggregated time cost.
 
-    Visualization activities are being performed by Tensorboard by 
+    Visualization activities are being performed by Tensorboard by
     importing SummaryWriter.Tensorboard is a suite of web applications
     for inspecting and understanding model runs and graphs.It supports
-    totally five visualizations i.e scalars, images, graphs, audio and 
+    totally five visualizations i.e scalars, images, graphs, audio and
     histograms.
 
     """
@@ -24,7 +24,7 @@ class BaseLogger(ABC):
 
     @staticmethod
     def time(func):
-        
+
         def decorated(*args, **kwargs):
             """
             Prints the logging info message i.e aggregated time cost on the screen.
@@ -62,7 +62,7 @@ try:
     from torch.utils.tensorboard import SummaryWriter
 
     class TBLogger(SummaryWriter, BaseLogger):
-        """ 
+        """
         Helps in visualizing the data through the tensorboard class.
         """
         def __init__(self, log_dir, comment="", max_queue=10):
@@ -75,7 +75,8 @@ try:
 
         def log_gradients(self, model, step, to_normalize=True):
             """
-            Returns a scalar or histogram on the basis of bool value given to to_normalize.
+            Returns a scalar or histogram on the basis of bool value
+            given to to_normalize.
             """
             for name, param in model.named_parameters():
                 if to_normalize:
