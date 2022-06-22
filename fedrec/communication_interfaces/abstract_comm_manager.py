@@ -9,6 +9,14 @@ from fedrec.utilities import registry
 
 
 class AbstractCommunicationManager(ABC):
+    """
+    This class works effectively on commuting messages between workers and job executors , and also performs different message operations like sending, receiving,serializing and deserializing.
+
+    Serialization is the process of converting a data object into a format that can be reused later. It helps in reconstructing the object later and helps in obtaining the exact structure/object which makes it easy to use instead of reconstructing the object from scratch.
+
+    Deserialization is the reverse process of serialization. It reconstructs the data object from a set of formats.
+
+    """
     def __init__(self, srl_strategy):
         self.queue = asyncio.Queue()
         self.srl_strategy = registry.construct(
