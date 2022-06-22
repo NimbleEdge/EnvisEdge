@@ -5,7 +5,19 @@ from time import time
 
 class BaseLogger(ABC):
     """
-    Performs the logging messages and visulaisations activities.
+    This logger class performs the logging messages and
+    visualization activities.
+
+    The logging module in python is a way to store information 
+    about the script and track of events that occur. Similarly 
+    here,logging.info() helps in printing the aggregated time cost.
+
+    Visualization activities are being performed by Tensorboard by 
+    importing SummaryWriter.Tensorboard is a suite of web applications
+    for inspecting and understanding model runs and graphs.It supports
+    totally five visualizations i.e scalars, images, graphs, audio and 
+    histograms.
+
     """
     def __init__(self) -> None:
         super().__init__()
@@ -14,7 +26,7 @@ class BaseLogger(ABC):
     def time(func):
         
         def decorated(*args, **kwargs):
-            """  
+            """
             Prints the logging info message i.e aggregated time cost on the screen.
             """
             start_time = time()
