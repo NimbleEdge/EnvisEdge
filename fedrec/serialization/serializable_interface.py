@@ -32,12 +32,18 @@ class Serializable(Registrable, ABC):
 
     @abstractmethod
     def serialize(self):
+        """
+        Serializes the data object into another format
+        """
         raise NotImplementedError()
 
     @abstractmethod
     def deserialize(self):
+        """
+        Deserializes the format into a data object
+        """
         raise NotImplementedError()
-        
+
     def append_type(self, obj_dict):
         """Generates a dictionary from an object and
          appends type information for finding the appropriate serialiser.

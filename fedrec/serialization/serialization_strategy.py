@@ -8,10 +8,16 @@ class SerializationStrategy(registry.Registrable, ABC):
 
     @abstractmethod
     def parse(self, obj):
+        """
+        Serializes a python object to json.
+        """
         raise NotImplementedError()
 
     @abstractmethod
     def unparse(self, obj):
+        """
+        Deserializes the json object to python object.
+        """
         raise NotImplementedError()
 
 

@@ -6,12 +6,36 @@ from fedrec.utilities.registry import Registrable
 
 
 def get_deserializer(serialized_obj_name):
+    """
+    Receives deserializer from registry module.
+
+    Parameters
+    -----------
+    serialized_obj_name: str
+        The object name of serializer.
+    Returns
+    --------
+    obj
+    """
     # find the deserializer from registry
     # given object name.
     return Registrable.lookup_class_ref(serialized_obj_name)
 
 
 def serialize_attribute(obj):
+    """
+    This method recursively calls serialize_attribute on each
+    attributes such as list,Tuple,Dict and checks for primitives
+    as well to serialize the object.
+
+    Parameters
+    -----------
+    obj: object
+        The object to serialize.
+    Returns
+    --------
+    obj
+    """
     # TODO : make a single global function
     # for this method.
     ## location : [envis_base_module.py]
@@ -32,6 +56,17 @@ def serialize_attribute(obj):
 
 
 def deserialize_attribute(obj: Dict):
+    """
+    Receives deserializer from registry module.
+
+    Parameters
+    -----------
+    obj: object
+        Its a dictionary taken from the abstract common manager.
+    Returns
+    --------
+    obj
+    """
     # TODO : make a single global function
     # for this method.
     ## location : [envis_base_module.py]
