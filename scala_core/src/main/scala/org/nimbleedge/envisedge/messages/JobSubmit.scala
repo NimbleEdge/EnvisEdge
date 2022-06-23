@@ -8,7 +8,7 @@ case class JobSubmitMessage (
     job_type : String,
     senderid : String,
     receiverid : String,
-    job_args : List[String],
-    job_kwargs : List[Object],
+    job_args : List[Object],
+    job_kwargs : Map[String, Object],
     workerstate : Message
 )

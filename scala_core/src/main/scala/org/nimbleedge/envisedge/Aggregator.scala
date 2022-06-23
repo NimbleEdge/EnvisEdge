@@ -43,8 +43,8 @@ object Aggregator {
 
     // TODO
     // Add messages here
-}
 
+}
 // TODO: parent should be either of orchestrator or aggregator.
 class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerScheduler[Aggregator.Command], aggId: AggregatorIdentifier, parent: ActorRef[Orchestrator.Command], routerRef: ActorRef[LocalRouter.Command]) extends AbstractBehavior[Aggregator.Command](context) {
     import Aggregator._
@@ -162,12 +162,22 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
         return Message (
             __type__ = "fedrec.data_models.job_submit_model.JobSubmitMessage",
             __data__ = JobSubmitMessage (
-                job_args = clientList,
-                job_kwargs = List(),
-                workerstate = null,
-                senderid = aggId.name(),
-                receiverid = aggId.name(),
-                job_type = "sampling"
+                job_args = List(clientList),
+                job_kwargs = Map(),
+                senderid = aggId.toString(),
+                receiverid = aggId.toString(),
+                job_type = "sample_clients",
+                workerstate = Message (
+                    __type__ = "fedrec.data_models.aggregator_state_model.AggregatorState",
+                    __data__ = AggregatorState (
+                        worker_id = aggId.name(),
+                        round_idx = roundIndex,
+                        state_dict = null,
+                        storage = s"/models/${aggId.toString()}/${aggId.name()}.pb",
+                        in_neighbours = Map(),
+                        out_neighbours = Map(),
+                    )
+                )
             )
         )
     }
@@ -178,15 +188,15 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
             __type__ = "fedrec.data_models.job_submit_model.JobSubmitMessage",
             __data__ = JobSubmitMessage (
                 job_args = List(),
-                job_kwargs = List(),
-                senderid = aggId.name(),
-                receiverid = aggId.name(), // confirm this
+                job_kwargs = Map(),
+                senderid = aggId.toString(),
+                receiverid = aggId.toString(), // confirm this
                 job_type = "aggregate",
                 workerstate = Message (
                     __type__ = "fedrec.data_models.aggregator_state_model.AggregatorState",
                     __data__ = AggregatorState (
-                        worker_index = aggId.name(),
-                        round_index = roundIndex,
+                        worker_id = aggId.name(),
+                        round_idx = roundIndex,
                         storage = s"/models/${aggId.toString()}/${aggId.name()}.pb", // Confirm this
                         state_dict = aggStateDict,
                         in_neighbours = in_neighbours,
@@ -257,7 +267,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                 // Convert Message to Json String to send via kafka
                 val serializedMsg = JsonEncoder.serialize(samplingMessage)
                 // TODO Send job to Python Service using Kafka
-                KafkaProducer.send(AGGR_SAMPLING_REQUEST_TOPIC, aggId.name(), serializedMsg)
+                KafkaProducer.send(AGGR_SAMPLING_REQUEST_TOPIC, aggId.toString(), serializedMsg)
                 
                 this
 
@@ -269,7 +279,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                 context.log.info("Aggregator Id:{} Aggregation Message: {}", aggId.toString(), aggregationMessage)
 
                 val serializedMsg = JsonEncoder.serialize(aggregationMessage)
-                KafkaProducer.send(AGGR_AGGREGATION_REQUEST_TOPIC, aggId.name(), serializedMsg)
+                KafkaProducer.send(AGGR_AGGREGATION_REQUEST_TOPIC, aggId.toString(), serializedMsg)
                 this
 
             case KafkaResponse(requestId, message) =>
@@ -277,7 +287,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                 msg match {
                     case  resp: JobResponseMessage => 
                         resp.job_type match {
-                            case "sampling" =>
+                            case "sample_clients" =>
                                 // TODO: Handle the response appropriately
                                 val res = resp.results.asInstanceOf[Map[String, List[String]]]
                                 val selectedList = res("clients")

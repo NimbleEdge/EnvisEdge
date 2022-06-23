@@ -1,8 +1,8 @@
 package org.nimbleedge.envisedge.messages
 
 case class AggregatorState (
-    worker_index : String,
-    round_index : Int,
+    worker_id : String,
+    round_idx : Int,
     state_dict : Map[String, Object],
     storage : String,
     in_neighbours: Map[String, Message],
