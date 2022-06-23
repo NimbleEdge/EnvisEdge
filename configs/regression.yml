@@ -1,6 +1,6 @@
-model : 
+model :
   name : "regression"
-  
+
   input_dim: 49152
   output_dim : 62
   loss_function: "ce"
@@ -16,10 +16,10 @@ multiprocessing:
   num_aggregators : 1
   num_trainers : 5
 
-  process_manager : 
+  process_manager :
     name : "ray"
-    
-  communication_interface : 
+
+  communication_interface :
     name : "kafka"
     serialization : "json"
     consumer : True
@@ -48,7 +48,7 @@ trainer :
     name : "sgd"
     momentum : 0.9
     lr : 0.001
-    
+
   lr_scheduler :
     name : "dlrm"
     num_warmup_steps : 300
@@ -57,7 +57,7 @@ trainer :
 
 aggregator:
   name : "fed_avg"
-  min_num_clients : 1
+  min_num_clients : 3
 
 random:
   data_seed : 100

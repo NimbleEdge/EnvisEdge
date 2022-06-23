@@ -111,7 +111,7 @@ class AggregatorState(ActorState):
     @classmethod
     def deserialize(cls, obj: Dict):
         # unpack the response dict to create the object
-        if "state_dict" in obj:
+        if ("state_dict" in obj) and (obj["state_dict"] is not None):
             state_dict = deserialize_attribute(obj["state_dict"])
         else :
             state_dict = None

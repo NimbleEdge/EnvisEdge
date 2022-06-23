@@ -64,8 +64,8 @@ class FedAvg(EnvisBase):
         else:
             with RandomContext(round_idx):
                 selected_neighbours = np.random.choice(
-                    self.in_neighbours,
+                    list_of_clients,
                     min(self.min_num_clients, num_neighbours),
                     replace=False).tolist()
         logging.info("worker_indexes = %s" % str(selected_neighbours))
-        return selected_neighbours
+        return {"clients": selected_neighbours}

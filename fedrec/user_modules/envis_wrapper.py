@@ -59,8 +59,8 @@ def create_envis_state_hooks(class_ref):
                 tensors=self.state_dict(),
             )
 
-    def load_envis_state(self, state: StateTensors):
-        self.load_state_dict(state.tensors)
+    def load_envis_state(self, state: Dict):
+        self.load_state_dict(state)
 
     setattr(class_ref, "envis_state", property(envis_state))
     setattr(class_ref, "load_envis_state", load_envis_state)

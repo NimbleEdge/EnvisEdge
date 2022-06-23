@@ -145,7 +145,7 @@ class TestAggregator(AbstractTester):
         response: JobResponseMessage = self.submit_message(
             senderid=self.worker.worker_id,
             receiverid=self.worker.worker_id,
-            job_type="sample_client",
+            job_type="sample_clients",
             job_args=[],
             job_kwargs={}
         )
@@ -170,9 +170,9 @@ if __name__ == "__main__":
     test_trainer.test_training_method()
     print("testing train model...")
     test_trainer.test_testing_method()
-    # start aggregator
-    # TODO : HARD coded stuff need to be removed
-    # ------------------------------------------------------------
+    # # start aggregator
+    # # TODO : HARD coded stuff need to be removed
+    # # ------------------------------------------------------------
 
     tensor = StateTensors.deserialize({'storage' : '/home/varun/logs/envis/worker_id_0/remove_this_1223432344232_.pb'})
 
@@ -182,7 +182,7 @@ if __name__ == "__main__":
             0: Neighbour(0, tensor, 5)}
     )
     # ------------------------------------------------------------
-    print("Test aggregation...")
-    test_aggregator.test_aggregation()
-    print("testing sampling...")
-    test_aggregator.test_sample_client()
+    # print("Test aggregation...")
+    # test_aggregator.test_aggregation()
+    # print("testing sampling...")
+    # test_aggregator.test_sample_client([2])

@@ -121,7 +121,7 @@ class Aggregator(BaseActor, ABC):
         state : Dict
             Dictionary of the state to be updated
         """
-        if ("worker_state" not in state_dict) or (state_dict is None):
+        if (state_dict is None) or ("worker_state" not in state_dict):
             local_state = {
                 "model" : self.model.state_dict(),
                 "in_neighbours" : self.in_neighbours,

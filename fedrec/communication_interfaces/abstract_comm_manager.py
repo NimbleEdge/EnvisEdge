@@ -1,5 +1,6 @@
 import ast
 import asyncio
+import json
 from abc import ABC, abstractmethod
 
 from fedrec.serialization.serializable_interface import Serializable
@@ -42,7 +43,8 @@ class AbstractCommunicationManager(ABC):
         message: str
             The serialized message.
         """
-        out = str(serialize_attribute(obj)).encode('utf-8')
+        out = json.dumps(serialize_attribute(obj)).encode('utf-8')
+        print(out)
         return out
 
     def deserialize(self, message):
@@ -59,5 +61,6 @@ class AbstractCommunicationManager(ABC):
         message: object
             The deserialized message.
         """
-        message = ast.literal_eval(message.decode('utf-8'))
+        message = json.loads(message.decode('utf-8'))
+        print(message)
         return deserialize_attribute(message)
