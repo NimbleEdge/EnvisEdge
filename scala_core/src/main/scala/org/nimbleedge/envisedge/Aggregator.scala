@@ -1,6 +1,7 @@
 package org.nimbleedge.envisedge
 
 import models._
+import Types._
 import messages._
 import scala.concurrent.duration._
 import scala.collection.mutable.{Map => MutableMap}
@@ -18,10 +19,10 @@ import akka.actor.Timers
 import akka.actor.typed.scaladsl.TimerScheduler
 
 object Aggregator {
-    def apply(aggId: AggregatorIdentifier, parent: ActorRef[Orchestrator.Command], routerRef: ActorRef[LocalRouter.Command]): Behavior[Command] =
+    def apply(aggId: AggregatorIdentifier, cycleId: CycleId, parent: ActorRef[Orchestrator.Command], routerRef: ActorRef[LocalRouter.Command]): Behavior[Command] =
         Behaviors.setup{context =>
             Behaviors.withTimers { timers =>
-                new Aggregator(context, timers, aggId, parent, routerRef)
+                new Aggregator(context, timers, aggId, cycleId, parent, routerRef)
             }
         }
     
@@ -34,7 +35,7 @@ object Aggregator {
     private final case class TrainerTerminated(actor: ActorRef[Trainer.Command], traId: TrainerIdentifier)
         extends Aggregator.Command
 
-    final case class InitiateSampling(samplingPolicy: String, roundIdx: Int) extends Aggregator.Command
+    final case class InitiateSampling(samplingPolicy: String, roundIdx: Int, cyId: CycleId) extends Aggregator.Command
     private final case class StartAggregation(aggregationPolicy: String) extends Aggregator.Command
 
     final case class CheckS3ForModels() extends Aggregator.Command
@@ -46,7 +47,7 @@ object Aggregator {
 
 }
 // TODO: parent should be either of orchestrator or aggregator.
-class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerScheduler[Aggregator.Command], aggId: AggregatorIdentifier, parent: ActorRef[Orchestrator.Command], routerRef: ActorRef[LocalRouter.Command]) extends AbstractBehavior[Aggregator.Command](context) {
+class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerScheduler[Aggregator.Command], aggId: AggregatorIdentifier, cycId: CycleId, parent: ActorRef[Orchestrator.Command], routerRef: ActorRef[LocalRouter.Command]) extends AbstractBehavior[Aggregator.Command](context) {
     import Aggregator._
     import FLSystemManager.{ RequestTrainer, TrainerRegistered, RequestAggregator, AggregatorRegistered, RequestRealTimeGraph, StartCycle, KafkaResponse }
     import LocalRouter.RegisterAggregator
@@ -62,24 +63,29 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
     // List of trainers which are children of this aggregator
     var trainerIdsToRef : MutableMap[TrainerIdentifier, ActorRef[Trainer.Command]] = MutableMap.empty
 
-
     routerRef ! RegisterAggregator(aggId.toString(), context.self)
 
     private var roundIndex = 0
 
+    private var cycleId = cycId
+
+    private var curModelVersion = s"${cycleId}_${aggId.toString}_${roundIndex}.pb"
+
     private var aggStateDict: Map[String, Object] = Map(
         "model" -> Message(
             __type__ = "fedrec.data_models.state_tensors_model.StateTensors",
-            __data__ = Map("storage" -> s"models/${aggId.toString}/${aggId.name}.pb")
+            __data__ = Map("storage" -> curModelVersion)
         )
     )
 
-    private var curModelVersion = s"v_${aggId.getOrchestrator().name()}${roundIndex}"
-
-    AmazonS3Communicator.createEmptyDir(AmazonS3Communicator.s3Config.getString("bucket"), s"models/${aggId.toString()}/")
-    AmazonS3Communicator.createEmptyDir(AmazonS3Communicator.s3Config.getString("bucket"), s"clients/${aggId.toString()}/")
+    AmazonS3Communicator.createEmptyDir(AmazonS3Communicator.s3Config.getString("bucket"), s"models/${aggId.getOrchestrator().name()}/${aggId.name()}/")
+    AmazonS3Communicator.createEmptyDir(AmazonS3Communicator.s3Config.getString("bucket"), s"clients/${aggId.getOrchestrator().name()}/${aggId.name()}/")
 
     context.log.info("Aggregator {} started", aggId.toString())
+
+    def updateCurModelVersion() = {
+        curModelVersion = s"${cycleId}_${aggId.toString}_${roundIndex}.pb"
+    }
 
     def getTrainerRef(trainerId: TrainerIdentifier): ActorRef[Trainer.Command] = {
         trainerIdsToRef.get(trainerId) match {
@@ -101,7 +107,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                 actorRef
             case None =>
                 context.log.info("Creating new Aggregator actor for {}", aggregatorId.toString())
-                val actorRef = context.spawn(Aggregator(aggregatorId, parent, routerRef), s"aggregator-${aggregatorId.name()}")
+                val actorRef = context.spawn(Aggregator(aggregatorId, cycleId, parent, routerRef), s"aggregator-${aggregatorId.name()}")
                 context.watchWith(actorRef, AggregatorTerminated(actorRef, aggregatorId))
                 aggregatorIdsToRef += aggregatorId -> actorRef
                 actorRef
@@ -141,18 +147,20 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                 neighbours += (c -> Message (
                     __type__ = "fedrec.data_models.aggregator_state_model.Neighbour",
                     __data__ = Neighbour (
-                        worker_index = c,
+                        worker_id = c,
                         last_sync = 0,
                         model_state = Message (
                             __type__ = "fedrec.data_models.state_tensors_model.StateTensors",
                             __data__ = Map(
-                                "storage" -> s"clients/${aggId.toString()}/${c}.pd"
+                                "storage" -> s"clients/${aggId.getOrchestrator().name()}/${aggId.name()}/${c}.pb"
                             )
-                        )
+                        ),
+                        sample_num = 1
                     )
                 ))
             }
         })
+        context.log.info(s"Neighbours: ${neighbours}")
         return Map.empty ++ neighbours
     }
 
@@ -172,8 +180,9 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                     __data__ = AggregatorState (
                         worker_id = aggId.name(),
                         round_idx = roundIndex,
+                        cycle_idx = cycleId,
                         state_dict = null,
-                        storage = s"/models/${aggId.toString()}/${aggId.name()}.pb",
+                        storage = s"/models/${aggId.getOrchestrator().name()}/${aggId.name()}/",
                         in_neighbours = Map(),
                         out_neighbours = Map(),
                     )
@@ -195,9 +204,10 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                 workerstate = Message (
                     __type__ = "fedrec.data_models.aggregator_state_model.AggregatorState",
                     __data__ = AggregatorState (
-                        worker_id = aggId.name(),
+                        worker_id = aggId.toString(),
                         round_idx = roundIndex,
-                        storage = s"/models/${aggId.toString()}/${aggId.name()}.pb", // Confirm this
+                        cycle_idx = cycleId,
+                        storage = s"/models/${aggId.getOrchestrator().name()}/${aggId.name()}/", // Confirm this
                         state_dict = aggStateDict,
                         in_neighbours = in_neighbours,
                         out_neighbours = Map(),
@@ -254,9 +264,11 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                 }
                 this
 
-            case InitiateSampling(samplingPolicy, roundIdx) =>
+            case InitiateSampling(samplingPolicy, roundIdx, cyId) =>
                 context.log.info("Aggregator Id:{} Initiate Sampling", aggId.toString())
                 roundIndex = roundIdx
+                cycleId = cyId
+                updateCurModelVersion()
                 // fetch list of clientIds from the Redis
                 val clientList = RedisClientHelper.getList(aggId.toString()).toList.flatten.flatten
 
@@ -313,7 +325,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
             case trackMsg @ CheckS3ForModels() =>
                 // Connect to S3, and ask for models
                 context.log.info("Aggregator ID:{} CheckS3ForModels", aggId.toString())
-                val modelList = AmazonS3Communicator.listAllFiles(AmazonS3Communicator.s3Config.getString("bucket"), s"/clients/${aggId.toString()}/")
+                val modelList = AmazonS3Communicator.listAllFiles(AmazonS3Communicator.s3Config.getString("bucket"), s"clients/${aggId.getOrchestrator().name()}/${aggId.name()}/")
 
                 if (modelList.length >= ConfigManager.minClientsForAggregation) {
                     timers.cancel()

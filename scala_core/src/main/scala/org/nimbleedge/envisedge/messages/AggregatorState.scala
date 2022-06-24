@@ -1,8 +1,11 @@
 package org.nimbleedge.envisedge.messages
 
+import org.nimbleedge.envisedge.Types._
+
 case class AggregatorState (
     worker_id : String,
     round_idx : Int,
+    cycle_idx : CycleId,
     state_dict : Map[String, Object],
     storage : String,
     in_neighbours: Map[String, Message],
@@ -10,7 +13,8 @@ case class AggregatorState (
 )
 
 case class Neighbour (
-    worker_index : String,
+    worker_id : String,
     last_sync : Int,
-    model_state : Message
+    model_state : Message,
+    sample_num: Int
 )

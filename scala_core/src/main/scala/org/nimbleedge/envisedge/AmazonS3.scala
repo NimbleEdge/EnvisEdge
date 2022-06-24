@@ -71,7 +71,7 @@ object AmazonS3Communicator {
     def listAllFiles(bucket: String, dir:String): Array[String] = {
 
         try {
-            var objSummary = amazonS3Client.listObjects(bucket, "testing/").getObjectSummaries().asScala
+            var objSummary = amazonS3Client.listObjects(bucket, dir).getObjectSummaries().asScala
             var keys  = new Array[String](objSummary.length-1)
             var i = 0
             for (obj <- objSummary) {

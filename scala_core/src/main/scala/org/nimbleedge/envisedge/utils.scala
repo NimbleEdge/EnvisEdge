@@ -19,6 +19,10 @@ import messages._
 
 import java.io.{StringWriter, PrintWriter}
 
+object Types {
+  type CycleId = Long
+}
+
 object Utils {
     implicit class configMapperOps(config: Config) {
 

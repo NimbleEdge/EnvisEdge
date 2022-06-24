@@ -1,6 +1,7 @@
 package org.nimbleedge.envisedge
 
 import models._
+import Types._
 import scala.collection.mutable.{Map => MutableMap, ListBuffer}
 
 import akka.actor.typed.ActorRef
@@ -92,13 +93,21 @@ class FLSystemManager(context: ActorContext[FLSystemManager.Command]) extends Ab
     AmazonS3Communicator.createEmptyDir(AmazonS3Communicator.s3Config.getString("bucket"), "models/")
     AmazonS3Communicator.createEmptyDir(AmazonS3Communicator.s3Config.getString("bucket"), "clients/")
 
+    private var cycleId: CycleId = 0
+
+    private def getNextCycleId(): CycleId = {
+        val id = cycleId
+        cycleId += 1
+        return id
+    }
+
     private def getOrchestratorRef(orcId: OrchestratorIdentifier): ActorRef[Orchestrator.Command] = {
         orcIdToRef.get(orcId) match {
             case Some(actorRef) =>
                 actorRef
             case None =>
                 context.log.info("Creating new orchestrator actor for {}", orcId.name())
-                val actorRef = context.spawn(Orchestrator(orcId, context.self), s"orchestrator-${orcId.name()}")
+                val actorRef = context.spawn(Orchestrator(orcId, context.self, getNextCycleId()), s"orchestrator-${orcId.name()}")
                 context.watchWith(actorRef, OrchestratorTerminated(actorRef, orcId))
                 orcIdToRef += orcId -> actorRef
                 actorRef
@@ -177,7 +186,7 @@ class FLSystemManager(context: ActorContext[FLSystemManager.Command]) extends Ab
                 // inform HTTP Service to broadcast update model 
                 KafkaProducer.send(ConfigManager.FLSYS_REQUEST_TOPIC, "CycleTerminated", orcId.name())
                 if (roundIdx == ConfigManager.NUM_ROUNDS) {
-                    getOrchestratorRef(orcId) ! Orchestrator.ResetRoundIdx()
+                    getOrchestratorRef(orcId) ! Orchestrator.StartNextCycle(getNextCycleId())
                 }
                 this
 

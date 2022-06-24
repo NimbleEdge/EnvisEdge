@@ -1,6 +1,7 @@
 package org.nimbleedge.envisedge
 
 import models._
+import Types._
 import scala.concurrent.duration._
 import scala.collection.mutable.{Map => MutableMap}
 
@@ -19,10 +20,10 @@ import messages._
 import scala.collection.mutable
 
 object Orchestrator {
-  def apply(orcId: OrchestratorIdentifier, parent: ActorRef[FLSystemManager.Command]): Behavior[Command] =
+  def apply(orcId: OrchestratorIdentifier, parent: ActorRef[FLSystemManager.Command], cycleId: CycleId): Behavior[Command] =
     Behaviors.setup{ context => 
       Behaviors.withTimers { timers =>
-        new Orchestrator(context, orcId, parent, timers)
+        new Orchestrator(context, orcId, cycleId, parent, timers)
       }
     }
 
@@ -36,14 +37,14 @@ object Orchestrator {
 
   final case class SamplingCheckpoint(aggId: AggregatorIdentifier) extends Orchestrator.Command
   final case class AggregationCheckpoint(aggId: AggregatorIdentifier) extends Orchestrator.Command
-  final case class ResetRoundIdx() extends Orchestrator.Command
+  final case class StartNextCycle(cycleId: CycleId) extends Orchestrator.Command
 
   private case object TimerKey
   // TODO
   // Add messages here
 }
 
-class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: OrchestratorIdentifier, parent: ActorRef[FLSystemManager.Command], timers: TimerScheduler[Orchestrator.Command]) extends AbstractBehavior[Orchestrator.Command](context) {
+class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: OrchestratorIdentifier, cycId: CycleId, parent: ActorRef[FLSystemManager.Command], timers: TimerScheduler[Orchestrator.Command]) extends AbstractBehavior[Orchestrator.Command](context) {
   import Orchestrator._
   import FLSystemManager.{ RequestAggregator, AggregatorRegistered, RequestTrainer, RequestRealTimeGraph, StartCycle}
   import LocalRouter.RemoveAggregator
@@ -60,6 +61,8 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
 
   private var roundIndex = 0
 
+  private var cycleId = cycId
+
   val aggKafkaConsumerRef = context.spawn(
       KafkaConsumer(ConfigManager.staticConfig.getConfig("consumer-config"), Left(routerRef)), s"AggregatorKafkaConsumer-${orcId.toString()}", DispatcherSelector.blocking()
   )
@@ -71,7 +74,7 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
 
   private def spawnAggregator(aggId : AggregatorIdentifier) : ActorRef[Aggregator.Command] = {
     context.log.info("Creating new aggregator actor for {}", aggId.name())
-    val actorRef = context.spawn(Aggregator(aggId, context.self, routerRef), s"aggregator-${aggId.name()}")
+    val actorRef = context.spawn(Aggregator(aggId, cycleId, context.self, routerRef), s"aggregator-${aggId.name()}")
     context.watchWith(actorRef, AggregatorTerminated(actorRef, aggId))
     aggIdToRef += aggId -> actorRef
     aggIdToClientCount += aggId -> 0
@@ -173,7 +176,7 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
         val aggId = getAvailableAggregator()
         val clientId = Hasher.getHash(device)
         //update this pair to the redis
-        val dataMap = Map("name" -> device, "clientId" -> clientId, "aggId" -> aggId.toString(), "orcId" -> orcId.name(), "cycleAccepted" -> 0, "modelVersion" -> "")
+        val dataMap = Map("name" -> device, "clientId" -> clientId, "aggId" -> aggId.name(), "orcId" -> orcId.name(), "cycleAccepted" -> 0, "modelVersion" -> "")
         RedisClientHelper.hmset(clientId, dataMap)
         RedisClientHelper.rpush(aggId.toString(), clientId)
 
@@ -187,12 +190,13 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
         this
 
       case StartCycle(_) =>
-        val aggMsg = Aggregator.InitiateSampling(ConfigManager.samplingPolicy, roundIndex)
+        val aggMsg = Aggregator.InitiateSampling(ConfigManager.samplingPolicy, roundIndex, cycleId)
         aggIdToRef.values.foreach((a) => a ! aggMsg)
         this
 
-      case ResetRoundIdx() =>
+      case StartNextCycle(cyId) =>
         roundIndex = 0
+        cycleId = cyId
         this
 
       case SamplingCheckpoint(aggId) =>
