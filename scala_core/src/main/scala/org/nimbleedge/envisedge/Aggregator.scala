@@ -74,7 +74,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
     private var aggStateDict: Map[String, Object] = Map(
         "model" -> Message(
             __type__ = "fedrec.data_models.state_tensors_model.StateTensors",
-            __data__ = Map("storage" -> curModelVersion)
+            __data__ = Map("storage" -> s"models/${aggId.getOrchestrator().name()}/${aggId.name()}/${curModelVersion}.pb")
         )
     )
 
@@ -149,10 +149,14 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                     __data__ = Neighbour (
                         worker_id = c,
                         last_sync = 0,
-                        model_state = Message (
-                            __type__ = "fedrec.data_models.state_tensors_model.StateTensors",
-                            __data__ = Map(
-                                "storage" -> s"clients/${aggId.getOrchestrator().name()}/${aggId.name()}/${c}.pb"
+                        fl_cycle = cycleId,
+                        round_idx = roundIndex,
+                        state_dict = Map (
+                            "model" -> Message(
+                                __type__ = "fedrec.data_models.state_tensors_model.StateTensors",
+                                __data__ = Map(
+                                    "storage" -> s"clients/${aggId.getOrchestrator().name()}/${aggId.name()}/${cycleId}_${c}_${roundIndex}.pb"
+                                )
                             )
                         ),
                         sample_num = 1
@@ -180,7 +184,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                     __data__ = AggregatorState (
                         worker_id = aggId.name(),
                         round_idx = roundIndex,
-                        cycle_idx = cycleId,
+                        fl_cycle = cycleId,
                         state_dict = null,
                         storage = s"/models/${aggId.getOrchestrator().name()}/${aggId.name()}/",
                         in_neighbours = Map(),
@@ -206,7 +210,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                     __data__ = AggregatorState (
                         worker_id = aggId.toString(),
                         round_idx = roundIndex,
-                        cycle_idx = cycleId,
+                        fl_cycle = cycleId,
                         storage = s"/models/${aggId.getOrchestrator().name()}/${aggId.name()}/", // Confirm this
                         state_dict = aggStateDict,
                         in_neighbours = in_neighbours,
@@ -305,14 +309,13 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                                 val selectedList = res("clients")
                                 parent ! Orchestrator.SamplingCheckpoint(aggId)
                                 // set cycle accepted to 1
-                                selectedList.foreach((c) => RedisClientHelper.hset(c.toString, "cycleAccepted", "1"))
+                                selectedList.foreach((c) => RedisClientHelper.hmset(c.toString, Map("cycleAccepted" -> 1, "roundIdx" -> roundIndex, "cycleIdx" -> cycleId)))
                                 timers.startSingleTimer(TimerKey, CheckS3ForModels(), ConfigManager.aggregatorS3ProbeIntervalMinutes.minutes)
                                 
                             case "aggregate" => 
                                 // TODO: Handle the reponse appropriately
                                 aggStateDict = resp.results
                                 parent ! Orchestrator.AggregationCheckpoint(aggId)
-                                curModelVersion = s"v_${aggId.getOrchestrator().name()}${roundIndex}"
                                 val clientList = RedisClientHelper.getList(aggId.toString()).toList.flatten.flatten
                                 clientList.foreach((c) => RedisClientHelper.hset(c, "cycleAccepted", "0"))
                             case _ => throw new IllegalArgumentException(s"Invalid response_type : ${resp}")

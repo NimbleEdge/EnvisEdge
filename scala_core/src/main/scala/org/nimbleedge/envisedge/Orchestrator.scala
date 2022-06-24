@@ -176,7 +176,7 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
         val aggId = getAvailableAggregator()
         val clientId = Hasher.getHash(device)
         //update this pair to the redis
-        val dataMap = Map("name" -> device, "clientId" -> clientId, "aggId" -> aggId.name(), "orcId" -> orcId.name(), "cycleAccepted" -> 0, "modelVersion" -> "")
+        val dataMap = Map("name" -> device, "clientId" -> clientId, "aggId" -> aggId.name(), "orcId" -> orcId.name(), "cycleAccepted" -> 0, "modelVersion" -> "", "roundIdx" -> "", "cycleIdx" -> "")
         RedisClientHelper.hmset(clientId, dataMap)
         RedisClientHelper.rpush(aggId.toString(), clientId)
 
