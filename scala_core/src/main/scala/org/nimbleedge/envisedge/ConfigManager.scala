@@ -16,7 +16,7 @@ object ConfigManager {
     val NUM_ROUNDS = 5
 
     var maxClientsInAgg : Int = 2000
-    var minClientsForAggregation: Int = 1000
+    var minClientsForAggregation: Int = 2
     var samplingPolicy : String = "default"
     var aggregationPolicy: String = "default"
 
@@ -24,7 +24,7 @@ object ConfigManager {
     var aggAggregationConsumerTopics: Vector[String] = Vector(AGGR_SAMPLING_RESPONSE_TOPIC)
     var flSysConsumerTopics: Vector[String] = Vector(FLSYS_RESPONSE_TOPIC)
 
-    var aggregatorS3ProbeIntervalMinutes = 60
+    var aggregatorS3ProbeIntervalMinutes = 1
     var nextRoundStartIntervalHours = 24
 
     def getOrcId(taskId : String) : OrchestratorIdentifier = {

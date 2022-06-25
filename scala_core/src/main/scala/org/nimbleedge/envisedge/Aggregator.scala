@@ -74,7 +74,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
     private var aggStateDict: Map[String, Object] = Map(
         "model" -> Message(
             __type__ = "fedrec.data_models.state_tensors_model.StateTensors",
-            __data__ = Map("storage" -> s"models/${aggId.getOrchestrator().name()}/${aggId.name()}/${curModelVersion}.pb")
+            __data__ = Map("storage" -> s"models/${aggId.getOrchestrator().name()}/${aggId.name()}/${curModelVersion}")
         )
     )
 
@@ -149,8 +149,9 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                     __data__ = Neighbour (
                         worker_id = c,
                         last_sync = 0,
-                        fl_cycle = cycleId,
+                        fl_cycle = cycleId.toString,
                         round_idx = roundIndex,
+                        storage = s"clients/${aggId.getOrchestrator().name()}/${aggId.name()}/",
                         state_dict = Map (
                             "model" -> Message(
                                 __type__ = "fedrec.data_models.state_tensors_model.StateTensors",
@@ -184,9 +185,9 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                     __data__ = AggregatorState (
                         worker_id = aggId.name(),
                         round_idx = roundIndex,
-                        fl_cycle = cycleId,
+                        fl_cycle = cycleId.toString,
                         state_dict = null,
-                        storage = s"/models/${aggId.getOrchestrator().name()}/${aggId.name()}/",
+                        storage = s"models/${aggId.getOrchestrator().name()}/${aggId.name()}/",
                         in_neighbours = Map(),
                         out_neighbours = Map(),
                     )
@@ -210,8 +211,8 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                     __data__ = AggregatorState (
                         worker_id = aggId.toString(),
                         round_idx = roundIndex,
-                        fl_cycle = cycleId,
-                        storage = s"/models/${aggId.getOrchestrator().name()}/${aggId.name()}/", // Confirm this
+                        fl_cycle = cycleId.toString,
+                        storage = s"models/${aggId.getOrchestrator().name()}/${aggId.name()}/", // Confirm this
                         state_dict = aggStateDict,
                         in_neighbours = in_neighbours,
                         out_neighbours = Map(),
