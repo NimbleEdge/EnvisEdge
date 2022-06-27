@@ -7,10 +7,17 @@ from fedrec.communication_interfaces.abstract_comm_manager import \
 @registry.load("communication_interface", "ZeroMQ")
 class ZeroMQ(AbstractCommunicationManager):
     """
-    ZeroMQ class implements the basic send/receive interface between the publisher and the subscriber. Senders of messages token are called publishers and the one who receives these tokens are called subscribers.
+    ZeroMQ class implements the basic send/receive interface
+    between the publisher and the subscriber. Senders of
+    messages token are called publishers and the one who
+    receives these tokens are called subscribers.
 
 
-    It is a high-performance messaging library, which is aimed to use in distributed and concurrent environments.The philosophy of ZeroMQ starts with zero where the zero is for zero broker, zero latency, zero cost, and zero administration.
+    It is a high-performance messaging library, which is aimed
+    to use in distributed and concurrent environments.The
+    philosophy of ZeroMQ starts with zero where the zero is
+    for zero broker, zero latency, zero cost, and zero
+    administration.
 
     Parameters
     ----------
