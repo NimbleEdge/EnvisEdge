@@ -54,6 +54,10 @@ object RedisClientHelper {
         client.flushdb
     }
 
+    def expire(hash: String, ttl: Int) : Boolean = {
+        client.expire(hash, ttl)
+    }
+
     var client : RedisClient = _
 
     // TODO configure these in the FLSystemManager

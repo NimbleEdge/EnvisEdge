@@ -179,6 +179,9 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
         val dataMap = Map("name" -> device, "clientId" -> clientId, "aggId" -> aggId.name(), "orcId" -> orcId.name(), "cycleAccepted" -> 0, "modelVersion" -> "", "roundIdx" -> "", "cycleIdx" -> "")
         RedisClientHelper.hmset(clientId, dataMap)
         RedisClientHelper.rpush(aggId.toString(), clientId)
+        if (!RedisClientHelper.expire(clientId, ConfigManager.clientExpireTimeSeconds)) {
+          context.log.warn("Cannot set expiry for client in Redis")
+        }
 
         aggIdToClientCount(aggId) += 1
         this

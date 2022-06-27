@@ -26,6 +26,7 @@ object ConfigManager {
 
     var aggregatorS3ProbeIntervalMinutes = 1
     var nextRoundStartIntervalHours = 24
+    var clientExpireTimeSeconds = 2592000 // 30 days
 
     def getOrcId(taskId : String) : OrchestratorIdentifier = {
         return OrchestratorIdentifier(taskId)
