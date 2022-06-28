@@ -6,12 +6,61 @@ from fedrec.utilities.registry import Registrable
 
 
 def get_deserializer(serialized_obj_name):
+  """
+  This function is used to check if the parameter passed 
+  is present in the list of classes present in the memory
+  during execution.
+  
+  Arguments
+  ----------
+  serialized_obj_name : str
+  
+  
+  Returns
+  ---------
+  The value corresponding to that class name in the memory : str
+  
+ 
+  Raises
+  ---------
+  KeyError 
+    If the class name is not found in the class map.
+ 
+  """
     # find the deserializer from registry
     # given object name.
     return Registrable.lookup_class_ref(serialized_obj_name)
 
 
 def serialize_attribute(obj):
+    """
+    This function is used to serialize an attribute
+    over the obj parameter.
+    
+    
+    Arguments
+    ---------- 
+    obj 
+    
+   
+    Returns
+    ----------
+    Key-value pairs within the obj : dict
+      If obj is a dictionary.
+    
+    Elements of obj : list or tuple
+      If obj is list or tuple.
+    
+    obj : str, int, float or bool
+      If obj is string, integer, float or boolean.
+    
+    obj.serialize() 
+      If the object has an attribute named serialize.
+     
+    "Object must be serializable" : str
+      If the object does not have an attribute named serialize.
+    
+    """
     # TODO : make a single global function
     # for this method.
     ## location : [envis_base_module.py]
@@ -32,6 +81,39 @@ def serialize_attribute(obj):
 
 
 def deserialize_attribute(obj: Dict):
+    """
+    Arguments
+    ---------- 
+    obj : dict
+   
+    
+    Returns
+    ---------
+    obj : dict
+      If obj is a string, integer, float or boolean.
+    
+    The value corresponding to that class name in the memory : str
+      If __type__ is in the dictionary obj, the type of the object is 
+      called in the get_deserializable function.
+    
+    dictionary
+      key 
+        keys of obj.
+      value 
+        deserialize_attribute() is called recursively on each value in obj.
+      If obj is a dictionary.
+      
+    list or tuple
+      if obj is list or tuple, deserialize_attribute() is called recursively 
+      on each attribute in obj.
+      
+    
+    Raises
+    ---------
+    ValueError
+      If none of the conditions are satisfied.
+    
+    """
     # TODO : make a single global function
     # for this method.
     ## location : [envis_base_module.py]
