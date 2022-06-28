@@ -1,0 +1,60 @@
+version: '3.5'
+
+networks:
+  cluster-network:
+
+services:
+  seed:
+    networks:
+      - cluster-network
+    image: nimbleedge/akka-cluster
+    ports:
+      - '2552:2552'
+      - '8000:8000'
+    environment:
+      SERVER_IP: 0.0.0.0
+      CLUSTER_IP: seed
+      CLUSTER_SEED_IP: seed
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201" # Logstash UDP input port
+        tag: "seed"
+    restart: always
+
+  node1:
+    networks:
+      - cluster-network
+    image: nimbleedge/akka-cluster
+    ports:
+      - '8001:8000'
+    environment:
+      SERVER_IP: 0.0.0.0
+      CLUSTER_IP: node1
+      CLUSTER_PORT: 1600
+      CLUSTER_SEED_IP: seed
+      CLUSTER_SEED_PORT: 2552
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201" # Logstash UDP input port
+        tag: "node1"
+    restart: always
+  node2:
+    networks:
+      - cluster-network
+    image: nimbleedge/akka-cluster
+    ports:
+      - '8002:8000'
+    environment:
+      SERVER_IP: 0.0.0.0
+      CLUSTER_IP: node2
+      CLUSTER_PORT: 1600
+      CLUSTER_SEED_IP: seed
+      CLUSTER_SEED_PORT: 2552
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201" # Logstash UDP input port
+        tag: "node2"
+    restart: always

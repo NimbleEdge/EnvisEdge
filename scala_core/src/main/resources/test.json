@@ -1,0 +1,54 @@
+{
+  "name" : "name",
+  "id" : "name",
+
+  "orchestrator" : {
+    "name" : "orchname",
+    "id" :"orchid",
+    "aggregators" : [
+      {
+        "aggid" :"aggid1",
+        "aggname" :"aggname1",
+        "aggregators" : [
+          {
+            "aggid" :"aggid1",
+            "aggname" :"aggname1"
+          },
+          {
+            "aggid" :"aggid2",
+            "aggname" :"aggname2"
+          }
+        ],
+        "trainers" : [
+          {
+            "trainerid" :"trainerid1",
+            "trainername" :"trainername1"
+          },
+          {
+            "trainerid" :"trainerid2",
+            "trainername" :"trainername2"
+          }
+        ]
+
+      },
+      {
+        "aggid" :"aggid2",
+        "aggname" :"aggname2",
+        "trainers" : [
+          {
+            "trainerid" :"trainerid1",
+            "trainername" :"trainername1"
+          },
+          {
+            "trainerid" :"trainerid2",
+            "trainername" :"trainername2"
+          }
+        ]
+
+      }
+
+    ]
+  }
+}
+
+
