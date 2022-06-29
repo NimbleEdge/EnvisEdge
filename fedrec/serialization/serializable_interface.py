@@ -12,7 +12,13 @@ def is_primitives(obj):
 
 
 class Serializable(Registrable, ABC):
-    """Abstract class for serializers and deserializers.
+    """
+    Abstract class for serializers and deserializers.
+    In simple terms, the serializable is converting a
+    data object (e.g., Python objects, Tensorflow models)
+    into a format that can be stored or transmitted, and
+    then recreated using the reverse process of
+    deserialization when needed.
 
     Attributes
     -----------
