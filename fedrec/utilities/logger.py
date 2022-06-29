@@ -5,7 +5,7 @@ from time import time
 
 class BaseLogger(ABC):
     """
-    This logger class performs the logging messages and
+    The 'BaseLogger' performs the logging messages and
     visualization activities.
 
     The logging module in python is a way to store information
@@ -63,7 +63,7 @@ try:
 
     class TBLogger(SummaryWriter, BaseLogger):
         """
-        Helps in visualizing the data through the tensorboard class.
+        Helps in visualizing the data through the tensorboard class.Tensorboard logger class is implemented using SummaryWriter and BaseLogger.
         """
         def __init__(self, log_dir, comment="", max_queue=10):
             super().__init__(log_dir=log_dir,
