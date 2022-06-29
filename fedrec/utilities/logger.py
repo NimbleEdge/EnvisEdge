@@ -63,7 +63,14 @@ try:
 
     class TBLogger(SummaryWriter, BaseLogger):
         """
-        Helps in visualizing the data through the tensorboard class.Tensorboard logger class is implemented using SummaryWriter and BaseLogger.
+        Helps in visualizing the data through the tensorboard
+        class.Tensorboard logger class is implemented using
+        SummaryWriter and BaseLogger.As mentioned previously,
+        summarywriter helps visualize graphs and histograms.
+        Whereas, Baselogger is used to inherit the properties
+        to the TBLogger in order to avoid reimplementing basic
+        functions.
+
         """
         def __init__(self, log_dir, comment="", max_queue=10):
             super().__init__(log_dir=log_dir,
