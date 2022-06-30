@@ -92,7 +92,7 @@ class FLSystemManagerSpec extends ScalaTestWithActorTestKit with AnyWordSpecLike
 			val registered6 = deviceRegsiterd.receiveMessage()
 			registered6.clientId should === ("client-device-1")
 
-			val timerProbe = createTestProbe[Aggregator.CheckS3ForModels]()
+			val timerProbe = createTestProbe[Aggregator.CheckRedisForModels]()
 			// check timer
 			aggActor1 ! Aggregator.SamplingFinished()
 			var msg = timerProbe.receiveMessage()

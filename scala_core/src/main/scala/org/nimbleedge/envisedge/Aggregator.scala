@@ -38,7 +38,7 @@ object Aggregator {
     final case class InitiateSampling(samplingPolicy: String, roundIdx: Int, cyId: CycleId) extends Aggregator.Command
     private final case class StartAggregation(aggregationPolicy: String) extends Aggregator.Command
 
-    final case class CheckS3ForModels() extends Aggregator.Command
+    final case class CheckRedisForModels() extends Aggregator.Command
 
     private case object TimerKey
 
@@ -69,12 +69,12 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
 
     private var cycleId = cycId
 
-    private var curModelVersion = s"${cycleId}_${aggId.toString}_${roundIndex}.pb"
+    private var curModelVersion = s"${cycleId}_${aggId.toString}_${roundIndex}"
 
     private var aggStateDict: Map[String, Object] = Map(
         "model" -> Message(
             __type__ = "fedrec.data_models.state_tensors_model.StateTensors",
-            __data__ = Map("storage" -> s"models/${aggId.getOrchestrator().name()}/${aggId.name()}/${curModelVersion}")
+            __data__ = Map("storage" -> s"models/${aggId.getOrchestrator().name()}/${aggId.name()}/${curModelVersion}.pt")
         )
     )
 
@@ -84,7 +84,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
     context.log.info("Aggregator {} started", aggId.toString())
 
     def updateCurModelVersion() = {
-        curModelVersion = s"${cycleId}_${aggId.toString}_${roundIndex}.pb"
+        curModelVersion = s"${cycleId}_${aggId.toString}_${roundIndex}"
     }
 
     def getTrainerRef(trainerId: TrainerIdentifier): ActorRef[Trainer.Command] = {
@@ -156,7 +156,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                             "model" -> Message(
                                 __type__ = "fedrec.data_models.state_tensors_model.StateTensors",
                                 __data__ = Map(
-                                    "storage" -> s"clients/${aggId.getOrchestrator().name()}/${aggId.name()}/${cycleId}_${c}_${roundIndex}.pb"
+                                    "storage" -> s"clients/${aggId.getOrchestrator().name()}/${aggId.name()}/${cycleId}_${c}_${roundIndex}.pt"
                                 )
                             )
                         ),
@@ -311,7 +311,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                                 parent ! Orchestrator.SamplingCheckpoint(aggId)
                                 // set cycle accepted to 1
                                 selectedList.foreach((c) => RedisClientHelper.hmset(c.toString, Map("cycleAccepted" -> 1, "roundIdx" -> roundIndex, "cycleIdx" -> cycleId)))
-                                timers.startSingleTimer(TimerKey, CheckS3ForModels(), ConfigManager.aggregatorS3ProbeIntervalMinutes.minutes)
+                                timers.startSingleTimer(TimerKey, CheckRedisForModels(), ConfigManager.aggregatorS3ProbeIntervalMinutes.minutes)
                                 
                             case "aggregate" => 
                                 // TODO: Handle the reponse appropriately
@@ -326,16 +326,24 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                 }
                 this
 
-            case trackMsg @ CheckS3ForModels() =>
+            case trackMsg @ CheckRedisForModels() =>
                 // Connect to S3, and ask for models
-                context.log.info("Aggregator ID:{} CheckS3ForModels", aggId.toString())
-                val modelList = AmazonS3Communicator.listAllFiles(AmazonS3Communicator.s3Config.getString("bucket"), s"clients/${aggId.getOrchestrator().name()}/${aggId.name()}/")
+                context.log.info("Aggregator ID:{} CheckRedisForModels", aggId.toString())
+                var num_models = 0
+                
+                val clientList = RedisClientHelper.getList(aggId.toString()).toList.flatten.flatten
+                clientList.foreach((c) => {
+                    val version = RedisClientHelper.hget(c, "modelVersion").get
+                    if (version == curModelVersion) {
+                        num_models += 1
+                    }
+                })
 
-                if (modelList.length >= ConfigManager.minClientsForAggregation) {
+                if (num_models >= ConfigManager.minClientsForAggregation) {
                     timers.cancel()
                     context.self ! StartAggregation(ConfigManager.aggregationPolicy)
                 } else {
-                    timers.startSingleTimer(TimerKey, CheckS3ForModels(), ConfigManager.aggregatorS3ProbeIntervalMinutes.minutes)
+                    timers.startSingleTimer(TimerKey, CheckRedisForModels(), ConfigManager.aggregatorS3ProbeIntervalMinutes.minutes)
                 }
                 this
 
