@@ -14,6 +14,8 @@ object ConfigManager {
     val FLSYS_REQUEST_TOPIC = "fl-system-to-http-service"
     val FLSYS_RESPONSE_TOPIC = "http-service-to-fl-system"
     val NUM_ROUNDS = 5
+    val DEFAULT_REDIS_HOST = "localhost"
+    val DEFAULT_REDIS_PORT = 6379
 
     var maxClientsInAgg : Int = 2000
     var minClientsForAggregation: Int = 2

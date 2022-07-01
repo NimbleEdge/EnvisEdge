@@ -81,6 +81,7 @@ class FLSystemManager(context: ActorContext[FLSystemManager.Command]) extends Ab
 
     // TODO insert host, port from config
     RedisClientHelper.initConnection()
+    RedisClientPoolHelper.initConnection()
 
     context.log.info("FLSystemManager Started")
 

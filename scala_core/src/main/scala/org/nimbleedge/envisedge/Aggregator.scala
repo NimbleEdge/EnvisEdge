@@ -141,9 +141,10 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
     def getInNeighbours() : Map[String, Message] = {
         val clientList = RedisClientHelper.getList(aggId.toString()).toList.flatten.flatten
         var neighbours: MutableMap[String, Message] = MutableMap.empty
-        clientList.foreach((c) => {
-            val version = RedisClientHelper.hget(c, "modelVersion").get
-            if (version == curModelVersion) {
+        val versions = RedisClientPoolHelper.hget(clientList, "modelVersion")
+        val clients = clientList zip versions
+        for((c,v) <- clients) {
+            if (v.get == curModelVersion) {
                 neighbours += (c -> Message (
                     __type__ = "fedrec.data_models.aggregator_state_model.Neighbour",
                     __data__ = Neighbour (
@@ -164,7 +165,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                     )
                 ))
             }
-        })
+        }
         context.log.info(s"Neighbours: ${neighbours}")
         return Map.empty ++ neighbours
     }
@@ -310,7 +311,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                                 val selectedList = res("clients")
                                 parent ! Orchestrator.SamplingCheckpoint(aggId)
                                 // set cycle accepted to 1
-                                selectedList.foreach((c) => RedisClientHelper.hmset(c.toString, Map("cycleAccepted" -> 1, "roundIdx" -> roundIndex, "cycleIdx" -> cycleId)))
+                                RedisClientPoolHelper.hmset(selectedList, Map("cycleAccepted" -> 1, "roundIdx" -> roundIndex, "cycleIdx" -> cycleId))
                                 timers.startSingleTimer(TimerKey, CheckRedisForModels(), ConfigManager.aggregatorS3ProbeIntervalMinutes.minutes)
                                 
                             case "aggregate" => 
@@ -318,7 +319,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                                 aggStateDict = resp.results
                                 parent ! Orchestrator.AggregationCheckpoint(aggId)
                                 val clientList = RedisClientHelper.getList(aggId.toString()).toList.flatten.flatten
-                                clientList.foreach((c) => RedisClientHelper.hset(c, "cycleAccepted", "0"))
+                                RedisClientPoolHelper.hset(clientList, "cycleAccepted", "0")
                             case _ => throw new IllegalArgumentException(s"Invalid response_type : ${resp}")
                         }
                         
@@ -332,9 +333,9 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                 var num_models = 0
                 
                 val clientList = RedisClientHelper.getList(aggId.toString()).toList.flatten.flatten
-                clientList.foreach((c) => {
-                    val version = RedisClientHelper.hget(c, "modelVersion").get
-                    if (version == curModelVersion) {
+                val versions = RedisClientPoolHelper.hget(clientList, "modelVersion")
+                versions.foreach((v) => {
+                    if (v.get == curModelVersion) {
                         num_models += 1
                     }
                 })
