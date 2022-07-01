@@ -18,6 +18,32 @@ class BaseLogger(ABC):
     totally five visualizations i.e scalars, images, graphs, audio and
     histograms.
 
+    Example
+    -------
+      # importing logging module
+    >>> import logging
+
+      # Create and configure logger
+    >>> logging.basicConfig(filename="myfile.log",
+                    format='%(asctime)s %(message)s',
+                    filemode='w')
+
+      # Creat an object
+    >>> logger = logging.getLogger()
+
+      # Setting the threshold of logger to DEBUG  as logging
+      messages which are less severe than level will be
+      ignored.Point to be noted - When a logger   is created
+        the level is set to NOTSET
+    >>> logger.setLevel(logging.DEBUG)
+
+       # Test messages
+    >>> logger.debug("Safe debug Message")
+    >>> logger.info("It's an information")
+    >>> logger.warning("Its a Red Alert")
+    >>> logger.error("Did you try to divide by zero")
+    >>> logger.critical("Internet is down")
+
     """
     def __init__(self) -> None:
         super().__init__()
@@ -84,6 +110,31 @@ try:
             """
             Returns a scalar or histogram on the basis of bool value
             given to to_normalize.
+
+            Example
+            -------
+              # example for add scalar
+              # import summarywriter
+            >>> from torch.utils.tensorboard import SummaryWriter
+              # create summary writer with auto generated folder name
+            >>> writer = SummaryWriter()
+            >>> x = range(100)
+            >>> for i in x:
+                    writer.add_scalar('y=2x', i * 2, i)
+            >>> writer.close()
+
+               #example for add histogram
+               #import summarywriter
+            >>> from torch.utils.tensorboard import SummaryWriter
+               # Create summary writer with auto generated folder name
+            >>> writer = SummaryWriter()
+            >>> r = 5
+            >>> for i in range(100):
+            >>> writer.add_scalars('run_14h', {'xsinx':i*np.sin(i/r),
+                                    'xcosx':i*np.cos(i/r),
+                                    'tanx': np.tan(i/r)}, i)
+            >>> writer.close()
+
             """
             for name, param in model.named_parameters():
                 if to_normalize:
