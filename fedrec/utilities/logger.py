@@ -53,7 +53,8 @@ class BaseLogger(ABC):
 
         def decorated(*args, **kwargs):
             """
-            Prints the logging info message i.e aggregated time cost on the screen.
+            Prints the logging info message i.e aggregated time cost
+            on the screen.
             """
             start_time = time()
             out = func(*args, **kwargs)
