@@ -59,7 +59,7 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
 
   val routerRef = context.spawn(LocalRouter(), s"LocalRouter-${orcId.toString()}")
 
-  private var roundIndex = 0
+  private var roundIndex = 1
 
   private var cycleId = cycId
 
@@ -198,7 +198,7 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
         this
 
       case StartNextCycle(cyId) =>
-        roundIndex = 0
+        roundIndex = 1
         cycleId = cyId
         this
 

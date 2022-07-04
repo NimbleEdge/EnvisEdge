@@ -65,11 +65,11 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
 
     routerRef ! RegisterAggregator(aggId.toString(), context.self)
 
-    private var roundIndex = 0
+    private var roundIndex = 1
 
     private var cycleId = cycId
 
-    private var curModelVersion = s"${cycleId}_${aggId.toString}_${roundIndex}"
+    private var curModelVersion = s"${cycleId}_${aggId.toString}_${roundIndex-1}"
 
     private var aggStateDict: Map[String, Object] = Map(
         "model" -> Message(
@@ -84,7 +84,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
     context.log.info("Aggregator {} started", aggId.toString())
 
     def updateCurModelVersion() = {
-        curModelVersion = s"${cycleId}_${aggId.toString}_${roundIndex}"
+        curModelVersion = s"${cycleId}_${aggId.toString}_${roundIndex-1}"
     }
 
     def getTrainerRef(trainerId: TrainerIdentifier): ActorRef[Trainer.Command] = {
@@ -157,7 +157,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                             "model" -> Message(
                                 __type__ = "fedrec.data_models.state_tensors_model.StateTensors",
                                 __data__ = Map(
-                                    "storage" -> s"clients/${aggId.getOrchestrator().name()}/${aggId.name()}/${cycleId}_${c}_${roundIndex}.pt"
+                                    "storage" -> s"clients/${aggId.getOrchestrator().name()}/${aggId.name()}/${cycleId}_${c}_${roundIndex-1}.pt"
                                 )
                             )
                         ),
@@ -277,6 +277,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                 updateCurModelVersion()
                 // fetch list of clientIds from the Redis
                 val clientList = RedisClientHelper.getList(aggId.toString()).toList.flatten.flatten
+                context.log.info("Sampling list: {}", clientList)
 
                 // TODO create the Job and submit to the python service
                 // Make Sampling Job Submit Message here
@@ -319,6 +320,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                                 aggStateDict = resp.results
                                 parent ! Orchestrator.AggregationCheckpoint(aggId)
                                 val clientList = RedisClientHelper.getList(aggId.toString()).toList.flatten.flatten
+                                RedisClientHelper.hset("models", curModelVersion, "1")
                                 RedisClientPoolHelper.hset(clientList, "cycleAccepted", "0")
                             case _ => throw new IllegalArgumentException(s"Invalid response_type : ${resp}")
                         }

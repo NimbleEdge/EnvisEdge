@@ -186,7 +186,7 @@ class FLSystemManager(context: ActorContext[FLSystemManager.Command]) extends Ab
                 context.log.info("FLSystemManager: Aggregation finished")
                 // inform HTTP Service to broadcast update model 
                 KafkaProducer.send(ConfigManager.FLSYS_REQUEST_TOPIC, "CycleTerminated", orcId.name())
-                if (roundIdx == ConfigManager.NUM_ROUNDS) {
+                if (roundIdx > ConfigManager.NUM_ROUNDS) {
                     getOrchestratorRef(orcId) ! Orchestrator.StartNextCycle(getNextCycleId())
                 }
                 this
