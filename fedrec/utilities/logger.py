@@ -98,6 +98,31 @@ try:
         to the TBLogger in order to avoid reimplementing basic
         functions.
 
+        Example
+        -------
+          # example for add scalar
+          # import summarywriter
+        >>> from torch.utils.tensorboard import SummaryWriter
+          # create summary writer with auto generated folder name
+        >>> writer = SummaryWriter()
+        >>> x = range(100)
+        >>> for i in x:
+                writer.add_scalar('y=2x', i * 2, i)
+        >>> writer.close()
+
+           #example for add histogram
+           #import summarywriter
+        >>> from torch.utils.tensorboard import SummaryWriter
+          # Create summary writer with auto generated folder name
+        >>> writer = SummaryWriter()
+        >>> r = 5
+        >>> for i in range(100):
+        >>> writer.add_scalars('run_14h', {'xsinx':i*np.sin(i/r),
+                                    'xcosx':i*np.cos(i/r),
+                                    'tanx': np.tan(i/r)}, i)
+        >>> writer.close()
+
+
         """
         def __init__(self, log_dir, comment="", max_queue=10):
             super().__init__(log_dir=log_dir,
@@ -111,30 +136,6 @@ try:
             """
             Returns a scalar or histogram on the basis of bool value
             given to to_normalize.
-
-            Example
-            -------
-              # example for add scalar
-              # import summarywriter
-            >>> from torch.utils.tensorboard import SummaryWriter
-              # create summary writer with auto generated folder name
-            >>> writer = SummaryWriter()
-            >>> x = range(100)
-            >>> for i in x:
-                    writer.add_scalar('y=2x', i * 2, i)
-            >>> writer.close()
-
-               #example for add histogram
-               #import summarywriter
-            >>> from torch.utils.tensorboard import SummaryWriter
-               # Create summary writer with auto generated folder name
-            >>> writer = SummaryWriter()
-            >>> r = 5
-            >>> for i in range(100):
-            >>> writer.add_scalars('run_14h', {'xsinx':i*np.sin(i/r),
-                                    'xcosx':i*np.cos(i/r),
-                                    'tanx': np.tan(i/r)}, i)
-            >>> writer.close()
 
             """
             for name, param in model.named_parameters():
