@@ -12,29 +12,19 @@ class ZeroMQ(AbstractCommunicationManager):
     messages token are called publishers and the one who
     receives these tokens are called subscribers.
 
-
-    It is a high-performance messaging library, which is aimed
-    to use in distributed and concurrent environments.The
-    philosophy of ZeroMQ starts with zero where the zero is
-    for zero broker, zero latency, zero cost, and zero
-    administration.
-
     Example
     -------
     >>> import zmq
-    >>> context = zmq.Context()
 
-    #  Socket to talk to server
+    >>> context = zmq.Context()
     >>> print("Connecting to envisedge server…")
     >>> socket = context.socket(zmq.REQ)
     >>> socket.connect("tcp://localhost:5555")
 
-    #  Do 10 requests, waiting each time for a response
     >>> for request in range(10):
     >>>     print("Sending request %s …" % request)
     >>>     socket.send(b"Hello")
 
-         #  Get the reply.
     >>>     message = socket.recv()
     >>>     print("Received reply %s [ %s ]" % (request, message))
 
@@ -48,14 +38,9 @@ class ZeroMQ(AbstractCommunicationManager):
     >>> socket.bind("tcp://*:5555")
 
     >>> while True:
-          #  Wait for next request from client
     >>>      message = socket.recv()
     >>>      print("Received request: %s" % message)
-
-          #  Do some 'work'
     >>>      time.sleep(1)
-
-          #  Send reply back to client
     >>>      socket.send(b"World")
 
     Parameters
