@@ -9,35 +9,26 @@ class BaseLogger(ABC):
     visualization activities.
 
     The logging module in python is a way to store information
-    about the script and track of events that occur. Similarly
-    here,logging.info() helps in printing the aggregated time cost.
+    about the script and track events that occur. Similarly
+    here, logging.info() helps in printing the aggregated time cost.
 
     Visualization activities are being performed by Tensorboard by
     importing SummaryWriter.Tensorboard is a suite of web applications
-    for inspecting and understanding model runs and graphs.It supports
+    for inspecting and understanding model runs and graphs. It supports
     totally five visualizations i.e scalars, images, graphs, audio and
     histograms.
 
     Example
     -------
-      # importing logging module
+
     >>> import logging
 
-      # Create and configure logger
     >>> logging.basicConfig(filename="myfile.log",
                     format='%(asctime)s %(message)s',
                     filemode='w')
-
-      # Creat an object
     >>> logger = logging.getLogger()
-
-      # Setting the threshold of logger to DEBUG  as logging
-      messages which are less severe than level will be
-      ignored.Point to be noted - When a logger   is created
-        the level is set to NOTSET
     >>> logger.setLevel(logging.DEBUG)
 
-       # Test messages
     >>> logger.debug("Safe debug Message")
     >>> logger.info("It's an information")
     >>> logger.warning("Its a Red Alert")
@@ -91,29 +82,25 @@ try:
     class TBLogger(SummaryWriter, BaseLogger):
         """
         Helps in visualizing the data through the tensorboard
-        class.Tensorboard logger class is implemented using
+        class. Tensorboard logger class is implemented using
         SummaryWriter and BaseLogger.As mentioned previously,
-        summarywriter helps visualize graphs and histograms.
+        summary writer helps visualize graphs and histograms.
         Whereas, Baselogger is used to inherit the properties
         to the TBLogger in order to avoid reimplementing basic
         functions.
 
         Example
         -------
-          # example for add scalar
-          # import summarywriter
+
         >>> from torch.utils.tensorboard import SummaryWriter
-          # create summary writer with auto generated folder name
+
         >>> writer = SummaryWriter()
         >>> x = range(100)
         >>> for i in x:
                 writer.add_scalar('y=2x', i * 2, i)
         >>> writer.close()
 
-           #example for add histogram
-           #import summarywriter
         >>> from torch.utils.tensorboard import SummaryWriter
-          # Create summary writer with auto generated folder name
         >>> writer = SummaryWriter()
         >>> r = 5
         >>> for i in range(100):
@@ -121,7 +108,6 @@ try:
                                     'xcosx':i*np.cos(i/r),
                                     'tanx': np.tan(i/r)}, i)
         >>> writer.close()
-
 
         """
         def __init__(self, log_dir, comment="", max_queue=10):
