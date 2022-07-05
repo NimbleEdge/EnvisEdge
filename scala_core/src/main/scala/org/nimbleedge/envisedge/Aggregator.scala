@@ -157,7 +157,7 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                             "model" -> Message(
                                 __type__ = "fedrec.data_models.state_tensors_model.StateTensors",
                                 __data__ = Map(
-                                    "storage" -> s"clients/${aggId.getOrchestrator().name()}/${aggId.name()}/${cycleId}_${c}_${roundIndex-1}.pt"
+                                    "storage" -> s"clients/${aggId.getOrchestrator().name()}/${aggId.name()}/${cycleId}_${c}_${roundIndex}.pt"
                                 )
                             )
                         ),
