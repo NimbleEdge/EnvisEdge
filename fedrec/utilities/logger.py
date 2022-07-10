@@ -14,7 +14,7 @@ class BaseLogger(ABC):
 
     Visualization activities are being performed by Tensorboard by
     importing SummaryWriter.Tensorboard is a suite of web applications
-    for inspecting and understanding model runs and graphs. It supports
+    for inspecting and understanding model metrics and graphs. It supports
     totally five visualizations i.e scalars, images, graphs, audio and
     histograms.
 
