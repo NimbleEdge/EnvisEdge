@@ -69,7 +69,7 @@ The plan is executed using the training and validation dataset and hyperparamete
 
 List of returned Tensors
 ~~~~~~~~~~~~~~~~~~~~~~~~
-From the above example, the list of tensors is returned in the following order - loss, accuracy, and updated model parameters that are sent back to the cloud aggregating service for aggregation.
+From the above example, the list of tensors are returned in the following order - loss, accuracy, and updated model parameters that are sent back to the cloud aggregating service for aggregation.
 
 .. code:: Swift
 
@@ -98,7 +98,10 @@ From the above example, the list of tensors is returned in the following order -
 
 Error Handlers
 ~~~~~~~~~~~~~~
-Here are two error handlers that get implemented on specific conditions: 1. onError( ) This is the error handler for any job execution errors like failure to connect a cloud aggregating service. 2. onRejected( ) If you are being rejected from participating in the training cycle this error handler comes into play where you can retry again after the suggested timeout.
+Here are two error handlers that get implemented on specific conditions:
+1. onError( ) This is the error handler for any job execution errors like failure to connect a cloud aggregating service.
+2. onRejected( ) If you are being rejected from participating in the training cycle this error handler comes into play where 
+   you can retry again after the suggested timeout.
 
 .. code:: Swift
 

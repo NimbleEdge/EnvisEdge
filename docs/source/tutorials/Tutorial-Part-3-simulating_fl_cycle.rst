@@ -6,35 +6,29 @@ FL Simulation
 
 For the simulator, both the aggregator and trainer are defined as a
 worker. Each worker has an assigned role that determines the kind of
-computation it will perform.
+computation it will perform.It is the role of the orchestrator to define 
+these roles for the workers and initialize them.
 
-It is the role of the orchestrator to define these roles for the workers and
-initialize them.
-
-For the purposes of the simulator, the `train_fl <../train_fl.py>`__ file
+For the purposes of the simulator, the `train_fl <https://github.com/NimbleEdge/EnvisEdge/blob/main/train.py>`__ file
 behaves as the orchestrator and initiates all the workers.
 
 Federated Worker
 ----------------
 
-The federated worker class implements all the networking and FL logic.
-
-The developer needs to implement three basic methods of the federated
-worker- aggregation logic, client selection, and role description.
+The federated worker class implements all the networking and FL logic.The developer 
+needs to implement three basic methods of the federated worker- aggregation logic, 
+client selection, and role description.
 
 Worker Roles
 ~~~~~~~~~~~~
 
-Roles define the kind of computation each worker does.
-
-In this tutorial, we are using the `FedAvg McMahan et
-al <https://arxiv.org/abs/1602.05629>`__ strategy with random client
+Roles define the kind of computation each worker does and in this tutorial, we are using the
+`FedAvg McMahan etal <https://arxiv.org/abs/1602.05629>`__ strategy with random client
 selection. There are only two roles here namely, the aggregator and
 trainer.
 
--  **Aggregator** requests models from the trainers before aggregating
-   and updating its model.
--  **Trainer** responds to aggregators’ requests after updating its own
+-  **Aggregator** requests models from the trainers before aggregating,
+   updating its model **Trainer** responds to aggregators’ requests after updating its own
    model by local training.
 
 We define these roles in the ``run()`` method of Federated Worker.
@@ -101,10 +95,9 @@ This is one of the most crucial stages of the FL cycle. It is necessary to
 build a robust client selection strategy. It can save you from
 malicious poisoning attacks, biased models, and slow training cycles.
 
-NimbleEdge brings along specific algorithms that augment the client
-selection strategy to deal with the above problems.
-
-For now, we just take random selection…
+To address the above problems, NimbleEdge brings specific algorithms that
+enhance the client selection strategy.
+For now, we will just take random selection…
 
 .. code:: python
 
@@ -123,5 +116,5 @@ For now, we just take random selection…
 
 **Hurray!**
 
-And it’s done. Simply run the `train_fl.py <../train_fl.py>`__ and see
+And it’s done. Simply run the `train_fl.py <../../../train_fl.py>`__ and see
 the simulator in action.

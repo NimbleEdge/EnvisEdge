@@ -4,8 +4,8 @@ Deployment
 FL Deployment
 -------------
 
-With the simulations done and benchmark results satisfactory, you may
-want to take things into production.
+Once the simulations and benchmark results are satisfactory, you may want
+to begin production.
 
 The best thing about using the NimbleEdge simulator is it already checks for
 compatibility and serialization capabilities of the models.
@@ -15,25 +15,24 @@ Let’s see the components needed to deploy the FL cycle.
 .. figure:: ../_static/architecture.jpeg
    :alt: Architecture Diagram
 
-   Architecture Diagram
+                                 Architecture Diagram
 
 Orchestrator
 ~~~~~~~~~~~~
 
 You can control the orchestrator via CLI or by python commands.
 NimbleEdge Orchestrator is built over
-`PySyft <https://github.com/OpenMined/PySyft/tree/dev/packages/grid>`__
+`PySyft <https://github.com/OpenMined/PySyft/tree/dev/packages/grid>`__ and the 
+service itself can be run as a docker container on the main server.
 
-The service itself can be run as a docker container on the main server.
-
-create a virtual environment to install the necessary dependencies. The
+In order to create a virtual environment you need to install the necessary dependencies. The
 dependencies could simply be installed via
 
 .. code:: bash
 
    poetry install
 
-Now the start the orchestrator in a docker container with
+Now you can start the orchestrator in a docker container with the below command
 
 .. code:: bash
 
@@ -87,9 +86,8 @@ Setting FL hyper parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We define all the hyper parameters for the orchestrator in the server
-config, and for the workers in the client_config.
-
-These parameters themselves are serialized and sent to the workers
+config, and for the workers in the client_config.These parameters themselves are
+serialized and sent to the workers
 whenever they begin the FL cycle.
 
 .. code:: python
@@ -133,9 +131,8 @@ simply connect to the instance via ``connect()`` call
 Hosting the models
 ~~~~~~~~~~~~~~~~~~
 
-Finally, we host all the plans and global model weights and make them
-available to be downloaded by the workers.
-
+In addition, we host all of the plans and weights and make them readily available
+for workers to download.
 .. code:: python
 
    response = orchestrator.host_federated_training(
@@ -153,6 +150,5 @@ available to be downloaded by the workers.
 
 **On-device Training**
 
-The last step is to connect the user devices with the orchestrator to
-begin the Training process. Hop into the `next
-section <./Tutorial-Part-5-local_training.md>`__ for details.
+The last step will be to connect the user devices to the orchestrator, so that the
+Training process can begin.Hop into the `next section <./Tutorial-Part-5-local_training.md>`__ for details.

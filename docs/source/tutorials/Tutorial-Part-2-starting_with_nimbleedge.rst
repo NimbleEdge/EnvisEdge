@@ -7,15 +7,10 @@ The Simulation
 Before we put a code into production we need to evaluate the models and
 run benchmarks to get the expected accuracy gains.
 
-There is a `simulator <https://github.com/NimbleEdge/EnvisEdge>`__
-created by NimbleEdge exactly for this purpose.
-
--  The FL simulator is designed in a way to make the architecture as
-   close to real-world deployments as possible.
--  You can simulate both normal ML training and FL training with the
-   simulator.
--  The design is scalable to hit 10000+ workers running in the
-   simulation.
+But, dont worry NimbleEdge has created a `simulator <https://github.com/NimbleEdge/EnvisEdge>`__
+for this purpose.This FL simulator is designed to make the architecture as close to 
+real-world deployment as possible. You can simulate both normal ML training and FL training 
+with the simulator and the design is scalable to hit 10000+ workers running in the simulation.
 
 Let’s take an example of FB AI’s
 `DLRM <https://arxiv.org/abs/1906.00091>`__. This is one of the standard
@@ -26,10 +21,9 @@ Data <https://www.kaggle.com/c/criteo-display-ad-challenge>`__.
 Model Definition
 ----------------
 
-All the model descriptions go into
+The description of each model is located in 
 `fedrec/modules <https://github.com/NimbleEdge/EnvisEdge/tree/main/fedrec/modules>`__.
-You can add your folder of models as well and hook the registry with
-it.
+As well, you can add your own collection of models and hook the registry to it.
 
 We will create a file dlrm.py and write its implementation in standard
 PyTorch code.
@@ -56,10 +50,8 @@ Hooking the registry
 
 The simulator makes it easy to experiment with different model
 architectures, hyper parameters, optimizers, and other components of an
-ML pipeline.
-
-We define a `registry class <../fedrec/utilities/registry.py>`__ that
-records all the model definitions, optimizers and attaches a
+ML pipeline.We define a `registry class <../fedrec/utilities/registry.py>`__ 
+that records all the model definitions, optimizers and attaches a
 configuration file to the top.
 
 For all your experiments simply define the config file and you are done.
@@ -97,10 +89,8 @@ Training your model in the normal non-FL setting requires you to write
 the implementations for ``train`` and ``test`` methods. You can also
 implement the ``validate`` method if you want and all these methods will
 automatically be serialized into FL plans when we move into FL
-deployment.
-
-The `BaseTrainer <../fedrec/trainers/base_trainer.py>`__ abstracts away
-the basic methods needed to be implemented.
+deployment.The `BaseTrainer <../fedrec/trainers/base_trainer.py>`__ abstracts 
+away the basic methods needed to be implemented.
 
 Simply subclass the ``BaseTrainer`` and create your trainer object.
 We will call this DLRMTrainer
@@ -134,7 +124,6 @@ and return them to the Trainer class.
            }
 
 Define the train and test methods of ``BaseTrainer`` in ``DLRMTrainer``.
-
 With this, you are ready to train your model. Till now we have been doing
 what you usually do to train your ML models. We have been writing
 standard PyTorch code and developing our ML pipeline.
@@ -142,7 +131,7 @@ standard PyTorch code and developing our ML pipeline.
 Federated Training
 ------------------
 
-Now we will simulate DLRM in a federated setting. Create data split to
+Now we will simulate DLRM in a federated setting and create data split to
 mimic your users. We use Drichlet sampling for creating non-IID datasets
 for the model.
 

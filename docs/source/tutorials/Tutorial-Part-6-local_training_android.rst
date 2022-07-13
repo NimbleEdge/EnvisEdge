@@ -43,14 +43,14 @@ fail at authentication.
 Training hooks
 ~~~~~~~~~~~~~~
 
-There are three hooks that need to be implemented on the app side: 1.
-``onReady()`` This is called when the worker has downloaded all the
+There are three hooks that need to be implemented on the app side:
+1. ``onReady()`` This is called when the worker has downloaded all the
 necessary parameters and hyper-params to begin the training process. You
-should implement all the training logic here. 2. ``onRejected()`` If the
-device could pass the selection criteria of the aggregator it responds
+should implement all the training logic here.
+2. ``onRejected()`` If the device could pass the selection criteria of the aggregator it responds
 with the time to try again. The worker should wait for the given time
-period before requesting participation again. 3. ``onError()`` In
-case any error happens during the execution, this callback is executed.
+period before requesting participation again. 
+3. ``onError()`` In case any error happens during the execution, this callback is executed.
 As a fallback, we can implement cloud connectivity here or simply log the
 message and send it to the server.
 

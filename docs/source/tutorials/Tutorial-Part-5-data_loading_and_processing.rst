@@ -1,7 +1,7 @@
 Data Processors and Data Loaders
 ================================
 
-This tutorial is consists of four parts:
+This tutorial consists of four parts:
 
 1. Data Interfaces
 2. Data Loaders
@@ -11,12 +11,12 @@ This tutorial is consists of four parts:
 Data Interfaces
 ---------------
 
-This section describes how to implement a getItem and length for the dataset interface. First, you have to understand what it is, and how to implement it using get item and length.
+This section describes how to implement a get Item and length for the dataset interface. First, you have to understand what it is, and how to implement it using get item and length.
 
 The dataset interface is to provide a mechanism to describe the properties of datasets. It is composed of a collection of raw data points and describes the data points. It is designed in such a way as to allow new features to be added without disrupting current applications that use the dataset interface. It gives you access to a collection of data points that you use the getItem to pick a specific data point to work with.
   
-  * length: It describes the length of the dataset.
-  * getItem(): It fetches a data sample for a given key. 
+  * **length** : It describes the length of the dataset.
+  * **getItem()** : It fetches a data sample for a given key. 
 
 .. code:: kotlin
 
@@ -42,7 +42,7 @@ DataLoader
 This is the base class that defines the implementation of all DataLoaders.
 It’s an integral part of handling the entire Extract Transform Load (ETL) pipeline process of a dataset. It is an Iteratable object(dataset)
 
-    * reset(): this resets its content every time it is called.
+    * **reset()** : this resets its content every time it is called.
 
 .. code:: kotlin
 
@@ -59,9 +59,9 @@ Dataloader-iterator
 
 It’s used to load that dataset in samples and chunks.
 
-    * dataLoader: this input is used to define the loading and sampling process of a particular dataset
-    * next(): this uses a specified index range to fetch and load data in chunks
-    * hasNext(): this checks if the current index exists in the range of the dataset and returns true if there the current index is less than the length of the dataset otherwise false.
+    * **dataLoader** : this input is used to define the loading and sampling process of a particular dataset
+    * **next()** : this uses a specified index range to fetch and load data in chunks
+    * **hasNext()** : this checks if the current index exists in the range of the dataset and returns true if there the current index is less than the length of the dataset otherwise false.
 
 
 
@@ -105,8 +105,8 @@ Sampler
 
 It’s the base for all Samplers. Whenever we create a sampler or a subclass of the sampler, we need to provide two methods named Indices and length
 
-    * Indices: it provides a way to iterate over indices of dataset elements.
-    * Length: It returns the length of the returned iterators.
+    * **Indices** : it provides a way to iterate over indices of dataset elements.
+    * **Length** : It returns the length of the returned iterators.
 
 .. code:: kotlin
 
@@ -120,11 +120,11 @@ It’s the base for all Samplers. Whenever we create a sampler or a subclass of 
 Batch Samplers
 ~~~~~~~~~~~~~~~~
 
-As the name suggests Batch, It processes the samplers in a batch or group. It wraps another sampler to yield a mini-batch of indices. It has three properties:
+As the name suggests Batch, It processes the samplers in a batch or group and it wraps another sampler to yield a mini-batch of indices. It has three properties:
 
-    * indexer- It’s a base sampler that can be any iterable object.
-    * batchSize - The Size of mini-batch
-    * dropLast - If its value is True and the size would be less than batchSize then the sampler will drop the last batch.
+    * **indexer** - It’s a base sampler that can be any iterable object.
+    * **batchSize** - The Size of mini-batch
+    * **dropLast** - If its value is True and the size would be less than batchSize then the sampler will drop the last batch.
 
 .. code:: kotlin
 
@@ -168,11 +168,11 @@ As the name suggests Batch, It processes the samplers in a batch or group. It wr
 Random Samplers
 ~~~~~~~~~~~~~~~~
 
-As the name suggests, It samples the elements randomly. It has two main components. A user can opt for with or without the replacements.
+Random Samplers samples the elements randomly. It consists of two main components in which a user can opt for with or without the replacements.
 
-    * Without replacements: It samples from a shuffled dataset.
-    * With replacements: It gives the user a bit more control on what portion you need to select. The user can specify the num_samples to draw from the dataset.
-    * dataset: It’s a property of the class.
+    * **Without replacements** : It samples from a shuffled dataset.
+    * **With replacements** : It gives the user a bit more control on what portion you need to select. The user can specify the num_samples to draw from the dataset.
+    * **dataset()** : It’s a property of the class.
 
 .. code:: kotlin
 
@@ -188,9 +188,9 @@ As the name suggests, It samples the elements randomly. It has two main componen
 Sequential Samplers:
 ~~~~~~~~~~~~~~~~~~~~
 
-As the name suggests, it samples the elements sequentially and always in the same order. It also has a property named dataset:
+In sequential samplers, the elements are sampled sequentially and always in the same order. It also has a property named dataset:
 
-    * dataset: It’s the source from where we can sample the elements.
+    * **dataset** : It’s the source from where we can sample the elements.
 
 .. code:: kotlin
 
@@ -278,7 +278,7 @@ This method takes nothing and returns a Pair Object which is a pair of two Lists
 
 Step 5: Defining ``ReadSample()`` and ``ReadAllData()`` methods
 
-First, we will create the ReadSample method which just takes two arraylists of type ``List<Float>as parameters (trainInput, labels)`` and then simply fills the two arraylists taken as parameters by using a sample variable which is defined using ``readLine()``. As this method does this job once we need a method to call this method n number of times so we will create another method called ``ReadAllData()``.
+First, we will create the ReadSample method which just takes two arraylists of type ``List<Float>as parameters (trainInput, labels)`` and then simply fills the two arraylists taken as parameters by using a sample variable which is defined using ``readLine()``. As this method does this job once we need another method to call this method n number of times so we will create another method called ``ReadAllData()``.
 This method simply just calls  ``ReadSample()`` the times of Dataset length defined as constant at starting of the program.
 
 .. code:: kotlin 

@@ -21,7 +21,7 @@ quote them to define Federated Learning.
 Types of Federated learning
 ---------------------------
 
-Federated Learning is broadly classified as 
+Federated Learning can be categorised into two types:
 
 * **Model Centric:**
   
@@ -36,10 +36,9 @@ Federated Learning is broadly classified as
     
     When Federated Learning takes place through suitable federated techniques
     from data across a wide range of devices.
-
-    Typically, Cross-Device FL uses Horizontal Federated Learning or Homogeneous Federated Learning and it
-    can be described as a Federated Learning method which uses a dataset which shares the same features but
-    are different in samples.
+    Typically, Cross-Device FL uses Horizontal Federated Learning or Homogeneous Federated 
+    Learning and it can be described as a Federated Learning method which uses a dataset 
+    which shares the same features but are different in samples.
 
     * So when data sets share the same features but are different in samples.
     * This is also called as Homogeneous Federated Learning.
@@ -47,23 +46,18 @@ Federated Learning is broadly classified as
   
   * **Cross-Silo Federated Learning**
 
-    Similar to Cross-Device FL, this FL aims to create a more centrally sound model.
+    In a similar way to cross-device federated learning, this Federated Learning
+    method is intended to create a more centrally-driven model. Instead of a 
+    small concentration of data, here humongous amounts are stored in clusters 
+    like Hadoop/Spark, and datasets are partitioned vertically. Where vertical FL 
+    refers to data sets that have similar samples but different feature sets.
 
-    But, instead of a small concentration of data, here humongous amounts of data are
-    stored in clusters like Hadoop/Spark.
-
-    Here data sets are partitioned Vertically. Let's take a look at Vertical-FL.
-
-    * When the data set has similar samples, but has different feature sets, it is known
-      as Vertical-FL.
-   
 * **Data-Centric FL:**
 
-  * Data-Centric Federated Learning is where private users can give organisations
-    access to build models on their data without sharing it.
-
-  * This concept can be further expanded to a Cloud of Cross-Silo FL, where similar
-    strategy could be implemented.
+  The concept of Data-Centric Federated Learning allows private users to enable 
+  organizations to build models based on their own data without having to share
+  it.This concept can be further extended to a Cloud of Cross-Silo FL, where a 
+  similar strategy could be implemented.
 
 Clients
 ~~~~~~~
@@ -122,7 +116,6 @@ Once all the participants have finished the training process, they
 submit their model updates to the aggregator, which begins the cycle. The
 aggregator waits until a fraction of accepted devices report
 back with their models.
-
 The workers often only send the compressed model weights to reduce the
 data consumption
 
@@ -167,10 +160,10 @@ distributed on the devices to find the performance.
 Deployment
 ~~~~~~~~~~
 
-Manual quality assurance, live A/B testing and staged rollout. Usually,
-the engineer determines this process. It is precisely similar to how a
+Usually, the engineer determines the processes such as manual quality assurance,
+live A/B testing, and staged rollout. It is precisely similar to how a 
 typically trained model will be deployed.
 
 We will first build a `normal ML
-pipeline <./Tutorial-Part-2-starting_with_nimbleedge.rst>`__ and then
-convert it into Federated Setting.
+pipeline <https://docs.nimbleedge.ai/tutorials/tutorial-part-2-starting_with_nimbleedge>`__ and 
+then convert it into Federated Setting.
