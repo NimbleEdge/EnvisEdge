@@ -9,7 +9,20 @@ from fedrec.utilities.registry import Registrable
 
 @Registrable.register_class_ref
 class EnvisTensors(Serializable):
+    """
+    The EnvisTensors class majorly focuses on naming
+    tensor states ,their paths,collecting torch object
+    with serialization and deserialization methods
+    implemented.
 
+    Parameters
+    ----------
+    storage : int
+       The address for persistent storage
+    tensor_type : str
+       the type of tensor
+
+    """
     def __init__(
             self,
             storage,

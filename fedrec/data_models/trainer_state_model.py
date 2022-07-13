@@ -14,7 +14,7 @@ class TrainerState(ActorState):
 
     Attributes
     ----------
-    wokrer_index : int
+    worker_index : int
         Unique worker identifier
     model_preproc : `Preprocessor`
         The local dataset of the worker
@@ -45,7 +45,18 @@ class TrainerState(ActorState):
 
     @classmethod
     def deserialize(cls, obj: Dict):
-        # Takes in dictionary of attributes and returns a new object.
+        """
+        Takes in a dictionary of serialized attributes and returns
+        a deserialized new object.
+
+        Attributes
+        ----------
+        obj : dict
+          contains serialized dictionary
+        cls : tuple
+          contains deserialized object
+
+        """
         state_dict = deserialize_attribute(
             obj['state_dict'])
         model_preproc = deserialize_attribute(

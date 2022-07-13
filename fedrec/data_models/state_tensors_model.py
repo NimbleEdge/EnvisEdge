@@ -7,6 +7,23 @@ from fedrec.utilities.registry import Registrable
 
 @Registrable.register_class_ref
 class StateTensors(EnvisTensors):
+    """
+    The StateTensors class majorly focuses on naming
+    tensor states and their paths, with serialization
+    and deserialization methods implemented.
+
+    Parameters
+    ----------
+    storage : int
+       The address for persistent storage
+    worker_id : int
+       the id of worker
+    round_idx : int
+       The number of local training cycles finished
+    tensor_type : str
+       the type of tensor
+
+    """
     def __init__(
             self,
             storage,

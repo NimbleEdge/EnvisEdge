@@ -5,7 +5,8 @@ from fedrec.utilities.registry import Registrable
 @Registrable.register_class_ref
 @attr.s(kw_only=True)
 class ActorState(Serializable):
-    """Construct a ActorState object to reinstatiate an actor when needed.
+    """
+    Construct a ActorState object to reinstatiate an actor when needed.
 
     Attributes
     ----------

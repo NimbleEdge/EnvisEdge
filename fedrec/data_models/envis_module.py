@@ -8,6 +8,12 @@ from fedrec.serialization.serializer_registry import (deserialize_attribute,
 
 @Registrable.register_class_ref
 class EnvisModule(Serializable):
+    """
+    Envismodule is the base module for pytorch modules.
+    All other pytorch modules when called will have
+    EnvisModule as base which is used to serialize and
+    decirialize data objects.
+    """
     def __init__(
             self,
             class_ref_name) -> None:
@@ -23,9 +29,7 @@ class EnvisModule(Serializable):
         self.original_reference = self.class_reference(*args, **kwds)
         return self
 
-    # envismodule will be the base module for pytorch modules
-    # all pytorch modules when called will have EnvisModule
-    # which we will use to serialize and decirialize.
+
     def __getattr__(self, __name: str) -> Any:
         if hasattr(self.class_reference, __name):
             return getattr(self.original_reference, __name)
