@@ -175,15 +175,16 @@ class Orchestrator(context: ActorContext[Orchestrator.Command], orcId: Orchestra
         context.log.info("Orc id:{} device registration for device:{}", orcId.name(), device)
         val aggId = getAvailableAggregator()
         val clientId = Hasher.getHash(device)
-        //update this pair to the redis
-        val dataMap = Map("name" -> device, "clientId" -> clientId, "aggId" -> aggId.name(), "orcId" -> orcId.name(), "cycleAccepted" -> 0, "modelVersion" -> "", "roundIdx" -> "", "cycleIdx" -> "")
-        RedisClientHelper.hmset(clientId, dataMap)
-        RedisClientHelper.rpush(aggId.toString(), clientId)
-        if (!RedisClientHelper.expire(clientId, ConfigManager.clientExpireTimeSeconds)) {
-          context.log.warn("Cannot set expiry for client in Redis")
+        if (RedisClientHelper.hget(clientId, "name").isEmpty) {
+          //update this pair to the redis
+          val dataMap = Map("name" -> device, "clientId" -> clientId, "aggId" -> aggId.name(), "orcId" -> orcId.name(), "cycleAccepted" -> 0, "modelVersion" -> "", "roundIdx" -> "", "cycleIdx" -> "")
+          RedisClientHelper.hmset(clientId, dataMap)
+          RedisClientHelper.rpush(aggId.toString(), clientId)
+          if (!RedisClientHelper.expire(clientId, ConfigManager.clientExpireTimeSeconds)) {
+            context.log.warn("Cannot set expiry for client in Redis")
+          }
+          aggIdToClientCount(aggId) += 1
         }
-
-        aggIdToClientCount(aggId) += 1
         this
 
       case AggregatorTerminated(actor, aggId) =>

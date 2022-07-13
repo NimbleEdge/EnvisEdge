@@ -309,8 +309,11 @@ class Aggregator(context: ActorContext[Aggregator.Command], timers: TimerSchedul
                             case "sample_clients" =>
                                 // TODO: Handle the response appropriately
                                 val res = resp.results.asInstanceOf[Map[String, List[String]]]
-                                val selectedList = res("clients")
+                                var selectedList = res("clients")
                                 parent ! Orchestrator.SamplingCheckpoint(aggId)
+                                if (ConfigManager.testBuild) {
+                                    selectedList = RedisClientHelper.getList(aggId.toString()).toList.flatten.flatten
+                                }
                                 // set cycle accepted to 1
                                 RedisClientPoolHelper.hmset(selectedList, Map("cycleAccepted" -> 1, "roundIdx" -> roundIndex, "cycleIdx" -> cycleId))
                                 timers.startSingleTimer(TimerKey, CheckRedisForModels(), ConfigManager.aggregatorS3ProbeIntervalMinutes.minutes)

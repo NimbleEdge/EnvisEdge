@@ -17,8 +17,8 @@ object ConfigManager {
     val DEFAULT_REDIS_HOST = "localhost"
     val DEFAULT_REDIS_PORT = 6379
 
-    var maxClientsInAgg : Int = 2000
-    var minClientsForAggregation: Int = 2
+    var maxClientsInAgg : Int = 20000
+    var minClientsForAggregation: Int = 10000
     var samplingPolicy : String = "default"
     var aggregationPolicy: String = "default"
 
@@ -26,9 +26,11 @@ object ConfigManager {
     var aggAggregationConsumerTopics: Vector[String] = Vector(AGGR_SAMPLING_RESPONSE_TOPIC)
     var flSysConsumerTopics: Vector[String] = Vector(FLSYS_RESPONSE_TOPIC)
 
-    var aggregatorS3ProbeIntervalMinutes = 2
-    var nextRoundStartIntervalHours = 0.02
+    var aggregatorS3ProbeIntervalMinutes = 60
+    var nextRoundStartIntervalHours = 24.00
     var clientExpireTimeSeconds = 2592000 // 30 days
+
+    var testBuild = false
 
     def getOrcId(taskId : String) : OrchestratorIdentifier = {
         return OrchestratorIdentifier(taskId)
