@@ -31,7 +31,7 @@ def md_solver(n, alpha, d0=None, B=None, round_dim=True, k=None):
     B -- (torch.FloatTensor); Scalar, parameter budget for embedding layer
     round_dim -- (bool); flag for rounding dims to nearest pow of 2
     k -- (torch.LongTensor) ; Vector of average number of queries per inference
-    '''
+    ''' #noqa: E501
     n, indices = torch.sort(n)
     k = k[indices] if k is not None else torch.ones(len(n))
     d = alpha_power_rule(n.type(torch.float) / k, alpha, d0=d0, B=B)
@@ -44,6 +44,12 @@ def md_solver(n, alpha, d0=None, B=None, round_dim=True, k=None):
 
 
 def alpha_power_rule(n, alpha, d0=None, B=None):
+    """
+    Alpha power rule first checks the value of d0 and B. If
+    they are none then it proceeds by calculating the value
+    of lambda by using an exponential operator else  a value
+    error to specify the value of d0 and B.
+    """
     if d0 is not None:
         lamb = d0 * (n[0].type(torch.float) ** alpha)
     elif B is not None:
@@ -60,11 +66,30 @@ def alpha_power_rule(n, alpha, d0=None, B=None):
 
 
 def pow_2_round(dims):
+    '''
+    Calculates the nearest 2 to the power of value
+    Arguments
+    ---------
+    dims -- (torch.LongTensor);takes dimension as input
+    '''
     return 2 ** torch.round(torch.log2(dims.type(torch.float)))
 
 
 @registry.load("embedding", "torch_bag")
 class EmbeddingBag(nn.EmbeddingBag):
+    '''
+    The embedding bag function sums the "Bags" of embeddings without
+    noticing the intermediate embeddings.EmbeddedBag is a time and
+    cost efficient process.
+
+    Due to the fact that embedding_bag isn't required to return
+    an intermediate result, it does not generate a Tensor object.
+    It proceeds straight to computing the reduction, pulling the
+    appropriate data from the weight argument in accordance with
+    the indices in the input argument. This resulted in better
+    performance since there was no need to create the embedding Tensor.
+    '''
+
     def __init__(
             self,
             num_embeddings: int,
@@ -99,6 +124,22 @@ class EmbeddingBag(nn.EmbeddingBag):
 
 @registry.load("embedding", "pr_emb")
 class PrEmbeddingBag(nn.Module):
+    '''
+    PrEmbeddingBag function assists in initializing and
+    assigning the values to the parameters such as weights,
+    num_embeddings, embedding_dim, base_dim, index for summation.
+
+    Parameters
+    ----------
+    num_embeddings : int
+        size of the dictionary of embeddings.
+    embedding_dim : int
+        the size of each embedding vector.
+    base_dim :
+        the base dimension of embedding
+    index : int
+         the index of embedding
+    '''
     def __init__(self,
                  num_embeddings,
                  embedding_dim,
@@ -315,6 +356,29 @@ class QREmbeddingBag(nn.Module):
         nn.init.uniform_(self.weight_r, np.sqrt(1 / self.num_categories))
 
     def forward(self, input, offsets=None, per_sample_weights=None):
+        '''
+        Defines the forward computation performed by EmbeddingBag
+        at every call.Should be overridden by all subclasses.
+
+        Arguments
+        ---------
+        input: Tensor
+           Tensor containing bags of indices into the embedding matrix.
+        offsets: Tensor
+           offsets determines the starting index position of
+           each bag (sequence) in input.
+        per_sample_weights: Tensor
+           a tensor of float/double weights, or None to
+           indicate all weights should be taken to be 1.If
+           specified per_sample_weights must have exactly
+           the same shape as input and is treated as having
+           the same offsets,if those are not None. Only
+           supported for mode='sum'.
+
+        Returns
+        -------
+        (int)The output tensor of shape (B, embedding_dim)
+        '''
         input_q = (input / self.num_collisions).long()
         input_r = torch.remainder(input, self.num_collisions).long()
 
@@ -339,6 +403,14 @@ class QREmbeddingBag(nn.Module):
         return embed
 
     def extra_repr(self):
+        """"
+        In this model its a necessity to set the
+        extra representation of the module to
+        print customized extra information,and one
+        should re-implement this method in their own
+        modules.Both single-line and multi-line
+        strings are acceptable.
+        """
         s = '{num_embeddings}, {embedding_dim}'
         if self.max_norm is not None:
             s += ', max_norm={max_norm}'
