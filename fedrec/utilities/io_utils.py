@@ -5,6 +5,11 @@ import torch
 
 
 def load_tensors(path):
+   """
+   Checks if the file path is true, if yes then it
+   loads the path to tensor and returns it else raises
+   a value error if the path doesn't exist.
+   """
     if os.path.isfile(path) == True:
         tensors = torch.load(path)
         return tensors
@@ -13,10 +18,18 @@ def load_tensors(path):
 
 
 def to_dict_with_sorted_values(d, key=None):
+    """
+    Takes dictionary d as parameter and returns dict
+    with v values sorted.
+    """
     return {k: sorted(v, key=key) for k, v in d.items()}
 
 
 def to_dict_with_set_values(d):
+    """
+    Returns the result in set by checking the type
+    of values being passed through the parameter d.
+    """
     result = {}
     for k, v in d.items():
         hashable_v = []
@@ -30,6 +43,24 @@ def to_dict_with_set_values(d):
 
 
 def save_tensors(tensors, path) -> str:
+    """
+    Checks if the file path is true then it returns
+    the tensor path else the path is joined to
+    "completeName" which is further returned.
+
+    Example
+    -------
+    >>> import tensorflow
+
+      # creating object and asigning location
+    >>> model=tensorflow.keras.Model()
+    >>> path='Model_folder/Files'
+
+      # saving model to specified path
+    >>> model.save_weights(path)
+
+    """
+
     if os.path.isfile(path) == True:
         torch.save(tensors, path)
         return path
@@ -54,6 +85,18 @@ def dictify(iterable):
 
 
 def dash_separated_ints(value):
+    """
+    This method takes a list of int as input
+    and returns the dash-seperated list of values.
+
+    Example
+    -------
+    >>> value = "2-3-4"
+    >>> x = value.split("-")
+    >>> print(x)
+    ['2','3','4']
+
+    """
     vals = value.split("-")
     for val in vals:
         try:
@@ -67,6 +110,18 @@ def dash_separated_ints(value):
 
 
 def dash_separated_floats(value):
+    """
+    This method takes a list of float values as input
+    and returns the dash-seperated list of values.
+
+    Example
+    -------
+    >>> value = "1.0-1.0"
+    >>> x = value.split("-")
+    >>> print(x)
+    ['1.0','1.0']
+
+    """
     vals = value.split("-")
     for val in vals:
         try:

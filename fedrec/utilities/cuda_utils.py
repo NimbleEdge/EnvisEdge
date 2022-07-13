@@ -4,6 +4,13 @@ import logging
 
 
 def map_to_cuda(args, device=None, **kwargs):
+    """
+    CUDA differentiates between the host, the computer's CPU and
+    main memory and device, the GPU. In CUDA programs, functions
+    specify both on which device they are run and on which devices
+    they are callable from.In this method the processes are being
+    mapped to cuda.
+    """
     if isinstance(args, (list, tuple)):
         return [map_to_cuda(arg, device, **kwargs) for arg in args]
     elif isinstance(args, dict):
@@ -15,12 +22,18 @@ def map_to_cuda(args, device=None, **kwargs):
 
 
 def map_to_list(model_params):
+    """
+    Cuda processes are being mapped here to lists.
+    """
     for k in model_params.keys():
         model_params[k] = model_params[k].detach().numpy().tolist()
     return model_params
 
 
 def mapping_processes_to_gpus(gpu_config, process_id, worker_number):
+    """
+    Processes are being mapped to gpus.
+    """
     if gpu_config == None:
         device = torch.device("cpu")
         logging.info(device)
