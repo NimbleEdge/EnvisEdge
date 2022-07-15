@@ -1,4 +1,4 @@
-'''
+"""
 The registry class makes it easy and quick to experiment with
 different algorithms, model architectures and hyperparameters.
 
@@ -11,7 +11,7 @@ code but only change the parameters in yaml configuration file.
 
 for detailed explaination on the use of registry, see:
 github.com/NimbleEdge/EnvisEdge/blob/main/docs/Tutorial-Part-2-starting_with_nimbleedge.md
-'''
+"""
 
 import collections
 import collections.abc
@@ -23,9 +23,13 @@ LOOKUP_DICT = collections.defaultdict(dict)
 
 
 def load(kind, name):
-    '''
-    A decorator to record callable object definitions
-    for models,trainers,workers etc.
+    """
+    This function returns a decorator function to store object
+    definitions for models, trainers, workers, etc., in the registry.
+    
+    It also validates the object definition before the definition
+    gets loaded in the registry. That, when the name of the object
+    definition is not in the registry, it raises an error.
 
     Arguments
     ----------
@@ -38,8 +42,8 @@ def load(kind, name):
 
     Returns
     ----------
-    callable:
-          Decorator function to store object definition.
+    decorator: func
+          Decorator function to store object definitions.
 
     Examples
     ----------
@@ -47,7 +51,7 @@ def load(kind, name):
     ... class DLRM_Net(nn.Module): # This class definition gets recorded
     ... def __init__(self, arg):
     ...     self.arg = arg
-    '''
+    """
 
     assert kind != "class_map", "reserved keyword for kind \"class_map\""
     registry = LOOKUP_DICT[kind]
@@ -63,20 +67,26 @@ def load(kind, name):
 
 
 def lookup(kind, name):
-    '''
-    Returns the callable object definition stored in registry.
+    """
+    This function returns an object definition by loading the
+    stored object definition from the registry and arguments
+    from a configuration file.
+    
+    It also verifies the validity of the object definition
+    before the definition gets loaded. If the object definition
+    is not valid, it raises an error.
 
     Arguments
     ----------
     kind: str
           Key to search in dictionary of registry.
     name: str
-          Sub-key to search under kind key in dictionary
-          of registry.
+          Sub-key to search under kind key in dictionary of
+          registry.
 
     Returns
     ----------
-    callable:
+    object
           Object definition stored in registry under key kind
           and sub-key name.
 
@@ -89,8 +99,7 @@ def lookup(kind, name):
     >>> model = lookup('model', 'dlrm') # loads model class from registry
     >>> model  # model is a DLRM_Net object
     __main__.DLRM_Net
-    '''
-
+    """
     # check if 'name' argument is a dictionary.
     # if yes, load the value under key 'name'.
     if isinstance(name, collections.abc.Mapping):
@@ -102,26 +111,35 @@ def lookup(kind, name):
 
 
 def construct(kind, config, unused_keys=(), **kwargs):
-    '''
-    Returns an object instance by loading definition from registry,
-    and arguments from configuration file.
+    """
+    This function constructs an object after verifying its parameters. It
+    is similar to instantiate except that it does not instantiate the
+    object. It just constructs the object.
+
+    It is used to construct the object definition from the configuration file.
 
     Arguments
     ----------
-    kind:        str
-                 Key to search in dictionary of registry.
-    config:      dict
-                 Configuration dictionary loaded from yaml file
-    unused_keys: tuple
-                 Keys for values that are not passed as arguments to
-                 insantiate the object but are still present in config.
-    **kwargs:    dict, optional
-                 Extra arguments to pass.
+    kind: str
+            Key to search in dictionary of registry.
+    config: dict
+            Dictionary of arguments to construct the object.
+    unused_keys: list
+            List of keys in the configuration file that are not
+            used in the object definition. These keys are ignored.
+    kwargs: dict
+            Keyword arguments to construct the object. These keyword
+            arguments are ignored. This is useful if the object definition
+            has some default arguments. For example, if the object definition
+            has a default argument of 'num_classes', then the object can be
+            constructed by passing the keyword argument 'num_classes' to the
+            function.
 
     Returns
     ----------
-    object:
-        Constructed object using the parameters passed in config and \**kwargs.
+    object
+            Object definition stored in registry under key kind and sub-key
+            name. If the object definition is not valid, it raises an error.
 
     Examples
     ----------
@@ -132,7 +150,7 @@ def construct(kind, config, unused_keys=(), **kwargs):
     >>> model = construct('model', 'drlm', (), arg = 5)
     >>> model.arg  # model is a DLRM_Net object with arg = 5
     5
-    '''
+    """
 
     # check if 'config' argument is a string,
     # if yes, make it a dictionary.
@@ -146,26 +164,35 @@ def construct(kind, config, unused_keys=(), **kwargs):
 
 
 def instantiate(callable, config, unused_keys=(), **kwargs):
-    '''
-    Instantiates an object after verifying the parameters.
+    """
+    This function instantiates an object after verifying its parameters.
+    It is similar to construct except that it instantiates the object. It
+    is used to instantiate the object definition from the configuration file.
 
     Arguments
     ----------
-    callable:    callable
-                 Definition of object to be instantiated.
-    config:      dict
-                 Arguments to construct the object.
-    unused_keys: tuple
-                 Keys for values that are not passed as arguments to
-                 insantiate the object but are still present in config.
-    **kwargs:    dict, optional
-                 Extra arguments to pass.
-
+    callable: object
+            Object definition stored in registry under key kind and sub-key
+            name. If the object definition is not valid, it raises an error.
+    config: dict
+            Dictionary of arguments to construct the object. It is used to
+            instantiate the object. It is also used to verify the validity
+            of the object definition.
+    unused_keys: list
+            List of keys in the configuration file that are not used in the
+            object definition. These keys are ignored. This is useful if the
+            object definition has some default arguments.
+    kwargs: dict (optional)
+            Keyword arguments to construct the object. These keyword arguments
+            are ignored. This is useful if the object definition has some
+            default arguments.
+    
     Returns
     ----------
-    object:
-        Instantiated object by the parameters passed in config and \**kwargs.
-
+    object
+            Instantiated object by the parameters passed in config and
+            \**kwargs.
+    
     Examples
     ----------
     >>> @registry.load('model', 'dlrm')
@@ -177,7 +204,7 @@ def instantiate(callable, config, unused_keys=(), **kwargs):
     >>> model = instantiate(call, config, ('name'))
     >>> model.arg  # model is a DRLM_Net object with arg = 5
     5
-    '''
+    """
 
     # merge config arguments and kwargs in a single dictionary.
     merged = {**config, **kwargs}
@@ -209,6 +236,29 @@ def instantiate(callable, config, unused_keys=(), **kwargs):
 
 
 class Registrable(object):
+    """
+    This class is used to register an object definition in the registry,
+    and check for new class objects. The object definition is stored in
+    the registry under the key 'kind' and sub-key 'name' in the dictionary.
+    
+    The object definition is a dictionary that contains the class object
+    and the arguments that are used to construct the object.
+
+    Methods
+    -----------
+    type_name()
+        Returns the type name of the object. This is used to identify the
+        object in the registry.
+    get_name()
+        Returns the name of the object. This is used to identify the object
+        in the registry.
+    register_class_ref()
+        Registers the class object in the registry.
+    lookup_class_ref()
+        Returns the class object from the registry. This is used to instantiate
+        the object.
+
+    """
 
     def __init__(self) -> None:
         pass
