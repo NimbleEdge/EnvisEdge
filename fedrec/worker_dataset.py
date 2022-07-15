@@ -2,6 +2,37 @@ from collections import defaultdict
 
 
 class WorkerDataset:
+    """
+    This class represents a dataset of workers and includes methods
+    for adding and loading federated workers.
+
+    The WorkerDataset class also allows for the retrieval
+    of workers based on their role IDs. This is useful for the
+    distributed training process.
+    ...
+
+    Attributes
+    ----------
+    workers: dict
+        Dictionary of workers. The key is the worker ID and the
+        value is the worker object.
+    workers_by_types: dict
+        Dictionary of lists of workers. The key is the role ID and
+        the value is a list of worker IDs.
+    len: int
+        Number of federated workers in the dataset.
+
+    Methods
+    -------
+    add_worker()
+        Method to create new federated workers.
+    get_worker()
+        Method to get a federated worker based on its ID.
+    get_workers_by_roles()
+        Method to get a list of federated workers based on their
+        role IDs.
+    """
+
     def __init__(self) -> None:
         self._workers = {}
         self.workers_by_types = defaultdict(list)
