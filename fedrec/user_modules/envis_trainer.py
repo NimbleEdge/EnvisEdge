@@ -14,6 +14,50 @@ from fedrec.utilities.logger import BaseLogger
 
 @attr.s
 class TrainConfig:
+    """
+    This class stores the training configuration for the model. It is used to
+    pass the configuration to the trainer. The trainer then uses the configuration
+    to train the model. The trainer also uses the configuration to save the model.
+
+    Attributes
+    ----------
+    eval_every_n: int
+        The number of epochs after which the model is evaluated on the test set.
+    report_every_n: int
+        The number of epochs after which the model is reported on the test set.
+    save_every_n: int
+        The number of epochs after which the model is saved.
+    keep_every_n: int
+        The number of epochs after which the model is kept.
+    batch_size: int
+        The batch size for the training.
+    eval_batch_size: int
+        The batch size for the evaluation.
+    num_epochs: int
+        The number of epochs for training.
+    num_batches: int
+        The number of batches for training.
+    num_eval_batches: int
+        The number of batches for evaluation.
+    eval_on_train: bool
+        Whether to evaluate the model on the training set.
+    eval_on_test: bool
+        Whether to evaluate the model on the test set.
+    eval_on_val: bool
+        Whether to evaluate the model on the validation set.
+    num_workers: int
+        The number of workers for data loading.
+    pin_memory: bool
+        Whether to use pinned memory for data loading.
+    log_gradients: bool
+        Whether to log the gradients.
+    
+    Methods
+    -------
+    check_only_one_declaration()
+        Checks if only one of the following is declared: eval_on_train, eval_on_test, eval_on_val.
+        
+    """
     eval_every_n = attr.ib(default=10000)
     report_every_n = attr.ib(default=10)
     save_every_n = attr.ib(default=2000)
@@ -41,6 +85,47 @@ class TrainConfig:
 
 
 class EnvisTrainer(EnvisBase):
+    """
+    This class is used to train the model. It is responsible for training the
+    model and evaluating the model on the test set. It also saves the model and
+    reports the model on the test set.
+
+    Methods
+    -------
+    reset_loaders()
+        Resets the data loaders. This is called before the training starts.
+    _yield_batches_from_epochs(epochs)
+        Yields batches from the given epochs in the data loader. This is used
+        to train the model.
+    get_scheduler()
+        Returns the scheduler for the optimizer. This is used to adjust the
+        learning rate.
+    saver()
+        Returns the saver for the model. This is used to save the model.
+    data_loaders()
+        Returns the data loaders for the model. This is used to load the data. It checks
+        if the data loaders are already created. If not, it creates the data loaders.
+        The data loaders are created by the model preprocessor and are stored in the
+        data_loaders dictionary.
+    eval_model()
+        Evaluates the model on the test set. This is important to check the model
+        performance. It also sets the model to eval mode so that it does not use the
+        dropout.
+    store_state()
+        Stores the state of the model. This is used to save the model. It stores the
+        model and the optimizer by calling the save_state_dict method of the model
+        and optimizer.
+    test()
+        Tests the model on the test set. This is used to check the model performance.
+        It also sets the model to eval mode so that it does not use the dropout.
+    train()
+        Trains the model. This is used to train the model. It also sets the model to
+        train mode so that it uses the dropout. And it checks if the model is already
+        trained. If not, it trains the model and evaluates the model on the test set.
+    update()
+        Updates the model. This is used to update the model. It also sets the model to
+        train mode so that it uses the dropout.
+    """
     def __init__(
             self,
             config_dict: Dict,
