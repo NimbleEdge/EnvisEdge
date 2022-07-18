@@ -8,6 +8,31 @@ from fedrec.serialization.serializer_registry import (deserialize_attribute,
 
 
 def create_serializer_hooks(class_ref):
+    """
+    This function adds hooks to the class_ref to serialize and deserialize the
+    state of the class_ref. The hooks are added to the class_ref as properties
+    of the class_ref.
+
+    Arguments
+    ---------
+    class_ref: Any
+        The class_ref to which the hooks are added. This class_ref must be
+        registed with the Registrable class.
+    
+    Methods
+    -------
+    type_name()
+        Returns the name of the class_ref.
+    append_type()
+        Generates a dictionary from an object and appends type information for
+        finding the appropriate serialiser.
+    serialize()
+        Serializes the state of the class_ref. This method is called when the
+        class_ref is serialized.
+    deserialize(obj)
+        Deserializes the state of the class_ref. This method is called when the
+        class_ref is deserialized.
+    """
     # TODO : refactor the code, make a single
     # function to call these methods.
     def type_name(cls):
@@ -51,6 +76,24 @@ def create_serializer_hooks(class_ref):
 
 
 def create_envis_state_hooks(class_ref):
+    """
+    This function creates hooks to the class_ref to serialize and deserialize the
+    state of the class_ref. The hooks are added to the class_ref as properties
+    of the class_ref.
+
+    Arguments
+    ---------
+    class_ref: Any
+        The class_ref to which the hooks are added. This class_ref must be
+        registed with the Registrable class.
+    
+    Methods
+    -------
+    envis_state()
+        Returns the state of the class_ref.
+    load_envis_state()
+        Loads the state of the class_ref.
+    """
     
     def envis_state(self: Any):
         return EnvisTensors(
@@ -67,6 +110,16 @@ def create_envis_state_hooks(class_ref):
 
 
 def add_envis_hooks(class_ref):
+    """"
+    This function adds hooks to the class_ref to serialize and deserialize the
+    state of the class_ref. The hooks are added to the class_ref as properties
+    of the class_ref.
+    
+    Arguments
+    ---------
+    class_ref: Any
+        The class_ref to which the hooks are added.
+    """
     setattr(class_ref,"storage", None)
     Registrable.register_class_ref(
         class_ref, Registrable.get_name(class_ref))
