@@ -6,6 +6,42 @@ from fedrec.utilities.registry import Registrable
 
 @Registrable.register_class_ref
 class EnvisPreProcessor(Serializable):
+    """
+    This class preprocesses the data and stores it in the storage. It also
+    loads the data and the data description from the storage.
+
+    The data is stored in the storage as a dictionary, where the keys are
+    the splits and the values are the data.
+
+    Arguments
+    ---------
+    dataset_config: dict
+        The dataset configuration.
+    client_id: str
+        The client id. This is used to store the data in the storage.
+    
+    Methods
+    -------
+    preprocess_data: None
+        Preprocesses the data. This method should be called before the data is
+        loaded.
+    load: None
+        Loads the data from the storage.
+    load_data_description: None
+        Loads the data description from the storage.
+    datasets: dict
+        Returns the datasets.
+    dataset: torch.utils.data.Dataset
+        Returns the dataset for the given split. The split can be either
+        'train', 'validation' or 'test'.
+    data_loader: torch.utils.data.DataLoader
+        Returns the data loader for the given dataset. The data loader can be
+        configured using the kwargs.
+    serialize: dict
+        Returns the serialized data.
+    deserialize: None
+        Deserializes the data.
+    """
     def __init__(
             self,
             dataset_config,
