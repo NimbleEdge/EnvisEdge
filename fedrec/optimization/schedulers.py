@@ -6,6 +6,37 @@ from torch.optim.lr_scheduler import _LRScheduler
 
 @registry.load('lr_scheduler', 'dlrm')
 class LRPolicyScheduler(_LRScheduler):
+    """
+    This class is used to adjust the learning rate of the optimizer during
+    training. It implements the LRPolicy, which is a learning rate decay
+    policy as described in the paper "`Demystifying Learning Rate Policies
+    for High Accuracy Training of Deep Neural Networks
+    <https://arxiv.org/pdf/1908.06477.pdf>`_".
+    
+    The LRPolicy is designed to decrease the learning rate after a fixed
+    number of epochs, and increase it after a fixed number of epochs. The
+    LRScheduler is a wrapper around the Pytorch LRScheduler class, and is
+    used to adjust the learning rate of the optimizer.
+
+    Arguments:
+        optimizer():
+            Optimizer instance. This is the optimizer that will be used to
+            update the model.
+        num_warmup_steps():
+            Number of warmup steps. The learning rate will be increased after
+            this number of steps.
+        decay_start_step():
+            Step at which the learning rate decay starts. The learning rate
+            will be decreased after this number of steps.
+        num_decay_steps():
+            Number of steps after which the learning rate will be decreased.
+        
+    Method:
+        get_lr():
+            Returns the learning rate for the current step. This method is
+            called by the optimizer to get the learning rate for the current
+            step.
+    """
     def __init__(self,
                  optimizer,
                  num_warmup_steps,
