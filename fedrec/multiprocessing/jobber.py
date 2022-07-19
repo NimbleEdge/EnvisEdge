@@ -15,15 +15,55 @@ from fedrec.utilities import registry
 
 class Jobber:
     """
-    Jobber class handles job requests based on job types
+    Jobber class executes the pipeline and
+    publishes the results. It handles job requests based on the job type
+    and can also be extended to handle other job types.
+    
+    The job type and the job arguments are defined in the job request.
+    The job request is a dictionary that contains the job type and the
+    job arguments.
+
+    Arguments
+    ----------
+    worker: BaseActor
+        The worker object that is used to execute the job request. The worker
+        is an object that is defined in the worker module.
+    logger: Logger
+        The logger object that is used to log the job request and the job
+        response.
+    com_manager_config: Dict (optional) default=None
+        The configuration dictionary that is used to create the communication
+        manager.
+    
     Attributes
     ----------
-    worker : BaseActor
-        Trainer/Aggregator executing on the actor
-    logger : logger
-        Logger Object
-    com_manager_config : dict
-        Configuration of communication manager stored as dictionary
+    comm_manager: object
+        Communication manager object that handles the communication
+        between the jobber and the workers.
+    comm_manager_config: Dict
+        The configuration dictionary that is used to create the communication
+        manager.
+    logger: object of type Logger
+        Logger object that handles the logging of the jobber. It is
+        used to log the jobber's activity.
+    worker: object of type BaseActor
+        Worker object that handles the execution of the job request.
+        It is used to execute the job request.
+    
+    Methods
+    -------
+    run()
+        This method runs the jobs, and after this method is called, the
+        Communication Manager listens to the queue for messages, executes
+        the job request and publishes the results in that order.
+    execute()
+        This method takes message object and stores the job request to publish.
+    publish()
+        Publishes the result on kafka after executing the job request
+    stop()
+        This method is called after the end of a job request to perform cleanup
+        and logging. It is called by the atexit function.
+    
     """
 
     def __init__(self, worker, logger, com_manager_config: Dict) -> None:
