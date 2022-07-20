@@ -4,10 +4,10 @@ Customization
 Training Configuration
 ----------------------
 
-There are two ways to adjust training hyper-parameters: - \**Set values
-in config/*.yml\ **persistent settings which are necessary for
-reproducibility eg randomization seed -**\ Pass them as CLI argument*\*
-Good for non-persistent and dynamic settings like GPU device
+There are two ways to adjust training hyper-parameters:
+- **Set values in config/*.yml** - persistent settings which are necessary for reproducibility eg. randomization seed.
+- **Pass them as CLI argument** - Good for non-persistent and dynamic settings like GPU device.
+
 
 *In case of conflict, the CLI argument supersedes the config file parameter.*
 For further reference, check out `training config
@@ -25,9 +25,9 @@ by simply creating a key-value pair in the config file.
 For example DLRM requires ``arch_feature_emb_size``, ``arch_mlp_bot``,
 etc
 
-.. code:: 
+.. code::
 
-   model: 
+   model:
      name : 'dlrm'
      arch_sparse_feature_size : 16
      arch_mlp_bot : [13, 512, 256, 64]
@@ -50,7 +50,7 @@ into the registry.
    @registry.load('model','<model_name>')
    class My_Model(torch.nn.Module):
        def __init__(num):
-           ... 
+           ...
 
 You can define your own modules and add them in the
 `fedrec/modules <fedrec/modules>`__. Finally set the ``name`` flag of
@@ -58,5 +58,5 @@ You can define your own modules and add them in the
 
 .. code::
 
-   model : 
+   model :
      name : "<model name>"

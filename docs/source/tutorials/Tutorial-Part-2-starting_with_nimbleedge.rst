@@ -7,14 +7,14 @@ The Simulation
 Before we put a code into production we need to evaluate the models and
 run benchmarks to get the expected accuracy gains.
 
-There is a `simulator <https://github.com/NimbleEdge/EnvisEdge>`__
+But dont worry there is a `simulator <https://github.com/NimbleEdge/EnvisEdge>`__
 created by NimbleEdge exactly for this purpose.
 
--  The FL simulator is designed in a way to make the architecture as
++ The FL simulator is designed in a way to make the architecture as
    close to real-world deployments as possible.
--  You can simulate both normal ML training and FL training with the
++  You can simulate both normal ML training and FL training with the
    simulator.
--  The design is scalable to hit 10000+ workers running in the
++  The design is scalable to hit 10000+ workers running in the
    simulation.
 
 Let’s take an example of FB AI’s
@@ -40,13 +40,13 @@ PyTorch code.
 
 
    class DLRM_Net(nn.Module):
-       
+
        def __init__(self, arg1, arg2, arg3):
            # Your model description comes here.
-       
+
        def forward(inputs):
            # process inputs
-           return output 
+           return output
 
 To see the real implementation of DLRM, please check out the `dlrm
 implementation in the repository <../fedrec/modules/dlrm.py>`__
@@ -63,7 +63,6 @@ records all the model definitions, optimizers and attaches a
 configuration file to the top.
 
 For all your experiments simply define the config file and you are done.
-
 In our DLRM model description, we record it in the registry by
 annotating it with ``@registry.load(<Class Type>, <Name>)``
 
@@ -74,13 +73,13 @@ annotating it with ``@registry.load(<Class Type>, <Name>)``
 
    @registry.load('model','dlrm')
    class DLRM_Net(nn.Module):
-       
+
        def __init__(self, arg1, arg2, arg3):
            # Your model description comes here.
-       
+
        def forward(inputs):
            # process inputs
-           return output 
+           return output
 
 Now create a `config.yml <../configs/dlrm.yml>`__ file to pass the
 arguments and hyper parameters.
@@ -88,7 +87,7 @@ arguments and hyper parameters.
 .. code:: yaml
 
    model: # The <Class Type> annotated in registry
-       name : 'dlrm' # The unique identifier key 
+       name : 'dlrm' # The unique identifier key
 
 Standard Training
 -----------------
@@ -114,7 +113,7 @@ We will call this DLRMTrainer
                self,
                config_dict: Dict,
                train_config: DLRMTrainConfig,
-               logger: BaseLogger, 
+               logger: BaseLogger,
                model_preproc: PreProcessor,) -> None:
 
            self.train_config = train_config
@@ -161,16 +160,16 @@ method.
 
        async def run(self):
            '''
-               `Run` function updates the local model. 
+               `Run` function updates the local model.
                Implement this method to determine how the roles interact with each other to determine the final updated model.
-               For example, a worker which has both the `aggregator` and `trainer` roles might first train locally and then run discounted `aggregate()` to get the final update model 
+               For example, a worker which has both the `aggregator` and `trainer` roles might first train locally and then run discounted `aggregate()` to get the final update model
 
 
                In the following example,
                1. Aggregator requests models from the trainers before aggregating and updating its model.
                2. Trainer responds to aggregators' requests after updating its own model by local training.
 
-               Since standard FL requires force updates from the central entity before each cycle, trainers always start with the global model/aggregator's model 
+               Since standard FL requires force updates from the central entity before each cycle, trainers always start with the global model/aggregator's model
 
            '''
            assert role in self.roles, InvalidStateError("unknown role for worker")

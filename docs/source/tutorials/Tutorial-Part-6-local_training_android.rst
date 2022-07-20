@@ -10,7 +10,7 @@ device.
 We will import the Device side SDK in our application to take care of
 managing the FL cycle and interacting with the orchestrator for us.
 
-Create an android project and add the gradle dependency.
+Then we will create an android project and add the gradle dependency.
 
 In your viewmodel for the activity implement the listeners to the local
 on-device worker.
@@ -43,13 +43,12 @@ fail at authentication.
 Training hooks
 ~~~~~~~~~~~~~~
 
-There are three hooks that need to be implemented on the app side: 1.
-``onReady()`` This is called when the worker has downloaded all the
-necessary parameters and hyper-params to begin the training process. You
-should implement all the training logic here. 2. ``onRejected()`` If the
-device could pass the selection criteria of the aggregator it responds
-with the time to try again. The worker should wait for the given time
-period before requesting participation again. 3. ``onError()`` In
+There are three hooks that need to be implemented on the app side:
+1. **``onReady()``** - This is called when the worker has downloaded
+all the necessary parameters and hyper-params to begin the training
+process. You should implement all the training logic here.
+1. **``onRejected()``** - If the device could pass the selection the criteria aggregator it responds with the time to try again. The worker should wait for the given time period before requesting participation again.
+3. **``onError()``** - In
 case any error happens during the execution, this callback is executed.
 As a fallback, we can implement cloud connectivity here or simply log the
 message and send it to the server.

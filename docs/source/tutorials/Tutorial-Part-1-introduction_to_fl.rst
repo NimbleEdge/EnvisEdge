@@ -21,19 +21,21 @@ quote them to define Federated Learning.
 Types of Federated learning
 ---------------------------
 
-Federated Learning is broadly classified as 
-
 * **Model Centric:**
-  
+
   When the distributed data is used to improve a central model with
-  a goal of delivering better centrally administered models, it is known
-  as Model-Centric Federated Learning.
+  a goal of delivering better centrally administered models, it is
+  known as Model-Centric Federated Learning.In model centric approach
+  the development of experimental research is performed in order to
+  improve the ML model performance.This process involves selecting
+  the best model architecture and training the process from a wide
+  range of possibilities.
 
 
   Model Centric Federated Learning is further classifid into:
-  
+
   * **Cross-Device Federated Learning**
-    
+
     When Federated Learning takes place through suitable federated techniques
     from data across a wide range of devices.
 
@@ -44,19 +46,19 @@ Federated Learning is broadly classified as
     * So when data sets share the same features but are different in samples.
     * This is also called as Homogeneous Federated Learning.
     * Supervised Learning uses Horizontal datasets.
-  
+
   * **Cross-Silo Federated Learning**
 
-    Similar to Cross-Device FL, this FL aims to create a more centrally sound model.
-
-    But, instead of a small concentration of data, here humongous amounts of data are
-    stored in clusters like Hadoop/Spark.
+    Similar to Cross-Device FL, this FL aims to create a more
+    centrally sound model.But, instead of a small concentration
+    of data, here humongous amounts of data are stored in clusters
+    like Hadoop/Spark.
 
     Here data sets are partitioned Vertically. Let's take a look at Vertical-FL.
 
     * When the data set has similar samples, but has different feature sets, it is known
       as Vertical-FL.
-   
+
 * **Data-Centric FL:**
 
   * Data-Centric Federated Learning is where private users can give organisations
@@ -95,43 +97,42 @@ A horizontal FL cycle consists of 5 steps:
 Client selection
 ~~~~~~~~~~~~~~~~
 
-Before training our global model, we need to select the
-participants. Every aggregator samples a subset of all of its neighbours
-and asks for model updates from it. In some cases, the neighbours first
-apply for participation, and then the aggregator decides who amongst them
-should be accepted.
+The client selection process starts with selecting the
+participants before training the global model.As part of
+its model updates, each aggregator samples a subset of all
+of its neighbours. It is not uncommon to have the neighbours
+apply for participation first, and then the aggregator decides
+who should be accepted.
 
 Model download
 ~~~~~~~~~~~~~~
 
-Download the model parameters and execution plans, if not done already.
-Once accepted into the cycle, the workers ask for the necessary information
-to begin training.
+The model parameters and execution plans need to be downloaded, if
+they have not already been done. Upon acceptance into the cycle,
+the workers ask for the necessary information to begin training.
 
 Local training
 ~~~~~~~~~~~~~~
 
-Each worker runs a specific number of iterations locally with the data
-available on the device. It updates its local model weights and
-uses them for inference.
+Based on the data available on the device, each worker runs a
+specified number of iterations locally. Model weights are updated
+locally and used for inference.
 
 Reporting
 ~~~~~~~~~
 
-Once all the participants have finished the training process, they
-submit their model updates to the aggregator, which begins the cycle. The
-aggregator waits until a fraction of accepted devices report
-back with their models.
-
-The workers often only send the compressed model weights to reduce the
-data consumption
+Once all the participants finishes the training process, they
+submit their model updates to the aggregator, which begins the
+cycle. The aggregator waits until a fraction of accepted devices
+report cycle back with their models.The workers often only send
+the compressed model weights to reduce the data consumption
 
 Aggregation
 ~~~~~~~~~~~
 
 The aggregator then averages the model weights to generate the final
-global model. It often uses a non-linear combination of these models to
-account for their history and communication errors.
+global model. It often uses a non-linear combination of these models
+to account for their history and communication errors.
 
 Federated Learning in Deployment
 --------------------------------

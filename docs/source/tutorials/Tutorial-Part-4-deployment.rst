@@ -10,7 +10,7 @@ want to take things into production.
 The best thing about using the NimbleEdge simulator is it already checks for
 compatibility and serialization capabilities of the models.
 
-Let’s see the components needed to deploy the FL cycle.
+**Let’s see the components needed to deploy the FL cycle.**
 
 .. figure:: ../_static/architecture.jpeg
    :alt: Architecture Diagram
@@ -24,9 +24,7 @@ You can control the orchestrator via CLI or by python commands.
 NimbleEdge Orchestrator is built over
 `PySyft <https://github.com/OpenMined/PySyft/tree/dev/packages/grid>`__
 
-The service itself can be run as a docker container on the main server.
-
-create a virtual environment to install the necessary dependencies. The
+The service itself can be run as a docker container on the main server.You just have to create a virtual environment to install the necessary dependencies. The
 dependencies could simply be installed via
 
 .. code:: bash
@@ -60,7 +58,7 @@ annotate them with ``@make_plan`` to generate a serialized plan object.
    ):
    '''
    We pass on dummy arguments to fix the shape of the tensors being used for training
-   ''' 
+   '''
        # forward
        logits = model(xs)
 
@@ -112,7 +110,7 @@ whenever they begin the FL cycle.
        "max_diffs": 1,  # number of diffs to collect before updating global model
        "minimum_upload_speed": 0,
        "minimum_download_speed": 0,
-       
+
    }
 
 You can also optionally add JWT authentication to protect model files
@@ -122,7 +120,7 @@ Connecting to Orchestrator
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When you have a docker image already running for orchestrator, you can
-simply connect to the instance via ``connect()`` call
+simply connect to the instance via ``connect()`` call.
 
 .. code:: python
 

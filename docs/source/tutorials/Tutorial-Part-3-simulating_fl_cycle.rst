@@ -4,11 +4,12 @@ Simulating Federated Learning Cycle
 FL Simulation
 -------------
 
-For the simulator, both the aggregator and trainer are defined as a
-worker. Each worker has an assigned role that determines the kind of
-computation it will perform.
+Trainers and aggregators are both defined as workers in the simulator.
+There are multiple types of computations that each worker performs
+based on their assigned role.
 
-It is the role of the orchestrator to define these roles for the workers and
+It is the role of the orchestrator to define these roles for the workers
+and
 initialize them.
 
 For the purposes of the simulator, the `train_fl <../train_fl.py>`__ file
@@ -18,19 +19,15 @@ Federated Worker
 ----------------
 
 The federated worker class implements all the networking and FL logic.
-
-The developer needs to implement three basic methods of the federated
-worker- aggregation logic, client selection, and role description.
+It's the responsibility of the developer needs to implement three basic methods of the federated worker- aggregation logic, client selection,
+and role description.
 
 Worker Roles
 ~~~~~~~~~~~~
 
-Roles define the kind of computation each worker does.
-
-In this tutorial, we are using the `FedAvg McMahan et
-al <https://arxiv.org/abs/1602.05629>`__ strategy with random client
-selection. There are only two roles here namely, the aggregator and
-trainer.
+Roles define the kind of computation each worker does.In this tutorial,
+we are using the `FedAvg McMahan etal <https://arxiv.org/abs/1602.05629>`__ strategy with random client selection. There are only two roles here
+namely, the aggregator and trainer.
 
 -  **Aggregator** requests models from the trainers before aggregating
    and updating its model.
@@ -65,14 +62,14 @@ We define these roles in the ``run()`` method of Federated Worker.
 Aggregation Strategy
 ~~~~~~~~~~~~~~~~~~~~
 
-The aggregation strategy defines how the model updates from trainers will be
-combined into a single model update. Every FL paper proposes different
-Fl strategies for personalization, parallelization, accuracy
-improvement, etc.
+In the aggregation strategy, the model updates from the trainers are
+combined into a single model update. There are different FL strategies
+for personalization, parallelization, and accuracy improvement in every
+FL paper.
 
-The most recent ones propose a second-order aggregation strategy to
-accommodate losses in communication. We here would be running the
-simplest one - average them all!
+Recent studies propose a second-order aggregation strategy to compensate
+for communication losses. We would run the simplest one here - average
+them all!
 
 .. code:: python
 
@@ -97,8 +94,8 @@ simplest one - average them all!
 Client Selection
 ~~~~~~~~~~~~~~~~
 
-This is one of the most crucial stages of the FL cycle. It is necessary to
-build a robust client selection strategy. It can save you from
+This is one of the most crucial stages of the FL cycle. It is necessary
+to build a robust client selection strategy. It can save you from
 malicious poisoning attacks, biased models, and slow training cycles.
 
 NimbleEdge brings along specific algorithms that augment the client

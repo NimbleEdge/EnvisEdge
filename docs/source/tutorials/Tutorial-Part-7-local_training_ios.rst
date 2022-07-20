@@ -23,9 +23,18 @@ To create a training job locally, you need to supply the model name and version.
 
 Training Hooks
 ~~~~~~~~~~~~~~
-Here is a function called onReady( ) that's called when NimbleEdge SDK has downloaded plans, and parameters from the cloud aggregating service and is ready to train the model on your data.The function onReady( )
-consists of four parameters where modelParams contains the tensor parameters of your model and update these tensors during training in order to generate the diff at the end of your training run. Plans contain all code information to execute on the devices. 
-ClientConfig contains the configuration for the training cycle and metadata for the model. ModelReport is used as a complete block and reports the diff to the cloud aggregating service.
+Here is a function called **onReady( )** that's called when NimbleEdge
+SDK has downloaded plans, and parameters from the cloud aggregating
+service and is ready to train the model on your data.
+The function **onReady( )** consists of four parameters where
+modelParams contains the tensor parameters of your model and
+update these tensors during training in order to generate the diff
+at the end of your training run. Plans contain all code information
+to execute on the devices.
+
+ClientConfig contains the configuration for the training cycle and
+metadata for the model. ModelReport is used as a complete block and
+reports the diff to the cloud aggregating service.
 
 
 .. code:: Swift
