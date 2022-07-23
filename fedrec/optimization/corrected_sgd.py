@@ -7,7 +7,15 @@ from torch import Tensor
 
 
 class _RequiredParameter(object):
-    """Singleton class representing a required parameter for an Optimizer."""
+    """
+    Singleton class representing a required parameter for an Optimizer.
+    This is used to indicate that a parameter is required for the optimizer to
+    be instantiated.
+    
+    It is also used to ensure that all required parameters are provided when
+    the optimizer is instantiated by the user. This is done by checking that
+    all required parameters are present in the kwargs passed to the constructor.
+    """
 
     def __repr__(self):
         return "<required parameter>"
@@ -25,10 +33,18 @@ def sgd(params: List[Tensor],
         lr: float,
         dampening: float,
         nesterov: bool):
-    r"""Correcting SGD for sparse operations
+    r"""This function implements the SGD algorithm. It is a Pytorch-specific
+    implementation of the SGD algorithm, and it corrects the SGD algorithm
+    for the case where the learning rate is not constant over the epoch.
 
     Functional API that performs SGD algorithm computation.
     See :class:`~torch.optim.SGD` for details.
+
+    The SGD algorithm is a simple stochastic gradient descent method that is
+    used to update the parameters of a model. It is a simple, but very
+    effective method for training neural networks and is a good choice for
+    smaller datasets. It is also a good choice for training a model with a
+    large number of parameters.
     """
 
     for i, param in enumerate(params):
@@ -71,6 +87,13 @@ class SGD(Optimizer):
         weight_decay (float, optional): weight decay (L2 penalty) (default: 0)
         dampening (float, optional): dampening for momentum (default: 0)
         nesterov (bool, optional): enables Nesterov momentum (default: False)
+    
+    Methods:
+        __setstate__(): restores the state of the optimizer.
+        step(): updates the parameters of a model by one step with SGD. It
+        performs a single SGD step by updating the weights of all model
+        parameters.
+
     Example:
         >>> optimizer = torch.optim.SGD(model.parameters(),
          lr=0.1, momentum=0.9)
