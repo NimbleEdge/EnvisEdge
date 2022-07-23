@@ -27,6 +27,33 @@ class BaseActor(Reproducible, ABC):
         Whether the worker represents a mobile device or not
     round_idx : int
         Number of local iterations finished
+    
+    Methods
+    -------
+    name()
+        Returns the name of the actor.
+    optimizer()
+        Returns the optimizer for the actor.
+    serialize()
+        Serializes the current state of the actor.
+    load_worker()
+        Loads the worker from the serialized state.
+    model()
+        Returns the model for the actor.
+    _get_model_params()
+        Returns the current model parameters for the trainer.
+    _get_optimizer_params()
+        Returns the current optimizer parameters for the trainer.
+    load_model()
+        Loads the model weights from the serialized state.
+    load_optimizer()
+        Loads the optimizer weights from the serialized state.
+    wrap_tensors()
+        Wraps the tensors in a `StateTensors` object.
+    process_args()
+        Processes the arguments before passing them to the model.
+    run()
+        Runs the model on the given data.
     """
 
     def __init__(self,
