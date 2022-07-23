@@ -8,7 +8,13 @@ registry.load('optimizer', 'sparse_adam')(torch.optim.SparseAdam)
 
 @registry.load("optimizer", "rwsadagrad")
 class RWSAdagrad(Optimizer):
-    """Implements Row Wise Sparse Adagrad algorithm.
+    """
+    This class implements the Row Wise Sparse Adagrad algorithm. It is a
+    variant of the Adagrad optimizer that uses a running average of the
+    squared gradient to improve the learning rate for sparse gradients.
+
+    It raises an error if the gradients are sparse and the weight_decay is
+    non-zero since the sparse Adagrad algorithm does not support weight decay.
 
     Arguments:
         params (iterable): iterable of parameters to optimize or dicts defining
@@ -18,6 +24,14 @@ class RWSAdagrad(Optimizer):
         weight_decay (float, optional): weight decay (L2 penalty) (default: 0)
         eps (float, optional): term added to the denominator to improve
             numerical stability (default: 1e-10)
+
+    Methods:
+        share_memory():
+            Share memory for all workers in the same GPU. This is necessary for
+            distributed training.
+        step():
+            Performs a single optimization step on the given parameters and
+            returns the loss (default: None). Overrides the default method.
     """
 
     def __init__(self, params,
@@ -65,12 +79,6 @@ class RWSAdagrad(Optimizer):
                     state['sum'].share_memory_()
 
     def step(self, closure=None):
-        """Performs a single optimization step.
-        
-        Arguments:
-            closure (callable, optional): A closure that reevaluates the model
-                and returns the loss.
-        """
         loss = None
         if closure is not None:
             loss = closure()
