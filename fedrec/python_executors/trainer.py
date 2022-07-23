@@ -11,7 +11,36 @@ from fedrec.utilities.logger import BaseLogger
 
 class Trainer(BaseActor, ABC):
     """
-    The Trainer class is responsible for training the model.
+    The Trainer class is responsible for training the model, updating the
+    model weights, and running the training steps. It also handles the loading
+    and preprocessing of data.
+
+    Attributes
+    ----------
+    round_idx : int
+        Number of local iterations finished
+    worker_index : int
+        The unique id alloted to the worker by the orchestrator
+    is_mobile : bool
+        Whether the worker represents a mobile device or not
+    persistent_storage : str
+        The location to serialize and store the `WorkerState`
+    local_sample_number : int or None
+        The number of datapoints in the local dataset
+    
+    Methods
+    -------
+    reset_loaders()
+        Reset the data loaders to empty dict to avoid memory issues when
+        loading the data multiple times in the same epoch.
+    serialize()
+        Serialize the state of the worker to a TrainerState.
+    load_worker()
+        Constructs a trainer object from the state.
+    update_dataset()
+        Update the dataset, trainer_index and model_index.
+    run()
+        Run the model.
     """
 
     def __init__(self,
@@ -21,23 +50,6 @@ class Trainer(BaseActor, ABC):
                  client_id: int,
                  is_mobile: bool = True,
                  round_idx: int = 0):
-        """
-        Initialize the Trainer class.
-
-        Attributes
-        ----------
-        round_idx : int
-            Number of local iterations finished
-        worker_index : int
-            The unique id alloted to the worker by the orchestrator
-        is_mobile : bool
-            Whether the worker represents a mobile device or not
-        persistent_storage : str
-            The location to serialize and store the `WorkerState`
-        local_sample_number : int or None
-            The number of datapoints in the local dataset
-
-        """
         super().__init__(worker_index, config, logger,
                          is_mobile, round_idx)
         self.local_sample_number = None
